@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     // Start is called before the first frame update
     private Rigidbody rb;
-    public float acceleration = 10f;
+    public float acceleration = 5000f;
     public float maxSpeed = 1000f;
 
     public float rangle;
@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    private Vector3 lastDir = Vector3.zero;
+    private Vector3 lastVel = Vector3.zero;
 
     // Update is called once per frame
     void Update()
@@ -28,22 +28,23 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.RightArrow)) dir.x = 1;
         if (Input.GetKey(KeyCode.UpArrow)) dir.z = 1;
         if (Input.GetKey(KeyCode.LeftArrow)) dir.x = -1;
-        dir.Normalize();
-
-        // limit rotation
-        /* rangle = Vector3.Angle(lastDir, dir) / Time.deltaTime;
-        if (Mathf.Abs(rangle) > 30)
-        {
-            float s = Mathf.Sign(rangle);
-            Vector3.RotateTowards(dir, lastDir, Mathf.Rad2Deg * rangle+s*30*Time.deltaTime, 0);
-        } */
-
-        lastDir = dir;
+        dir = dir.normalized * Time.deltaTime;
 
         // apply direction
         rb.AddForce(acceleration * dir, ForceMode.Acceleration);
         if(rb.velocity.magnitude > maxSpeed) 
             rb.velocity = rb.velocity.normalized * maxSpeed;
+
+        // limit rotation
+        /* Vector3 vel = rb.velocity;
+        rangle = Vector3.Angle(lastVel, vel);// / Time.deltaTime;
+        if (Mathf.Abs(rangle) > 5)
+        {
+            float s = Mathf.Sign(rangle);
+            Vector3.RotateTowards(vel, lastVel, Mathf.Rad2Deg * rangle + s * 5 * Time.deltaTime, 0);
+        }
+        lastVel = vel; */
+
 
         // look in movement direction
         if (rb.velocity.sqrMagnitude != 0) 
