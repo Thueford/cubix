@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: 869483832}
   - component: {fileID: 869483831}
   - component: {fileID: 869483830}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -416,6 +416,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 290598353}
   stickyness: 10
+  target: {x: 0, y: 0, z: 0}
 --- !u!1001 &331514178781491243
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -482,6 +483,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3573863749504846800, guid: c757194044ae0bd40bbc234134156d13,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3573863749504846812, guid: c757194044ae0bd40bbc234134156d13,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3573863750579656485, guid: c757194044ae0bd40bbc234134156d13,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3573863750579656487, guid: c757194044ae0bd40bbc234134156d13,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4432245382237489260, guid: c757194044ae0bd40bbc234134156d13,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 8002478655246067546, guid: c757194044ae0bd40bbc234134156d13,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c757194044ae0bd40bbc234134156d13, type: 3}
@@ -551,6 +582,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2703775900557845818, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 116
+      objectReference: {fileID: 0}
+    - target: {fileID: 2703775900557845819, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
+        type: 3}
+      propertyPath: maxSpeed
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 2703775900557845819, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
+        type: 3}
+      propertyPath: acceleration
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 2703775900557845821, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
         type: 3}

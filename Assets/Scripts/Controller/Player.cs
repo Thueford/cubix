@@ -6,6 +6,8 @@ using UnityEngine.Assertions;
 
 public class Player : MonoBehaviour
 {
+    private const float floatHeight = 0.5f;
+
     public static Player self;
     public static GameStage curStage;
 
@@ -13,7 +15,7 @@ public class Player : MonoBehaviour
     private static Rigidbody rb;
 
     public Text txtDbg;
-    public float acceleration = 15f;
+    public float accelerationForce = 15f;
     public float maxSpeed = 20f;
     public float posY = 0.5f; // for Teleport anim
     public bool movable = true;
@@ -37,7 +39,7 @@ public class Player : MonoBehaviour
     {
         if(movable) {
             Vector3 dir = Vector2.zero;
-        
+
             // read input keys
             if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) dir.z = -1;
             if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) dir.x = 1;
@@ -47,7 +49,7 @@ public class Player : MonoBehaviour
 
             // apply direction
             rb.AddForce(dir*Time.deltaTime*1000, ForceMode.Acceleration);
-            if(rb.velocity.magnitude > maxSpeed) 
+            if(rb.velocity.magnitude > maxSpeed)
                 rb.velocity = rb.velocity.normalized * maxSpeed;
 
             // look in movement direction
@@ -86,5 +88,8 @@ public class Player : MonoBehaviour
         self.transform.position = stage.spawn.transform.position;
 
         curStage = stage;
+        Vector3 spawnPos = stage.spawn.transform.position;
+        spawnPos.y = floatHeight;
+        self.transform.position = spawnPos;
     }
 }

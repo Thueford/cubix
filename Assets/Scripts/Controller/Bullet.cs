@@ -16,6 +16,7 @@ public class Bullet : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         rgb = BulletSpawner.rgb;
+
         if (rgb == Vector3Int.zero)
             color = new Color(.3f, .3f, .3f, 1f);
         else if (rgb == Vector3Int.forward)
@@ -29,15 +30,18 @@ public class Bullet : MonoBehaviour
         gameObject.GetComponent<Light>().color = color;
 
         if (dir != null) 
-            rb.velocity = this.dir * this.speed;
+            rb.velocity = dir * speed;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (rb.velocity.magnitude < speed)
+        if (rb.velocity.magnitude < .5)
         {
-            //Debug.Log("Bullet Stuck");
+            Debug.Log("Bullet Stuck");
+            Destroy(gameObject);
+        } else if (rb.velocity.magnitude < speed)
+        {
             rb.velocity = rb.velocity.normalized * speed;
         }
         oldVelocity = rb.velocity;
@@ -63,9 +67,10 @@ public class Bullet : MonoBehaviour
         {
             if (rgb.x == 1)
                 explode();
-            Destroy(this.gameObject);
+            Destroy(gameObject);
             return;
         }
+
         // get the point of contact
         ContactPoint contact = collision.contacts[0];
 
@@ -73,7 +78,7 @@ public class Bullet : MonoBehaviour
         Vector3 reflectedVelocity = Vector3.Reflect(oldVelocity, contact.normal);
 
         // assign the reflected velocity back to the rigidbody
-        rb.velocity = reflectedVelocity;
+        rb.velocity = oldVelocity = reflectedVelocity;
 
         /*
          * rotate the object by the same ammount we changed its velocity
