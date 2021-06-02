@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 331514180023121783}
+  - component: {fileID: 757038173234545941}
   m_Layer: 0
   m_Name: Stage
   m_TagString: Untagged
@@ -38,6 +39,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &757038173234545941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 331514180023121776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c8eca009189bf640ae700592bb0c1dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 1037097025517605565}
+  spawn: {fileID: 4432245382237489268}
 --- !u!1 &1037097025517605565
 GameObject:
   m_ObjectHideFlags: 0
@@ -452,6 +467,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c070ac4a26db4ce479bbf3c9929b5d88, type: 3}
+--- !u!1 &4432245382237489268 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4233632357213921171, guid: c070ac4a26db4ce479bbf3c9929b5d88,
+    type: 3}
+  m_PrefabInstance: {fileID: 523153695193716711}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4432245382237489260 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4233632357213921163, guid: c070ac4a26db4ce479bbf3c9929b5d88,

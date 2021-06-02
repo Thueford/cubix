@@ -6,16 +6,25 @@ using UnityEngine.Assertions;
 
 public class Player : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public static Player self;
+    public static GameStage curStage;
+
     private Rigidbody rb;
     public Text txtDbg;
     public float acceleration = 15f;
     public float maxSpeed = 20f;
 
+    // Start is called before the first frame update
     void Start()
     {
+        self = this;
         rb = GetComponent<Rigidbody>();
-        Assert.IsNotNull(txtDbg, "player.txtDbg not assigned");
+        if(txtDbg == null) Debug.LogWarning("player.txtDbg not assigned");
+
+        // spawn in stage0
+        GameStage[] stages = FindObjectsOfType<GameStage>();
+        Debug.Assert(stages.Length != 0, "no stages found");
+        Teleport(stages[stages.Length-1]);
     }
 
     // Update is called once per frame
@@ -37,9 +46,27 @@ public class Player : MonoBehaviour
 
 
         // look in movement direction
-        Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray r = FindObjectOfType<GameCamera>().GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
         // intersect mouse ray with floor plane
         float f = (transform.position.y-r.origin.y)/r.direction.y;
         transform.forward = r.GetPoint(f) - transform.position;
+    }
+
+    public static void TeleportNext()
+    {
+        if (curStage == null || curStage.next == null) return;
+        Teleport(curStage.next.GetComponent<GameStage>());
+    }
+
+    public static void Teleport(GameStage stage)
+    {
+        if (stage == null) return;
+        Debug.Log("Stage: " + stage.gameObject.name);
+
+        curStage = stage;
+        GameCamera cam = FindObjectOfType<GameCamera>();
+        cam.target = stage.cam.transform.position;
+        cam.transform.rotation = stage.cam.transform.rotation;
+        self.transform.position = stage.spawn.transform.position;
     }
 }
