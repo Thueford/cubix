@@ -45,7 +45,7 @@ public class Player : MonoBehaviour
             if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) dir.x = 1;
             if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) dir.z = 1;
             if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) dir.x = -1;
-            dir = dir.normalized * acceleration;
+            dir = dir.normalized * accelerationForce;
 
             // apply direction
             rb.AddForce(dir*Time.deltaTime*1000, ForceMode.Acceleration);
