@@ -7,7 +7,7 @@ public class Portal : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        Disable();
     }
 
     // Update is called once per frame
@@ -22,5 +22,17 @@ public class Portal : MonoBehaviour
             Debug.Log("Teleporting");
             Player.TeleportNext();
         }
+    }
+
+    public void Enable()
+    {
+        GetComponent<ParticleSystem>().Play();
+        GetComponent<SphereCollider>().enabled = true;
+    }
+
+    public void Disable()
+    {
+        GetComponent<ParticleSystem>().Stop();
+        GetComponent<SphereCollider>().enabled = false;
     }
 }

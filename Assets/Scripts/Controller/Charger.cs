@@ -7,6 +7,7 @@ public class Charger : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
     }
 
 
@@ -19,6 +20,7 @@ public class Charger : MonoBehaviour
     public void OnCharged(AnimationEvent ev)
     {
         Debug.Log("Charged");
+        Player.curStage.GetComponentInChildren<Portal>().Enable();
     }
 
     private void OnTriggerEnter(Collider c)

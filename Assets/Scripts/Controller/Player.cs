@@ -63,7 +63,14 @@ public class Player : MonoBehaviour
         if (stage == null) return;
         Debug.Log("Stage: " + stage.gameObject.name);
 
+        // reset animations
+        if (curStage != null) curStage.GetComponentInChildren<Portal>().Disable();
+        // stage.portal.GetComponent<Portal>().Disable();
+
         curStage = stage;
+        curStage.GetComponentInChildren<ChargeAnim>().Reset();
+
+        // copy camera
         GameCamera cam = FindObjectOfType<GameCamera>();
         cam.target = stage.cam.transform.position;
         cam.transform.rotation = stage.cam.transform.rotation;

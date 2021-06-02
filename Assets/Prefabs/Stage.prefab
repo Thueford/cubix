@@ -53,6 +53,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 1037097025517605565}
   spawn: {fileID: 4432245382237489268}
+  portal: {fileID: 8002478655246067522}
+  charger: {fileID: 3573863749504846812}
+  next: {fileID: 0}
 --- !u!1 &1037097025517605565
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,6 +305,12 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 7752741785395244074, guid: ee175145e72731d498b8ac2e7c9d7113, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ee175145e72731d498b8ac2e7c9d7113, type: 3}
+--- !u!1 &8002478655246067522 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7752741785395244079, guid: ee175145e72731d498b8ac2e7c9d7113,
+    type: 3}
+  m_PrefabInstance: {fileID: 331514179739044717}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8002478655246067546 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7752741785395244087, guid: ee175145e72731d498b8ac2e7c9d7113,
@@ -337,6 +346,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 91fb9d32a6e15d0418b7de3bd49c5570, type: 3}
+--- !u!1 &3573863749504846812 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3819382641382715249, guid: 91fb9d32a6e15d0418b7de3bd49c5570,
+    type: 3}
+  m_PrefabInstance: {fileID: 331514179851199661}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3573863749504846800 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3819382641382715261, guid: 91fb9d32a6e15d0418b7de3bd49c5570,
