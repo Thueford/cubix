@@ -4,22 +4,37 @@ using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
-    private Vector3 dir;
-    private Vector3 oldVelocity;
+    private Vector3 dir, oldVelocity;
+    private Vector3Int rgb;
     private float speed;
+    private int reflects;
     private Rigidbody rb;
-
+    private Color color;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        if (dir != null) rb.velocity = this.dir * this.speed;
-        Debug.Log(rb);
+
+        rgb = BulletSpawner.rgb;
+        if (rgb.z == 1 && rgb.magnitude == 1) 
+            color = new Color(.2f, .2f, rgb.z, 1f);
+        else 
+            color = new Color(rgb.x, rgb.y, rgb.z, 1f);
+        gameObject.GetComponent<Renderer>().material.color = color;
+        gameObject.GetComponent<Light>().color = color;
+
+        if (dir != null) 
+            rb.velocity = this.dir * this.speed;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (rb.velocity.magnitude < speed)
+        {
+            //Debug.Log("Bullet Stuck");
+            rb.velocity = rb.velocity.normalized * speed;
+        }
         oldVelocity = rb.velocity;
     }
 
@@ -30,9 +45,22 @@ public class BulletController : MonoBehaviour
         if (rb) rb.velocity = this.dir * this.speed;
     }
 
-    //Source: https://answers.unity.com/questions/352609/how-can-i-reflect-a-projectile.html
-    void OnCollisionEnter(Collision collision)
+    private void explode()
     {
+        //Animate
+
+    }
+
+    //Source: https://answers.unity.com/questions/352609/how-can-i-reflect-a-projectile.html
+     void OnCollisionEnter(Collision collision)
+    {
+        if (rgb.y == 0 || reflects++ > 2)
+        {
+            if (rgb.x == 1)
+                explode();
+            Destroy(this.gameObject);
+            return;
+        }
         // get the point of contact
         ContactPoint contact = collision.contacts[0];
 
@@ -46,7 +74,7 @@ public class BulletController : MonoBehaviour
          * rotate the object by the same ammount we changed its velocity
         Quaternion rotation = Quaternion.FromToRotation(oldVelocity, reflectedVelocity);
         transform.rotation = rotation * transform.rotation;
-         */
-    }
+        */
 
+    }
 }
