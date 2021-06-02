@@ -8,13 +8,15 @@ public class BulletController : MonoBehaviour
     private Vector3 oldVelocity;
     private float speed;
     private Rigidbody rb;
+    private Vector3Int rgb;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        if (dir != null) rb.velocity = this.dir * this.speed;
-        Debug.Log(rb);
+        if (dir != null) 
+            rb.velocity = this.dir * this.speed;
+        rgb = BulletSpawner.rgb;
     }
 
     // Update is called once per frame
@@ -30,9 +32,22 @@ public class BulletController : MonoBehaviour
         if (rb) rb.velocity = this.dir * this.speed;
     }
 
-    //Source: https://answers.unity.com/questions/352609/how-can-i-reflect-a-projectile.html
-    void OnCollisionEnter(Collision collision)
+    private void explode()
     {
+        //Animate
+
+    }
+
+    //Source: https://answers.unity.com/questions/352609/how-can-i-reflect-a-projectile.html
+     void OnCollisionEnter(Collision collision)
+    {
+        if (rgb.y == 0)
+        {
+            if (rgb.x == 1)
+                explode();
+            Destroy(this.gameObject);
+            return;
+        }
         // get the point of contact
         ContactPoint contact = collision.contacts[0];
 
@@ -46,7 +61,6 @@ public class BulletController : MonoBehaviour
          * rotate the object by the same ammount we changed its velocity
         Quaternion rotation = Quaternion.FromToRotation(oldVelocity, reflectedVelocity);
         transform.rotation = rotation * transform.rotation;
-         */
+        */
     }
-
 }
