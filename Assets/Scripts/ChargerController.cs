@@ -15,7 +15,7 @@ public class ChargerController : MonoBehaviour
     {
         
     }
-
+    
     public void OnCharged(AnimationEvent ev)
     {
         Debug.Log("Charged");
@@ -23,15 +23,13 @@ public class ChargerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider c)
     {
-        Debug.Log("CollEn: " + c.gameObject.name);
-        if (c.gameObject.name.ToLower() == "player")
+        if (c.name.ToLower() == "player")
             GetComponentInChildren<Animator>().enabled = true;
     }
 
     private void OnTriggerExit(Collider c)
     {
-        Debug.Log("CollEx: " + c.gameObject.name);
-        if (c.gameObject.name.ToLower() == "player")
+        if (c.name.ToLower() == "player")
             GetComponentInChildren<Animator>().enabled = false;
     }
 }
