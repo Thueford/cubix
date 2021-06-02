@@ -24,6 +24,7 @@ public class BulletController : MonoBehaviour
             color = new Color(0f, .6f, 0f, 1f);
         else
             color = new Color(rgb.x, rgb.y, rgb.z, 1f);
+
         gameObject.GetComponent<Renderer>().material.color = color;
         gameObject.GetComponent<Light>().color = color;
 
