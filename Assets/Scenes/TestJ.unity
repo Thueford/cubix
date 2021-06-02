@@ -504,21 +504,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2703775900557845817, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
         type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2703775900557845817, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2703775900557845817, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2703775900557845817, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
-        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -566,26 +551,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2703775900557845818, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
-        type: 3}
-      propertyPath: m_Constraints
-      value: 112
-      objectReference: {fileID: 0}
-    - target: {fileID: 2703775900557845818, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
-        type: 3}
-      propertyPath: m_IsKinematic
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2703775900557845819, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
-        type: 3}
-      propertyPath: maxSpeed
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 2703775900557845819, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
-        type: 3}
-      propertyPath: acceleration
-      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 2703775900557845821, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
         type: 3}

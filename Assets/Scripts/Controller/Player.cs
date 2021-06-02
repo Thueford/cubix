@@ -31,7 +31,7 @@ public class Player : MonoBehaviour
         dir = dir.normalized * acceleration;
 
         // apply direction
-        rb.AddForce(dir, ForceMode.Acceleration);
+        rb.AddForce(dir*Time.deltaTime*1000, ForceMode.Acceleration);
         if(rb.velocity.magnitude > maxSpeed) 
             rb.velocity = rb.velocity.normalized * maxSpeed;
 
