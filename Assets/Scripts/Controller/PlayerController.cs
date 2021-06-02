@@ -9,8 +9,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     private Rigidbody rb;
     public Text txtDbg;
-    public float acceleration = 5000f;
-    public float maxSpeed = 1000f;
+    public float acceleration = 15f;
+    public float maxSpeed = 20f;
 
     void Start()
     {
@@ -28,10 +28,10 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) dir.x = 1;
         if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) dir.z = 1;
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) dir.x = -1;
-        dir = dir.normalized * Time.deltaTime;
+        dir = dir.normalized * acceleration;
 
         // apply direction
-        rb.AddForce(acceleration * dir, ForceMode.Acceleration);
+        rb.AddForce(dir, ForceMode.Acceleration);
         if(rb.velocity.magnitude > maxSpeed) 
             rb.velocity = rb.velocity.normalized * maxSpeed;
 
