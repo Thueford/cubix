@@ -2,10 +2,17 @@ using UnityEngine;
 
 public class ChargeAnim : MonoBehaviour
 {
-    private void Start()
+    void Start()
     {
-        transform.localScale = new Vector3(0,1,0);
+        Reset();
+    }
+
+    public void Reset()
+    {
+        Debug.Log("AnimReset");
+        GetComponent<Animator>().Play("Charging");
         GetComponent<Animator>().enabled = false;
+        transform.localScale = new Vector3(0, 1, 0);
     }
 
     void OnCharged(AnimationEvent ev) {
