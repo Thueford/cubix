@@ -17,7 +17,7 @@ public class BulletSpawner : MonoBehaviour
     void Start()
     {
         timeCounter = rateOfFire;
-        radius = gameObject.GetComponent<SphereCollider>().radius;
+        radius = GetComponent<SphereCollider>().radius;
     }
 
     // Update is called once per frame

@@ -58,14 +58,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void LateUpdate()
-    {
-        Vector3 pos = transform.position;
-        pos.y = posY;
-        // transform.SetPositionAndRotation(pos, transform.rotation);
-        txtDbg.text = posY.ToString();
-    }
-
     public static void TeleportNext()
     {
         if (curStage == null || curStage.next == null) return;
