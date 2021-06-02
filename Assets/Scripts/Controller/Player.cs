@@ -6,12 +6,14 @@ using UnityEngine.Assertions;
 
 public class Player : MonoBehaviour
 {
+    private const float floatHeight = 0.5f;
+
     public static Player self;
     public static GameStage curStage;
 
     private Rigidbody rb;
     public Text txtDbg;
-    public float acceleration = 15f;
+    public float accelerationForce = 15f;
     public float maxSpeed = 20f;
 
     // Start is called before the first frame update
@@ -37,7 +39,7 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) dir.x = 1;
         if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) dir.z = 1;
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) dir.x = -1;
-        dir = dir.normalized * acceleration;
+        dir = dir.normalized * accelerationForce;
 
         // apply direction
         rb.AddForce(dir*Time.deltaTime*1000, ForceMode.Acceleration);
@@ -67,6 +69,8 @@ public class Player : MonoBehaviour
         GameCamera cam = FindObjectOfType<GameCamera>();
         cam.target = stage.cam.transform.position;
         cam.transform.rotation = stage.cam.transform.rotation;
-        self.transform.position = stage.spawn.transform.position;
+        Vector3 spawnPos = stage.spawn.transform.position;
+        spawnPos.y = floatHeight;
+        self.transform.position = spawnPos;
     }
 }
