@@ -5,18 +5,18 @@ using UnityEngine;
 public class BulletSpawner : MonoBehaviour
 {
     public static float timeCounter;
-    private const float rateOfFire = .5f;
-    private const float bulletSpeed = 5f;
+    private const float rateOfFire = .2f;
+    private const float bulletSpeed = 10f;
     private const float spread = 30f;
     private const int amount = 5;
     public GameObject bulletPrefab;
     float radius;
-    public static Vector3Int rgb = new Vector3Int(0, 1, 0);
+    public static Vector3Int rgb = new Vector3Int(0, 1, 1);
 
     // Start is called before the first frame update
     void Start()
     {
-        timeCounter = 0;
+        timeCounter = rateOfFire;
         radius = gameObject.GetComponent<SphereCollider>().radius;
     }
 
@@ -30,9 +30,15 @@ public class BulletSpawner : MonoBehaviour
             {
                 timeCounter = 0;
                 spawnBullet(transform.forward);
-            } else 
+            } else
                 timeCounter = rateOfFire;
         }
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            rgb.x = (~rgb.x) & 1;
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            rgb.y = (~rgb.y) & 1;
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+            rgb.z = (~rgb.z) & 1;
     }
 
     void spawnBullet(Vector3 dir)

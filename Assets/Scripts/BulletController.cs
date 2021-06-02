@@ -4,24 +4,37 @@ using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
-    private Vector3 dir;
-    private Vector3 oldVelocity;
-    private float speed;
-    private Rigidbody rb;
+    private Vector3 dir, oldVelocity;
     private Vector3Int rgb;
-
+    private float speed;
+    private int reflects;
+    private Rigidbody rb;
+    private Color color;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+
+        rgb = BulletSpawner.rgb;
+        if (rgb.z == 1 && rgb.magnitude == 1) 
+            color = new Color(.2f, .2f, rgb.z, 1f);
+        else 
+            color = new Color(rgb.x, rgb.y, rgb.z, 1f);
+        gameObject.GetComponent<Renderer>().material.color = color;
+        gameObject.GetComponent<Light>().color = color;
+
         if (dir != null) 
             rb.velocity = this.dir * this.speed;
-        rgb = BulletSpawner.rgb;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (rb.velocity.magnitude < speed)
+        {
+            //Debug.Log("Bullet Stuck");
+            rb.velocity = rb.velocity.normalized * speed;
+        }
         oldVelocity = rb.velocity;
     }
 
@@ -41,7 +54,7 @@ public class BulletController : MonoBehaviour
     //Source: https://answers.unity.com/questions/352609/how-can-i-reflect-a-projectile.html
      void OnCollisionEnter(Collision collision)
     {
-        if (rgb.y == 0)
+        if (rgb.y == 0 || reflects++ > 2)
         {
             if (rgb.x == 1)
                 explode();
@@ -62,5 +75,6 @@ public class BulletController : MonoBehaviour
         Quaternion rotation = Quaternion.FromToRotation(oldVelocity, reflectedVelocity);
         transform.rotation = rotation * transform.rotation;
         */
+
     }
 }
