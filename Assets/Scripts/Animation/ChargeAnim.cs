@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ChargingController : MonoBehaviour
+public class ChargeAnim : MonoBehaviour
 {
     private void Start()
     {
