@@ -829,6 +829,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1432198949064338186, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2703775900557845817, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
         type: 3}
       propertyPath: m_RootOrder
@@ -888,7 +893,7 @@ PrefabInstance:
         type: 3}
       propertyPath: txtDbg
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 131815492}
     - target: {fileID: 2703775900557845821, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
         type: 3}
       propertyPath: m_Name

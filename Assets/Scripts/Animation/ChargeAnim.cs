@@ -9,7 +9,6 @@ public class ChargeAnim : MonoBehaviour
 
     public void Reset()
     {
-        Debug.Log("AnimReset");
         GetComponent<Animator>().Play("Charging");
         GetComponent<Animator>().enabled = false;
         transform.localScale = new Vector3(0, 1, 0);

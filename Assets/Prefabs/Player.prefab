@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 733581025746260087}
   - component: {fileID: -1262445326376820021}
   - component: {fileID: 8303882289749333062}
+  - component: {fileID: 1432198949064338186}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -101,6 +102,8 @@ MonoBehaviour:
   txtDbg: {fileID: 0}
   acceleration: 10
   maxSpeed: 10
+  posY: 0.5
+  movable: 1
 --- !u!54 &2703775900557845818
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -206,3 +209,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 7958330587720593824, guid: da2792a8ce1e4d54388cd8c5a606e116,
     type: 3}
+--- !u!95 &1432198949064338186
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2703775900557845821}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e5f1dc54f9a77bd49828015af7221df9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
