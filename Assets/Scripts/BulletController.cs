@@ -16,9 +16,13 @@ public class BulletController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         rgb = BulletSpawner.rgb;
-        if (rgb.z == 1 && rgb.magnitude == 1) 
-            color = new Color(.2f, .2f, rgb.z, 1f);
-        else 
+        if (rgb == Vector3Int.zero)
+            color = new Color(.3f, .3f, .3f, 1f);
+        else if (rgb == Vector3Int.forward)
+            color = new Color(0f, .3f, 1f, 1f);
+        else if (rgb == Vector3Int.up)
+            color = new Color(0f, .6f, 0f, 1f);
+        else
             color = new Color(rgb.x, rgb.y, rgb.z, 1f);
         gameObject.GetComponent<Renderer>().material.color = color;
         gameObject.GetComponent<Light>().color = color;
