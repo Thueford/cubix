@@ -46,7 +46,7 @@ public class BulletSpawner : MonoBehaviour
         if (rgb.z == 0)
         {
             GameObject bullet = Instantiate(bulletPrefab, transform.position + dir * radius, Quaternion.identity);
-            bullet.GetComponent<BulletController>().launch(dir, bulletSpeed);
+            bullet.GetComponent<Bullet>().launch(dir, bulletSpeed);
         } else
         {
             float ang = spread / (amount-1);
@@ -54,7 +54,7 @@ public class BulletSpawner : MonoBehaviour
             {
                 Vector3 newDir = Quaternion.Euler(0, f, 0) * dir;
                 GameObject bullet = Instantiate(bulletPrefab, transform.position + newDir * radius, Quaternion.identity);
-                bullet.GetComponent<BulletController>().launch(newDir, bulletSpeed);
+                bullet.GetComponent<Bullet>().launch(newDir, bulletSpeed);
             }
         }
     }

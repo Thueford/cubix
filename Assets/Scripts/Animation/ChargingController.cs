@@ -9,6 +9,6 @@ public class ChargingController : MonoBehaviour
     }
 
     void OnCharged(AnimationEvent ev) {
-        GetComponentInParent<ChargerController>().OnCharged(ev);
+        GetComponentInParent<Charger>().OnCharged(ev);
     }
 }

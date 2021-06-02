@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Assertions;
 
-public class PlayerController : MonoBehaviour
+public class Player : MonoBehaviour
 {
     // Start is called before the first frame update
     private Rigidbody rb;
