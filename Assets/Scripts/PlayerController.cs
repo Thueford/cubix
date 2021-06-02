@@ -2,19 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Assertions;
 
 public class PlayerController : MonoBehaviour
 {
     // Start is called before the first frame update
     private Rigidbody rb;
     public Text txtDbg;
-    public Camera cam;
     public float acceleration = 5000f;
     public float maxSpeed = 1000f;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        Assert.IsNotNull(txtDbg, "player.txtDbg not assigned");
     }
 
     // Update is called once per frame
@@ -34,8 +35,11 @@ public class PlayerController : MonoBehaviour
         if(rb.velocity.magnitude > maxSpeed) 
             rb.velocity = rb.velocity.normalized * maxSpeed;
 
-        // TODO: look in movement direction
-        txtDbg.text = cam.ScreenToWorldPoint(Input.mousePosition).ToString();
-        transform.forward = cam.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+
+        // look in movement direction
+        Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
+        // intersect mouse ray with floor plane
+        float f = (transform.position.y-r.origin.y)/r.direction.y;
+        transform.forward = r.GetPoint(f) - transform.position;
     }
 }
