@@ -51,7 +51,7 @@ public class BulletSpawner : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             rgb.y = (~rgb.y) & 1;
-            bulletSpeed *= (rgb.y == 1 ? 1.8f : (1 / 1.8f));
+            bulletSpeed *= (rgb.y == 1 ? 3f : (1 / 3f));
             rateOfFire *= (rgb.y == 1 ? 2f : (1 / 2f));
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
