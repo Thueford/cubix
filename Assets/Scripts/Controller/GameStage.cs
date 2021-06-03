@@ -9,7 +9,8 @@ public class GameStage : MonoBehaviour
     public void OnStageEnter()
     {
         Debug.Log("Stage: " + name);
-        GetComponentInChildren<Hint>().ResetHints();
+        Hint h = GetComponentInChildren<Hint>();
+        if (h != null) h.ResetHints();
         GetComponentInChildren<ChargeAnim>().Reset();
     }
 
