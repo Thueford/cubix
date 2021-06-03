@@ -78,12 +78,12 @@ public class Player : MonoBehaviour
     public void Teleport(GameStage stage)
     {
         if (stage == null) return;
-        Debug.Log("Stage: " + stage.gameObject.name);
+
+        if (curStage != null) curStage.OnStageExit();
+        stage.OnStageEnter();
 
         // reset animations
         anim.Play("Spawn");
-        if (curStage != null) curStage.GetComponentInChildren<Portal>().Disable();
-        stage.GetComponentInChildren<ChargeAnim>().Reset();
 
         // copy camera
         GameCamera cam = FindObjectOfType<GameCamera>();

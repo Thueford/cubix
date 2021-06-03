@@ -5,7 +5,13 @@ using UnityEngine;
 public class Scene1 : Hint
 {
     enum State { START, WASD, CHARGE, PORTAL }
-    private State state = State.START;
+    private State state;
+
+    override public void ResetHints()
+    {
+        base.ResetHints();
+        state = State.START;
+    }
 
     // Update is called once per frame
     void Update()
