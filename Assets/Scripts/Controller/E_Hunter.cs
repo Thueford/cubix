@@ -28,7 +28,7 @@ public class E_Hunter : EnemyBase
                 rb.velocity = rb.velocity.normalized * maxSpeed;
 
             // look in movement direction
-            transform.forward = dir;
+            if(dir.magnitude > 0) transform.forward = dir;
         }
     }
 }

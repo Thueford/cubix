@@ -27,11 +27,17 @@ public class EntityBase : MonoBehaviour
     public void Hit(float damage)
     {
         HP -= damage;
-        if (HP <= 0) GetComponent<Animator>().Play("E_Die");
+        if (HP <= 0) Die();
+    }
+
+    public void Die()
+    {
+        Debug.Log("killed " + name);
+        GetComponent<Animator>().Play("E_Die");
     }
 
     public void OnDie(AnimationEvent ev)
     {
-        Destroy(gameObject);
+        if(this is EnemyBase) Destroy(gameObject);
     }
 }

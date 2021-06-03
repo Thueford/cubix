@@ -94,4 +94,12 @@ public class Player : EntityBase
         spawnPos.y = floatHeight;
         self.transform.position = spawnPos;
     }
+    public void OnTriggerEnter(Collider c)
+    {
+        if (c.CompareTag("Enemy")) 
+        {
+            c.GetComponent<EntityBase>().Die();
+            Hit(1);
+        }
+    }
 }

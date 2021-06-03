@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   accelerationForce: 15
-  maxSpeed: 10
+  maxSpeed: 3
   movable: 1
-  startHP: 0
+  startHP: 5
 --- !u!1001 &4051353101770595906
 PrefabInstance:
   m_ObjectHideFlags: 0
