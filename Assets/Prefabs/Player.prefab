@@ -51,6 +51,7 @@ MonoBehaviour:
   accelerationForce: 15
   maxSpeed: 18
   movable: 1
+  HP: 0
   startHP: 3
   txtDbg: {fileID: 0}
   startStage: {fileID: 0}

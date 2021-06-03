@@ -6,11 +6,13 @@ public class GameStage : MonoBehaviour
 {
     public GameObject cam, spawn, next;
 
-    public void OnBeforeStageEnter()
+    // Called when player steps on portal
+    public void OnStageEntering()
     {
 
     }
 
+    // Called when player is spawning
     public void OnStageEnter()
     {
         Debug.Log("Stage: " + name);
@@ -19,9 +21,20 @@ public class GameStage : MonoBehaviour
         GetComponentInChildren<ChargeAnim>().Reset();
         GetComponentInChildren<Spawn>().Disable();
         if(next != null) next.GetComponentInChildren<Spawn>().Enable();
+
+        foreach (EnemyBase eb in GetComponentsInChildren<EnemyBase>())
+            eb.movable = true;
     }
 
+    // Called when player steps on portal
     public void OnStageExit()
+    {
+        foreach (EnemyBase eb in GetComponentsInChildren<EnemyBase>())
+            eb.movable = false;
+    }
+
+    // Called when player left the stage
+    public void OnStageExited()
     {
         GetComponentInChildren<Portal>().Disable();
     }

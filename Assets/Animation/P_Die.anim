@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: E_Die
+  m_Name: P_Die
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -82,10 +82,10 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: movable
+    attribute: active
     path: 
     classID: 114
-    script: {fileID: 11500000, guid: 4b8c55d38f1b9334cb2c1112bec7d700, type: 3}
+    script: {fileID: 11500000, guid: ea0b835dc5babe642909f2a331d7d901, type: 3}
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -101,10 +101,10 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: active
+    attribute: movable
     path: 
     classID: 114
-    script: {fileID: 11500000, guid: ea0b835dc5babe642909f2a331d7d901, type: 3}
+    script: {fileID: 11500000, guid: f42f7f57e1a68e748bf6930ee0277d2c, type: 3}
   m_PPtrCurves: []
   m_SampleRate: 60
   m_WrapMode: 0
@@ -129,15 +129,15 @@ AnimationClip:
       isPPtrCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 3294913775
-      script: {fileID: 11500000, guid: 4b8c55d38f1b9334cb2c1112bec7d700, type: 3}
+      attribute: 1260321794
+      script: {fileID: 11500000, guid: ea0b835dc5babe642909f2a331d7d901, type: 3}
       typeID: 114
       customType: 0
       isPPtrCurve: 0
     - serializedVersion: 2
       path: 0
-      attribute: 1260321794
-      script: {fileID: 11500000, guid: ea0b835dc5babe642909f2a331d7d901, type: 3}
+      attribute: 3294913775
+      script: {fileID: 11500000, guid: f42f7f57e1a68e748bf6930ee0277d2c, type: 3}
       typeID: 114
       customType: 0
       isPPtrCurve: 0
@@ -346,10 +346,10 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: movable
+    attribute: active
     path: 
     classID: 114
-    script: {fileID: 11500000, guid: 4b8c55d38f1b9334cb2c1112bec7d700, type: 3}
+    script: {fileID: 11500000, guid: ea0b835dc5babe642909f2a331d7d901, type: 3}
   - curve:
       serializedVersion: 2
       m_Curve:
@@ -365,10 +365,10 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    attribute: active
+    attribute: movable
     path: 
     classID: 114
-    script: {fileID: 11500000, guid: ea0b835dc5babe642909f2a331d7d901, type: 3}
+    script: {fileID: 11500000, guid: f42f7f57e1a68e748bf6930ee0277d2c, type: 3}
   m_EulerEditorCurves:
   - curve:
       serializedVersion: 2

@@ -7,7 +7,7 @@ public class EntityBase : MonoBehaviour
     public float accelerationForce;
     public float maxSpeed;
     public bool movable;
-    protected float HP;
+    public float HP;
 
     protected Animator anim;
     protected Rigidbody rb;
@@ -32,12 +32,14 @@ public class EntityBase : MonoBehaviour
 
     public void Die()
     {
-        Debug.Log("killed " + name);
-        GetComponent<Animator>().Play("E_Die");
+        Debug.Log("killing " + name);
+        anim.enabled = true;
+        anim.Play("Die");
     }
 
     public void OnDie(AnimationEvent ev)
     {
-        if(this is EnemyBase) Destroy(gameObject);
+        Debug.Log("killed " + name);
+        if (this is EnemyBase) Destroy(gameObject);
     }
 }

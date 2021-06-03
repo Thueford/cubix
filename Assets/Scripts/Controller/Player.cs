@@ -57,6 +57,7 @@ public class Player : EntityBase
             Ray r = FindObjectOfType<GameCamera>().GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
             // intersect mouse ray with floor plane
             float f = (transform.position.y-r.origin.y)/r.direction.y;
+            txtDbg.text = (r.GetPoint(f) - transform.position).ToString();
             transform.forward = r.GetPoint(f) - transform.position;
         }
     }
@@ -64,8 +65,13 @@ public class Player : EntityBase
     public void TeleportNext()
     {
         if (curStage == null || curStage.next == null) return;
-        curStage.next.GetComponent<GameStage>().OnBeforeStageEnter();
+
+        curStage.OnStageExit();
+
+        anim.enabled = true;
         anim.Play("Teleport");
+
+        curStage.next.GetComponent<GameStage>().OnStageEntering();
     }
 
     void OnTeleport(AnimationEvent ev)
@@ -73,14 +79,16 @@ public class Player : EntityBase
         Teleport(curStage.next.GetComponent<GameStage>());
     }
 
+    public void OnSpawn(AnimationEvent ev) {
+        anim.enabled = false;
+    }
+
     public void Teleport(GameStage stage)
     {
         if (stage == null) return;
+        if (curStage != null) curStage.OnStageExited();
 
-        if (curStage != null) curStage.OnStageExit();
-        stage.OnStageEnter();
-
-        // reset animations
+        anim.enabled = true;
         anim.Play("Spawn");
 
         // copy camera
@@ -93,7 +101,10 @@ public class Player : EntityBase
         Vector3 spawnPos = stage.spawn.transform.position;
         spawnPos.y = floatHeight;
         self.transform.position = spawnPos;
+
+        stage.OnStageEnter();
     }
+
     public void OnTriggerEnter(Collider c)
     {
         if (c.CompareTag("Enemy")) 

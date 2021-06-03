@@ -16,4 +16,9 @@ public abstract class EnemyBase : EntityBase
     {
         base.Update();
     }
+
+    public void OnSpawn(AnimationEvent ev)
+    {
+        anim.enabled = false;
+    }
 }
