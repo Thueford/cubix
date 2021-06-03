@@ -26,6 +26,14 @@ public class Player : EntityBase
         StartCoroutine(StartGame());
     }
 
+    public static void dbgSet(string msg) {
+        if (self && self.txtDbg) self.txtDbg.text = msg;
+    }
+    public static void dbgLog(string msg)
+    {
+        if (self && self.txtDbg) self.txtDbg.text += "\n" + msg;
+    }
+
     IEnumerator StartGame()
     {
         yield return new WaitForSeconds(0.2f);
@@ -64,7 +72,6 @@ public class Player : EntityBase
             Ray r = FindObjectOfType<GameCamera>().GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
             // intersect mouse ray with floor plane
             float f = (transform.position.y-r.origin.y)/r.direction.y;
-            txtDbg.text = (r.GetPoint(f) - transform.position).ToString();
             transform.forward = r.GetPoint(f) - transform.position;
         }
     }
