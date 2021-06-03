@@ -26,13 +26,13 @@ public class Portal : MonoBehaviour
 
     public void Enable()
     {
-        GetComponent<ParticleSystem>().Play();
+        GetComponentInChildren<ParticleSystem>().Play();
         GetComponent<SphereCollider>().enabled = true;
     }
 
     public void Disable()
     {
-        GetComponent<ParticleSystem>().Stop();
+        GetComponentInChildren<ParticleSystem>().Stop();
         GetComponent<SphereCollider>().enabled = false;
     }
 

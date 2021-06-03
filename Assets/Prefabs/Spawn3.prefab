@@ -1,11 +1,11 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &3467721837405945207
+--- !u!1001 &4930862286962707909
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 6666973612737437670}
+    m_TransformParent: {fileID: 8105510958650065809}
     m_Modifications:
     - target: {fileID: 54904620348658276, guid: 9be8fd90a36485c46bacb5198c9f48ea,
         type: 3}
@@ -49,21 +49,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3563585939732338122, guid: 9be8fd90a36485c46bacb5198c9f48ea,
         type: 3}
-      propertyPath: InitialModule.startColor.maxColor.b
-      value: 0.9892149
-      objectReference: {fileID: 0}
-    - target: {fileID: 3563585939732338122, guid: 9be8fd90a36485c46bacb5198c9f48ea,
-        type: 3}
-      propertyPath: InitialModule.startColor.maxColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3563585939732338122, guid: 9be8fd90a36485c46bacb5198c9f48ea,
-        type: 3}
-      propertyPath: InitialModule.startColor.maxColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3563585939732338122, guid: 9be8fd90a36485c46bacb5198c9f48ea,
-        type: 3}
       propertyPath: TrailModule.colorOverTrail.maxColor.b
       value: 1
       objectReference: {fileID: 0}
@@ -79,23 +64,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3563585939732338122, guid: 9be8fd90a36485c46bacb5198c9f48ea,
         type: 3}
-      propertyPath: TrailModule.colorOverLifetime.maxGradient.atime0
-      value: 1928
-      objectReference: {fileID: 0}
-    - target: {fileID: 3563585939732338122, guid: 9be8fd90a36485c46bacb5198c9f48ea,
-        type: 3}
-      propertyPath: TrailModule.colorOverLifetime.maxGradient.atime1
-      value: 65535
-      objectReference: {fileID: 0}
-    - target: {fileID: 3563585939732338122, guid: 9be8fd90a36485c46bacb5198c9f48ea,
-        type: 3}
       propertyPath: TrailModule.colorOverLifetime.maxGradient.ctime0
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3563585939732338122, guid: 9be8fd90a36485c46bacb5198c9f48ea,
         type: 3}
       propertyPath: TrailModule.colorOverLifetime.maxGradient.key0.b
-      value: 1
+      value: 0.0408051
       objectReference: {fileID: 0}
     - target: {fileID: 3563585939732338122, guid: 9be8fd90a36485c46bacb5198c9f48ea,
         type: 3}
@@ -109,58 +84,53 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3563585939732338122, guid: 9be8fd90a36485c46bacb5198c9f48ea,
         type: 3}
+      propertyPath: TrailModule.colorOverLifetime.maxGradient.key1.b
+      value: 0.0408051
+      objectReference: {fileID: 0}
+    - target: {fileID: 3563585939732338122, guid: 9be8fd90a36485c46bacb5198c9f48ea,
+        type: 3}
       propertyPath: TrailModule.colorOverLifetime.maxGradient.key1.r
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8747032546836533881, guid: 9be8fd90a36485c46bacb5198c9f48ea,
-        type: 3}
-      propertyPath: m_Materials.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8747032546836533881, guid: 9be8fd90a36485c46bacb5198c9f48ea,
-        type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value: 
-      objectReference: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9be8fd90a36485c46bacb5198c9f48ea, type: 3}
---- !u!1001 &8165424401385274253
+--- !u!1001 &5385299612767247386
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3302461335702217835, guid: 7b9742f5e847d8146b617b37c2982cfa,
+    - target: {fileID: 4233632357213921163, guid: c070ac4a26db4ce479bbf3c9929b5d88,
         type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3302461335702217835, guid: 7b9742f5e847d8146b617b37c2982cfa,
+    - target: {fileID: 4233632357213921163, guid: c070ac4a26db4ce479bbf3c9929b5d88,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3302461335702217835, guid: 7b9742f5e847d8146b617b37c2982cfa,
+    - target: {fileID: 4233632357213921163, guid: c070ac4a26db4ce479bbf3c9929b5d88,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3302461335702217835, guid: 7b9742f5e847d8146b617b37c2982cfa,
+    - target: {fileID: 4233632357213921163, guid: c070ac4a26db4ce479bbf3c9929b5d88,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3302461335702217843, guid: 7b9742f5e847d8146b617b37c2982cfa,
+    - target: {fileID: 4233632357213921171, guid: c070ac4a26db4ce479bbf3c9929b5d88,
         type: 3}
       propertyPath: m_Name
-      value: Portal3
+      value: Spawn3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 7b9742f5e847d8146b617b37c2982cfa, type: 3}
---- !u!4 &6666973612737437670 stripped
+  m_SourcePrefab: {fileID: 100100000, guid: c070ac4a26db4ce479bbf3c9929b5d88, type: 3}
+--- !u!4 &8105510958650065809 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 3302461335702217835, guid: 7b9742f5e847d8146b617b37c2982cfa,
+  m_CorrespondingSourceObject: {fileID: 4233632357213921163, guid: c070ac4a26db4ce479bbf3c9929b5d88,
     type: 3}
-  m_PrefabInstance: {fileID: 8165424401385274253}
+  m_PrefabInstance: {fileID: 5385299612767247386}
   m_PrefabAsset: {fileID: 0}

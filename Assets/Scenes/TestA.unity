@@ -621,6 +621,26 @@ PrefabInstance:
       propertyPath: next
       value: 
       objectReference: {fileID: 1428751591}
+    - target: {fileID: 3138623082110731695, guid: c757194044ae0bd40bbc234134156d13,
+        type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3381000445220101673, guid: c757194044ae0bd40bbc234134156d13,
+        type: 3}
+      propertyPath: m_Name
+      value: Spawn3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3381000445220101673, guid: c757194044ae0bd40bbc234134156d13,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7730873502653545410, guid: c757194044ae0bd40bbc234134156d13,
+        type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c757194044ae0bd40bbc234134156d13, type: 3}
 --- !u!1 &1990724498
