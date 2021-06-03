@@ -23,9 +23,9 @@ public class GameStage : MonoBehaviour
         Debug.Log("Stage: " + name);
 
         // copy camera
-        GameCamera cam = FindObjectOfType<GameCamera>();
-        cam.target = cam.transform.position;
-        cam.transform.rotation = cam.transform.rotation;
+        GameCamera gcam = FindObjectOfType<GameCamera>();
+        gcam.target = cam.transform.position;
+        gcam.transform.rotation = cam.transform.rotation;
 
         Hint h = GetComponentInChildren<Hint>();
         if (h != null) h.ResetHints();
