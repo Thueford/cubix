@@ -158,7 +158,7 @@ GameObject:
   - component: {fileID: 5487182818035476225}
   - component: {fileID: 6835014429758451763}
   m_Layer: 8
-  m_Name: E_Base
+  m_Name: EntityBase
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -203,7 +203,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5487182818035476226}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.6

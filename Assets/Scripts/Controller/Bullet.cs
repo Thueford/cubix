@@ -70,43 +70,46 @@ public class Bullet : MonoBehaviour
     //Source: https://answers.unity.com/questions/352609/how-can-i-reflect-a-projectile.html
     void OnCollisionEnter(Collision c)
     {
-        if (rgb.x == 1)
-            explode();
-
-        if (--reflects < 0)
+        if (c.collider.CompareTag("Wall"))
         {
-            Destroy(gameObject);
-            return;
-        }
+            if (rgb.x == 1)
+                explode();
 
-        // get the point of contact
-        ContactPoint contact = c.contacts[0];
-
-        // reflect our old velocity off the contact point's normal vector
-        Vector3 reflectedVelocity = Vector3.Reflect(oldVelocity, contact.normal);
-
-        // assign the reflected velocity back to the rigidbody
-        rb.velocity = oldVelocity = reflectedVelocity;
-
-        /*
-         * rotate the object by the same ammount we changed its velocity
-        Quaternion rotation = Quaternion.FromToRotation(oldVelocity, reflectedVelocity);
-        transform.rotation = rotation * transform.rotation;
-        */
-    }
-
-    private void OnTriggerEnter(Collider c)
-    {
-        Debug.Log("BTrigger: " + c.name + " " + tag + " " + c.tag);
-        if (!CompareTag(c.tag))
-        {
-            EntityBase b = c.GetComponent<EntityBase>();
-            if (b)
+            if (--reflects < 0)
             {
-                b.Hit(damage);
-                if (--hits < 0) Destroy(gameObject);
+                Destroy(gameObject);
+                return;
             }
-            else Debug.LogWarning("bullet hit non-Entity");
+
+            // get the point of contact
+            ContactPoint contact = c.contacts[0];
+
+            // reflect our old velocity off the contact point's normal vector
+            Vector3 reflectedVelocity = Vector3.Reflect(oldVelocity, contact.normal);
+
+            // assign the reflected velocity back to the rigidbody
+            rb.velocity = oldVelocity = reflectedVelocity;
+
+            /*
+             * rotate the object by the same ammount we changed its velocity
+            Quaternion rotation = Quaternion.FromToRotation(oldVelocity, reflectedVelocity);
+            transform.rotation = rotation * transform.rotation;
+            */
+        } 
+        else
+        {
+            Debug.Log("BTrigger: " + c.collider.name + " " + tag + " " + c.collider.tag);
+            if (!CompareTag(c.collider.tag))
+            {
+                EntityBase b = c.collider.GetComponent<EntityBase>();
+                if (b)
+                {
+                    b.Hit(damage);
+                    if (--hits < 0) Destroy(gameObject);
+                    // if (--reflects < 0) Destroy(gameObject);
+                }
+                else Debug.LogWarning("bullet hit non-Entity");
+            }
         }
     }
 }

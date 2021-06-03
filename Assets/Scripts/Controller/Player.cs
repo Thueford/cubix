@@ -23,6 +23,13 @@ public class Player : EntityBase
         self = this;
         if(txtDbg == null) Debug.LogWarning("player.txtDbg not assigned");
 
+        StartCoroutine(StartGame());
+    }
+
+    IEnumerator StartGame()
+    {
+        yield return new WaitForSeconds(0.2f);
+
         // spawn in stage0
         if (startStage == null)
         {
@@ -62,11 +69,12 @@ public class Player : EntityBase
         }
     }
 
-    public void OnTriggerEnter(Collider c)
+    public void OnCollisionEnter(Collision c)
     {
-        if (c.CompareTag("Enemy"))
+        if (c.collider.CompareTag("Enemy"))
         {
-            c.GetComponent<EntityBase>().Die();
+            c.collider.GetComponent<EntityBase>().Die();
+            c.collider.GetComponent<SphereCollider>().isTrigger = true;
             Hit(1);
         }
     }

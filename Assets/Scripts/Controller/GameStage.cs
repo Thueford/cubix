@@ -6,7 +6,7 @@ public class GameStage : MonoBehaviour
 {
     public GameObject cam, spawn, actors, next;
 
-    public void OnStart()
+    public void Start()
     {
         actors.SetActive(false);
     }
