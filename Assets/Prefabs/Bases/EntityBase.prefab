@@ -157,6 +157,7 @@ GameObject:
   - component: {fileID: 7030260383473072592}
   - component: {fileID: 5487182818035476225}
   - component: {fileID: 6835014429758451763}
+  - component: {fileID: 7324494277604629981}
   m_Layer: 8
   m_Name: EntityBase
   m_TagString: Enemy
@@ -242,3 +243,16 @@ MonoBehaviour:
   bulletPrefab: {fileID: 7958330587720593824, guid: da2792a8ce1e4d54388cd8c5a606e116,
     type: 3}
   active: 1
+--- !u!135 &7324494277604629981
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5487182818035476226}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}

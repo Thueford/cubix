@@ -70,46 +70,45 @@ public class Bullet : MonoBehaviour
     //Source: https://answers.unity.com/questions/352609/how-can-i-reflect-a-projectile.html
     void OnCollisionEnter(Collision c)
     {
-        if (c.collider.CompareTag("Wall"))
+        if (!c.collider.CompareTag("Wall")) return;
+
+        if (rgb.x == 1) explode();
+
+        if (--reflects < 0)
         {
-            if (rgb.x == 1)
-                explode();
+            Destroy(gameObject);
+            return;
+        }
 
-            if (--reflects < 0)
-            {
-                Destroy(gameObject);
-                return;
-            }
+        // get the point of contact
+        ContactPoint contact = c.contacts[0];
 
-            // get the point of contact
-            ContactPoint contact = c.contacts[0];
+        // reflect our old velocity off the contact point's normal vector
+        Vector3 reflectedVelocity = Vector3.Reflect(oldVelocity, contact.normal);
 
-            // reflect our old velocity off the contact point's normal vector
-            Vector3 reflectedVelocity = Vector3.Reflect(oldVelocity, contact.normal);
+        // assign the reflected velocity back to the rigidbody
+        rb.velocity = oldVelocity = reflectedVelocity;
 
-            // assign the reflected velocity back to the rigidbody
-            rb.velocity = oldVelocity = reflectedVelocity;
+        /*
+        rotate the object by the same ammount we changed its velocity
+        Quaternion rotation = Quaternion.FromToRotation(oldVelocity, reflectedVelocity);
+        transform.rotation = rotation * transform.rotation;
+        */
+    }
 
-            /*
-             * rotate the object by the same ammount we changed its velocity
-            Quaternion rotation = Quaternion.FromToRotation(oldVelocity, reflectedVelocity);
-            transform.rotation = rotation * transform.rotation;
-            */
-        } 
-        else
+    private void OnTriggerEnter(Collider c)
+    {
+        Debug.Log("BTrigger: " + c.name + " " + tag + " " + c.tag);
+        if (!CompareTag(c.tag))
         {
-            Debug.Log("BTrigger: " + c.collider.name + " " + tag + " " + c.collider.tag);
-            if (!CompareTag(c.collider.tag))
+            EntityBase b = c.GetComponent<EntityBase>();
+            if (b)
             {
-                EntityBase b = c.collider.GetComponent<EntityBase>();
-                if (b)
-                {
-                    b.Hit(damage);
-                    if (--hits < 0) Destroy(gameObject);
-                    // if (--reflects < 0) Destroy(gameObject);
-                }
-                else Debug.LogWarning("bullet hit non-Entity");
+                b.Hit(damage);
+                if (--hits < 0) Destroy(gameObject);
+                // if (--reflects < 0) Destroy(gameObject);
             }
+            else Debug.LogWarning("bullet hit non-Entity");
         }
     }
 }
