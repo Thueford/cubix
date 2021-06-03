@@ -7,6 +7,12 @@ public class Scene2 : Hint
     enum State { START,  SHOOT }
     private State state;
 
+    override public void ResetHints()
+    {
+        base.ResetHints();
+        state = State.START;
+    }
+
     // Update is called once per frame
     void Update()
     {
