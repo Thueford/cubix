@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class EntityBase : MonoBehaviour
 {
-    protected float accelerationForce;
-    protected float maxSpeed;
-    protected bool movable;
+    public float accelerationForce;
+    public float maxSpeed;
+    public bool movable;
     protected float HP;
 
     protected Animator anim;
@@ -26,14 +26,12 @@ public class EntityBase : MonoBehaviour
 
     public void Hit(float damage)
     {
-        Debug.Log("Hit: " + name);
         HP -= damage;
         if (HP <= 0) GetComponent<Animator>().Play("E_Die");
     }
 
     public void OnDie(AnimationEvent ev)
     {
-        Debug.Log("killed " + name);
         Destroy(gameObject);
     }
 }

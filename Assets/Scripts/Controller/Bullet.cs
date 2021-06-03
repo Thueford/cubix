@@ -100,8 +100,13 @@ public class Bullet : MonoBehaviour
         Debug.Log("BTrigger: " + c.name + " " + tag + " " + c.tag);
         if (!CompareTag(c.tag))
         {
-             c.GetComponent<EntityBase>().Hit(damage);
-            if (--hits < 0) Destroy(gameObject);
+            EntityBase b = c.GetComponent<EntityBase>();
+            if (b)
+            {
+                b.Hit(damage);
+                if (--hits < 0) Destroy(gameObject);
+            }
+            else Debug.LogWarning("bullet hit non-Entity");
         }
     }
 }
