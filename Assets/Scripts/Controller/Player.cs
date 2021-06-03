@@ -67,6 +67,7 @@ public class Player : MonoBehaviour
     public void TeleportNext()
     {
         if (curStage == null || curStage.next == null) return;
+        curStage.next.GetComponent<GameStage>().OnBeforeStageEnter();
         anim.Play("Teleport");
     }
 
