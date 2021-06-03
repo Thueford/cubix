@@ -10,6 +10,9 @@ public class Bullet : MonoBehaviour
     private int reflects, hits;
     private Rigidbody rb;
     private Color color;
+    private static Color 
+        black = new Color(.3f, .3f, .3f, 1f),
+        glow = new Color(.7f, .7f, .7f, 1f);
     // Start is called before the first frame update
     void Start()
     {
@@ -45,7 +48,7 @@ public class Bullet : MonoBehaviour
     {
         this.color = color;
         gameObject.GetComponent<Renderer>().material.color = color;
-        gameObject.GetComponent<Light>().color = color;
+        gameObject.GetComponent<Light>().color = color == black ? glow : color;
     }
 
     public void launch(Vector3 dir, float speed)

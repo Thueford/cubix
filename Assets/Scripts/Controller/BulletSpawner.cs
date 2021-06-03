@@ -16,7 +16,7 @@ public class BulletSpawner : MonoBehaviour
     private Color
         black = new Color(.3f, .3f, .3f, 1f),
         blue = new Color(0f, .3f, 1f, 1f),
-        green = new Color(0f, .6f, 0f, 1f);
+        green = new Color(0f, .7f, 0f, 1f);
     private Color color = new Color(.3f, .3f, .3f, 1f);
     public bool active;
 
