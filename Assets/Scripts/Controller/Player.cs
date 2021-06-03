@@ -62,6 +62,15 @@ public class Player : EntityBase
         }
     }
 
+    public void OnTriggerEnter(Collider c)
+    {
+        if (c.CompareTag("Enemy"))
+        {
+            c.GetComponent<EntityBase>().Die();
+            Hit(1);
+        }
+    }
+
     public void TeleportNext()
     {
         if (curStage == null || curStage.next == null) return;
@@ -77,10 +86,6 @@ public class Player : EntityBase
     void OnTeleport(AnimationEvent ev)
     {
         Teleport(curStage.next.GetComponent<GameStage>());
-    }
-
-    public void OnSpawn(AnimationEvent ev) {
-        anim.enabled = false;
     }
 
     public void Teleport(GameStage stage)
@@ -105,12 +110,9 @@ public class Player : EntityBase
         stage.OnStageEnter();
     }
 
-    public void OnTriggerEnter(Collider c)
+    public void OnSpawn(AnimationEvent ev)
     {
-        if (c.CompareTag("Enemy")) 
-        {
-            c.GetComponent<EntityBase>().Die();
-            Hit(1);
-        }
+        anim.enabled = false;
+        curStage.OnStageEntered();
     }
 }

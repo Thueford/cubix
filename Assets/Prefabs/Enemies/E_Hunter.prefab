@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   accelerationForce: 15
   maxSpeed: 3
-  movable: 1
+  movable: 0
+  HP: 0
   startHP: 5
 --- !u!1001 &4051353101770595906
 PrefabInstance:
@@ -46,6 +47,11 @@ PrefabInstance:
     - target: {fileID: 5487182818035476230, guid: 07b4f49e86467f145ad605a79f630e95,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6835014429758451763, guid: 07b4f49e86467f145ad605a79f630e95,
+        type: 3}
+      propertyPath: active
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

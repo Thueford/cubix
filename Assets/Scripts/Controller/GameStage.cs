@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class GameStage : MonoBehaviour
 {
-    public GameObject cam, spawn, next;
+    public GameObject cam, spawn, actors, next;
+
+    public void OnStart()
+    {
+        actors.SetActive(false);
+    }
 
     // Called when player steps on portal
     public void OnStageEntering()
@@ -22,6 +27,11 @@ public class GameStage : MonoBehaviour
         GetComponentInChildren<Spawn>().Disable();
         if(next != null) next.GetComponentInChildren<Spawn>().Enable();
 
+        actors.SetActive(true);
+    }
+
+    public void OnStageEntered()
+    {
         foreach (EnemyBase eb in GetComponentsInChildren<EnemyBase>())
             eb.movable = true;
     }
@@ -37,5 +47,6 @@ public class GameStage : MonoBehaviour
     public void OnStageExited()
     {
         GetComponentInChildren<Portal>().Disable();
+        actors.SetActive(false);
     }
 }
