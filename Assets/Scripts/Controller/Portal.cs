@@ -20,7 +20,7 @@ public class Portal : MonoBehaviour
     {
         if(c.name.ToLower() == "player") {
             Debug.Log("Teleporting");
-            Player.TeleportNext();
+            Player.self.TeleportNext();
         }
     }
 
@@ -34,5 +34,10 @@ public class Portal : MonoBehaviour
     {
         GetComponent<ParticleSystem>().Stop();
         GetComponent<SphereCollider>().enabled = false;
+    }
+
+    public bool Enabled()
+    {
+        return GetComponent<SphereCollider>().enabled;
     }
 }

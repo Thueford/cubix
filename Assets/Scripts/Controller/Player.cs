@@ -11,13 +11,13 @@ public class Player : MonoBehaviour
     public static Player self;
     public static GameStage curStage;
 
-    private static Animator anim;
-    private static Rigidbody rb;
+    private Animator anim;
+    private Rigidbody rb;
 
     public Text txtDbg;
+    public GameObject startStage;
     public float accelerationForce = 15f;
     public float maxSpeed = 20f;
-    public float posY = 0.5f; // for Teleport anim
     public bool movable = true;
 
     // Start is called before the first frame update
@@ -29,9 +29,13 @@ public class Player : MonoBehaviour
         if(txtDbg == null) Debug.LogWarning("player.txtDbg not assigned");
 
         // spawn in stage0
-        GameStage[] stages = FindObjectsOfType<GameStage>();
-        Debug.Assert(stages.Length != 0, "no stages found");
-        Teleport(stages[0]);
+        if (startStage == null)
+        {
+            GameStage[] stages = FindObjectsOfType<GameStage>();
+            Debug.Assert(stages.Length != 0, "no stages found");
+            Teleport(stages[0]);
+        }
+        else Teleport(startStage.GetComponent<GameStage>());
     }
 
     // Update is called once per frame
@@ -60,7 +64,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public static void TeleportNext()
+    public void TeleportNext()
     {
         if (curStage == null || curStage.next == null) return;
         anim.Play("Teleport");
@@ -71,7 +75,7 @@ public class Player : MonoBehaviour
         Teleport(curStage.next.GetComponent<GameStage>());
     }
 
-    public static void Teleport(GameStage stage)
+    public void Teleport(GameStage stage)
     {
         if (stage == null) return;
         Debug.Log("Stage: " + stage.gameObject.name);
