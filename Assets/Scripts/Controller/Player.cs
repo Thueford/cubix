@@ -16,9 +16,9 @@ public class Player : MonoBehaviour
 
     public Text txtDbg;
     public GameObject startStage;
-    public float accelerationForce = 15f;
-    public float maxSpeed = 20f;
-    public bool movable = true;
+    public float accelerationForce;
+    public float maxSpeed;
+    public bool movable;
 
     // Start is called before the first frame update
     void Start()
@@ -41,7 +41,8 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(movable) {
+        if(movable)
+        {
             Vector3 dir = Vector2.zero;
 
             // read input keys
