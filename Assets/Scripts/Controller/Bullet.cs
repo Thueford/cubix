@@ -7,7 +7,7 @@ public class Bullet : MonoBehaviour
     private Vector3 dir, oldVelocity;
     private Vector3Int rgb;
     private float speed;
-    private int reflects;
+    private int reflects, hits;
     private Rigidbody rb;
     private Color color;
     // Start is called before the first frame update
@@ -16,19 +16,6 @@ public class Bullet : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         rgb = BulletSpawner.rgb;
-
-        if (rgb == Vector3Int.zero)
-            color = new Color(.3f, .3f, .3f, 1f);
-        else if (rgb == Vector3Int.forward)
-            color = new Color(0f, .3f, 1f, 1f);
-        else if (rgb == Vector3Int.up)
-            color = new Color(0f, .6f, 0f, 1f);
-        else
-            color = new Color(rgb.x, rgb.y, rgb.z, 1f);
-
-        gameObject.GetComponent<Renderer>().material.color = color;
-        gameObject.GetComponent<Light>().color = color;
-
         if (dir != null) 
             rb.velocity = dir * speed;
     }
@@ -47,6 +34,20 @@ public class Bullet : MonoBehaviour
         oldVelocity = rb.velocity;
     }
 
+    public void setProperties(int reflects, int hits, Color color)
+    {
+        this.reflects = reflects;
+        this.hits = hits;
+        setColor(color);
+    }
+
+    private void setColor(Color color)
+    {
+        this.color = color;
+        gameObject.GetComponent<Renderer>().material.color = color;
+        gameObject.GetComponent<Light>().color = color;
+    }
+
     public void launch(Vector3 dir, float speed)
     {
         this.dir = dir;
@@ -63,10 +64,11 @@ public class Bullet : MonoBehaviour
     //Source: https://answers.unity.com/questions/352609/how-can-i-reflect-a-projectile.html
      void OnCollisionEnter(Collision collision)
     {
-        if (rgb.y == 0 || reflects++ > 2)
+        if (rgb.x == 1)
+            explode();
+
+        if (--reflects < 0)
         {
-            if (rgb.x == 1)
-                explode();
             Destroy(gameObject);
             return;
         }

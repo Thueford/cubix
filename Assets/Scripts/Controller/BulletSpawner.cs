@@ -5,14 +5,19 @@ using UnityEngine;
 public class BulletSpawner : MonoBehaviour
 {
     public static float timeCounter;
-    private const float 
-        rateOfFire = .2f, 
-        bulletSpeed = 25f, 
+    private float 
+        rateOfFire = .3f, 
+        bulletSpeed = 30f, 
         spread = 30f;
     private const int amount = 5;
     public GameObject bulletPrefab;
     float radius;
     public static Vector3Int rgb = new Vector3Int(0, 0, 0);
+    private Color
+        black = new Color(.3f, .3f, .3f, 1f),
+        blue = new Color(0f, .3f, 1f, 1f),
+        green = new Color(0f, .6f, 0f, 1f);
+    private Color color = new Color(.3f, .3f, .3f, 1f);
 
     // Start is called before the first frame update
     void Start()
@@ -30,34 +35,59 @@ public class BulletSpawner : MonoBehaviour
             if (Input.GetMouseButton(0))
             {
                 timeCounter = 0;
-                spawnBullet(transform.forward);
+                shoot(transform.forward);
             } else
                 timeCounter = rateOfFire;
         }
+
+        updateProperties();
+        
+    }
+
+    void updateProperties()
+    {
         if (Input.GetKeyDown(KeyCode.Alpha1))
             rgb.x = (~rgb.x) & 1;
         if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
             rgb.y = (~rgb.y) & 1;
+            bulletSpeed *= (rgb.y == 1 ? 1.8f : (1 / 1.8f));
+            rateOfFire *= (rgb.y == 1 ? 2f : (1 / 2f));
+        }
         if (Input.GetKeyDown(KeyCode.Alpha3))
+        { 
             rgb.z = (~rgb.z) & 1;
+            rateOfFire *= (rgb.z == 1 ? 2/3f : 3/2f);
+        }
+
+        if (rgb == Vector3Int.zero) color = black;
+        else if (rgb == Vector3Int.forward) color = blue;
+        else if (rgb == Vector3Int.up) color = green;
+        else color = new Color(rgb.x, rgb.y, rgb.z, 1f);
     }
 
-    void spawnBullet(Vector3 dir)
+    void shoot(Vector3 dir)
     {
-        float correctedSpeed = bulletSpeed * (rgb.y == 1 ? 1.2f : 1f);
+        int reflects = rgb.y == 1 ? 2 : 0;
+        int hits = rgb.y == 1 ? 4 : 0;
+        float damage = rgb.y == 1 ? 2f : 1f;
+        damage *= rgb.z == 1 ? 0.5f : 1f;
+
         if (rgb.z == 0)
         {
-            GameObject bullet = Instantiate(bulletPrefab, transform.position + dir * radius, Quaternion.identity);
-            bullet.GetComponent<Bullet>().launch(dir, correctedSpeed);
+            CreateAndLaunch(dir, reflects, hits);
         } else
         {
             float ang = spread / (amount-1);
-            for (float f = -spread/2; f <= spread/2; f += ang)
-            {
-                Vector3 newDir = Quaternion.Euler(0, f, 0) * dir;
-                GameObject bullet = Instantiate(bulletPrefab, transform.position + newDir * radius, Quaternion.identity);
-                bullet.GetComponent<Bullet>().launch(newDir, correctedSpeed);
-            }
+            for (float a = -spread/2; a <= spread/2; a += ang)
+                CreateAndLaunch(Quaternion.Euler(0, a, 0) * dir, reflects, hits);
         }
+    }
+
+    void CreateAndLaunch(Vector3 dir, int reflects, int hits)
+    {
+        GameObject bullet = Instantiate(bulletPrefab, transform.position + dir * radius, Quaternion.identity);
+        bullet.GetComponent<Bullet>().launch(dir, bulletSpeed);
+        bullet.GetComponent<Bullet>().setProperties(reflects, hits, color);
     }
 }
