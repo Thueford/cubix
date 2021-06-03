@@ -100,7 +100,7 @@ public class Bullet : MonoBehaviour
         Debug.Log("BTrigger: " + c.name + " " + tag + " " + c.tag);
         if (!CompareTag(c.tag))
         {
-             c.GetComponent<EntityBase>().Hit(damage);
+            c.GetComponent<EntityBase>().Hit(damage);
             if (--hits < 0) Destroy(gameObject);
         }
     }
