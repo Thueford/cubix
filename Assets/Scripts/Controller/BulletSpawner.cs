@@ -18,6 +18,7 @@ public class BulletSpawner : MonoBehaviour
         blue = new Color(0f, .3f, 1f, 1f),
         green = new Color(0f, .7f, 0f, 1f);
     private Color color = new Color(.3f, .3f, .3f, 1f);
+    public bool active;
 
     // Start is called before the first frame update
     void Start()
@@ -32,7 +33,7 @@ public class BulletSpawner : MonoBehaviour
         timeCounter += Time.deltaTime;
         if (timeCounter > rateOfFire)
         {
-            if (Input.GetMouseButton(0))
+            if (active && Input.GetMouseButton(0))
             {
                 timeCounter = 0;
                 shoot(transform.forward);
@@ -41,7 +42,6 @@ public class BulletSpawner : MonoBehaviour
         }
 
         updateProperties();
-        
     }
 
     void updateProperties()
