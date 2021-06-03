@@ -11,7 +11,7 @@ public class Bullet : MonoBehaviour
     private Rigidbody rb;
     private Color color;
     private float damage;
-    private static Color 
+    private static Color
         black = new Color(.3f, .3f, .3f, 1f),
         glow = new Color(.7f, .7f, .7f, 1f);
     // Start is called before the first frame update
@@ -20,7 +20,7 @@ public class Bullet : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         rgb = BulletSpawner.rgb;
-        if (dir != null) 
+        if (dir != null)
             rb.velocity = dir * speed;
     }
 
@@ -31,7 +31,7 @@ public class Bullet : MonoBehaviour
         {
             Debug.Log("Bullet Stuck");
             Destroy(gameObject);
-        } 
+        }
         else if (rb.velocity.magnitude < speed)
         {
             rb.velocity = rb.velocity.normalized * speed;
@@ -100,8 +100,13 @@ public class Bullet : MonoBehaviour
         Debug.Log("BTrigger: " + c.name + " " + tag + " " + c.tag);
         if (!CompareTag(c.tag))
         {
-            c.GetComponent<EntityBase>().Hit(damage);
-            if (--hits < 0) Destroy(gameObject);
+            EntityBase b = c.GetComponent<EntityBase>();
+            if (b)
+            {
+                b.Hit(damage);
+                if (--hits < 0) Destroy(gameObject);
+            }
+            else Debug.LogWarning("bullet hit non-Entity");
         }
     }
 }
