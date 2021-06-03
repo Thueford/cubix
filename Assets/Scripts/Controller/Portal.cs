@@ -18,7 +18,7 @@ public class Portal : MonoBehaviour
 
     private void OnTriggerEnter(Collider c)
     {
-        if(c.name.ToLower() == "player")
+        if(c.CompareTag("Player"))
         {
             Debug.Log("Teleporting");
             Player.self.TeleportNext();

@@ -4,28 +4,23 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Assertions;
 
-public class Player : MonoBehaviour
+public class Player : EntityBase
 {
     private const float floatHeight = 0.5f;
 
     public static Player self;
     public static GameStage curStage;
-
-    private Animator anim;
-    private Rigidbody rb;
+    public float startHP;
 
     public Text txtDbg;
     public GameObject startStage;
-    public float accelerationForce;
-    public float maxSpeed;
-    public bool movable;
 
     // Start is called before the first frame update
-    void Start()
+    override protected void Start()
     {
+        HP = startHP;
+        base.Start();
         self = this;
-        rb = GetComponent<Rigidbody>();
-        anim = GetComponent<Animator>();
         if(txtDbg == null) Debug.LogWarning("player.txtDbg not assigned");
 
         // spawn in stage0
@@ -39,9 +34,10 @@ public class Player : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    override protected void Update()
     {
-        if(movable)
+        base.Update();
+        if (movable)
         {
             Vector3 dir = Vector2.zero;
 

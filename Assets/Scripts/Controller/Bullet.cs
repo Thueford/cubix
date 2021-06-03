@@ -10,6 +10,7 @@ public class Bullet : MonoBehaviour
     private int reflects, hits;
     private Rigidbody rb;
     private Color color;
+    private float damage;
     private static Color 
         black = new Color(.3f, .3f, .3f, 1f),
         glow = new Color(.7f, .7f, .7f, 1f);
@@ -30,17 +31,19 @@ public class Bullet : MonoBehaviour
         {
             Debug.Log("Bullet Stuck");
             Destroy(gameObject);
-        } else if (rb.velocity.magnitude < speed)
+        } 
+        else if (rb.velocity.magnitude < speed)
         {
             rb.velocity = rb.velocity.normalized * speed;
         }
         oldVelocity = rb.velocity;
     }
 
-    public void setProperties(int reflects, int hits, Color color)
+    public void setProperties(int reflects, int hits, float damage, Color color)
     {
         this.reflects = reflects;
         this.hits = hits;
+        this.damage = damage;
         setColor(color);
     }
 
@@ -65,7 +68,7 @@ public class Bullet : MonoBehaviour
     }
 
     //Source: https://answers.unity.com/questions/352609/how-can-i-reflect-a-projectile.html
-     void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision c)
     {
         if (rgb.x == 1)
             explode();
@@ -77,7 +80,7 @@ public class Bullet : MonoBehaviour
         }
 
         // get the point of contact
-        ContactPoint contact = collision.contacts[0];
+        ContactPoint contact = c.contacts[0];
 
         // reflect our old velocity off the contact point's normal vector
         Vector3 reflectedVelocity = Vector3.Reflect(oldVelocity, contact.normal);
@@ -90,6 +93,15 @@ public class Bullet : MonoBehaviour
         Quaternion rotation = Quaternion.FromToRotation(oldVelocity, reflectedVelocity);
         transform.rotation = rotation * transform.rotation;
         */
+    }
 
+    private void OnTriggerEnter(Collider c)
+    {
+        Debug.Log("BTrigger: " + c.name + " " + tag + " " + c.tag);
+        if (!CompareTag(c.tag))
+        {
+             c.GetComponent<EntityBase>().Hit(damage);
+            if (--hits < 0) Destroy(gameObject);
+        }
     }
 }

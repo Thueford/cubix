@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 590920405104688111}
   m_Layer: 7
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -48,11 +48,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f42f7f57e1a68e748bf6930ee0277d2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  txtDbg: {fileID: 0}
-  startStage: {fileID: 0}
   accelerationForce: 15
   maxSpeed: 18
   movable: 1
+  HP: 3
+  anim: {fileID: 0}
+  rb: {fileID: 0}
+  startHP: 0
+  txtDbg: {fileID: 0}
+  startStage: {fileID: 0}
 --- !u!114 &8303882289749333062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,6 +71,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 7958330587720593824, guid: da2792a8ce1e4d54388cd8c5a606e116,
     type: 3}
+  active: 1
 --- !u!95 &1432198949064338186
 Animator:
   serializedVersion: 3

@@ -30,6 +30,8 @@ public class BulletSpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!CompareTag("Player")) return;
+
         timeCounter += Time.deltaTime;
         if (timeCounter > rateOfFire)
         {
@@ -75,19 +77,20 @@ public class BulletSpawner : MonoBehaviour
 
         if (rgb.z == 0)
         {
-            CreateAndLaunch(dir, reflects, hits);
+            CreateAndLaunch(dir, reflects, damage, hits);
         } else
         {
             float ang = spread / (amount-1);
             for (float a = -spread/2; a <= spread/2; a += ang)
-                CreateAndLaunch(Quaternion.Euler(0, a, 0) * dir, reflects, hits);
+                CreateAndLaunch(Quaternion.Euler(0, a, 0) * dir, reflects, damage, hits);
         }
     }
 
-    void CreateAndLaunch(Vector3 dir, int reflects, int hits)
+    void CreateAndLaunch(Vector3 dir, int reflects, float damage, int hits)
     {
         GameObject bullet = Instantiate(bulletPrefab, transform.position + dir * radius, Quaternion.identity);
         bullet.GetComponent<Bullet>().launch(dir, bulletSpeed);
-        bullet.GetComponent<Bullet>().setProperties(reflects, hits, color);
+        bullet.GetComponent<Bullet>().setProperties(reflects, hits, damage, color);
+        bullet.tag = tag;
     }
 }

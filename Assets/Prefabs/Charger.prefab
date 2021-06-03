@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3819382640310170507}
   - component: {fileID: 3819382640310170549}
   - component: {fileID: 3819382640310170550}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: ChargerFill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -128,7 +128,7 @@ GameObject:
   - component: {fileID: 3819382641382715250}
   - component: {fileID: 3819382641382715262}
   - component: {fileID: -4330462122717370275}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Charger
   m_TagString: Untagged
   m_Icon: {fileID: 0}

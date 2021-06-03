@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class E_Hunter : EnemyBase
 {
+    public float startHP;
+
     // Start is called before the first frame update
-    override public void Start()
+    override protected void Start()
     {
+        HP = startHP;
         base.Start();
     }
 
     // Update is called once per frame
-    override public void Update()
+    override protected void Update()
     {
         base.Update();
         if (movable)
