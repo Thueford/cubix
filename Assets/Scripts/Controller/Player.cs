@@ -111,17 +111,11 @@ public class Player : EntityBase
         anim.enabled = true;
         anim.Play("Spawn");
 
-        // copy camera
-        GameCamera cam = FindObjectOfType<GameCamera>();
-        cam.target = stage.cam.transform.position;
-        cam.transform.rotation = stage.cam.transform.rotation;
-        self.transform.position = stage.spawn.transform.position;
-
-        curStage = stage;
         Vector3 spawnPos = stage.spawn.transform.position;
         spawnPos.y = floatHeight;
         self.transform.position = spawnPos;
 
+        curStage = stage;
         stage.OnStageEnter();
     }
 

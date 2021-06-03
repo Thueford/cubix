@@ -21,6 +21,12 @@ public class GameStage : MonoBehaviour
     public void OnStageEnter()
     {
         Debug.Log("Stage: " + name);
+
+        // copy camera
+        GameCamera cam = FindObjectOfType<GameCamera>();
+        cam.target = cam.transform.position;
+        cam.transform.rotation = cam.transform.rotation;
+
         Hint h = GetComponentInChildren<Hint>();
         if (h != null) h.ResetHints();
         GetComponentInChildren<ChargeAnim>().Reset();
