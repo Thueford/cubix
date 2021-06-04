@@ -6,14 +6,22 @@ public class E_Hunter : EnemyBase
 {
     public float startHP;
 
+    private const float
+        MAXDIST_P_NOISE = 10,
+        F_PERLIN = 0.5f;
+
+    private int pnX, pnY;
+
     // Start is called before the first frame update
     override protected void Start()
     {
         base.Start();
         HP = startHP;
+
+        pnX = Random.Range(int.MinValue, int.MaxValue);
+        pnY = Random.Range(int.MinValue, int.MaxValue);
     }
 
-    private const float MAXDIST_E = 20;
 
     // Update is called once per frame
     override protected void Update()
@@ -21,19 +29,20 @@ public class E_Hunter : EnemyBase
         base.Update();
         if (movable)
         {
-            Vector3 dir = 2 * (Player.self.transform.position - transform.position).normalized;
-            
-            // avoid other enemies
-            foreach(EnemyBase e in Player.curStage.GetComponentsInChildren<EnemyBase>())
-            {
-                if(!e.Equals(this))
-                {
-                    Vector3 d = e.transform.position - transform.position;
-                    if (d.magnitude < MAXDIST_E) dir -= (1 - d.magnitude / MAXDIST_E) * d.normalized;
-                }
-            }
+            EnemyBase[] enemies = Player.curStage.GetComponentsInChildren<EnemyBase>();
+            Vector3[] effectors = new Vector3[enemies.Length + 2];
 
-            dir = dir.normalized * accelerationForce;
+            // avoid enemies
+            for (int i = 0; i < enemies.Length; ++i)
+                effectors[i + 2] = F_ENEMIES * -avoid(enemies[i], MAXDIST_E);
+
+            // move towards player
+            effectors[0] = F_PLAYER * (Player.self.transform.position - transform.position).normalized;
+            // noise
+            effectors[1] = F_PERLIN * new Vector3(perlinNoise(0.4f, pnX), 0, perlinNoise(0.4f, pnY)).normalized;
+
+            // steer
+            Vector3 dir = contextSteer(effectors, F_WALLS, MAXDIST_W).normalized * accelerationForce;
 
             // apply direction
             rb.AddForce(dir * Time.deltaTime * 1000, ForceMode.Acceleration);
