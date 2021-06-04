@@ -68,7 +68,7 @@ public class BulletSpawner : MonoBehaviour
         else color = new Color(rgb.x, rgb.y, rgb.z, 1f);
     }
 
-    void shoot(Vector3 dir)
+    public void shoot(Vector3 dir)
     {
         int reflects = rgb.y == 1 ? 2 : 0;
         int hits = rgb.y == 1 ? 4 : 0;
