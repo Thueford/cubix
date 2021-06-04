@@ -33,6 +33,7 @@ public class EntityBase : MonoBehaviour
     public void Die()
     {
         Debug.Log("killing " + name);
+        if (this is Player) Player.curStage.OnStageExit();
         anim.enabled = true;
         anim.Play("Die");
     }
@@ -40,6 +41,7 @@ public class EntityBase : MonoBehaviour
     public void OnDie(AnimationEvent ev)
     {
         Debug.Log("killed " + name);
-        if (this is EnemyBase) Destroy(gameObject);
+        if (!(this is Player)) Destroy(gameObject);
+
     }
 }

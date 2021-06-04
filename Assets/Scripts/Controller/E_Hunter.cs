@@ -9,8 +9,8 @@ public class E_Hunter : EnemyBase
     // Start is called before the first frame update
     override protected void Start()
     {
-        HP = startHP;
         base.Start();
+        HP = startHP;
     }
 
     private const float MAXDIST_E = 20;
