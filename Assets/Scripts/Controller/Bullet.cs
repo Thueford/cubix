@@ -96,8 +96,8 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider c)
     {
-        //Debug.Log("BTrigger: " + c.name + " " + tag + " " + c.tag);
-        if (!CompareTag(c.tag))
+        Debug.Log("BTrigger: " + c.name + " " + tag + " " + c.tag);
+        if (!CompareTag(c.tag + "Bullet"))
         {
             EntityBase b = c.GetComponentInParent<EntityBase>();
             if (b)
