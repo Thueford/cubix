@@ -68,7 +68,7 @@ public class BulletSpawner : MonoBehaviour
         else color = new Color(rgb.x, rgb.y, rgb.z, 1f);
     }
 
-    public void shoot(Vector3 dir)
+    void shoot(Vector3 dir)
     {
         int reflects = rgb.y == 1 ? 2 : 0;
         int hits = rgb.y == 1 ? 4 : 0;
@@ -91,6 +91,6 @@ public class BulletSpawner : MonoBehaviour
         GameObject bullet = Instantiate(bulletPrefab, transform.position + dir * radius, Quaternion.identity);
         bullet.GetComponent<Bullet>().launch(dir, bulletSpeed);
         bullet.GetComponent<Bullet>().setProperties(reflects, hits, damage, color);
-        bullet.tag = tag + "Bullet";
+        bullet.tag = tag;
     }
 }
