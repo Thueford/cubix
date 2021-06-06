@@ -70,8 +70,6 @@ public class Bullet : MonoBehaviour
     //Source: https://answers.unity.com/questions/352609/how-can-i-reflect-a-projectile.html
     void OnCollisionEnter(Collision c)
     {
-        if (!c.collider.CompareTag("Wall")) return;
-
         if (rgb.x == 1) explode();
 
         if (--reflects < 0)
@@ -98,12 +96,13 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider c)
     {
-        Debug.Log("BTrigger: " + c.name + " " + tag + " " + c.tag);
+        //Debug.Log("BTrigger: " + c.name + " " + tag + " " + c.tag);
         if (!CompareTag(c.tag))
         {
-            EntityBase b = c.GetComponent<EntityBase>();
+            EntityBase b = c.GetComponentInParent<EntityBase>();
             if (b)
             {
+                Debug.Log("bullet hit Enemy");
                 b.Hit(damage);
                 if (--hits < 0) Destroy(gameObject);
                 // if (--reflects < 0) Destroy(gameObject);

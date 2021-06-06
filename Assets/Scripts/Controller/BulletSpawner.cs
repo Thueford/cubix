@@ -7,7 +7,7 @@ public class BulletSpawner : MonoBehaviour
     public static float timeCounter;
     private float 
         rateOfFire = .3f, 
-        bulletSpeed = 30f, 
+        bulletSpeed = 100f, 
         spread = 30f;
     private const int amount = 5;
     public GameObject bulletPrefab;
