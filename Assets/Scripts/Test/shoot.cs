@@ -9,12 +9,16 @@ public class shoot : MonoBehaviour
     public float force;
     public Vector3 dir;
     public Rigidbody rb;
+    public CapsuleCollider cc;
 
     private bool used = false;
     private Vector3 oldVelocity;
+    private float radius;
     // Start is called before the first frame update
     void Start()
     {
+        radius = gameObject.GetComponent<SphereCollider>().radius;
+        if (cc == null) Debug.Log("No CapsuleCollider on Bullet");
     }
 
     // Update is called once per frame
@@ -38,11 +42,18 @@ public class shoot : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (Physics.SphereCast(transform.position, gameObject.GetComponent<SphereCollider>().radius, rb.velocity, out RaycastHit hitInfo, rb.velocity.magnitude * Time.fixedDeltaTime, layerMask: 1<<14))
+        float distanceToTravel = rb.velocity.magnitude * Time.fixedDeltaTime;
+
+        cc.height = distanceToTravel;
+        cc.transform.rotation = Quaternion.LookRotation(rb.velocity);
+        cc.center = new Vector3(0f, 0f, distanceToTravel/2);
+
+        if (Physics.SphereCast(transform.position, radius, rb.velocity, out RaycastHit hitInfo, distanceToTravel, layerMask: (1 << 14) | (1 << 8)))
         {
-            Debug.Log("Hit SphereCast");
+            //Debug.Log("Hit SphereCast");
             if (hitInfo.collider.CompareTag("Enemy"))
-                OnTriggerEnter(hitInfo.collider);
+                Debug.Log("Enemy");
+                //hitTarget(hitInfo.collider);
         }
     }
 

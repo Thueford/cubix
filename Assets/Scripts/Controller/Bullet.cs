@@ -9,19 +9,18 @@ public class Bullet : MonoBehaviour
     private float speed;
     private int reflects, hits;
     private Rigidbody rb;
-    private Color color;
     private float damage, radius;
-    private static Color
-        black = new Color(.3f, .3f, .3f, 1f),
-        glow = new Color(.7f, .7f, .7f, 1f);
+    public CapsuleCollider cc;
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         radius = gameObject.GetComponent<SphereCollider>().radius;
-        rgb = BulletSpawner.rgb;
         if (dir != null)
             rb.velocity = dir * speed;
+        //cc = GetComponentInChildren<CapsuleCollider>();
+        if (cc == null) Debug.Log("No CapsuleCollider on Bullet");
     }
 
     // Update is called once per frame
@@ -41,7 +40,13 @@ public class Bullet : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (Physics.SphereCast(transform.position, radius, rb.velocity, out RaycastHit hitInfo, speed * Time.fixedDeltaTime, layerMask: (1 << 14) | (1 << 8)))
+        float distanceToTravel = speed * Time.fixedDeltaTime;
+
+        cc.height = distanceToTravel * 2;
+        cc.transform.rotation = Quaternion.LookRotation(rb.velocity);
+        cc.center = new Vector3(0f, 0f, distanceToTravel);
+
+        if (Physics.SphereCast(transform.position, radius, rb.velocity, out RaycastHit hitInfo, distanceToTravel, layerMask: (1 << 14) | (1 << 8)))
         {
             //Debug.Log("Hit SphereCast");
             if (hitInfo.collider.CompareTag("Enemy"))
@@ -49,8 +54,9 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    public void setProperties(int reflects, int hits, float damage, Color color)
+    public void setProperties(int reflects, int hits, float damage, Color color, string owner)
     {
+        cc.gameObject.layer = owner == "Player" ? 16 : 15;
         this.reflects = reflects;
         this.hits = hits;
         this.damage = damage;
@@ -59,9 +65,8 @@ public class Bullet : MonoBehaviour
 
     private void setColor(Color color)
     {
-        this.color = color;
         gameObject.GetComponent<Renderer>().material.color = color;
-        gameObject.GetComponent<Light>().color = color == black ? glow : color;
+        gameObject.GetComponent<Light>().color = color == GameState.black ? GameState.glow : color;
     }
 
     public void launch(Vector3 dir, float speed)
@@ -119,5 +124,10 @@ public class Bullet : MonoBehaviour
             }
             else Debug.LogWarning("bullet hit non-Entity");
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Bullet Bullet Collision: " + other);
     }
 }

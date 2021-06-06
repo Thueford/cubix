@@ -22,8 +22,8 @@ TagManager:
   - Collectable
   - EnemyPhysics
   - EnemyTrigger
-  - 
-  - 
+  - EnemyBulletTrigger
+  - PlayerBulletTrigger
   - 
   - 
   - 

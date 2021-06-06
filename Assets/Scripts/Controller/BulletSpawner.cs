@@ -4,93 +4,93 @@ using UnityEngine;
 
 public class BulletSpawner : MonoBehaviour
 {
-    public static float timeCounter;
-    private float 
-        rateOfFire = .3f, 
-        bulletSpeed = 100f, 
-        spread = 30f;
-    private const int amount = 5;
     public GameObject bulletPrefab;
-    float radius;
-    public static Vector3Int rgb = new Vector3Int(0, 0, 0);
-    private Color
-        black = new Color(.3f, .3f, .3f, 1f),
-        blue = new Color(0f, .3f, 1f, 1f),
-        green = new Color(0f, .7f, 0f, 1f);
     private Color color = new Color(.3f, .3f, .3f, 1f);
     public bool active;
+    private bool 
+        singleFire = true,
+        explodes = false;
+    private int
+        reflects = 0,
+        hits = 0,
+        amount = 5;
+    private float
+        rateOfFire = .3f,
+        bulletSpeed = 20f,
+        damage = 1f,
+        spread = 30f,
+        explosionRadius = 0f,
+        timeCounter,
+        shooterRadius;
 
     // Start is called before the first frame update
     void Start()
     {
         timeCounter = rateOfFire;
-        radius = GetComponent<SphereCollider>().radius;
+        shooterRadius = GetComponent<SphereCollider>().radius;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!CompareTag("Player")) return;
-
-        timeCounter += Time.deltaTime;
-        if (timeCounter > rateOfFire)
-        {
-            if (active && Input.GetMouseButton(0))
-            {
-                timeCounter = 0;
-                shoot(transform.forward);
-            } else
-                timeCounter = rateOfFire;
-        }
-
-        updateProperties();
+        timeCounter = Mathf.Min(timeCounter + Time.deltaTime, rateOfFire);
     }
 
-    void updateProperties()
+    public void updateColor(Vector3Int rgb)
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-            rgb.x = (~rgb.x) & 1;
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            rgb.y = (~rgb.y) & 1;
-            bulletSpeed *= (rgb.y == 1 ? 3f : (1 / 3f));
-            rateOfFire *= (rgb.y == 1 ? 2f : (1 / 2f));
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        { 
-            rgb.z = (~rgb.z) & 1;
-            rateOfFire *= (rgb.z == 1 ? 2/3f : 3/2f);
-        }
-
-        if (rgb == Vector3Int.zero) color = black;
-        else if (rgb == Vector3Int.forward) color = blue;
-        else if (rgb == Vector3Int.up) color = green;
+        if (rgb == Vector3Int.zero) color = GameState.black;
+        else if (rgb == Vector3Int.forward) color = GameState.blue;
+        else if (rgb == Vector3Int.up) color = GameState.green;
         else color = new Color(rgb.x, rgb.y, rgb.z, 1f);
+    }
+
+    public void toggleRed(bool b) {
+
+    }
+
+    public void toggleGreen(bool b)
+    {
+        bulletSpeed *= (b ? 3f : (1 / 3f));
+        rateOfFire *= (b ? 2f : (1 / 2f));
+        reflects = b ? 2 : 0;
+        hits = b ? 4 : 0;
+        damage *= b ? 2f : 0.5f;
+    }
+
+    public void toggleBlue(bool b)
+    {
+        rateOfFire *= b ? 2 / 3f : 3 / 2f;
+        damage *= b ? 0.5f : 2f;
+        singleFire = !b;
+    }
+
+    public void tryShot()
+    {
+        if (active && timeCounter >= rateOfFire)
+        {
+            timeCounter = 0;
+            shoot(transform.forward);
+        }
     }
 
     void shoot(Vector3 dir)
     {
-        int reflects = rgb.y == 1 ? 2 : 0;
-        int hits = rgb.y == 1 ? 4 : 0;
-        float damage = rgb.y == 1 ? 2f : 1f;
-        damage *= rgb.z == 1 ? 0.5f : 1f;
-
-        if (rgb.z == 0)
+        if (singleFire)
         {
-            CreateAndLaunch(dir, reflects, damage, hits);
+            CreateAndLaunch(dir);
         } else
         {
             float ang = spread / (amount-1);
             for (float a = -spread/2; a <= spread/2; a += ang)
-                CreateAndLaunch(Quaternion.Euler(0, a, 0) * dir, reflects, damage, hits);
+                CreateAndLaunch(Quaternion.Euler(0, a, 0) * dir);
         }
     }
 
-    void CreateAndLaunch(Vector3 dir, int reflects, float damage, int hits)
+    void CreateAndLaunch(Vector3 dir)
     {
-        GameObject bullet = Instantiate(bulletPrefab, transform.position + dir * radius, Quaternion.identity);
+        GameObject bullet = Instantiate(bulletPrefab, transform.position + dir * shooterRadius, Quaternion.identity);
         bullet.GetComponent<Bullet>().launch(dir, bulletSpeed);
-        bullet.GetComponent<Bullet>().setProperties(reflects, hits, damage, color);
+        bullet.GetComponent<Bullet>().setProperties(reflects, hits, damage, color, gameObject.tag);
         bullet.tag = tag;
     }
 }

@@ -13,7 +13,9 @@ public class Player : EntityBase
     public float startHP;
 
     public Text txtDbg;
-    public GameObject startStage;
+
+    public BulletSpawner bs;
+    private Vector3Int rgb = new Vector3Int(0, 0, 0);
 
     // Start is called before the first frame update
     override protected void Start()
@@ -21,9 +23,8 @@ public class Player : EntityBase
         HP = startHP;
         base.Start();
         self = this;
-        if(txtDbg == null) Debug.LogWarning("player.txtDbg not assigned");
-
-        StartCoroutine(StartGame());
+        bs = gameObject.GetComponent<BulletSpawner>();
+        if (txtDbg == null) Debug.LogWarning("player.txtDbg not assigned");
     }
 
     public static void dbgSet(string msg) {
@@ -34,33 +35,17 @@ public class Player : EntityBase
         if (self && self.txtDbg) self.txtDbg.text += "\n" + msg;
     }
 
-    IEnumerator StartGame()
-    {
-        yield return new WaitForSeconds(0.2f);
-
-        // spawn in stage0
-        if (startStage == null)
-        {
-            GameStage[] stages = FindObjectsOfType<GameStage>();
-            Debug.Assert(stages.Length != 0, "no stages found");
-            Teleport(stages[0]);
-        }
-        else Teleport(startStage.GetComponent<GameStage>());
-    }
-
     // Update is called once per frame
     override protected void Update()
     {
         base.Update();
         if (movable)
         {
-            Vector3 dir = Vector2.zero;
+            Vector3 dir = Vector3.zero;
 
+            rgb = ReadColorInput(rgb);
             // read input keys
-            if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) dir.z = -1;
-            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) dir.x = 1;
-            if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) dir.z = 1;
-            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) dir.x = -1;
+            dir = ReadDirInput();
             dir = dir.normalized * accelerationForce;
 
             // apply direction
@@ -73,6 +58,51 @@ public class Player : EntityBase
             // intersect mouse ray with floor plane
             float f = (transform.position.y-r.origin.y)/r.direction.y;
             transform.forward = r.GetPoint(f) - transform.position;
+
+            ReadShootInput();
+        }
+    }
+
+    private Vector3 ReadDirInput()
+    {
+        Vector3 dir = Vector3.zero;
+        if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) dir.z -= 1;
+        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) dir.x += 1;
+        if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) dir.z += 1;
+        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) dir.x -= 1;
+        return dir;
+    }
+
+    private Vector3Int ReadColorInput(Vector3Int rgb)
+    {
+        //Vector3Int rgb = this.rgb;
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            rgb.x = 1 - rgb.x;
+            bs.toggleRed(rgb.x == 1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            rgb.y = 1 - rgb.y;
+            bs.toggleGreen(rgb.y == 1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            rgb.z = 1 - rgb.z;
+            bs.toggleBlue(rgb.z == 1);
+        }
+        if (rgb != this.rgb)
+        {
+            bs.updateColor(rgb);
+        }
+        return rgb;
+    }
+
+    private void ReadShootInput()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            bs.tryShot();
         }
     }
 
