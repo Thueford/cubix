@@ -252,11 +252,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1424360558515836998}
-  - component: {fileID: 4147551083950901996}
   - component: {fileID: 8221834717104777736}
   m_Layer: 14
   m_Name: triggerCollider
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -275,22 +274,6 @@ Transform:
   m_Father: {fileID: 5487182818035476230}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &4147551083950901996
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8424105872709786154}
-  serializedVersion: 2
-  m_Mass: 0.0000001
-  m_Drag: 0
-  m_AngularDrag: 0
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 2
 --- !u!135 &8221834717104777736
 SphereCollider:
   m_ObjectHideFlags: 0

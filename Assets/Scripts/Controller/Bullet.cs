@@ -10,7 +10,7 @@ public class Bullet : MonoBehaviour
     private int reflects, hits;
     private Rigidbody rb;
     private Color color;
-    private float damage;
+    private float damage, radius;
     private static Color
         black = new Color(.3f, .3f, .3f, 1f),
         glow = new Color(.7f, .7f, .7f, 1f);
@@ -18,7 +18,7 @@ public class Bullet : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-
+        radius = gameObject.GetComponent<SphereCollider>().radius;
         rgb = BulletSpawner.rgb;
         if (dir != null)
             rb.velocity = dir * speed;
@@ -37,6 +37,16 @@ public class Bullet : MonoBehaviour
             rb.velocity = rb.velocity.normalized * speed;
         }
         oldVelocity = rb.velocity;
+    }
+
+    private void FixedUpdate()
+    {
+        if (Physics.SphereCast(transform.position, radius, rb.velocity, out RaycastHit hitInfo, speed * Time.fixedDeltaTime, layerMask: (1 << 14) | (1 << 8)))
+        {
+            //Debug.Log("Hit SphereCast");
+            if (hitInfo.collider.CompareTag("Enemy"))
+                hitTarget(hitInfo.collider);
+        }
     }
 
     public void setProperties(int reflects, int hits, float damage, Color color)
@@ -94,7 +104,7 @@ public class Bullet : MonoBehaviour
         */
     }
 
-    private void OnTriggerEnter(Collider c)
+    private void hitTarget(Collider c)
     {
         //Debug.Log("BTrigger: " + c.name + " " + tag + " " + c.tag);
         if (!CompareTag(c.tag))

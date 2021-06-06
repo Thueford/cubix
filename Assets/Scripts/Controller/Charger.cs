@@ -25,7 +25,7 @@ public class Charger : MonoBehaviour
 
     private void OnTriggerEnter(Collider c)
     {
-        if (c.name.ToLower() == "player")
+        if (c.CompareTag("Player"))
             GetComponentInChildren<Animator>().enabled = true;
     }
 
