@@ -91,6 +91,6 @@ public class BulletSpawner : MonoBehaviour
         GameObject bullet = Instantiate(bulletPrefab, transform.position + dir * shooterRadius, Quaternion.identity);
         bullet.GetComponent<Bullet>().launch(dir, bulletSpeed);
         bullet.GetComponent<Bullet>().setProperties(reflects, hits, damage, color, gameObject.tag);
-        bullet.tag = tag;
+        bullet.tag = tag + "Bullet";
     }
 }
