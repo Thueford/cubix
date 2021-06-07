@@ -325,6 +325,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7958330587720593824, guid: da2792a8ce1e4d54388cd8c5a606e116,
         type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7958330587720593824, guid: da2792a8ce1e4d54388cd8c5a606e116,
+        type: 3}
       propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
@@ -816,7 +821,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!33 &1739726250
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -999,7 +1004,7 @@ PrefabInstance:
     - target: {fileID: 8367458984102672704, guid: 60580c159fb96a8458a29dd2496e3b5a,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8367458984102672707, guid: 60580c159fb96a8458a29dd2496e3b5a,
         type: 3}

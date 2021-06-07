@@ -19,6 +19,7 @@ public class shoot : MonoBehaviour
     {
         radius = gameObject.GetComponent<SphereCollider>().radius;
         if (cc == null) Debug.Log("No CapsuleCollider on Bullet");
+        transform.rotation = Quaternion.LookRotation(dir);
     }
 
     // Update is called once per frame
@@ -42,12 +43,12 @@ public class shoot : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float distanceToTravel = rb.velocity.magnitude * Time.fixedDeltaTime;
+        float distanceToTravel = rb.velocity.magnitude * Time.fixedDeltaTime / cc.transform.lossyScale.x;
 
         cc.height = distanceToTravel;
-        cc.transform.rotation = Quaternion.LookRotation(rb.velocity);
         cc.center = new Vector3(0f, 0f, distanceToTravel/2);
 
+        /*
         if (Physics.SphereCast(transform.position, radius, rb.velocity, out RaycastHit hitInfo, distanceToTravel, layerMask: (1 << 14) | (1 << 8)))
         {
             //Debug.Log("Hit SphereCast");
@@ -55,6 +56,7 @@ public class shoot : MonoBehaviour
                 Debug.Log("Enemy");
                 //hitTarget(hitInfo.collider);
         }
+        */
     }
 
     void OnCollisionEnter(Collision c)
@@ -65,6 +67,10 @@ public class shoot : MonoBehaviour
 
         // reflect our old velocity off the contact point's normal vector
         Vector3 reflectedVelocity = Vector3.Reflect(oldVelocity, contact.normal);
+
+        //rotate the object by the same ammount we changed its velocity
+        Quaternion rotation = Quaternion.FromToRotation(oldVelocity, reflectedVelocity);
+        transform.rotation = rotation * transform.rotation;
 
         // assign the reflected velocity back to the rigidbody
         rb.velocity = oldVelocity = reflectedVelocity;

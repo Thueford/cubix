@@ -42,7 +42,7 @@ public abstract class EnemyBase : EntityBase
                 factor += d.magnitude * Vector3.Dot(a, d.normalized);
 
             // avoid walls
-            if (Physics.Raycast(transform.position, a, out RaycastHit hitInfo, maxdistW))
+            if (Physics.Raycast(transform.position, a, out RaycastHit hitInfo, maxdistW/*, layerMask: 1<<9*/))
                 if (hitInfo.collider.CompareTag("Wall"))
                     factor += fwalls * (1 - hitInfo.distance / maxdistW);
 
