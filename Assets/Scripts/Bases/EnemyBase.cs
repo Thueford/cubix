@@ -13,13 +13,21 @@ public abstract class EnemyBase : EntityBase
         F_PLAYER = 2,
         F_ENEMIES = -1;
 
+    public Color color;
+
     private int pnD;
 
     // Start is called before the first frame update
     override protected void Start()
     {
         base.Start();
+        
         pnD = Random.Range(int.MinValue, int.MaxValue);
+
+        if (GameState.unlockedColors.x != 0) color.r = 1;
+        if (GameState.unlockedColors.y != 0) color.g = 1;
+        if (GameState.unlockedColors.z != 0) color.b = 1;
+        GetComponentInChildren<Renderer>().material.color = color;
     }
 
     // Update is called once per frame
@@ -63,9 +71,12 @@ public abstract class EnemyBase : EntityBase
         return d;
     }
 
-    public void OnSpawn(AnimationEvent ev)
+    override public void OnSpawn(AnimationEvent ev)
     {
-        anim.enabled = false;
+        base.OnSpawn(ev);
+        Debug.Log("Enemy Spawn");
+        // look at player
+        transform.forward = Player.self.transform.position - transform.position;
     }
 
     public void dbgLine(Vector3 dir, float length, Color color)

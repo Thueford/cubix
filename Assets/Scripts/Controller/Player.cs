@@ -149,9 +149,10 @@ public class Player : EntityBase
         stage.OnStageEnter();
     }
 
-    public void OnSpawn(AnimationEvent ev)
+    override public void OnSpawn(AnimationEvent ev)
     {
-        anim.enabled = false;
+        base.OnSpawn(ev);
+        Debug.Log("Player Spawn");
         curStage.OnStageEntered();
     }
 }

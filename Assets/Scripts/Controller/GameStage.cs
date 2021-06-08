@@ -8,19 +8,22 @@ public class GameStage : MonoBehaviour
 
     public void Start()
     {
-        actors.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     // Called when player steps on portal
     public void OnStageEntering()
     {
-
+        gameObject.SetActive(true);
+        GetComponentInChildren<Portal>().Disable();
     }
 
     // Called when player is spawning
     public void OnStageEnter()
     {
         Debug.Log("Stage: " + name);
+        gameObject.SetActive(true);
+        GetComponentInChildren<Portal>().Disable();
 
         // copy camera
         GameCamera gcam = FindObjectOfType<GameCamera>();
@@ -33,28 +36,28 @@ public class GameStage : MonoBehaviour
         GetComponentInChildren<Spawn>().Disable();
         if(next != null) next.GetComponentInChildren<Spawn>().Enable();
 
-        actors.SetActive(true);
+        // actors.SetActive(true);
     }
 
     public void OnStageEntered()
     {
-        foreach (EnemyBase eb in GetComponentsInChildren<EnemyBase>())
-            eb.movable = true;
-        foreach (ShooterBase sb in GetComponentsInChildren<ShooterBase>())
-            sb.active = true;
+        Player.self.Melt();
+        foreach (EntityBase eb in GetComponentsInChildren<EntityBase>())
+            eb.Melt();
     }
 
     // Called when player steps on portal
     public void OnStageExit()
     {
-        foreach (EnemyBase eb in GetComponentsInChildren<EnemyBase>())
-            eb.movable = false;
+        Player.self.Freeze();
+        foreach (EntityBase eb in GetComponentsInChildren<EntityBase>())
+            eb.Freeze();
     }
 
     // Called when player left the stage
     public void OnStageExited()
     {
         GetComponentInChildren<Portal>().Disable();
-        actors.SetActive(false);
+        gameObject.SetActive(false);
     }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EntityBase : MonoBehaviour
+public abstract class EntityBase : MonoBehaviour
 {
     public float accelerationForce;
     public float maxSpeed;
@@ -17,6 +17,7 @@ public class EntityBase : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
+        Freeze();
     }
 
     virtual protected void Update()
@@ -30,18 +31,35 @@ public class EntityBase : MonoBehaviour
         if (HP <= 0) Die();
     }
 
-    public void Die()
+    virtual public void Freeze()
     {
-        Debug.Log("killing " + name);
-        if (this is Player) Player.curStage.OnStageExit();
-        anim.enabled = true;
-        anim.Play("Die");
+        movable = false;
+        foreach (ShooterBase sb in GetComponents<ShooterBase>()) sb.active = false;
     }
 
-    public void OnDie(AnimationEvent ev)
+    virtual public void Melt()
+    {
+        movable = true;
+        foreach (ShooterBase sb in GetComponents<ShooterBase>()) sb.active = true;
+    }
+
+    virtual public void Die()
+    {
+        Debug.Log("killing " + name);
+        anim.enabled = true;
+        anim.Play("Die");
+        Freeze();
+        if (this is Player) Player.curStage.OnStageExit();
+    }
+
+    virtual public void OnDie(AnimationEvent ev)
     {
         Debug.Log("killed " + name);
         if (!(this is Player)) Destroy(gameObject);
+    }
 
+    virtual public void OnSpawn(AnimationEvent ev)
+    {
+        anim.enabled = false;
     }
 }

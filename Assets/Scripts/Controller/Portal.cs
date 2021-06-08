@@ -7,13 +7,11 @@ public class Portal : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Disable();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     private void OnTriggerEnter(Collider c)

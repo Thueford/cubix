@@ -28,7 +28,7 @@ public class ArcherShooter : ShooterBase
     override protected void Update()
     {
         base.Update();
-        base.tryShot();
+        tryShot();
     }
 
 }

@@ -21,6 +21,7 @@ public class Charger : MonoBehaviour
     {
         Debug.Log("Charged");
         Player.curStage.GetComponentInChildren<Portal>().Enable();
+        GetComponentInChildren<Animator>().enabled = false;
     }
 
     private void OnTriggerEnter(Collider c)
@@ -31,7 +32,7 @@ public class Charger : MonoBehaviour
 
     private void OnTriggerExit(Collider c)
     {
-        if (c.name.ToLower() == "player")
+        if (c.CompareTag("Player"))
             GetComponentInChildren<Animator>().enabled = false;
     }
 }
