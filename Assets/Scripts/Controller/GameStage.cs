@@ -40,6 +40,8 @@ public class GameStage : MonoBehaviour
     {
         foreach (EnemyBase eb in GetComponentsInChildren<EnemyBase>())
             eb.movable = true;
+        foreach (ShooterBase sb in GetComponentsInChildren<ShooterBase>())
+            sb.active = true;
     }
 
     // Called when player steps on portal

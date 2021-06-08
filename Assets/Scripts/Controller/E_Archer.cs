@@ -55,7 +55,8 @@ public class E_Archer: EnemyBase
                 rb.velocity = rb.velocity.normalized * maxSpeed;
 
             // look at player
-            if(effectors[0].magnitude > 0) transform.forward = effectors[0];
+            //if(effectors[0].magnitude > 0) transform.forward = effectors[0];
+            transform.forward = -transform.position + Player.self.transform.position;
         }
     }
 }

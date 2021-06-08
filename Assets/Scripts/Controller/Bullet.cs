@@ -4,19 +4,26 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    private bool explodes;
     private Vector3 dir, oldVelocity;
-    private float speed;
-    private int reflects, hits;
     public Rigidbody rb;
-    private float damage, radius, velocityMultiplier;
+    private float radius, velocityMultiplier;
     public CapsuleCollider cc;
+    private Properties p;
+
+    public struct Properties
+    {
+        public bool explodes;
+        public int reflects, hits;
+        public float speed, damage, explosionRadius;
+        public string owner;
+        public Color color;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         if (!rb) Debug.LogWarning("No Rigidbody assigned to Bullet Script");
-        if (cc == null) Debug.LogWarning("No CapsuleCollider on Bullet");
+        if (!cc) Debug.LogWarning("No CapsuleCollider assigned to Bullet Script");
         radius = gameObject.GetComponent<SphereCollider>().radius;
         velocityMultiplier = Time.fixedDeltaTime / cc.transform.lossyScale.x;
     }
@@ -29,9 +36,9 @@ public class Bullet : MonoBehaviour
             Debug.Log("Bullet Stuck");
             Destroy(gameObject);
         }
-        else if (rb.velocity.magnitude < speed)
+        else if (rb.velocity.magnitude < p.speed)
         {
-            rb.velocity = rb.velocity.normalized * speed;
+            rb.velocity = rb.velocity.normalized * p.speed;
         }
         oldVelocity = rb.velocity;
     }
@@ -42,27 +49,14 @@ public class Bullet : MonoBehaviour
 
         cc.height = distanceToTravel + radius*2;
         cc.center = new Vector3(0f, 0f, distanceToTravel/2);
-
-        /*
-        if (Physics.SphereCast(transform.position, radius, rb.velocity, out RaycastHit hitInfo, distanceToTravel, layerMask: (1 << 14) | (1 << 8)))
-        {
-            //Debug.Log("Hit SphereCast");
-            if (hitInfo.collider.CompareTag("Enemy"))
-                hitTarget(hitInfo.collider);
-        }
-        */
     }
 
-    public void setProperties(BulletSpawner.Properties p)
+    public void setProperties(Properties p)
     {
-        cc.gameObject.layer = p.owner == "Player" ? 16 : 15;
-        tag = p.owner + "Bullet";
-        reflects = p.reflects;
-        hits = p.hits;
-        damage = p.damage;
-        speed = p.bulletSpeed;
-        explodes = p.explodes;
+        this.p = p;
         setColor(p.color);
+        cc.gameObject.layer = p.owner == "Player" ? 16 : 15;
+        tag = cc.tag = p.owner + "Bullet";
     }
 
     private void setColor(Color color)
@@ -74,7 +68,7 @@ public class Bullet : MonoBehaviour
     public void launch(Vector3 dir)
     {
         this.dir = dir;
-        if (rb) rb.velocity = this.dir * speed;
+        if (rb) rb.velocity = this.dir * p.speed;
         transform.rotation = Quaternion.LookRotation(dir);
     }
 
@@ -87,9 +81,9 @@ public class Bullet : MonoBehaviour
     //Source: https://answers.unity.com/questions/352609/how-can-i-reflect-a-projectile.html
     void OnCollisionEnter(Collision c)
     {
-        if (explodes) explode();
+        if (p.explodes) explode();
 
-        if (--reflects < 0)
+        if (--p.reflects < 0)
         {
             Destroy(gameObject);
             return;
@@ -120,21 +114,33 @@ public class Bullet : MonoBehaviour
             if (b)
             {
                 Debug.Log("bullet hit Enemy");
-                b.Hit(damage);
-                if (--hits < 0) Destroy(gameObject);
+                b.Hit(p.damage);
+                if (--p.hits < 0) Destroy(gameObject);
             }
             else Debug.LogWarning("bullet hit non-Entity");
         }
         else if (c.CompareTag("Player") && CompareTag("EnemyBullet"))
         {
-            //Damage Player
-            if (--hits < 0) Destroy(gameObject);
+            EntityBase b = c.GetComponentInParent<EntityBase>();
+            if (b)
+            {
+                Debug.Log("bullet hit Player");
+                b.Hit(p.damage);
+                if (--p.hits < 0) Destroy(gameObject);
+            }
+            else Debug.LogWarning("bullet hit non-Entity");
         }
         else if (c.CompareTag("EnemyBullet") && CompareTag("PlayerBullet"))
         {
-            Debug.Log("BulletBulletCollision");
-            Destroy(c.gameObject);
-            if (--hits < 0) Destroy(gameObject);
+            //Debug.Log("BulletBulletCollision");
+            //Destroy(c.transform.parent.gameObject);
+            if (--p.hits < 0) Destroy(gameObject);
+        }
+        else if (c.CompareTag("PlayerBullet") && CompareTag("EnemyBullet"))
+        {
+            //Debug.Log("BulletBulletCollision");
+            //Destroy(c.transform.parent.gameObject);
+            if (--p.hits < 0) Destroy(gameObject);
         }
     }
 

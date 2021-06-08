@@ -17,14 +17,21 @@ MonoBehaviour:
   movable: 0
   HP: 0
   startHP: 3
-  MAXDIST_E: 10
-  MAXDIST_P: 20
-  MAXDIST_W: 10
-  F_WALLS: -2
-  F_PERLIN: 0.5
-  F_PLAYER: 2.2
-  F_APLAYER: -2
-  F_ENEMIES: -1
+--- !u!114 &236654566384133876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8367458984102672704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6ebfb08718d80449a41e64db8bbcb05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  active: 0
+  bulletPrefab: {fileID: 7958330587720593824, guid: da2792a8ce1e4d54388cd8c5a606e116,
+    type: 3}
 --- !u!1001 &4051353101770595906
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -62,7 +69,8 @@ PrefabInstance:
       propertyPath: active
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6835014429758451763, guid: 07b4f49e86467f145ad605a79f630e95, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 07b4f49e86467f145ad605a79f630e95, type: 3}
 --- !u!1 &8367458984102672704 stripped
 GameObject:

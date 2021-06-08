@@ -14,7 +14,7 @@ public class Player : EntityBase
 
     public Text txtDbg;
 
-    public BulletSpawner bs;
+    public PlayerShooter bs;
     private Vector3Int rgb = new Vector3Int(0, 0, 0);
 
     // Start is called before the first frame update
@@ -23,7 +23,7 @@ public class Player : EntityBase
         HP = startHP;
         base.Start();
         self = this;
-        bs = gameObject.GetComponent<BulletSpawner>();
+        bs = gameObject.GetComponent<PlayerShooter>();
         if (txtDbg == null) Debug.LogWarning("player.txtDbg not assigned");
     }
 
