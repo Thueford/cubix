@@ -34,7 +34,7 @@ public class GameStage : MonoBehaviour
 
         Hint h = GetComponentInChildren<Hint>();
         if (h != null) h.ResetHints();
-        GetComponentInChildren<ChargeAnim>().Reset(1/chargeTime);
+        GetComponentInChildren<ChargeAnim>().Reset(chargeTime);
         GetComponentInChildren<Spawn>().Disable();
         if(next != null) next.GetComponentInChildren<Spawn>().Enable();
 
