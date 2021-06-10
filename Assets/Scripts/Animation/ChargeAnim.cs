@@ -17,10 +17,10 @@ public class ChargeAnim : MonoBehaviour
         transform.localScale = new Vector3(0, 1, 0);
     }
 
-    public void Reset(float speed)
+    public void Reset(float time)
     {
         Reset();
-        anim.speed = speed;
+        anim.speed = 1/time;
     }
 
     void OnCharged(AnimationEvent ev) {

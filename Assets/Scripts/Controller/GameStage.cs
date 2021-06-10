@@ -6,7 +6,7 @@ public class GameStage : MonoBehaviour
 {
     public GameObject cam, spawn, actors, next;
     public int colorSlots = 3;
-    public float chargingSpeed = 1;
+    public float chargeTime = 10;
 
     public void Start()
     {
@@ -34,7 +34,7 @@ public class GameStage : MonoBehaviour
 
         Hint h = GetComponentInChildren<Hint>();
         if (h != null) h.ResetHints();
-        GetComponentInChildren<ChargeAnim>().Reset(chargingSpeed);
+        GetComponentInChildren<ChargeAnim>().Reset(1/chargeTime);
         GetComponentInChildren<Spawn>().Disable();
         if(next != null) next.GetComponentInChildren<Spawn>().Enable();
 
