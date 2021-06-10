@@ -24,10 +24,11 @@ public abstract class EnemyBase : EntityBase
         
         pnD = Random.Range(int.MinValue, int.MaxValue);
 
-        if (GameState.unlockedColors.x != 0) color.r = 1;
-        if (GameState.unlockedColors.y != 0) color.g = 1;
-        if (GameState.unlockedColors.z != 0) color.b = 1;
+        if (GameState.self.unlockedColors.x != 0) color.r = 1;
+        if (GameState.self.unlockedColors.y != 0) color.g = 1;
+        if (GameState.self.unlockedColors.z != 0) color.b = 1;
         GetComponentInChildren<Renderer>().material.color = color;
+        GetComponentInChildren<Light>().color = color == GameState.black ? GameState.glow : color;
     }
 
     // Update is called once per frame

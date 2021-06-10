@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 7239240670957358722}
   - component: {fileID: 8044385844186000547}
   - component: {fileID: 4761858882520445552}
-  m_Layer: 7
+  - component: {fileID: 484370860486712777}
+  m_Layer: 12
   m_Name: Collectable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -82,6 +83,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &484370860486712777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4761858882520445553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29c7a329bfe79e24d8cac60f69624fbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
 --- !u!1 &4979802801901812961
 GameObject:
   m_ObjectHideFlags: 0
@@ -94,7 +108,7 @@ GameObject:
   - component: {fileID: 4979802801901812957}
   - component: {fileID: 4979802801901812958}
   - component: {fileID: 4979802801901812959}
-  m_Layer: 7
+  m_Layer: 12
   m_Name: vCollectable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -175,7 +189,7 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 1, g: 0.99296916, b: 0, a: 1}
+  m_Color: {r: 0.18867922, g: 0.18867922, b: 0.18867922, a: 1}
   m_Intensity: 2
   m_Range: 6
   m_SpotAngle: 30

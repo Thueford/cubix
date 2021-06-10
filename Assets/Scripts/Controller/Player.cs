@@ -16,6 +16,7 @@ public class Player : EntityBase
 
     public PlayerShooter bs;
     private Vector3Int rgb = new Vector3Int(0, 0, 0);
+    private Vector3Int lastActivatedColor = new Vector3Int(0, 0, 0);
 
     // Start is called before the first frame update
     override protected void Start()
@@ -76,24 +77,36 @@ public class Player : EntityBase
     private Vector3Int ReadColorInput(Vector3Int rgb)
     {
         //Vector3Int rgb = this.rgb;
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (GameState.self.maxActiveColors == 0) return rgb;
+
+        if (Input.GetKeyDown(KeyCode.Alpha1) && GameState.self.unlockedColors.x == 1)
         {
             rgb.x = 1 - rgb.x;
-            bs.toggleRed(rgb.x == 1);
+            if (GameState.self.maxActiveColors == 1 && rgb.x == 1) rgb = Vector3Int.right;
+            if (GameState.self.maxActiveColors == 2 && rgb.x + rgb.y + rgb.z == 3)
+                rgb = Vector3Int.right + lastActivatedColor;
+            if (rgb.x == 1) lastActivatedColor = Vector3Int.right;
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        if (Input.GetKeyDown(KeyCode.Alpha2) && GameState.self.unlockedColors.y == 1)
         {
             rgb.y = 1 - rgb.y;
-            bs.toggleGreen(rgb.y == 1);
+            if (GameState.self.maxActiveColors == 1 && rgb.y == 1) rgb = Vector3Int.up;
+            if (GameState.self.maxActiveColors == 2 && rgb.x + rgb.y + rgb.z == 3)
+                rgb = Vector3Int.up + lastActivatedColor;
+            if (rgb.y == 1) lastActivatedColor = Vector3Int.up;
         }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
+        if (Input.GetKeyDown(KeyCode.Alpha3) && GameState.self.unlockedColors.z == 1)
         {
             rgb.z = 1 - rgb.z;
-            bs.toggleBlue(rgb.z == 1);
+            if (GameState.self.maxActiveColors == 1 && rgb.z == 1) rgb = Vector3Int.forward;
+            if (GameState.self.maxActiveColors == 2 && rgb.x + rgb.y + rgb.z == 3)
+                rgb = Vector3Int.forward + lastActivatedColor;
+            if (rgb.z == 1) lastActivatedColor = Vector3Int.forward;
         }
         if (rgb != this.rgb)
         {
             bs.updateColor(rgb);
+            bs.updateProperties(rgb, this.rgb);
         }
         return rgb;
     }

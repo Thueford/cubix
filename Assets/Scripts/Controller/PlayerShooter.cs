@@ -39,6 +39,13 @@ public class PlayerShooter : ShooterBase
         else p.color = new Color(rgb.x, rgb.y, rgb.z, 1f);
     }
 
+    public void updateProperties(Vector3Int rgbNew, Vector3Int rgbOld)
+    {
+        if (rgbNew.x != rgbOld.x) toggleRed(rgbNew.x == 1);
+        if (rgbNew.y != rgbOld.y) toggleGreen(rgbNew.y == 1);
+        if (rgbNew.z != rgbOld.z) toggleBlue(rgbNew.z == 1);
+    }
+
     public void toggleRed(bool b) {
         p.explodes = b;
         p.speed *= (b ? 3/2f : 2/3f);
