@@ -580,6 +580,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: E_Archer
       objectReference: {fileID: 0}
+    - target: {fileID: 8367458984102672704, guid: d1695d8d7ce0254499686bc9ad288bb7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8367458984102672708, guid: d1695d8d7ce0254499686bc9ad288bb7,
         type: 3}
       propertyPath: m_RootOrder
@@ -829,6 +834,7 @@ GameObject:
   - component: {fileID: 1990724499}
   - component: {fileID: 1990724502}
   - component: {fileID: 1990724503}
+  - component: {fileID: 1990724504}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -923,12 +929,37 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1990724498}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f00167f45e3349d478ff2ca5e4f166d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MatPostProc: {fileID: 2100000, guid: 274b1b0192379f441995496a3b24ed5c, type: 2}
+  MatPostProc1: {fileID: 2100000, guid: 274b1b0192379f441995496a3b24ed5c, type: 2}
+  MatPostProc2: {fileID: 2100000, guid: 274b1b0192379f441995496a3b24ed5c, type: 2}
+  doTwoSteps: 0
+--- !u!114 &1990724504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1990724498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a13974c4cb7e7c544a221ce2e43e41d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bloom: {fileID: 7200000, guid: 47862c77207702b4b811ee8ab5a54fea, type: 3}
+  chromaticAberration: {fileID: 7200000, guid: b44717a65c53e5d40a78a11956cae06b, type: 3}
+  sourceTex: {fileID: 0}
+  brightTex: {fileID: 0}
+  blurrBuff: {fileID: 0}
+  caTex: {fileID: 0}
+  useBloom: 1
+  useCA: 1
+  bloomBlurrAmount: 1
+  bloomThreshold: 0.555
+  caAmount: 4
 --- !u!1001 &2040687778
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -949,7 +980,7 @@ PrefabInstance:
     - target: {fileID: 8367458984102672704, guid: 60580c159fb96a8458a29dd2496e3b5a,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8367458984102672708, guid: 60580c159fb96a8458a29dd2496e3b5a,
         type: 3}

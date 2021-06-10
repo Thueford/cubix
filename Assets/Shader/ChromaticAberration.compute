@@ -1,0 +1,22 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSshift
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+RWTexture2D<float4> Source;
+RWTexture2D<float4> Result;
+
+static const int numThreads = 24;
+
+uniform uint amount;
+
+[numthreads(numThreads, numThreads, 1)]
+void CSshift(uint3 id : SV_DispatchThreadID)
+{
+    float3 col;
+    col.r = Source[id.xy + uint2(amount, 0)].r;
+    col.g = Source[id.xy].g;
+    col.b = Source[id.xy - uint2(amount, 0)].b;
+    
+    Result[id.xy] = float4(col, 1.0);
+}

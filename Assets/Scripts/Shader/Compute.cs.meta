@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: a13974c4cb7e7c544a221ce2e43e41d8
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - bloom: {fileID: 7200000, guid: 47862c77207702b4b811ee8ab5a54fea, type: 3}
+  - chromaticAberration: {fileID: 7200000, guid: b44717a65c53e5d40a78a11956cae06b,
+      type: 3}
+  - sourceTex: {instanceID: 0}
+  - brightTex: {instanceID: 0}
+  - blurrBuff: {instanceID: 0}
+  - caTex: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
