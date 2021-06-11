@@ -1,0 +1,40 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSflare
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+RWTexture2D<float4> Source;
+RWTexture2D<float4> Result;
+
+static const int numThreads = 24;
+
+uniform int ghostCount;
+uniform float ghostSpacing;
+
+[numthreads(numThreads, numThreads, 1)]
+void CSflare(uint3 id : SV_DispatchThreadID)
+{
+    float width, height;
+    Source.GetDimensions(width, height);
+    //flip coordinates normalized to (-0.5, 0.5)
+    float2 uv = -((id.xy / float2(width, height)) - .5); 
+    //vector from uv to the image center;
+    float2 ghostVec = -(uv) * ghostSpacing;
+    
+    for (int i = 0; i < ghostCount; ++i)
+    {
+        //Coordinates to look for a bright spot 
+        float2 suv = ghostVec * float2(i, i);
+        uint2 suvcoords = uint2(suv + 0.5 * float2(width, height));
+        //Bright spots at the edge of the screen matter less;
+        float weight = smoothstep(0, .75, distance(float2(0, 0), suv));
+        //create ghost
+        if (any(Source[suvcoords].rgb))
+        {
+            uint2 uvcoords = uint2(uv + 0.5 * float2(width, height));
+            Result[uvcoords] = float4(Source[suvcoords].rgb * weight, 1);
+        }
+    }
+    float3 col;
+    //Result[id.xy] = float4(col, 1.0);
+}

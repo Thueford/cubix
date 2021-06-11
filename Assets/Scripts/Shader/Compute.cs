@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Compute : MonoBehaviour
 {
-    public ComputeShader bloom, chromaticAberration;
+    public ComputeShader bloom, chromaticAberration, lensFlare;
 
-    public RenderTexture sourceTex, brightTex, blurrBuff, caTex;
+    public RenderTexture sourceTex, brightTex, blurrBuff, bloomResult, caResult;
 
     public bool useBloom = true;
     public bool useCA = true;
@@ -31,10 +31,11 @@ public class Compute : MonoBehaviour
         sourceTex = createTexture();
         brightTex = createTexture();
         blurrBuff = createTexture();
-        caTex = createTexture();
+        caResult = createTexture();
 
         setBloomUniforms();
         setCAUniforms();
+        setLensFlareUniforms();
     }
 
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
@@ -59,7 +60,7 @@ public class Compute : MonoBehaviour
         {
             chromaticAberration.SetInt("amount", caAmount);
             chromaticAberration.Dispatch(0, xThreads, yThreads, 1);
-            Graphics.Blit(caTex, destination);
+            Graphics.Blit(caResult, destination);
         }
         else
             Graphics.Blit(sourceTex, destination);
@@ -96,6 +97,12 @@ public class Compute : MonoBehaviour
         chromaticAberration.SetInt("amount", caAmount);
 
         chromaticAberration.SetTexture(0, "Source", sourceTex);
-        chromaticAberration.SetTexture(0, "Result", caTex);
+        chromaticAberration.SetTexture(0, "Result", caResult);
+    }
+
+    private void setLensFlareUniforms()
+    {
+        lensFlare.SetInt("ghostCount", 2);
+        lensFlare.SetFloat("ghostSpacing", 1);
     }
 }
