@@ -14,15 +14,17 @@ public abstract class EnemyBase : EntityBase
         F_ENEMIES = -1;
 
     public Color color;
-
     private int pnD;
+    override public void Awake()
+    {
+        base.Awake();
+        pnD = Random.Range(int.MinValue, int.MaxValue);
+    }
 
     // Start is called before the first frame update
-    override protected void Start()
+    override public void Start()
     {
         base.Start();
-        
-        pnD = Random.Range(int.MinValue, int.MaxValue);
 
         if (GameState.self.unlockedColors.x != 0) color.r = 1;
         if (GameState.self.unlockedColors.y != 0) color.g = 1;
@@ -32,7 +34,7 @@ public abstract class EnemyBase : EntityBase
     }
 
     // Update is called once per frame
-    override protected void Update()
+    override public void Update()
     {
         base.Update();
     }

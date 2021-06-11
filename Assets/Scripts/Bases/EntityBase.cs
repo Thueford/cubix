@@ -12,15 +12,20 @@ public abstract class EntityBase : MonoBehaviour
     protected Animator anim;
     protected Rigidbody rb;
 
+    virtual public void Awake()
+    {
+
+    }
+
     // Start is called before the first frame update
-    virtual protected void Start()
+    virtual public void Start()
     {
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         Freeze();
     }
 
-    virtual protected void Update()
+    virtual public void Update()
     {
 
     }

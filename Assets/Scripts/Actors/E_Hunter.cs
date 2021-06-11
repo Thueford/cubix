@@ -12,19 +12,23 @@ public class E_Hunter : EnemyBase
 
     private int pnX, pnY;
 
-    // Start is called before the first frame update
-    override protected void Start()
+    override public void Awake()
     {
-        base.Start();
-        HP = startHP;
-
+        base.Awake();
         pnX = Random.Range(int.MinValue, int.MaxValue);
         pnY = Random.Range(int.MinValue, int.MaxValue);
     }
 
+    // Start is called before the first frame update
+    override public void Start()
+    {
+        base.Start();
+        HP = startHP;
+    }
+
 
     // Update is called once per frame
-    override protected void Update()
+    override public void Update()
     {
         base.Update();
         if (movable)

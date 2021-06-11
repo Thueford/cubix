@@ -17,10 +17,14 @@ public class GameState : MonoBehaviour
     public Vector3Int unlockedColors = Vector3Int.right;
     public int maxActiveColors = 0;
 
+    void Awake()
+    {
+        self = this;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        if (self == null) self = this;
         maxActiveColors = unlockedColors.x + unlockedColors.y + unlockedColors.z;
         StartCoroutine(StartGame());
     }

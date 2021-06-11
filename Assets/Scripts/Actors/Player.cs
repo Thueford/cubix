@@ -18,12 +18,16 @@ public class Player : EntityBase
     private Vector3Int rgb = new Vector3Int(0, 0, 0);
     private Vector3Int lastActivatedColor = new Vector3Int(0, 0, 0);
 
-    // Start is called before the first frame update
-    override protected void Start()
+    override public void Awake()
     {
-        HP = startHP;
-        base.Start();
         self = this;
+    }
+
+    // Start is called before the first frame update
+    override public void Start()
+    {
+        base.Start();
+        HP = startHP;
         bs = gameObject.GetComponent<PlayerShooter>();
         if (txtDbg == null) Debug.LogWarning("player.txtDbg not assigned");
     }
@@ -37,7 +41,7 @@ public class Player : EntityBase
     }
 
     // Update is called once per frame
-    override protected void Update()
+    override public void Update()
     {
         base.Update();
         if (movable)
