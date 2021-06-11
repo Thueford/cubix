@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class ArcherShooter : ShooterBase
 {
     // Start is called before the first frame update

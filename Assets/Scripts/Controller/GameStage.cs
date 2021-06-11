@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class GameStage : MonoBehaviour
 {
-    [NotNull] public GameObject actors;
     [NotNull] public Camera cam;
-    [WarnNull] public GameStage next;
     [NotNull] public Spawn spawn;
     [NotNull] public Portal portal;
+    [NotNull] public GameObject actors;
+    [WarnNull] public GameStage next;
     [WarnNull] public Hint hints;
 
     public int colorSlots = 3;

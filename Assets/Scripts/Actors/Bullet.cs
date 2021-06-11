@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 [RequireComponent(typeof(SphereCollider), typeof(Renderer), typeof(Light))]
 public class Bullet : MonoBehaviour
 {

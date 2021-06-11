@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class GameState : MonoBehaviour
 {
     public static GameState self;
@@ -37,7 +38,7 @@ public class GameState : MonoBehaviour
 
     IEnumerator StartGame()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0);
         // spawn in stage0
         if (startStage == null)
         {
@@ -47,7 +48,7 @@ public class GameState : MonoBehaviour
         }
 
         startStage.OnStageEntering();
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0);
         Player.self.Teleport(startStage);
     }
 

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 [RequireComponent(typeof(Rigidbody), typeof(Animator))]
 public abstract class EntityBase : MonoBehaviour
 {

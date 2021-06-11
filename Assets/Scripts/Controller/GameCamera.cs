@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class GameCamera : MonoBehaviour
 {
     public float stickyness = 10;

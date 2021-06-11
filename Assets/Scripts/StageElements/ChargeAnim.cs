@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[DisallowMultipleComponent]
 [RequireComponent(typeof(Animator))]
 public class ChargeAnim : MonoBehaviour
 {
