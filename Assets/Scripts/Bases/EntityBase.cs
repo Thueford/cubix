@@ -2,12 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody), typeof(Animator))]
 public abstract class EntityBase : MonoBehaviour
 {
+    [Header("Movement Settings")]
+    [Range(1, 50)]
     public float accelerationForce;
+    [Range(1, 50)]
     public float maxSpeed;
     public bool movable;
+
+    [Header("HP Settings")]
+    [Range(0, 100)]
+    public float startHP;
+    [ReadOnly]
     public float HP;
+
+    // [Header("Other Settings")]
 
     protected Animator anim;
     protected Rigidbody rb;

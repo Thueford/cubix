@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class GameStage : MonoBehaviour
 {
-    public GameObject cam, spawn, actors, next;
+    public GameObject actors;
+    public Camera cam;
+    public GameStage next;
+    public Spawn spawn;
+    public Portal portal;
+
     public int colorSlots = 3;
     public float chargeTime = 10;
 
@@ -28,15 +33,14 @@ public class GameStage : MonoBehaviour
         GetComponentInChildren<Portal>().Disable();
 
         // copy camera
-        GameCamera gcam = FindObjectOfType<GameCamera>();
-        gcam.target = cam.transform.position;
-        gcam.transform.rotation = cam.transform.rotation;
+        Camera.main.GetComponent<GameCamera>().target = cam.transform.position;
+        Camera.main.transform.rotation = cam.transform.rotation;
 
         Hint h = GetComponentInChildren<Hint>();
         if (h != null) h.ResetHints();
         GetComponentInChildren<ChargeAnim>().Reset(chargeTime);
         GetComponentInChildren<Spawn>().Disable();
-        if(next != null) next.GetComponentInChildren<Spawn>().Enable();
+        if(next != null) next.spawn.Enable();
 
         // actors.SetActive(true);
     }

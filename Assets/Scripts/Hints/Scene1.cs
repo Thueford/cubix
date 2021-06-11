@@ -31,7 +31,7 @@ public class Scene1 : Hint
                 break;
 
             case State.CHARGE:
-                if (!GetComponentInChildren<Portal>().Enabled()) return;
+                if (!Player.curStage.portal.Enabled()) return;
                 texts[2].SetActive(true);
                 break;
 

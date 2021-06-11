@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameState : MonoBehaviour
 {
     public static GameState self;
-    public GameObject startStage;
+    public GameStage startStage;
 
     public static Color
         black = new Color(.3f, .3f, .3f, 1f),
@@ -46,7 +46,7 @@ public class GameState : MonoBehaviour
             Debug.Assert(stages.Length != 0, "no stages found");
             Player.self.Teleport(stages[0]);
         }
-        else Player.self.Teleport(startStage.GetComponent<GameStage>());
+        else Player.self.Teleport(startStage);
     }
 
     public static void addRed()

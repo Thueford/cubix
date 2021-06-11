@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class E_Hunter : EnemyBase
+public class E_Archer: EnemyBase
 {
-    public float startHP;
-
-    private const float
+    public const float
+        MAXDIST_P = 15,
         MAXDIST_P_NOISE = 10,
-        F_PERLIN = 0.5f;
+
+        F_PERLIN = 0.5f,
+        F_APLAYER = -3f;
 
     private int pnX, pnY;
 
@@ -26,11 +27,11 @@ public class E_Hunter : EnemyBase
         HP = startHP;
     }
 
-
     // Update is called once per frame
     override public void Update()
     {
         base.Update();
+
         if (movable)
         {
             EnemyBase[] enemies = Player.curStage.GetComponentsInChildren<EnemyBase>();
@@ -40,9 +41,11 @@ public class E_Hunter : EnemyBase
             for (int i = 0; i < enemies.Length; ++i)
                 effectors[i + 2] = F_ENEMIES * -avoid(enemies[i], MAXDIST_E);
 
-            // move towards player
-            effectors[0] = F_PLAYER * (Player.self.transform.position - transform.position).normalized;
-            // noise
+            // move towards player keeping distance
+            effectors[0] =
+                F_PLAYER * (Player.self.transform.position - transform.position).normalized +
+                F_APLAYER * (-2 * avoid(Player.self, MAXDIST_P + MAXDIST_P_NOISE * sinNoise(0.8f, pnX)));
+
             effectors[1] = F_PERLIN * new Vector3(perlinNoise(0.4f, pnX), 0, perlinNoise(0.4f, pnY)).normalized;
 
             // steer
@@ -53,9 +56,9 @@ public class E_Hunter : EnemyBase
             if (rb.velocity.magnitude > maxSpeed)
                 rb.velocity = rb.velocity.normalized * maxSpeed;
 
-            // look in movement direction
-            dir.y = 0;
-            if(dir.magnitude > 0) transform.forward = dir;
+            // look at player
+            //if(effectors[0].magnitude > 0) transform.forward = effectors[0];
+            transform.forward = Player.self.transform.position - transform.position;
         }
     }
 }
