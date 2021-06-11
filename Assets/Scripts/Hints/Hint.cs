@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Hint : MonoBehaviour
+[DisallowMultipleComponent]
+public class Hint : MonoBehaviour
 {
-    public GameObject[] texts;
+    [NotNull] public GameObject[] texts;
 
     virtual public void ResetHints()
     {
-        foreach (GameObject o in texts) o.SetActive(false);
+        foreach (GameObject o in texts)
+            if(o != null) o.SetActive(false);
     }
 }

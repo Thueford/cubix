@@ -13,8 +13,10 @@ public abstract class EnemyBase : EntityBase
         F_PLAYER = 2,
         F_ENEMIES = -1;
 
+    [Header("Other Settings")]
     public Color color;
     private int pnD;
+
     override public void Awake()
     {
         base.Awake();

@@ -2,9 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class GameStage : MonoBehaviour
 {
-    public GameObject cam, spawn, actors, next;
+    [NotNull] public Camera cam;
+    [NotNull] public Spawn spawn;
+    [NotNull] public Portal portal;
+    [NotNull] public GameObject actors;
+    [WarnNull] public GameStage next;
+    [WarnNull] public Hint hints;
+
     public int colorSlots = 3;
     public float chargeTime = 10;
 
@@ -16,27 +23,25 @@ public class GameStage : MonoBehaviour
     // Called when player steps on portal
     public void OnStageEntering()
     {
+        Debug.Log("Entering");
         gameObject.SetActive(true);
-        GetComponentInChildren<Portal>().Disable();
+        portal.Disable();
+        if (hints != null) hints.ResetHints();
     }
 
     // Called when player is spawning
     public void OnStageEnter()
     {
+        Debug.Log("Enter");
         Debug.Log("Stage: " + name);
-        gameObject.SetActive(true);
-        GetComponentInChildren<Portal>().Disable();
 
         // copy camera
-        GameCamera gcam = FindObjectOfType<GameCamera>();
-        gcam.target = cam.transform.position;
-        gcam.transform.rotation = cam.transform.rotation;
+        Camera.main.GetComponent<GameCamera>().target = cam.transform.position;
+        Camera.main.transform.rotation = cam.transform.rotation;
 
-        Hint h = GetComponentInChildren<Hint>();
-        if (h != null) h.ResetHints();
-        GetComponentInChildren<ChargeAnim>().Reset(chargeTime);
-        GetComponentInChildren<Spawn>().Disable();
-        if(next != null) next.GetComponentInChildren<Spawn>().Enable();
+        GetComponentInChildren<ChargeAnim>().ResetAnim(chargeTime);
+        spawn.Disable();
+        if(next != null) next.spawn.Enable();
 
         // actors.SetActive(true);
     }

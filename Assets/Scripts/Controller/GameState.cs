@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class GameState : MonoBehaviour
 {
     public static GameState self;
-    public GameObject startStage;
+    [NotNull] public GameStage startStage;
 
     public static Color
         black = new Color(.3f, .3f, .3f, 1f),
@@ -37,16 +38,18 @@ public class GameState : MonoBehaviour
 
     IEnumerator StartGame()
     {
-        yield return new WaitForSeconds(0.2f);
-
+        yield return new WaitForSeconds(0);
         // spawn in stage0
         if (startStage == null)
         {
             GameStage[] stages = FindObjectsOfType<GameStage>();
             Debug.Assert(stages.Length != 0, "no stages found");
-            Player.self.Teleport(stages[0]);
+            startStage = stages[0];
         }
-        else Player.self.Teleport(startStage.GetComponent<GameStage>());
+
+        startStage.OnStageEntering();
+        yield return new WaitForSeconds(0);
+        Player.self.Teleport(startStage);
     }
 
     public static void addRed()

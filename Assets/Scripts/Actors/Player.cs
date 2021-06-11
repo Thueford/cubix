@@ -2,19 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Assertions;
 
+[RequireComponent(typeof(PlayerShooter))]
 public class Player : EntityBase
 {
     private const float floatHeight = 0.5f;
 
     public static Player self;
     public static GameStage curStage;
-    public float startHP;
 
-    public Text txtDbg;
+    [Header("Other Settings")]
+    [WarnNull] public Text txtDbg;
+    private PlayerShooter bs;
 
-    public PlayerShooter bs;
     private Vector3Int rgb = new Vector3Int(0, 0, 0);
     private Vector3Int lastActivatedColor = new Vector3Int(0, 0, 0);
 
@@ -28,7 +28,7 @@ public class Player : EntityBase
     {
         base.Start();
         HP = startHP;
-        bs = gameObject.GetComponent<PlayerShooter>();
+        bs = GetComponent<PlayerShooter>();
         if (txtDbg == null) Debug.LogWarning("player.txtDbg not assigned");
     }
 
@@ -59,7 +59,7 @@ public class Player : EntityBase
                 rb.velocity = rb.velocity.normalized * maxSpeed;
 
             // look in movement direction
-            Ray r = FindObjectOfType<GameCamera>().GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+            Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
             // intersect mouse ray with floor plane
             float f = (transform.position.y-r.origin.y)/r.direction.y;
             transform.forward = r.GetPoint(f) - transform.position;
@@ -142,12 +142,12 @@ public class Player : EntityBase
         anim.enabled = true;
         anim.Play("Teleport");
 
-        curStage.next.GetComponent<GameStage>().OnStageEntering();
+        curStage.next.OnStageEntering();
     }
 
     void OnTeleport(AnimationEvent ev)
     {
-        Teleport(curStage.next.GetComponent<GameStage>());
+        Teleport(curStage.next);
     }
 
     public void Teleport(GameStage stage)

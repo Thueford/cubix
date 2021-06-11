@@ -19,7 +19,7 @@ public class Scene2 : Hint
         switch (state)
         {
             case State.START:
-                if (Player.curStage != GetComponent<GameStage>()) return;
+                if (Player.curStage != GetComponentInParent<GameStage>()) return;
                 texts[0].SetActive(true);
                 break;
 

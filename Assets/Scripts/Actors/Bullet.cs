@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[DisallowMultipleComponent]
+[RequireComponent(typeof(SphereCollider), typeof(Renderer), typeof(Light))]
 public class Bullet : MonoBehaviour
 {
+    [NotNull] public Rigidbody rb;
+    [NotNull] public CapsuleCollider cc;
+
     private Vector3 dir, oldVelocity;
-    public Rigidbody rb;
     private float radius, velocityMultiplier;
-    public CapsuleCollider cc;
     private Properties p;
 
     public struct Properties
@@ -22,9 +25,7 @@ public class Bullet : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (!rb) Debug.LogWarning("No Rigidbody assigned to Bullet Script");
-        if (!cc) Debug.LogWarning("No CapsuleCollider assigned to Bullet Script");
-        radius = gameObject.GetComponent<SphereCollider>().radius;
+        radius = GetComponent<SphereCollider>().radius;
         velocityMultiplier = Time.fixedDeltaTime / cc.transform.lossyScale.x;
     }
 
@@ -61,8 +62,8 @@ public class Bullet : MonoBehaviour
 
     private void setColor(Color color)
     {
-        gameObject.GetComponent<Renderer>().material.color = color;
-        gameObject.GetComponent<Light>().color = color == GameState.black ? GameState.glow : color;
+        GetComponent<Renderer>().material.color = color;
+        GetComponent<Light>().color = color == GameState.black ? GameState.glow : color;
     }
 
     public void launch(Vector3 dir)
