@@ -13,7 +13,7 @@ public class Player : EntityBase
     public static GameStage curStage;
 
     [Header("Other Settings")]
-    public Text txtDbg;
+    [WarnNull] public Text txtDbg;
     private PlayerShooter bs;
 
     private Vector3Int rgb = new Vector3Int(0, 0, 0);

@@ -57,6 +57,7 @@ MonoBehaviour:
   next: {fileID: 0}
   spawn: {fileID: 2521384948425824998}
   portal: {fileID: 4635702687571891008}
+  hints: {fileID: 0}
   colorSlots: 3
   chargeTime: 10
 --- !u!1 &1037097025517605565

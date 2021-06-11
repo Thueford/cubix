@@ -8,19 +8,19 @@ public class ChargeAnim : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
-        Reset();
+        ResetAnim();
     }
 
-    public void Reset()
+    public void ResetAnim()
     {
         anim.Play("Charging");
         anim.enabled = false;
         transform.localScale = new Vector3(0, 1, 0);
     }
 
-    public void Reset(float time)
+    public void ResetAnim(float time)
     {
-        Reset();
+        ResetAnim();
         anim.speed = 1/time;
     }
 

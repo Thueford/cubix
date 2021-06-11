@@ -8,6 +8,7 @@ public class GameCamera : MonoBehaviour
     //public float lazyness = 10;
     //private Vector3 offset;
     //private Vector3 vel = Vector3.zero;
+    [HideInInspector]
     public Vector3 target;
 
 

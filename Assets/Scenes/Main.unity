@@ -557,6 +557,11 @@ PrefabInstance:
       objectReference: {fileID: 1184953859}
     - target: {fileID: 757038173234545941, guid: c757194044ae0bd40bbc234134156d13,
         type: 3}
+      propertyPath: hints
+      value: 
+      objectReference: {fileID: 964325872}
+    - target: {fileID: 757038173234545941, guid: c757194044ae0bd40bbc234134156d13,
+        type: 3}
       propertyPath: chargeTime
       value: 3
       objectReference: {fileID: 0}
@@ -899,6 +904,11 @@ PrefabInstance:
       propertyPath: next
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 757038173234545941, guid: c757194044ae0bd40bbc234134156d13,
+        type: 3}
+      propertyPath: hints
+      value: 
+      objectReference: {fileID: 1184953858}
     - target: {fileID: 757038173234545941, guid: c757194044ae0bd40bbc234134156d13,
         type: 3}
       propertyPath: chargeTime

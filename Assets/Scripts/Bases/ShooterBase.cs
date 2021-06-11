@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class ShooterBase : MonoBehaviour
 {
     public bool active;
-    public GameObject bulletPrefab;
+    [NotNull] public GameObject bulletPrefab;
 
     protected bool singleFire;
     protected int amount;
