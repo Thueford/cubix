@@ -1,40 +1,89 @@
 // Each #kernel tells which function to compile; you can have many kernels
 #pragma kernel CSflare
+#pragma kernel CSWriteBack
 
 // Create a RenderTexture with enableRandomWrite flag and set it
 // with cs.SetTexture
 RWTexture2D<float4> Source;
 RWTexture2D<float4> Result;
+RWTexture2D<float4> lensDirt;
 
 static const int numThreads = 24;
 
-uniform int ghostCount;
-uniform float ghostSpacing;
+uniform int ghostCount, width, height;
+uniform float ghostSpacing, threshold, caStrength;
+
+float3 getTexColor(float2 texcoords, float2 iResolution)
+{
+    float amount = length(.5 - texcoords) * caStrength;
+    float2 offset = normalize(0.5 - texcoords) * amount;
+    return float3(
+		Source[(texcoords + offset) * iResolution].r,
+		Source[texcoords * iResolution].g,
+		Source[(texcoords - offset) * iResolution].b
+		);
+}
+
+float3 generateGhosts(float2 texcoord, float2 ghostVec, float2 iResolution)
+{
+    float3 col = 0;
+    for (int i = 0; i < ghostCount; ++i)
+    {
+        //Coordinates to look at for a bright spot 
+        float2 offset = texcoord + ghostVec * float(i);
+        //offset = frac(offset);
+        //create ghosts
+        float3 texColor = getTexColor(offset, iResolution);
+        texColor = max(texColor - threshold, 0);
+        if (any(texColor))
+        {
+            //Bright spots at the edge of the screen matter less;
+            float weight = 1 - length(.5 - offset);
+            weight = pow(abs(weight), 10);
+            col += texColor * weight;
+        }
+    }
+    return col;
+}
+
+float3 generateHalo(float2 texcoord, float2 ghostVec, float2 iResolution)
+{
+    float3 col = 0;
+    float2 haloVec = normalize(ghostVec) * 0.35;
+    float3 texColor = getTexColor(texcoord + haloVec, iResolution);
+    texColor = max(texColor - threshold, 0);
+    
+    if (any(texColor))
+    {
+        float weight = length(.5 - texcoord);
+        col += texColor * weight;
+    }
+    return col;
+}
 
 [numthreads(numThreads, numThreads, 1)]
 void CSflare(uint3 id : SV_DispatchThreadID)
 {
-    float width, height;
-    Source.GetDimensions(width, height);
-    //flip coordinates normalized to (-0.5, 0.5)
-    float2 uv = -((id.xy / float2(width, height)) - .5); 
-    //vector from uv to the image center;
-    float2 ghostVec = -(uv) * ghostSpacing;
+    float2 iResolution = float2(width, height);
+    //coordinates normalized to (0, 1)
+    float2 texcoord = (id.xy / iResolution);
+    //vector from texcoord to the image center;
+    float2 ghostVec = ( -texcoord + .5 ) * ghostSpacing;
+    float3 col = 0;
     
-    for (int i = 0; i < ghostCount; ++i)
+    col += generateGhosts(texcoord, ghostVec, iResolution);
+    col += generateHalo(texcoord, ghostVec, iResolution);
+    
+    Result[id.xy] = float4(col, 1);
+}
+
+[numthreads(numThreads, numThreads, 1)]
+void CSWriteBack(uint3 id : SV_DispatchThreadID)
+{
+    float3 col = Result[id.xy].rgb;
+    if (any(col))
     {
-        //Coordinates to look for a bright spot 
-        float2 suv = ghostVec * float2(i, i);
-        uint2 suvcoords = uint2(suv + 0.5 * float2(width, height));
-        //Bright spots at the edge of the screen matter less;
-        float weight = smoothstep(0, .75, distance(float2(0, 0), suv));
-        //create ghost
-        if (any(Source[suvcoords].rgb))
-        {
-            uint2 uvcoords = uint2(uv + 0.5 * float2(width, height));
-            Result[uvcoords] = float4(Source[suvcoords].rgb * weight, 1);
-        }
+        col *= lensDirt[id.xy].rgb + 0.15;
     }
-    float3 col;
-    //Result[id.xy] = float4(col, 1.0);
+    Source[id.xy] += float4(col, 0); // additive blending
 }

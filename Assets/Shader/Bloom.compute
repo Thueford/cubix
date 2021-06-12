@@ -1,16 +1,13 @@
 // Each #kernel tells which function to compile; you can have many kernels
 #pragma kernel CSExtractBright
-#pragma kernel CSBlurrHorr
-#pragma kernel CSBlurrVert
 #pragma kernel CSWriteBack
 
 // Create a RenderTexture with enableRandomWrite flag and set it
 // with cs.SetTexture
-RWTexture2D<float4> source;
+RWTexture2D<float4> Source;
 RWTexture2D<float4> BrightSpots;
 RWTexture2D<float4> BlurrBuffer;
 
-static const float weight[5] = { 0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216 };
 static const int numThreads = 24;
 
 uniform float threshold;
@@ -18,9 +15,9 @@ uniform float threshold;
 [numthreads(numThreads, numThreads, 1)]
 void CSExtractBright (uint3 id : SV_DispatchThreadID)
 {
-    if (dot(float3(0.2126, 0.7152, 0.0722), source[id.xy].rgb) > threshold)
+    if (dot(float3(0.2126, 0.7152, 0.0722), Source[id.xy].rgb) > threshold)
     {
-        BrightSpots[id.xy] = source[id.xy];
+        BrightSpots[id.xy] = Source[id.xy];
     }
     else
     {
@@ -29,41 +26,9 @@ void CSExtractBright (uint3 id : SV_DispatchThreadID)
 }
 
 [numthreads(numThreads, numThreads, 1)]
-void CSBlurrHorr(uint3 id : SV_DispatchThreadID)
-{
-    float4 result = BrightSpots[id.xy] * weight[0];
-    //BlurrBuffer[id.xy] = float4(result, 1);
-    for (int i = 1; i < 5; ++i)
-    {
-        result += BrightSpots[id.xy + uint2(i, 0)] * weight[i];
-        result += BrightSpots[id.xy - uint2(i, 0)] * weight[i];
-    }
-     
-    //BlurrBuffer[id.xy] = 1;
-    BlurrBuffer[id.xy] = float4(result.x, result.y, result.z, 1);
-
-}
-
-[numthreads(numThreads, numThreads, 1)]
-void CSBlurrVert(uint3 id : SV_DispatchThreadID)
-{
-    
-    float4 result = BlurrBuffer[id.xy] * weight[0];
-    
-    for (int i = 1; i < 5; ++i)
-    {
-        result += BlurrBuffer[id.xy + uint2(0, i)] * weight[i];
-        result += BlurrBuffer[id.xy - uint2(0, i)] * weight[i];
-    }
-    
-    BrightSpots[id.xy] = float4(result.x, result.y, result.z, 1);
-    //BrightSpots[id.xy] = BlurrBuffer[id.xy];
-}
-
-[numthreads(numThreads, numThreads, 1)]
 void CSWriteBack(uint3 id : SV_DispatchThreadID)
 {
-    float3 color = source[id.xy].rgb;
+    float3 color = Source[id.xy].rgb;
     color += BrightSpots[id.xy].rgb; // additive blending
-    source[id.xy] = float4(color, 1.0);
+    Source[id.xy] = float4(color, 1.0);
 }

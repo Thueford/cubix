@@ -70,8 +70,14 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _TexHeight: 512
+    - _TexWidth: 512
     - _UVSec: 0
     - _ZWrite: 1
+    - _horizontal: 0
+    - _vignette: 0.8
+    - _vignetteAmount: 0.8
+    - _vignetteWidth: 0.1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
