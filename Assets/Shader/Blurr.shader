@@ -3,9 +3,11 @@ Shader "Hidden/Blurr"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _StarburstTex ("Texture", 2D) = "white" {}
         _horizontal ("Horizontal", int) = 1
         _vignetteAmount ("Amount", float) = 1.0
         _vignetteWidth ("Width", float) = 0.1
+        _CAAmount ("CAAmount", float) = 0.001
     }
     SubShader
     {
@@ -111,7 +113,13 @@ Shader "Hidden/Blurr"
             {
                 fixed4 col = tex2D(_MainTex, uv);
 
-                float2 texcoord = abs(uv * 2 - 1);
+                float2 texcoord = uv * 2 - 1;
+
+                float scanLine = smoothstep(.8, 1.41422, length(texcoord));
+                if (scanLine > 0)
+                    col.rgb *= 1-(sin(texcoord.y * 6.28*100) / 2 + .5) * scanLine;
+
+                texcoord = abs(texcoord);
 
                 fixed2 u = texcoord * _vignetteWidth;
                 u = 1 - (pow(smoothstep(u, 0, 1 - texcoord), 4) * _vignetteAmount);
@@ -133,6 +141,91 @@ Shader "Hidden/Blurr"
 
                 if (uv.x <= 1 && uv.x >= 0 && uv.y <= 1 && uv.y >= 0)
                     col = getVignetteCol(uv);
+
+                return col;
+            }
+            ENDCG
+        }
+
+        Pass
+        {
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+
+            #include "UnityCG.cginc"
+
+            struct appdata
+            {
+                float4 vertex : POSITION;
+                float2 uv : TEXCOORD0;
+            };
+
+            struct v2f
+            {
+                float2 uv : TEXCOORD0;
+                float4 vertex : SV_POSITION;
+            };
+
+            v2f vert(appdata v)
+            {
+                v2f o;
+                o.vertex = UnityObjectToClipPos(v.vertex);
+                o.uv = v.uv;
+                return o;
+            }
+
+            sampler2D _MainTex;
+            sampler2D _StarburstTex;
+
+            fixed4 frag(v2f i) : SV_Target
+            {
+                fixed4 col = tex2D(_MainTex, i.uv);
+                float angle = acos(dot(normalize(i.uv-.5), float2(1, 0))) / 3.1416 / 2 + 1;
+                col += max(0, tex2D(_StarburstTex, float2(angle, .5)-.2)) * .3;
+
+                return col;
+            }
+            ENDCG
+        }
+
+        Pass
+        {
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+
+            #include "UnityCG.cginc"
+
+            struct appdata
+            {
+                float4 vertex : POSITION;
+                float2 uv : TEXCOORD0;
+            };
+
+            struct v2f
+            {
+                float2 uv : TEXCOORD0;
+                float4 vertex : SV_POSITION;
+            };
+
+            v2f vert(appdata v)
+            {
+                v2f o;
+                o.vertex = UnityObjectToClipPos(v.vertex);
+                o.uv = v.uv;
+                return o;
+            }
+
+            sampler2D _MainTex;
+            float _CAAmount;
+
+            fixed4 frag(v2f i) : SV_Target
+            {
+                fixed4 col = (0, 0, 0, 1);
+                col.r = tex2D(_MainTex, i.uv + float2(_CAAmount, 0)).r;
+                col.g = tex2D(_MainTex, i.uv).g;
+                col.b = tex2D(_MainTex, i.uv - float2(_CAAmount, 0)).b;
 
                 return col;
             }

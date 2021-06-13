@@ -83,7 +83,7 @@ void CSWriteBack(uint3 id : SV_DispatchThreadID)
     float3 col = Result[id.xy].rgb;
     if (any(col))
     {
-        col *= lensDirt[id.xy].rgb + 0.15;
+        col *= lensDirt[id.xy].rgb + .1;
     }
     Source[id.xy] += float4(col, 0); // additive blending
 }

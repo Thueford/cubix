@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Compute : MonoBehaviour
 {
-    public ComputeShader bloom, chromaticAberration, lensFlare;
+    public ComputeShader bloom, lensFlare;
 
     public Material blurrMat;
 
@@ -14,8 +14,8 @@ public class Compute : MonoBehaviour
         caResult,
         lfResult;
 
-    private RenderTexture lensDirt;
-    public Texture2D lensDirtTex;
+    public RenderTexture lensDirt;
+    public Texture2D lensDirtTex, starburstTex;
 
     public bool skipAll = false;
 
@@ -29,8 +29,8 @@ public class Compute : MonoBehaviour
 
     public bool useCA = true;
 
-    [Range(1, 10)]
-    public int caAmount = 3;
+    [Range(0f, 0.01f)]
+    public float caAmount = 0.001f;
 
     public bool useLensFlare = true;
 
@@ -46,8 +46,8 @@ public class Compute : MonoBehaviour
     [Range(0.1f, 2f)]
     public float lfGhostSpacing = 1.4f;
 
-    [Range(0.0f, 0.2f)]
-    public float lfCAStrength = 0.1f;
+    [Range(0.0f, 0.3f)]
+    public float lfCAStrength = 0.15f;
 
     public bool useVignette = true;
 
@@ -68,12 +68,12 @@ public class Compute : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        blurrMat.SetTexture("_StarburstTex", starburstTex);
         createTextures();
 
         setTextures();
 
         setBloomUniforms();
-        setCAUniforms();
         setLensFlareUniforms();
     }
 
@@ -111,11 +111,10 @@ public class Compute : MonoBehaviour
 
         if (useCA)
         {
-            setCAUniforms();
 
-            Graphics.Blit(sourceTex, caResult);
+            blurrMat.SetFloat("_CAAmount", caAmount);
+            Graphics.Blit(sourceTex, caResult, blurrMat, 3);
 
-            chromaticAberration.Dispatch(0, xThreads, yThreads, 1);
         } 
         else Graphics.Blit(sourceTex, caResult);
 
@@ -166,13 +165,12 @@ public class Compute : MonoBehaviour
         caResult = createTexture();
         lfResult = createTexture();
         lensDirt = createTexture();
-        Graphics.Blit(lensDirtTex, lensDirt);
+        Graphics.Blit(lensDirtTex, lensDirt, blurrMat, 2);
     }
 
     private void setTextures()
     {
         setBloomTextures();
-        setCATextures();
         setLensFlareTextures();
     }
 
@@ -188,17 +186,6 @@ public class Compute : MonoBehaviour
 
         bloom.SetTexture(1, "Source", sourceTex);
         bloom.SetTexture(1, "BrightSpots", brightTex);
-    }
-
-    private void setCAUniforms()
-    {
-        chromaticAberration.SetInt("amount", caAmount);
-    }
-
-    private void setCATextures()
-    {
-        chromaticAberration.SetTexture(0, "Source", sourceTex);
-        chromaticAberration.SetTexture(0, "Result", caResult);
     }
 
     private void setLensFlareUniforms()

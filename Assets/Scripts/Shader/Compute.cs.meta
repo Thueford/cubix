@@ -14,7 +14,9 @@ MonoImporter:
   - blurrBuff: {instanceID: 0}
   - caResult: {instanceID: 0}
   - lfResult: {instanceID: 0}
+  - lensDirt: {instanceID: 0}
   - lensDirtTex: {fileID: 2800000, guid: 145b2f0760f8c9642bcdc4459df91931, type: 3}
+  - starburstTex: {fileID: 2800000, guid: 283a61b575bfb8a49955039e0bfa4a74, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

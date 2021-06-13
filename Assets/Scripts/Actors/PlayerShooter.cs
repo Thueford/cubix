@@ -49,7 +49,7 @@ public class PlayerShooter : ShooterBase
 
     public void toggleRed(bool b) {
         p.explodes = b;
-        p.speed *= (b ? 3/2f : 2/3f);
+        p.speed *= (b ? 2/3f : 1.5f);
     }
 
     public void toggleGreen(bool b)
