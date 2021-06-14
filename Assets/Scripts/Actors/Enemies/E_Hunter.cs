@@ -4,18 +4,6 @@ using UnityEngine;
 
 public class E_Hunter : EnemyBase
 {
-    private const float
-        MAXDIST_P_NOISE = 10,
-        F_PERLIN = 0.5f;
-
-    private int pnX, pnY;
-
-    override public void Awake()
-    {
-        base.Awake();
-        pnX = Random.Range(int.MinValue, int.MaxValue);
-        pnY = Random.Range(int.MinValue, int.MaxValue);
-    }
 
     // Start is called before the first frame update
     override public void Start()
@@ -26,34 +14,21 @@ public class E_Hunter : EnemyBase
 
 
     // Update is called once per frame
+    override public void steer()
+    {
+        List<Vector3> effectors = new List<Vector3>(10);
+
+        // avoid enemies
+        effectors.AddRange(eenemy.getEffs(this));
+        steerDir = contextSteer2Player(effectors) * accelerationForce;
+    }
+
     override public void Update()
     {
         base.Update();
-        if (movable)
-        {
-            EnemyBase[] enemies = Player.curStage.GetComponentsInChildren<EnemyBase>();
-            Vector3[] effectors = new Vector3[enemies.Length + 2];
 
-            // avoid enemies
-            for (int i = 0; i < enemies.Length; ++i)
-                effectors[i + 2] = F_ENEMIES * -avoid(enemies[i], MAXDIST_E);
-
-            // move towards player
-            effectors[0] = F_PLAYER * (Player.self.transform.position - transform.position).normalized;
-            // noise
-            effectors[1] = F_PERLIN * new Vector3(perlinNoise(0.4f, pnX), 0, perlinNoise(0.4f, pnY)).normalized;
-
-            // steer
-            Vector3 dir = contextSteer(effectors, F_WALLS, MAXDIST_W).normalized * accelerationForce;
-
-            // apply direction
-            rb.AddForce(dir * Time.deltaTime * 1000, ForceMode.Acceleration);
-            if (rb.velocity.magnitude > maxSpeed)
-                rb.velocity = rb.velocity.normalized * maxSpeed;
-
-            // look in movement direction
-            dir.y = 0;
-            if(dir.magnitude > 0) transform.forward = dir;
-        }
+        // look in movement direction
+        steerDir.y = 0;
+        if (steerDir.magnitude > 0) transform.forward = steerDir;
     }
 }

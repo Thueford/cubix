@@ -216,6 +216,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8367458984102672708, guid: d1695d8d7ce0254499686bc9ad288bb7,
         type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8367458984102672708, guid: d1695d8d7ce0254499686bc9ad288bb7,
+        type: 3}
       propertyPath: m_LocalPosition.z
       value: 10
       objectReference: {fileID: 0}
@@ -368,6 +373,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_RootOrder
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8367458984102672708, guid: 60580c159fb96a8458a29dd2496e3b5a,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8367458984102672708, guid: 60580c159fb96a8458a29dd2496e3b5a,
         type: 3}
@@ -745,7 +755,7 @@ PrefabInstance:
     - target: {fileID: 2092887341787963931, guid: c757194044ae0bd40bbc234134156d13,
         type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3138623082110731695, guid: c757194044ae0bd40bbc234134156d13,
         type: 3}
@@ -1003,7 +1013,7 @@ MonoBehaviour:
   lfBlurrCount: 3
   lfThreshold: 0.737
   lfGhostSpacing: 1.4
-  lfCAStrength: 0.1
+  lfCAStrength: 0.2
   useVignette: 1
   vignetteAmount: 0.8
   vignetteWidth: 0.1
