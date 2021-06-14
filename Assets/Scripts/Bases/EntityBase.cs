@@ -24,10 +24,7 @@ public abstract class EntityBase : MonoBehaviour
     protected Animator anim;
     protected Rigidbody rb;
 
-    virtual public void Awake()
-    {
-
-    }
+    virtual public void Awake() {}
 
     // Start is called before the first frame update
     virtual public void Start()
@@ -37,10 +34,8 @@ public abstract class EntityBase : MonoBehaviour
         Freeze();
     }
 
-    virtual public void Update()
-    {
-
-    }
+    virtual public void Update() {}
+    virtual public void FixedUpdate() {}
 
     public void Hit(float damage)
     {

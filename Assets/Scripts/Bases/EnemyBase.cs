@@ -2,26 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class EnemyBase : EntityBase
+public abstract class EnemyBase : CtxSteer
 {
-    public const float
-        ANGULAR_NOISE = 40,
-        MAXDIST_E = 10,
-        MAXDIST_W = 10,
-
-        F_WALLS = -2f,
-        F_PLAYER = 2,
-        F_ENEMIES = -1;
-
     [Header("Other Settings")]
     public Color color;
-    private int pnD;
-
-    override public void Awake()
-    {
-        base.Awake();
-        pnD = Random.Range(int.MinValue, int.MaxValue);
-    }
+    protected int pnOff;
 
     // Start is called before the first frame update
     override public void Start()
@@ -33,47 +18,8 @@ public abstract class EnemyBase : EntityBase
         if (GameState.self.unlockedColors.z != 0) color.b = 1;
         GetComponentInChildren<Renderer>().material.color = color;
         GetComponentInChildren<Light>().color = color == GameState.black ? GameState.glow : color;
-    }
 
-    // Update is called once per frame
-    override public void Update()
-    {
-        base.Update();
-    }
-
-    private const int DIRS = 12;
-    protected Vector3 contextSteer(Vector3[] effectors, float fwalls, float maxdistW)
-    {
-        Vector3 dir = Vector3.zero;
-
-        for (int i = 0; i < DIRS; ++i)
-        {
-            Vector3 a = Quaternion.Euler(0, 360 * i / DIRS, 0) * Vector3.forward;
-            float factor = 0;
-
-            foreach (Vector3 d in effectors)
-                factor += d.magnitude * Vector3.Dot(a, d.normalized);
-
-            // avoid walls
-            if (Physics.Raycast(transform.position, a, out RaycastHit hitInfo, maxdistW/*, layerMask: 1<<9*/))
-                if (hitInfo.collider.CompareTag("Wall"))
-                    factor += fwalls * (1 - hitInfo.distance / maxdistW);
-
-            // effective dir
-            dir += factor * a;
-            dbgLine(a, Mathf.Abs(factor), factor > 0 ? Color.green : Color.red);
-        }
-
-        return Quaternion.Euler(0, ANGULAR_NOISE * perlinNoise(0.4f, pnD), 0) * dir;
-    }
-
-    protected Vector3 avoid(EntityBase e, float maxdist)
-    {
-        Vector3 d = e.transform.position - transform.position;
-        d.y = 0;
-        if (d.magnitude >= maxdist) d = Vector3.zero;
-        else d = -(1 - d.magnitude / maxdist) * d.normalized;
-        return d;
+        pnOff = (int)Random.Range(-1e5f, 1e5f);
     }
 
     override public void OnSpawn(AnimationEvent ev)
@@ -84,19 +30,38 @@ public abstract class EnemyBase : EntityBase
         transform.forward = Player.self.transform.position - transform.position;
     }
 
-    public void dbgLine(Vector3 dir, float length, Color color)
+
+    public bool isFocused()
     {
-        dir.Normalize();
-        Debug.DrawLine(transform.position + dir, transform.position + dir * (1 + length), color);
+        Vector3 dp = Player.self.transform.position - transform.position;
+        if (Physics.Raycast(transform.position, dp, out RaycastHit hit, eplayer.dist, LayerMask.GetMask("PlayerPhysics", "Wall")))
+        {
+            // dbgLine(dp, eplayer.dist, hit.collider.CompareTag("Player") ? Color.magenta : Color.gray);
+            return hit.collider.CompareTag("Player");
+        }
+        return false;
     }
 
-    public static float perlinNoise(float tscale, int seed)
+    protected Vector3 contextSteer2Player(List<Vector3> effectors)
     {
-        return 2 * Mathf.PerlinNoise(Time.time*tscale+seed%10, seed) - 1;
+        bool focused = isFocused();
+        if (focused) effectors.Add(eplayer.getEff(gameObject, Player.self.gameObject));
+        // eplayer.factor * (Player.self.transform.position - transform.position).normalized);
+        dbgLine(eplayer.getEff(gameObject, Player.self.gameObject), eplayer.getEff(gameObject, Player.self.gameObject).magnitude, Color.blue);
+        return (focused ? 1 : 0.4f) * contextSteerIDLE(effectors);
     }
 
-    public static float sinNoise(float tscale, int seed)
+    protected float noiseTime = 0;
+    protected Vector3 contextSteerIDLE(List<Vector3> effectors)
     {
-        return 2 * Mathf.PerlinNoise(Time.time * tscale + seed % 10, seed) - 1;
+        // idle noise
+        float fnoise = 1;
+        if (rb.velocity.magnitude > 0.01) fnoise += 2 / rb.velocity.magnitude;
+        noiseTime += 0.4f * steerdt * fnoise;
+
+        Vector3 d = new Vector3(perlinNoise(noiseTime, pnOff), 0, perlinNoise(noiseTime, -pnD));
+        effectors.Add(F_PERLIN * d.normalized);
+        dbgLine(d, d.magnitude, Color.yellow);
+        return contextSteer(effectors);
     }
 }
