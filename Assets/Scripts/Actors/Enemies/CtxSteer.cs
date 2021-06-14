@@ -13,7 +13,7 @@ public abstract class CtxSteer : EntityBase
         eenemy = new Effector_T("Enemy", -1, 10),
         ewall = new Effector_T("Wall", -2, 10);
 
-    public int steersPerSec; // 20
+    private static int steersPerSec = 20;
     protected int pnD;
     protected Vector3 steerDir;
     protected float steerdt;
@@ -22,9 +22,12 @@ public abstract class CtxSteer : EntityBase
     {
         base.Awake();
         pnD = (int)Random.Range(-1e5f, 1e5f);
+    }
 
-        const int n = 1;
-        steersPerSec = (int)(n / Time.fixedDeltaTime);
+    override public void Start()
+    {
+        base.Start();
+        // steersPerSec = (int)(n / Time.fixedDeltaTime);
         steerdt = 1 / (float)steersPerSec;
     }
 
@@ -38,7 +41,7 @@ public abstract class CtxSteer : EntityBase
             if(--steerTime <= 0)
             {
                 steerTime = Mathf.RoundToInt(1 / (steersPerSec * Time.fixedDeltaTime));
-                steer();
+                steerDir = steer();
             }
 
             // apply direction
@@ -85,5 +88,5 @@ public abstract class CtxSteer : EntityBase
         Debug.DrawLine(transform.position + dir, transform.position + dir * (1 + length), color);
     }
 
-    abstract public void steer();
+    abstract public Vector3 steer();
 }

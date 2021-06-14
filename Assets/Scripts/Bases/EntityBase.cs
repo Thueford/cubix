@@ -14,7 +14,7 @@ public abstract class EntityBase : MonoBehaviour
     public bool movable;
 
     [Header("HP Settings")]
-    [Range(0, 100)]
+    [Range(1, 100)]
     public float startHP;
     [ReadOnly]
     public float HP;
@@ -29,6 +29,7 @@ public abstract class EntityBase : MonoBehaviour
     // Start is called before the first frame update
     virtual public void Start()
     {
+        HP = startHP;
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         Freeze();

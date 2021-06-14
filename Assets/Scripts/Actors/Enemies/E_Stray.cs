@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class E_Hunter : EnemyBase
+public class E_Stray : EnemyBase
 {
+    // Update is called once per frame
     override public Vector3 steer()
     {
-        return contextSteer2Player(new List<Vector3>(10)) * accelerationForce;
+        return contextSteerIDLE(new List<Vector3>(10)) * accelerationForce;
     }
 
     override public void Update()
