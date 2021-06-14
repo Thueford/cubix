@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   accelerationForce: 15
-  maxSpeed: 3
+  maxSpeed: 6
   movable: 0
+  startHP: 3
   HP: 0
-  startHP: 5
+  color: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1001 &4051353101770595906
 PrefabInstance:
   m_ObjectHideFlags: 0

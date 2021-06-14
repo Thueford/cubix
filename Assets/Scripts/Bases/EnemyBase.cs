@@ -47,7 +47,7 @@ public abstract class EnemyBase : CtxSteer
         bool focused = isFocused();
         if (focused) effectors.Add(eplayer.getEff(gameObject, Player.self.gameObject));
         // eplayer.factor * (Player.self.transform.position - transform.position).normalized);
-        dbgLine(eplayer.getEff(gameObject, Player.self.gameObject), eplayer.getEff(gameObject, Player.self.gameObject).magnitude, Color.blue);
+        
         return (focused ? 1 : 0.4f) * contextSteerIDLE(effectors);
     }
 
@@ -62,6 +62,10 @@ public abstract class EnemyBase : CtxSteer
         Vector3 d = new Vector3(perlinNoise(noiseTime, pnOff), 0, perlinNoise(noiseTime, -pnD));
         effectors.Add(F_PERLIN * d.normalized);
         dbgLine(d, d.magnitude, Color.yellow);
+
+        // avoid enemies
+        // EnemyBase[] enemies = Player.curStage.GetComponentsInChildren<EnemyBase>();
+        effectors.AddRange(eenemy.getEffs(this));
         return contextSteer(effectors);
     }
 }
