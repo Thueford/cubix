@@ -59,8 +59,8 @@ public class Compute : MonoBehaviour
 
     private const int numThreads = 24;
 
-    private int xThreads = (int)Mathf.Ceil(Screen.width / numThreads);
-    private int yThreads = (int)Mathf.Ceil(Screen.height / numThreads);
+    private int xThreads = Mathf.CeilToInt(Screen.width / numThreads);
+    private int yThreads = Mathf.CeilToInt(Screen.height / numThreads);
 
     private int lastWidth = Screen.width;
     private int lastHeight = Screen.height;
@@ -83,8 +83,8 @@ public class Compute : MonoBehaviour
         {
             lastWidth = Screen.width;
             lastHeight = Screen.height;
-            xThreads = (int)Mathf.Ceil(Screen.width / numThreads);
-            yThreads = (int)Mathf.Ceil(Screen.height / numThreads);
+            xThreads = Mathf.CeilToInt(Screen.width / numThreads);
+            yThreads = Mathf.CeilToInt(Screen.height / numThreads);
 
             createTextures();
             setTextures();

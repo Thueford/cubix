@@ -6,7 +6,6 @@
 // with cs.SetTexture
 RWTexture2D<float4> Source;
 RWTexture2D<float4> BrightSpots;
-RWTexture2D<float4> BlurrBuffer;
 
 static const int numThreads = 24;
 

@@ -16,7 +16,7 @@ uniform float ghostSpacing, threshold, caStrength;
 float3 getTexColor(float2 texcoords, float2 iResolution)
 {
     float amount = length(.5 - texcoords) * caStrength;
-    float2 offset = normalize(0.5 - texcoords) * amount;
+    float2 offset = normalize(.5 - texcoords) * amount;
     return float3(
 		Source[(texcoords + offset) * iResolution].r,
 		Source[texcoords * iResolution].g,
