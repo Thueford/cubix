@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   accelerationForce: 15
-  maxSpeed: 6
+  maxSpeed: 4
   movable: 0
   startHP: 3
   HP: 0

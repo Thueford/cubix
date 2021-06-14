@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class E_Stray : EnemyBase
 {
-    // Update is called once per frame
     override public Vector3 steer()
     {
         return contextSteerIDLE(new List<Vector3>(10)) * accelerationForce;

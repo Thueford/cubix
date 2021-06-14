@@ -23,8 +23,8 @@ public class GameStage : MonoBehaviour
     // Called when player steps on portal
     public void OnStageEntering()
     {
-        Debug.Log("Entering");
         gameObject.SetActive(true);
+        actors.SetActive(false);
         portal.Disable();
         if (hints != null) hints.ResetHints();
     }
@@ -32,7 +32,6 @@ public class GameStage : MonoBehaviour
     // Called when player is spawning
     public void OnStageEnter()
     {
-        Debug.Log("Enter");
         Debug.Log("Stage: " + name);
 
         // copy camera
@@ -40,10 +39,10 @@ public class GameStage : MonoBehaviour
         Camera.main.transform.rotation = cam.transform.rotation;
 
         GetComponentInChildren<ChargeAnim>().ResetAnim(chargeTime);
+        actors.SetActive(true);
         spawn.Disable();
-        if(next != null) next.spawn.Enable();
 
-        // actors.SetActive(true);
+        //if(next != null) next.spawn.Enable();
     }
 
     public void OnStageEntered()

@@ -49,13 +49,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f42f7f57e1a68e748bf6930ee0277d2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 1
   accelerationForce: 15
   maxSpeed: 18
   movable: 1
-  HP: 0
   startHP: 3
+  HP: 0
   txtDbg: {fileID: 0}
-  bs: {fileID: 8303882289749333062}
 --- !u!114 &8303882289749333062
 MonoBehaviour:
   m_ObjectHideFlags: 0
