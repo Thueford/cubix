@@ -10,9 +10,9 @@ public class NotNullDrawer : PropertyDrawer
     public override void OnGUI(Rect inRect, SerializedProperty inProp, GUIContent label)
     {
         EditorGUI.BeginProperty(inRect, label, inProp);
-
         string k = label.text.ToString();
-        if (inProp.objectReferenceValue == null)
+
+        if (inProp.type == "Enum" ? inProp.enumValueIndex == 0 : inProp.objectReferenceValue == null)
         {
             if (!errs.ContainsKey(label.text) || !errs[k])
                 Debug.LogError("NotNullAttr: Reference of " + k + " is null");

@@ -8,7 +8,7 @@ public class E_Archer : EnemyBase
         MINDIST_P_NOISE = 10;
 
     public static Effector_T aplayer =
-        new Effector_T("Player", -5, 20, false);
+        new Effector_T("Player", -2, 25, false);
 
     override public Vector3 steer()
     {

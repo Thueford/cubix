@@ -8,16 +8,15 @@ public abstract class EntityBase : MonoBehaviour
 {
     [Header("Movement Settings")]
     [Range(1, 50)]
-    public float accelerationForce;
+    public float accelerationForce = 15;
     [Range(1, 50)]
-    public float maxSpeed;
-    public bool movable;
+    public float maxSpeed = 10;
+    public bool movable = false;
 
     [Header("HP Settings")]
     [Range(1, 100)]
-    public float startHP;
-    [ReadOnly]
-    public float HP;
+    public float startHP = 5;
+    [ReadOnly] public float HP;
 
     // [Header("Other Settings")]
 
@@ -63,6 +62,7 @@ public abstract class EntityBase : MonoBehaviour
         anim.Play("Die");
         Freeze();
         if (this is Player) Player.curStage.OnStageExit();
+        if (this is EnemyBase) EnemySpawner.EnemyDied();
     }
 
     virtual public void OnDie(AnimationEvent ev)
@@ -73,6 +73,8 @@ public abstract class EntityBase : MonoBehaviour
 
     virtual public void OnSpawn(AnimationEvent ev)
     {
+        Melt();
         anim.enabled = false;
+        if (this is EnemyBase) EnemySpawner.EnemySpawned();
     }
 }

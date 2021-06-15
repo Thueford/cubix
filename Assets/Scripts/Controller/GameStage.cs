@@ -12,19 +12,27 @@ public class GameStage : MonoBehaviour
     [WarnNull] public GameStage next;
     [WarnNull] public Hint hints;
 
-    public int colorSlots = 3;
-    public float chargeTime = 10;
+    [Range(0,  3)] public int colorSlots = 3;
+    [Range(1,100)] public float chargeTime = 10;
+    [Range(1,100)] public int maxEnemies = 10;
 
     public void Start()
     {
         gameObject.SetActive(false);
     }
 
+    // Reset entities
+    public void ResetStage()
+    {
+        foreach (EnemySpawner eb in GetComponentsInChildren<EnemySpawner>())
+            eb.ResetSpawner();
+    }
+
     // Called when player steps on portal
     public void OnStageEntering()
     {
-        Debug.Log("Entering");
         gameObject.SetActive(true);
+        actors.SetActive(false);
         portal.Disable();
         if (hints != null) hints.ResetHints();
     }
@@ -32,7 +40,6 @@ public class GameStage : MonoBehaviour
     // Called when player is spawning
     public void OnStageEnter()
     {
-        Debug.Log("Enter");
         Debug.Log("Stage: " + name);
 
         // copy camera
@@ -40,10 +47,10 @@ public class GameStage : MonoBehaviour
         Camera.main.transform.rotation = cam.transform.rotation;
 
         GetComponentInChildren<ChargeAnim>().ResetAnim(chargeTime);
+        actors.SetActive(true);
         spawn.Disable();
-        if(next != null) next.spawn.Enable();
 
-        // actors.SetActive(true);
+        //if(next != null) next.spawn.Enable();
     }
 
     public void OnStageEntered()
