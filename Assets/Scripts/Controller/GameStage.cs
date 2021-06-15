@@ -12,12 +12,20 @@ public class GameStage : MonoBehaviour
     [WarnNull] public GameStage next;
     [WarnNull] public Hint hints;
 
-    public int colorSlots = 3;
-    public float chargeTime = 10;
+    [Range(0,  3)] public int colorSlots = 3;
+    [Range(1,100)] public float chargeTime = 10;
+    [Range(1,100)] public int maxEnemies = 10;
 
     public void Start()
     {
         gameObject.SetActive(false);
+    }
+
+    // Reset entities
+    public void ResetStage()
+    {
+        foreach (EnemySpawner eb in GetComponentsInChildren<EnemySpawner>())
+            eb.ResetSpawner();
     }
 
     // Called when player steps on portal

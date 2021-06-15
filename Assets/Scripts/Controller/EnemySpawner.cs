@@ -15,6 +15,7 @@ public class EnemySpawner : MonoBehaviour
     public float variation = 0.2f;
 
     private int spawned = 0;
+    private static int enemyCount = 0;
 
     private void Start()
     {
@@ -33,6 +34,16 @@ public class EnemySpawner : MonoBehaviour
         spawned = 0;
     }
 
+    public static void EnemyDied()
+    {
+        enemyCount--;
+    }
+
+    public static void EnemySpawned()
+    {
+        enemyCount++;
+    }
+
     public void InitiateSpawn()
     {
         Invoke("Spawn", delay + Random.value * variation);
@@ -40,10 +51,14 @@ public class EnemySpawner : MonoBehaviour
 
     private void Spawn()
     {
-        Vector3 pos = transform.position + new Vector3((Random.value - 0.5f) * transform.lossyScale.x, 0, (Random.value - 0.5f) * transform.lossyScale.z);
-        pos.y = 0.5f;
-        EntityBase e = Instantiate(prefab, pos, Quaternion.identity, transform.parent);
-        if (++spawned < amount) InitiateSpawn();
+        if(enemyCount < Player.curStage.maxEnemies)
+        {
+            Vector3 pos = transform.position + new Vector3((Random.value - 0.5f) * transform.lossyScale.x, 0, (Random.value - 0.5f) * transform.lossyScale.z);
+            pos.y = 0.5f;
+            EntityBase e = Instantiate(prefab, pos, Quaternion.identity, transform.parent);
+            if (++spawned < amount) InitiateSpawn();
+        }
+        else InitiateSpawn();
     }
 
     void Update()

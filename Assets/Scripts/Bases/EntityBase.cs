@@ -62,6 +62,7 @@ public abstract class EntityBase : MonoBehaviour
         anim.Play("Die");
         Freeze();
         if (this is Player) Player.curStage.OnStageExit();
+        if (this is EnemyBase) EnemySpawner.EnemyDied();
     }
 
     virtual public void OnDie(AnimationEvent ev)
@@ -74,5 +75,6 @@ public abstract class EntityBase : MonoBehaviour
     {
         Melt();
         anim.enabled = false;
+        if (this is EnemyBase) EnemySpawner.EnemySpawned();
     }
 }
