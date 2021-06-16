@@ -5,7 +5,8 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class PlayerShooter : ShooterBase
 {
-    
+
+    private Vector3Int rgb = Vector3Int.zero;
 
     // Start is called before the first frame update
     override protected void Start()
@@ -24,6 +25,7 @@ public class PlayerShooter : ShooterBase
         p.damage = 1f;
         p.explosionRadius = 0f;
         p.color = new Color(.3f, .3f, .3f, 1f);
+
     }
 
     // Update is called once per frame
@@ -32,7 +34,7 @@ public class PlayerShooter : ShooterBase
         base.Update();
     }
 
-    public void updateColor(Vector3Int rgb)
+    private void updateColor(Vector3Int rgb)
     {
         if (rgb == Vector3Int.zero) p.color = GameState.black;
         else if (rgb == Vector3Int.forward) p.color = GameState.blue;
@@ -40,11 +42,13 @@ public class PlayerShooter : ShooterBase
         else p.color = new Color(rgb.x, rgb.y, rgb.z, 1f);
     }
 
-    public void updateProperties(Vector3Int rgbNew, Vector3Int rgbOld)
+    public void updateProperties(Vector3Int rgbNew)
     {
-        if (rgbNew.x != rgbOld.x) toggleRed(rgbNew.x == 1);
-        if (rgbNew.y != rgbOld.y) toggleGreen(rgbNew.y == 1);
-        if (rgbNew.z != rgbOld.z) toggleBlue(rgbNew.z == 1);
+        if (rgbNew.x != rgb.x) toggleRed(rgbNew.x == 1);
+        if (rgbNew.y != rgb.y) toggleGreen(rgbNew.y == 1);
+        if (rgbNew.z != rgb.z) toggleBlue(rgbNew.z == 1);
+        rgb = rgbNew;
+        updateColor(rgb);
     }
 
     public void toggleRed(bool b) {
@@ -68,4 +72,8 @@ public class PlayerShooter : ShooterBase
         singleFire = !b;
     }
 
+    override protected void shoot(Vector3 dir)
+    {
+        base.shoot(dir);
+    }
 }
