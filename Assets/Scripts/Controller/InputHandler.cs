@@ -35,29 +35,29 @@ public class InputHandler : MonoBehaviour
     {
         if (!enableNumbers) return rgb;
         Vector3Int oldrgb = rgb;
-        if (GameState.self.maxActiveColors == 0) return rgb;
+        if (GameState.maxActiveColors == 0) return rgb;
 
-        if (Input.GetKeyDown(KeyCode.Alpha1) && GameState.self.unlockedColors.x == 1)
+        if (Input.GetKeyDown(KeyCode.Alpha1) && GameState.unlockedColors.x == 1)
         {
             rgb.x = 1 - rgb.x;
-            if (GameState.self.maxActiveColors == 1 && rgb.x == 1) rgb = Vector3Int.right;
-            if (GameState.self.maxActiveColors == 2 && rgb.x + rgb.y + rgb.z == 3)
+            if (GameState.maxActiveColors == 1 && rgb.x == 1) rgb = Vector3Int.right;
+            if (GameState.maxActiveColors == 2 && rgb.x + rgb.y + rgb.z == 3)
                 rgb = Vector3Int.right + lastActivatedColor;
             if (rgb.x == 1) lastActivatedColor = Vector3Int.right;
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2) && GameState.self.unlockedColors.y == 1)
+        if (Input.GetKeyDown(KeyCode.Alpha2) && GameState.unlockedColors.y == 1)
         {
             rgb.y = 1 - rgb.y;
-            if (GameState.self.maxActiveColors == 1 && rgb.y == 1) rgb = Vector3Int.up;
-            if (GameState.self.maxActiveColors == 2 && rgb.x + rgb.y + rgb.z == 3)
+            if (GameState.maxActiveColors == 1 && rgb.y == 1) rgb = Vector3Int.up;
+            if (GameState.maxActiveColors == 2 && rgb.x + rgb.y + rgb.z == 3)
                 rgb = Vector3Int.up + lastActivatedColor;
             if (rgb.y == 1) lastActivatedColor = Vector3Int.up;
         }
-        if (Input.GetKeyDown(KeyCode.Alpha3) && GameState.self.unlockedColors.z == 1)
+        if (Input.GetKeyDown(KeyCode.Alpha3) && GameState.unlockedColors.z == 1)
         {
             rgb.z = 1 - rgb.z;
-            if (GameState.self.maxActiveColors == 1 && rgb.z == 1) rgb = Vector3Int.forward;
-            if (GameState.self.maxActiveColors == 2 && rgb.x + rgb.y + rgb.z == 3)
+            if (GameState.maxActiveColors == 1 && rgb.z == 1) rgb = Vector3Int.forward;
+            if (GameState.maxActiveColors == 2 && rgb.x + rgb.y + rgb.z == 3)
                 rgb = Vector3Int.forward + lastActivatedColor;
             if (rgb.z == 1) lastActivatedColor = Vector3Int.forward;
         }

@@ -28,8 +28,8 @@ public class EnemySpawner : MonoBehaviour
 
     private Color getWeightedColor()
     {
-        Vector4 color = (Vector3)GameState.self.unlockedColors; // active colors
-        color.w = GameState.self.maxActiveColors;      // default color scale
+        Vector4 color = (Vector3)GameState.unlockedColors; // active colors
+        color.w = GameState.maxActiveColors;      // default color scale
         color.Scale(colors);                      // apply scales
         color /= Vector4.Dot(color, Vector4.one); // normalize to sum=1
 

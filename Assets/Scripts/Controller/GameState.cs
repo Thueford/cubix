@@ -15,13 +15,13 @@ public class GameState : MonoBehaviour
         blue = new Color(0f, .3f, 1f, 1f),
         glow = new Color(.7f, .7f, .7f, 1f);
 
-    public Vector3Int unlockedColors = Vector3Int.right;
+    public static Vector3Int unlockedColors = Vector3Int.right;
     public static Color[] colorOrder = { Color.black, Color.black, Color.black };
-    public int maxActiveColors = 0;
+    public static int maxActiveColors = 0;
 
     void Awake()
     {
-        self = this;
+       self = this;
     }
 
     // Start is called before the first frame update
@@ -57,31 +57,31 @@ public class GameState : MonoBehaviour
 
     public static void addRed()
     {
-        if (self.unlockedColors.x != 1)
+        if (unlockedColors.x != 1)
         {
-            colorOrder[self.maxActiveColors].r = 1;
-            self.unlockedColors.x = 1;
-            self.maxActiveColors++;
+            colorOrder[maxActiveColors].r = 1;
+            unlockedColors.x = 1;
+            maxActiveColors++;
         }
     }
 
     public static void addGreen()
     {
-        if (self.unlockedColors.y != 1)
+        if (unlockedColors.y != 1)
         {
-            colorOrder[self.maxActiveColors].g = 1;
-            self.unlockedColors.y = 1;
-            self.maxActiveColors++;
+            colorOrder[maxActiveColors].g = 1;
+            unlockedColors.y = 1;
+            maxActiveColors++;
         }
     }
 
     public static void addBlue()
     {
-        if (self.unlockedColors.z != 1)
+        if (unlockedColors.z != 1)
         {
-            colorOrder[self.maxActiveColors].b = 1;
-            self.unlockedColors.z = 1;
-            self.maxActiveColors++;
+            colorOrder[maxActiveColors].b = 1;
+            unlockedColors.z = 1;
+            maxActiveColors++;
         }
     }
 }
