@@ -16,6 +16,7 @@ public class GameState : MonoBehaviour
         glow = new Color(.7f, .7f, .7f, 1f);
 
     public Vector3Int unlockedColors = Vector3Int.right;
+    public static Color[] colorOrder = { Color.black, Color.black, Color.black };
     public int maxActiveColors = 0;
 
     void Awake()
@@ -26,7 +27,9 @@ public class GameState : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        maxActiveColors = unlockedColors.x + unlockedColors.y + unlockedColors.z;
+        if (unlockedColors.x > 0) colorOrder[maxActiveColors++].r = 1;
+        if (unlockedColors.y > 0) colorOrder[maxActiveColors++].g = 1;
+        if (unlockedColors.z > 0) colorOrder[maxActiveColors++].b = 1;
         StartCoroutine(StartGame());
     }
 
@@ -56,8 +59,9 @@ public class GameState : MonoBehaviour
     {
         if (self.unlockedColors.x != 1)
         {
-            self.maxActiveColors += 1;
+            colorOrder[self.maxActiveColors].r = 1;
             self.unlockedColors.x = 1;
+            self.maxActiveColors++;
         }
     }
 
@@ -65,8 +69,9 @@ public class GameState : MonoBehaviour
     {
         if (self.unlockedColors.y != 1)
         {
-            self.maxActiveColors += 1;
+            colorOrder[self.maxActiveColors].g = 1;
             self.unlockedColors.y = 1;
+            self.maxActiveColors++;
         }
     }
 
@@ -74,8 +79,9 @@ public class GameState : MonoBehaviour
     {
         if (self.unlockedColors.z != 1)
         {
-            self.maxActiveColors += 1;
+            colorOrder[self.maxActiveColors].b = 1;
             self.unlockedColors.z = 1;
+            self.maxActiveColors++;
         }
     }
 }

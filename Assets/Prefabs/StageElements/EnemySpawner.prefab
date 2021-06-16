@@ -104,3 +104,4 @@ MonoBehaviour:
   amount: 1
   delay: 1
   variation: 0.2
+  colors: {x: 1, y: 1, z: 1, w: 1}

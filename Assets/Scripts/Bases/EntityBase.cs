@@ -37,6 +37,12 @@ public abstract class EntityBase : MonoBehaviour
     virtual public void Update() {}
     virtual public void FixedUpdate() {}
 
+    public void setColor(Color c)
+    {
+        GetComponentInChildren<Renderer>().material.color = c;
+        GetComponentInChildren<Light>().color = c == Color.black ? GameState.glow : c;
+    }
+
     public void Hit(float damage)
     {
         HP -= damage;

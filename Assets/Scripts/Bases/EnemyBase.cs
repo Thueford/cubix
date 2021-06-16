@@ -12,13 +12,6 @@ public abstract class EnemyBase : CtxSteer
     override public void Start()
     {
         base.Start();
-
-        if (GameState.self.unlockedColors.x != 0) color.r = 1;
-        if (GameState.self.unlockedColors.y != 0) color.g = 1;
-        if (GameState.self.unlockedColors.z != 0) color.b = 1;
-        GetComponentInChildren<Renderer>().material.color = color;
-        GetComponentInChildren<Light>().color = color == GameState.black ? GameState.glow : color;
-
         pnOff = (int)Random.Range(-1e5f, 1e5f);
     }
 

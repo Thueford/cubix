@@ -600,8 +600,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startStage: {fileID: 1653965245}
-  unlockedColors: {x: 1, y: 0, z: 0}
-  maxActiveColors: 0
 --- !u!84 &1092632210
 RenderTexture:
   m_ObjectHideFlags: 0

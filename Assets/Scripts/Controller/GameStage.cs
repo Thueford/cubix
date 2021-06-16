@@ -16,7 +16,7 @@ public class GameStage : MonoBehaviour
     [Range(1,100)] public float chargeTime = 10;
     [Range(1,100)] public int maxEnemies = 10;
 
-    public void Start()
+    public void Awake()
     {
         gameObject.SetActive(false);
     }
