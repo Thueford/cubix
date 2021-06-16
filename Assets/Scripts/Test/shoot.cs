@@ -11,7 +11,6 @@ public class shoot : MonoBehaviour
     public Rigidbody rb;
     public CapsuleCollider cc;
 
-    private bool used = false;
     private Vector3 oldVelocity;
     private float radius;
     // Start is called before the first frame update
@@ -26,7 +25,7 @@ public class shoot : MonoBehaviour
     void Update()
     {
         oldVelocity = rb.velocity;
-        if (Input.GetKey(KeyCode.Space) )
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             Time.timeScale = 1 / 60f;
             if (!useForce)
@@ -37,7 +36,6 @@ public class shoot : MonoBehaviour
             {
                 rb.AddForce(dir.normalized * force * rb.mass);
             }
-            used = true;
         }
     }
 

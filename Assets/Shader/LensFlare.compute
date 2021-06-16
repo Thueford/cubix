@@ -27,11 +27,12 @@ float3 getTexColor(float2 texcoords, float2 iResolution)
 float3 generateGhosts(float2 texcoord, float2 ghostVec, float2 iResolution)
 {
     float3 col = 0;
+    float2 offset = texcoord;
+    
     for (int i = 0; i < ghostCount; ++i)
     {
         //Coordinates to look at for a bright spot 
-        float2 offset = texcoord + ghostVec * float(i);
-        //offset = frac(offset);
+        offset += ghostVec;
         //create ghosts
         float3 texColor = getTexColor(offset, iResolution);
         texColor = max(texColor - threshold, 0);

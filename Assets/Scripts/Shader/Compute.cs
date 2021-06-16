@@ -44,7 +44,7 @@ public class Compute : MonoBehaviour
     public float lfThreshold = 0.7f;
 
     [Range(0.1f, 2f)]
-    public float lfGhostSpacing = 1.4f;
+    public float lfGhostSpacing = .69f;
 
     [Range(0.0f, 0.3f)]
     public float lfCAStrength = 0.15f;

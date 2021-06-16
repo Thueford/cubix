@@ -13,9 +13,9 @@ public class Player : EntityBase
 
     [Header("Other Settings")]
     [WarnNull] public Text txtDbg;
-    private PlayerShooter bs;
+    public PlayerShooter bs;
 
-    private Vector3Int rgb = new Vector3Int(0, 0, 0);
+    public Vector3Int rgb = new Vector3Int(0, 0, 0);
     private Vector3Int lastActivatedColor = new Vector3Int(0, 0, 0);
 
     override public void Awake()
@@ -48,9 +48,9 @@ public class Player : EntityBase
         {
             Vector3 dir = Vector3.zero;
 
-            rgb = ReadColorInput(rgb);
+            rgb = InputHandler.ReadColorInput(rgb);
             // read input keys
-            dir = ReadDirInput();
+            dir = InputHandler.ReadDirInput();
             dir = dir.normalized * accelerationForce;
 
             // apply direction
@@ -64,55 +64,8 @@ public class Player : EntityBase
             float f = (transform.position.y-r.origin.y)/r.direction.y;
             transform.forward = r.GetPoint(f) - transform.position;
 
-            ReadShootInput();
+            InputHandler.ReadShootInput();
         }
-    }
-
-    private Vector3 ReadDirInput()
-    {
-        Vector3 dir = Vector3.zero;
-        if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) dir.z -= 1;
-        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) dir.x += 1;
-        if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) dir.z += 1;
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) dir.x -= 1;
-        return dir;
-    }
-
-    private Vector3Int ReadColorInput(Vector3Int rgb)
-    {
-        //Vector3Int rgb = this.rgb;
-        if (GameState.self.maxActiveColors == 0) return rgb;
-
-        if (Input.GetKeyDown(KeyCode.Alpha1) && GameState.self.unlockedColors.x == 1)
-        {
-            rgb.x = 1 - rgb.x;
-            if (GameState.self.maxActiveColors == 1 && rgb.x == 1) rgb = Vector3Int.right;
-            if (GameState.self.maxActiveColors == 2 && rgb.x + rgb.y + rgb.z == 3)
-                rgb = Vector3Int.right + lastActivatedColor;
-            if (rgb.x == 1) lastActivatedColor = Vector3Int.right;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2) && GameState.self.unlockedColors.y == 1)
-        {
-            rgb.y = 1 - rgb.y;
-            if (GameState.self.maxActiveColors == 1 && rgb.y == 1) rgb = Vector3Int.up;
-            if (GameState.self.maxActiveColors == 2 && rgb.x + rgb.y + rgb.z == 3)
-                rgb = Vector3Int.up + lastActivatedColor;
-            if (rgb.y == 1) lastActivatedColor = Vector3Int.up;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3) && GameState.self.unlockedColors.z == 1)
-        {
-            rgb.z = 1 - rgb.z;
-            if (GameState.self.maxActiveColors == 1 && rgb.z == 1) rgb = Vector3Int.forward;
-            if (GameState.self.maxActiveColors == 2 && rgb.x + rgb.y + rgb.z == 3)
-                rgb = Vector3Int.forward + lastActivatedColor;
-            if (rgb.z == 1) lastActivatedColor = Vector3Int.forward;
-        }
-        if (rgb != this.rgb)
-        {
-            bs.updateColor(rgb);
-            bs.updateProperties(rgb, this.rgb);
-        }
-        return rgb;
     }
 
     private void ReadShootInput()
