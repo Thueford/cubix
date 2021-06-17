@@ -69,12 +69,15 @@ public class Collectable : MonoBehaviour
         {
             case cType.Red:
                 GameState.addRed();
+                Ressource.self.addRes(Ressource.col.Red, 50);
                 break;
             case cType.Green:
                 GameState.addGreen();
+                Ressource.self.addRes(Ressource.col.Green, 50);
                 break;
             case cType.Blue:
                 GameState.addBlue();
+                Ressource.self.addRes(Ressource.col.Blue, 50);
                 break;
             default:
                 break;

@@ -15,9 +15,10 @@ public class GameState : MonoBehaviour
         blue = new Color(0f, .3f, 1f, 1f),
         glow = new Color(.7f, .7f, .7f, 1f);
 
-    public static Vector3Int unlockedColors = Vector3Int.right;
+    public static Vector3Int unlockedColors = Vector3Int.zero;
     public static Color[] colorOrder = { Color.black, Color.black, Color.black };
-    public static int maxActiveColors = 0;
+    public static int maxActiveColors = 0, stage = 0;
+
 
     void Awake()
     {
