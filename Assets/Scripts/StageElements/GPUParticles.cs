@@ -5,24 +5,35 @@ using UnityEngine;
 [ExecuteAlways]
 public class GPUParticles : MonoBehaviour
 {
+    [Header("ParticleSystem Properties")]
     [NotNull] public Material mat;
     public float emissionRate = 5;
     public float startDelay = 0;
     public float lifetime = 3;
+    [Range(1,(int)1e6)]
     public int maxParts = 1;
     public Vector2 scale = new Vector2(0.2f, 0.2f);
     public Vector3 startSpeed = Vector3.one;
-    public AnimationCurve curve;
+
+    [Header("Other")]
+    [ReadOnly] public int curParts = 0;
+    private float timePerPart, partTimer = 0;
 
     private GPUParticle[] particles;
-    private float lastSpawnT = 0;
+    private Matrix4x4[] transforms;
     private int curMaxParts = 1;
+
+    // public MeshFilter mf;
+    public Mesh mesh;
+
+    // private float partsPerFrame, partTimer;
 
     // Start is called before the first frame update
     void Start()
     {
+        mat.enableInstancing = true;
         particles = new GPUParticle[maxParts];
-        // InvokeRepeating("spawnParticle", startDelay, 1 / emissionRate);
+        transforms = new Matrix4x4[maxParts];
     }
 
     uint lastUsedParticle = 0;
@@ -36,7 +47,7 @@ public class GPUParticles : MonoBehaviour
             if (particles[i].life <= 0)
                 return lastUsedParticle = i;
 
-        return lastUsedParticle = 0;
+        return 0; // lastUsedParticle = (uint)(Random.value*curMaxParts);
     }
 
     public void spawnParticle()
@@ -52,29 +63,57 @@ public class GPUParticles : MonoBehaviour
 
         uint p = firstUnusedParticle();
         particles[p].init(lifetime, pos, vel, col);
-        lastSpawnT = Time.time;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(curMaxParts != maxParts)
-            particles = new GPUParticle[curMaxParts = maxParts];
+        timePerPart = 1/emissionRate;
 
-        if (Time.time - lastSpawnT > 1 / emissionRate) spawnParticle();
-        // particles.RemoveAll(p => GPUParticle.Update(ref p));
-        for (int i = 0; i < maxParts; i++)
+        mat.SetVector("_parentPos", transform.position);
+        mat.SetVector("_scale", scale);
+
+        // update maxParts
+        if (curMaxParts != maxParts)
+        {
+            curMaxParts = maxParts;
+            particles = new GPUParticle[maxParts];
+            transforms = new Matrix4x4[maxParts];
+        }
+
+        // spawn particles
+        partTimer += Time.deltaTime;
+        for (float t = timePerPart; t < partTimer; t += timePerPart)
+            spawnParticle();
+        partTimer -= timePerPart * (int)(partTimer / timePerPart);
+        
+        // update particles
+        curParts = 0;
+        for (int i = 0; i < maxParts; i++) {
             particles[i].Update();
+            transforms[i] = particles[i].getTransform(this);
+            // Matrix4x4.Translate(particles[i].pos);
+            if (particles[i].life > 0) curParts++;
+            if (particles[i].life > 0) {
+                // Debug.DrawLine(transform.position, transform.position + particles[i].pos);
+                //Graphics.DrawMesh(mesh, transform.position + particles[i].pos, 
+                //    Quaternion.identity, mat, 0);
+                Graphics.DrawMesh(mesh, transforms[i], mat, 0);
+            }
+        }
+
+        //Graphics.DrawMeshInstanced(mesh, 0, mat, transforms, 10);
     }
 
     void OnRenderObject()
     {
-        mat.SetPass(0);
+        //mat.SetPass(0);
+        //GL.PushMatrix();
+        //GL.MultMatrix(transform.localToWorldMatrix);
+        //foreach (GPUParticle p in particles) p.Render(this);
+        //GL.PopMatrix();
 
-        GL.PushMatrix();
-        GL.MultMatrix(transform.localToWorldMatrix);
-        foreach (var p in particles) p.Render(this);
-        GL.PopMatrix();
+        //Graphics.DrawMeshInstanced(mf.mesh, 0, mat, transforms, curMaxParts, null, UnityEngine.Rendering.ShadowCastingMode.Off, false, 0, Camera.main, UnityEngine.Rendering.LightProbeUsage.Off);
     }
 }
 
@@ -92,9 +131,11 @@ struct GPUParticle
 
     public void Render(GPUParticles p)
     {
-        GL.PushMatrix();
+        if (life <= 0) return;
+        //GL.PushMatrix();
         // Matrix4x4 look = Matrix4x4.LookAt(pos, Camera.main.transform.position, Vector3.up)
-        GL.MultMatrix(Matrix4x4.Translate(p.transform.position + pos) * Matrix4x4.Scale(p.scale));
+        //GL.MultMatrix(Matrix4x4.Translate(pos));
+
         GL.Begin(GL.QUADS);
         GL.Color(col);
         GL.TexCoord(Vector3.zero);
@@ -106,16 +147,20 @@ struct GPUParticle
         GL.TexCoord(Vector3.right);
         GL.Vertex3(1, 0, 0);
         GL.End();
-        GL.PopMatrix();
+        //GL.PopMatrix();
     }
 
-    public bool Update()
+    public void Update()
     {
+        if (life < 0) return;
         life -= Time.deltaTime;
-        if (life < 0) return true;
 
         pos += vel * Time.deltaTime;
         col.a -= 2.5f * Time.deltaTime;
-        return false;
+    }
+
+    internal Matrix4x4 getTransform(GPUParticles p)
+    {
+        return Matrix4x4.Translate(p.transform.position + pos);
     }
 }
