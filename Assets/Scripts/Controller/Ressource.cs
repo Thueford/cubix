@@ -12,11 +12,11 @@ public class Ressource : MonoBehaviour
     [NotNull] public Text TextBlue;
 
     [Range(0, 100)]
-    public static float valueRed = 100;
+    public static float valueRed = 50;
     [Range(0, 100)]
-    public static float valueGreen = 100;
+    public static float valueGreen = 50;
     [Range(0, 100)]
-    public static float valueBlue = 100;
+    public static float valueBlue = 50;
 
     public static float cooldown = 10;
 
@@ -24,7 +24,16 @@ public class Ressource : MonoBehaviour
     private static bool greenMode = false;
     private static bool blueMode = false;
 
+    private const float alpha = 0.6862745098f;
+
     string bar = "█";
+
+    public enum col
+    {
+        Red,
+        Green,
+        Blue
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -46,35 +55,45 @@ public class Ressource : MonoBehaviour
     {
         if (redMode)
         {
-            valueRed = safeCoolDown(valueRed);
-            SetRessourceText(valueRed, TextRed);
+            addRes(col.Red, -cooldown);
+            check(valueRed);
         }
         if (greenMode)
         {
-            valueGreen = safeCoolDown(valueGreen);
-            SetRessourceText(valueGreen, TextGreen);
+            addRes(col.Green, -cooldown);
+            check(valueGreen);
         }
         if (blueMode)
         {
-            valueBlue = safeCoolDown(valueBlue);
-            SetRessourceText(valueBlue, TextBlue);
+            addRes(col.Blue, -cooldown);
+            check(valueBlue);
         }
     }
 
-    private float safeCoolDown(float value)
+    private void check(float value)
     {
-        value = Mathf.Max(0, value - cooldown);
         if (value == 0)
         {
             InputHandler.enableNumbers = true;
             Player.self.bs.updateProperties(Vector3Int.zero);
         }
-        return value;
     }
 
     void SetRessourceText(float value, Text textObject)
     {
+        Color color = textObject.color;
         string tmp = "";
+
+        if (value == 100) 
+        {
+            color.a = 1;
+            textObject.color = color; 
+        }
+        else
+        {
+            color.a = alpha;
+            textObject.color = color;
+        }
         for (int i = 0; i < (int)value / 10; i++)
         {
             tmp += bar + " ";
@@ -110,20 +129,25 @@ public class Ressource : MonoBehaviour
         Player.self.bs.updateProperties(rgb);
     }
 
-    public void addRed(float value)
+    public void addRes(col c, float value)
     {
-        valueRed += value;
-        SetRessourceText(valueRed, TextRed);
+        switch (c)
+        {
+            case col.Red:
+                valueRed = Mathf.Max(0, Mathf.Min(100, valueRed + value));
+                SetRessourceText(valueRed, TextRed);
+                break;
+            case col.Green:
+                valueGreen = Mathf.Max(0, Mathf.Min(100, valueGreen + value));
+                SetRessourceText(valueGreen, TextGreen);
+                break;
+            case col.Blue:
+                valueBlue = Mathf.Max(0, Mathf.Min(100, valueBlue + value));
+                SetRessourceText(valueBlue, TextBlue);
+                break;
+            default:
+                break;
+        }
     }
 
-    public void addGreen(float value)
-    {
-        valueGreen += value;
-        SetRessourceText(valueGreen, TextGreen);
-    }
-    public void addBlue(float value)
-    {
-        valueBlue += value;
-        SetRessourceText(valueBlue, TextBlue);
-    }
 }

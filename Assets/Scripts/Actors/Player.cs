@@ -15,9 +15,6 @@ public class Player : EntityBase
     [WarnNull] public Text txtDbg;
     public PlayerShooter bs;
 
-    public Vector3Int rgb = new Vector3Int(0, 0, 0);
-    private Vector3Int lastActivatedColor = new Vector3Int(0, 0, 0);
-
     override public void Awake()
     {
         self = this;
@@ -65,14 +62,6 @@ public class Player : EntityBase
             transform.forward = r.GetPoint(f) - transform.position;
 
             InputHandler.ReadShootInput();
-        }
-    }
-
-    private void ReadShootInput()
-    {
-        if (Input.GetMouseButton(0))
-        {
-            bs.tryShot();
         }
     }
 

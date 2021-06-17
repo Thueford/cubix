@@ -18,6 +18,8 @@ public abstract class EntityBase : MonoBehaviour
     public float startHP = 5;
     [ReadOnly] public float HP;
 
+    public Vector3Int rgb = Vector3Int.zero;
+
     // [Header("Other Settings")]
 
     protected Animator anim;
@@ -39,6 +41,9 @@ public abstract class EntityBase : MonoBehaviour
 
     public void setColor(Color c)
     {
+        rgb.x = (int)c.r;
+        rgb.y = (int)c.g;
+        rgb.z = (int)c.b;
         GetComponentInChildren<Renderer>().material.color = c;
         GetComponentInChildren<Light>().color = c == Color.black ? GameState.glow : c;
     }
@@ -53,12 +58,14 @@ public abstract class EntityBase : MonoBehaviour
     {
         movable = false;
         foreach (ShooterBase sb in GetComponents<ShooterBase>()) sb.active = false;
+        foreach (Collider c in GetComponentsInChildren<Collider>()) c.enabled = false;
     }
 
     virtual public void Melt()
     {
         movable = true;
         foreach (ShooterBase sb in GetComponents<ShooterBase>()) sb.active = true;
+        foreach (Collider c in GetComponentsInChildren<Collider>()) c.enabled = true;
     }
 
     virtual public void Die()
@@ -75,6 +82,9 @@ public abstract class EntityBase : MonoBehaviour
     {
         Debug.Log("killed " + name);
         if (!(this is Player)) Destroy(gameObject);
+        if (rgb.x == 1) Ressource.self.addRes(Ressource.col.Red, 10);
+        if (rgb.y == 1) Ressource.self.addRes(Ressource.col.Green, 10);
+        if (rgb.z == 1) Ressource.self.addRes(Ressource.col.Blue, 10);
     }
 
     virtual public void OnSpawn(AnimationEvent ev)
