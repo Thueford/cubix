@@ -63,7 +63,7 @@ Shader "Unlit/GPUPartUnlitShader"
 
                 
                 // Billboard: https://gist.github.com/kaiware007/8ebad2d28638ff83b6b74970a4f70c9a
-                /*
+                //*
                 float3 vpos = mul((float3x3)unity_ObjectToWorld, v.vertex.xyz);
                 float4 worldCoord = float4(unity_ObjectToWorld._m03, unity_ObjectToWorld._m13, unity_ObjectToWorld._m23, 1);
                 float4 viewPos = mul(UNITY_MATRIX_V, worldCoord) + float4(vpos, 0);

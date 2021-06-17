@@ -14,13 +14,29 @@ public class GPUParticles : MonoBehaviour
     public Vector3 startSpeed = Vector3.one;
     public AnimationCurve curve;
 
-    private List<GPUParticle> particles = new List<GPUParticle>();
+    private GPUParticle[] particles;
     private float lastSpawnT = 0;
+    private int curMaxParts = 1;
 
     // Start is called before the first frame update
     void Start()
     {
+        particles = new GPUParticle[maxParts];
         // InvokeRepeating("spawnParticle", startDelay, 1 / emissionRate);
+    }
+
+    uint lastUsedParticle = 0;
+    uint firstUnusedParticle()
+    {
+        for (uint i = lastUsedParticle; i < curMaxParts; ++i)
+            if (particles[i].life <= 0)
+                return lastUsedParticle = i;
+
+        for (uint i = 0; i < lastUsedParticle; ++i)
+            if (particles[i].life <= 0)
+                return lastUsedParticle = i;
+
+        return lastUsedParticle = 0;
     }
 
     public void spawnParticle()
@@ -34,16 +50,21 @@ public class GPUParticles : MonoBehaviour
         Vector3 vel = 2 * new Vector3(Random.value, Random.value, Random.value) - Vector3.one;
         vel.Normalize();
 
-        particles.Add(new GPUParticle(lifetime, pos, vel, col));
-        if (particles.Count > maxParts) particles.RemoveAt(0);
+        uint p = firstUnusedParticle();
+        particles[p].init(lifetime, pos, vel, col);
         lastSpawnT = Time.time;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(curMaxParts != maxParts)
+            particles = new GPUParticle[curMaxParts = maxParts];
+
         if (Time.time - lastSpawnT > 1 / emissionRate) spawnParticle();
-        particles.RemoveAll(p => GPUParticle.Update(ref p));
+        // particles.RemoveAll(p => GPUParticle.Update(ref p));
+        for (int i = 0; i < maxParts; i++)
+            particles[i].Update();
     }
 
     void OnRenderObject()
@@ -52,7 +73,7 @@ public class GPUParticles : MonoBehaviour
 
         GL.PushMatrix();
         GL.MultMatrix(transform.localToWorldMatrix);
-        particles.ForEach(p => p.Render(this));
+        foreach (var p in particles) p.Render(this);
         GL.PopMatrix();
     }
 }
@@ -61,12 +82,13 @@ struct GPUParticle
 {
     public Vector3 pos, vel;
     public Color col;
-    public float live;
+    public float life;
 
     public GPUParticle(float l, Vector3 p, Vector3 v, Color c)
-    {
-        pos = p; vel = v; live = l; col = c;
-    }
+    { pos = p; vel = v; life = l; col = c; }
+
+    public void init(float l, Vector3 p, Vector3 v, Color c)
+    { pos = p; vel = v; life = l; col = c; }
 
     public void Render(GPUParticles p)
     {
@@ -87,13 +109,13 @@ struct GPUParticle
         GL.PopMatrix();
     }
 
-    public static bool Update(ref GPUParticle p)
+    public bool Update()
     {
-        p.live -= Time.deltaTime;
-        if (p.live < 0) return true;
+        life -= Time.deltaTime;
+        if (life < 0) return true;
 
-        p.pos += p.vel * Time.deltaTime;
-        p.col.a -= 2.5f * Time.deltaTime;
+        pos += vel * Time.deltaTime;
+        col.a -= 2.5f * Time.deltaTime;
         return false;
     }
 }

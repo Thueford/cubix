@@ -638,7 +638,7 @@ MonoBehaviour:
   emissionRate: 10
   startDelay: 0
   lifetime: 1
-  maxParts: 1
+  maxParts: 10
   scale: {x: 0.2, y: 0.2}
   startSpeed: {x: 1, y: 1, z: 1}
   curve:
