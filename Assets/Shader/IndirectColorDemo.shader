@@ -3,10 +3,12 @@ Shader "Custom/IndirectColor" {
         Tags { "RenderType" = "Opaque" }
 
         Pass {
+            Cull Off // draw backfaces
+
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-
+            
             #include "UnityCG.cginc"
 
             struct appdata_t {
@@ -16,7 +18,7 @@ Shader "Custom/IndirectColor" {
 
             struct v2f {
                 float4 vertex   : SV_POSITION;
-                fixed4 color : COLOR;
+                fixed4 color    : COLOR;
             };
 
             struct MeshProperties {

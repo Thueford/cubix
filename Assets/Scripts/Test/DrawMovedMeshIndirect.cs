@@ -17,6 +17,9 @@ public class DrawMovedMeshIndirect : MonoBehaviour
     public Mesh mesh;
     private Bounds bounds;
 
+    private int kernel;
+    private uint tgx, tgy, tgz;
+
     // Mesh Properties struct to be read from the GPU.
     // Size() is a convenience funciton which returns the stride of the struct.
     private struct MeshProperties
@@ -36,21 +39,20 @@ public class DrawMovedMeshIndirect : MonoBehaviour
     {
         // Boundary surrounding the meshes we will be drawing.  Used for occlusion.
         bounds = new Bounds(transform.position, Vector3.one * (range + 1));
+        kernel = compute.FindKernel("CSMain");
+        compute.GetKernelThreadGroupSizes(kernel, out tgx, out tgy, out tgz);
         InitializeBuffers();
     }
 
     private void InitializeBuffers()
     {
-        int kernel = compute.FindKernel("CSMain");
-
         // Argument buffer used by DrawMeshInstancedIndirect.
         uint[] args = new uint[5] { 0, 0, 0, 0, 0 };
         // Arguments for drawing mesh.
-        // 0 == number of triangle indices, 1 == population, others are only relevant if drawing submeshes.
-        args[0] = (uint)mesh.GetIndexCount(0);
-        args[1] = (uint)population;
-        args[2] = (uint)mesh.GetIndexStart(0);
-        args[3] = (uint)mesh.GetBaseVertex(0);
+        args[0] = mesh.GetIndexCount(0); // number of triangle indices
+        args[1] = (uint)population;      // population
+        args[2] = mesh.GetIndexStart(0); // submesh start
+        args[3] = mesh.GetBaseVertex(0); // submesh bv
         argsBuffer = new ComputeBuffer(1, args.Length * sizeof(uint), ComputeBufferType.IndirectArguments);
         argsBuffer.SetData(args);
 
@@ -60,7 +62,7 @@ public class DrawMovedMeshIndirect : MonoBehaviour
         {
             MeshProperties props = new MeshProperties();
             Vector3 position = new Vector3(Random.Range(-range, range), Random.Range(-range, range), Random.Range(-range, range));
-            Quaternion rotation = Quaternion.Euler(Random.Range(-180, 180), Random.Range(-180, 180), Random.Range(-180, 180));
+            Quaternion rotation = Quaternion.identity; // Quaternion.Euler(Random.Range(-180, 180), Random.Range(-180, 180), Random.Range(-180, 180));
             Vector3 scale = Vector3.one;
 
             props.mat = Matrix4x4.TRS(position, rotation, scale);
@@ -82,15 +84,13 @@ public class DrawMovedMeshIndirect : MonoBehaviour
 
     private void Update()
     {
-        int kernel = compute.FindKernel("CSMain");
-
-        compute.SetVector("_PusherPosition", pusher.position - transform.position);
-        // compute.SetFloat("_DeltaTime", Time.deltaTime);
+        bounds.center = transform.position;
+        compute.SetVector("_PusherPosition", pusher.position);
+        compute.SetVector("_ParentPosition", bounds.center);
+        compute.SetFloat("_DeltaTime", Time.deltaTime);
         compute.SetMatrix("_Rotate", Matrix4x4.Rotate(Quaternion.Euler(0, 90*Time.deltaTime, 0)));
 
-        // We used to just be able to use `population` here, but it looks like a Unity update imposed a thread limit (65535) on my device.
-        // This is probably for the best, but we have to do some more calculation.  Divide population by numthreads.x in the compute shader.
-        compute.Dispatch(kernel, Mathf.CeilToInt(population / 64f), 1, 1);
+        compute.Dispatch(kernel, Mathf.CeilToInt(population / (float)tgx), 1, 1);
         Graphics.DrawMeshInstancedIndirect(mesh, 0, material, bounds, argsBuffer);
     }
 

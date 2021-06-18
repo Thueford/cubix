@@ -6,17 +6,19 @@ struct MeshProperties {
 };
 
 RWStructuredBuffer<MeshProperties> _Properties;
-float3 _PusherPosition;
-//float _DeltaTime;
+float3 _PusherPosition, _ParentPosition;
+float _DeltaTime;
 float4x4 _Rotate;
 
 // We used to just be able to use (1, 1, 1) threads for whatever population (not sure the old limit), but a Unity update
 // imposed a thread limit of 65535.  Now, to render populations above that, we need to be more granular with our threads.
-[numthreads(64,1,1)]
-void CSMain (uint3 id : SV_DispatchThreadID) {
+[numthreads(128,1,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
     float4x4 mat = _Properties[id.x].mat;
     // In a transform matrix, the position (translation) vector is the last column.
     float3 position = float3(mat[0][3], mat[1][3], mat[2][3]);
+    position += _ParentPosition;
 
     float dist = distance(position, _PusherPosition);
     // Scale and reverse distance so that we get a value which fades as it gets further away.
@@ -33,18 +35,7 @@ void CSMain (uint3 id : SV_DispatchThreadID) {
         0, 0, 0, 1
     );
 
-    // Apply translation to existing matrix, which will be read in the shader.
-    _Properties[id.x].mat = mul(translation, mat);
-
-    // Just for demo gif.  Not actually very useful -- need to inverse rotation first.
-    /* float4x4 rotation = float4x4(
-        .999, -.01, 0, 0.1,
-        .01, .999, 0, 0.1,
-        0, 0, 1, 0.1,
-        0, 0, 0, 1
-    );
-    _Properties[id.x].mat = mul(_Properties[id.x].mat, rotation);
-    */
-    
-    _Properties[id.x].mat = mul(_Properties[id.x].mat, _Rotate);
+    mat = mul(translation, mat);
+	mat = mul(mat, _Rotate); // MxR: Part, RxM: PartSys
+    _Properties[id.x].mat = mat;
 }
