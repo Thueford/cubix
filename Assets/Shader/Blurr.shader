@@ -222,7 +222,7 @@ Shader "Hidden/Blurr"
 
             fixed4 frag(v2f i) : SV_Target
             {
-                fixed4 col = (0, 0, 0, 1);
+                fixed4 col = fixed4(0, 0, 0, 1);
                 col.r = tex2D(_MainTex, i.uv + float2(_CAAmount, 0)).r;
                 col.g = tex2D(_MainTex, i.uv).g;
                 col.b = tex2D(_MainTex, i.uv - float2(_CAAmount, 0)).b;

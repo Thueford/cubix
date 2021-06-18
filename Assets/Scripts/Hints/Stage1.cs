@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Scene2 : Hint
+public class Stage1 : Hint
 {
-    enum State { START,  SHOOT }
+    enum State { START,  CHARGING, DONE }
     private State state;
 
     override public void ResetHints()
@@ -21,10 +21,17 @@ public class Scene2 : Hint
             case State.START:
                 if (Player.curStage != GetComponentInParent<GameStage>()) return;
                 texts[0].SetActive(true);
+                state++;
                 break;
 
+            case State.CHARGING:
+                if (Player.curStage != GetComponentInParent<GameStage>()) return;
+                //if (!Player.curStage.GetComponentInChildren<Charger>().charging) return;
+                texts[1].SetActive(true);
+                state++;
+                break;
             default: return;
         }
-        state++;
+        
     }
 }

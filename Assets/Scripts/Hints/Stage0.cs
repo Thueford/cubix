@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Scene1 : Hint
+public class Stage0 : Hint
 {
     enum State { START, WASD, CHARGE, PORTAL }
     private State state;
