@@ -2,18 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[DisallowMultipleComponent]
-public class ArcherShooter : ShooterBase
+public class StrayShooter : ShooterBase
 {
     // Start is called before the first frame update
     override protected void Start()
     {
         base.Start();
 
-        singleFire = true;
-        amount = 1;
+        singleFire = false;
+        amount = 4;
         rateOfFire = .8f;
-        spread = 30f;
+        spread = 270f;
         timeCounter = Random.Range(0f, rateOfFire);
 
         p.explodes = false;
@@ -31,5 +30,4 @@ public class ArcherShooter : ShooterBase
         base.Update();
         tryShot();
     }
-
 }

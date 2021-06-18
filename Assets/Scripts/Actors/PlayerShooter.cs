@@ -23,7 +23,7 @@ public class PlayerShooter : ShooterBase
         p.hits = 0;
         p.speed = 40f;
         p.damage = 1f;
-        p.explosionRadius = 0f;
+        p.explosionRadius = 5f;
         p.color = new Color(.3f, .3f, .3f, 1f);
 
     }
