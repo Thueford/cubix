@@ -157,12 +157,14 @@ public class Bullet : MonoBehaviour
         {
             //Debug.Log("BulletBulletCollision");
             //Destroy(c.transform.parent.gameObject);
+            if (p.explodes) explode();
             if (--p.hits < 0) Destroy(gameObject);
         }
         else if (c.CompareTag("PlayerBullet") && CompareTag("EnemyBullet"))
         {
             //Debug.Log("BulletBulletCollision");
             //Destroy(c.transform.parent.gameObject);
+            if (p.explodes) explode();
             if (--p.hits < 0) Destroy(gameObject);
         }
     }

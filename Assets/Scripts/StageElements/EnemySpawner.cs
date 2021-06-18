@@ -9,6 +9,7 @@ public class EnemySpawner : MonoBehaviour
     [NotNull] public EntityBase prefab;
     private MeshRenderer r;
 
+    [Range(0, 3)] public int maxColors = 0;
     [Range(1, 100)] public int amount = 1;
     [Range(1,  10)] public int wavesize = 1;
     [Range(0, 100)] public float delay = 1;
@@ -76,21 +77,26 @@ public class EnemySpawner : MonoBehaviour
             else if (prefab is E_Archer) r.material = modes[3];
             else if (prefab is E_Stray) r.material = modes[4];
             else if (prefab is Player) r.material = modes[1];
-            else r.material = modes[0];
+            else r.material = modes[0]; 
+            //Debug.Log(r.material);
         }
     }
     private Color getWeightedColor()
     {
-        Vector4 color = (Vector3)GameState.unlockedColors; // active colors
-        color.w = GameState.maxActiveColors;      // default color scale
-        color.Scale(colors);                      // apply scales
-        color /= Vector4.Dot(color, Vector4.one); // normalize to sum=1
+        if (maxColors == 0) return Color.black;
+
+        Vector4 prob = colors;                  //Probability vector
+        prob /= Vector4.Dot(prob, Vector4.one); // normalize to sum=1
 
         Color c = Color.black;
-        if (Random.value < color.x) c += GameState.colorOrder[0];
-        if (Random.value < color.y) c += GameState.colorOrder[1];
-        if (Random.value < color.z) c += GameState.colorOrder[2];
-
+        for (int i = 0; i < maxColors; i++)
+        {
+            float rand = Random.value;
+            if (rand < prob.x) c += GameState.colorOrder[0];
+            else if (rand < prob.x+prob.y) c += GameState.colorOrder[1];
+            else if (rand < prob.x+prob.y+prob.z) c += GameState.colorOrder[2];
+        }
+        Debug.Log(c);
         return c;
     }
 }

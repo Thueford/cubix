@@ -17,8 +17,10 @@ public class GameState : MonoBehaviour
 
     public static Vector3Int unlockedColors = Vector3Int.zero;
     public static Color[] colorOrder = { Color.black, Color.black, Color.black };
-    public static int maxActiveColors = 0, stage = 0;
+    public static int colorCount = 0, stage = 0;
     public static bool paused { get; private set; } = false;
+
+    [ReadOnly] public Color[] colorOrderNonStatic;
 
     void Awake()
     {
@@ -28,10 +30,15 @@ public class GameState : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (unlockedColors.x > 0) colorOrder[maxActiveColors++].r = 1;
-        if (unlockedColors.y > 0) colorOrder[maxActiveColors++].g = 1;
-        if (unlockedColors.z > 0) colorOrder[maxActiveColors++].b = 1;
+        if (unlockedColors.x > 0) colorOrder[colorCount++].r = 1;
+        if (unlockedColors.y > 0) colorOrder[colorCount++].g = 1;
+        if (unlockedColors.z > 0) colorOrder[colorCount++].b = 1;
         StartCoroutine(StartGame());
+    }
+
+    private void Update()
+    {
+        colorOrderNonStatic = colorOrder;
     }
 
     IEnumerator StartGame()
@@ -70,9 +77,9 @@ public class GameState : MonoBehaviour
     {
         if (unlockedColors.x != 1)
         {
-            colorOrder[maxActiveColors].r = 1;
+            colorOrder[colorCount].r = 1;
             unlockedColors.x = 1;
-            maxActiveColors++;
+            colorCount++;
         }
     }
 
@@ -80,9 +87,9 @@ public class GameState : MonoBehaviour
     {
         if (unlockedColors.y != 1)
         {
-            colorOrder[maxActiveColors].g = 1;
+            colorOrder[colorCount].g = 1;
             unlockedColors.y = 1;
-            maxActiveColors++;
+            colorCount++;
         }
     }
 
@@ -90,9 +97,9 @@ public class GameState : MonoBehaviour
     {
         if (unlockedColors.z != 1)
         {
-            colorOrder[maxActiveColors].b = 1;
+            colorOrder[colorCount].b = 1;
             unlockedColors.z = 1;
-            maxActiveColors++;
+            colorCount++;
         }
     }
 }

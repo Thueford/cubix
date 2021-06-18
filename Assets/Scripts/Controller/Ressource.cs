@@ -76,6 +76,7 @@ public class Ressource : MonoBehaviour
         {
             InputHandler.enableNumbers = true;
             Player.self.bs.updateProperties(Vector3Int.zero);
+            CancelInvoke("CoolDown");
         }
     }
 

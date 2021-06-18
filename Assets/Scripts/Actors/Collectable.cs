@@ -47,6 +47,12 @@ public class Collectable : MonoBehaviour
         }
     }
 
+    public static void Clear()
+    {
+        foreach (Collectable coll in Player.curStage.actors.GetComponentsInChildren<Collectable>())
+            Destroy(coll.gameObject);
+    }
+
     private void setColor(Color color)
     {
         gameObject.GetComponentInChildren<Renderer>().material.color = color;

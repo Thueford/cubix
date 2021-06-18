@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Stage2 : Hint
+public class Stage4 : Hint
 {
-    enum State { START, RED, GREEN, BLUE, DONE }
+    enum State { START, WAIT, RED, GREEN, BLUE, DONE }
     private State state;
 
     override public void ResetHints()
@@ -20,10 +20,24 @@ public class Stage2 : Hint
         {
             case State.START:
                 if (Player.curStage != GetComponentInParent<GameStage>()) return;
+                Color color1 = GameState.colorOrder[0];
+
+                foreach (Collectable c in Player.curStage.actors.GetComponentsInChildren<Collectable>())
+                {
+                    if (color1.r > 0 && c.type == Collectable.cType.Red) Destroy(c.gameObject);
+                    if (color1.g > 0 && c.type == Collectable.cType.Green) Destroy(c.gameObject);
+                    if (color1.b > 0 && c.type == Collectable.cType.Blue) Destroy(c.gameObject);
+                }
                 texts[0].SetActive(true);
-                if (GameState.unlockedColors == Vector3Int.right) state = State.RED;
-                else if (GameState.unlockedColors == Vector3Int.up) state = State.GREEN;
-                else if (GameState.unlockedColors == Vector3Int.forward) state = State.BLUE;
+                state++;
+                break;
+
+            case State.WAIT:
+                if (Player.curStage != GetComponentInParent<GameStage>()) return;
+                Color color2 = GameState.colorOrder[1];
+                if (color2.r > 0) state = State.RED;
+                if (color2.g > 0) state = State.GREEN;
+                if (color2.b > 0) state = State.BLUE;
                 break;
 
             case State.RED:
