@@ -8,6 +8,7 @@ public class Bullet : MonoBehaviour
 {
     [NotNull] public Rigidbody rb;
     [NotNull] public CapsuleCollider cc;
+    [NotNull] public GameObject explosionPrefab;
 
     private Vector3 dir, oldVelocity;
     private float radius, velocityMultiplier;
@@ -75,9 +76,10 @@ public class Bullet : MonoBehaviour
 
     private void explode()
     {
-        //Animate
-
+        GameObject explosion = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        explosion.GetComponent<Explosion>().SetProperties(p);
     }
+
 
     //Source: https://answers.unity.com/questions/352609/how-can-i-reflect-a-projectile.html
     void OnCollisionEnter(Collision c)
@@ -115,7 +117,11 @@ public class Bullet : MonoBehaviour
             if (b)
             {
                 Debug.Log("bullet hit Enemy");
-                b.Hit(p.damage);
+                if (p.explodes) explode();
+                else
+                {
+                    b.Hit(p.damage);
+                }
                 if (--p.hits < 0) Destroy(gameObject);
             }
             else Debug.LogWarning("bullet hit non-Entity");
@@ -126,7 +132,11 @@ public class Bullet : MonoBehaviour
             if (b)
             {
                 Debug.Log("bullet hit Player");
-                b.Hit(p.damage);
+                if (p.explodes) explode();
+                else
+                {
+                    b.Hit(p.damage);
+                }
                 if (--p.hits < 0) Destroy(gameObject);
             }
             else Debug.LogWarning("bullet hit non-Entity");
