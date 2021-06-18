@@ -32,8 +32,7 @@ public class Player : EntityBase
     public static void dbgSet(string msg) {
         if (self && self.txtDbg) self.txtDbg.text = msg;
     }
-    public static void dbgLog(string msg)
-    {
+    public static void dbgLog(string msg) {
         if (self && self.txtDbg) self.txtDbg.text += "\n" + msg;
     }
 
@@ -41,6 +40,8 @@ public class Player : EntityBase
     override public void Update()
     {
         base.Update();
+        InputHandler.ReadPauseInput();
+
         if (movable)
         {
             Vector3 dir = Vector3.zero;

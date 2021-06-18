@@ -18,7 +18,7 @@ public class GameState : MonoBehaviour
     public static Vector3Int unlockedColors = Vector3Int.zero;
     public static Color[] colorOrder = { Color.black, Color.black, Color.black };
     public static int maxActiveColors = 0, stage = 0;
-
+    public static bool paused { get; private set; } = false;
 
     void Awake()
     {
@@ -54,6 +54,22 @@ public class GameState : MonoBehaviour
         startStage.OnStageEntering();
         yield return new WaitForSeconds(0);
         Player.self.Teleport(startStage);
+    }
+
+    public static void TogglePause()
+    {
+        Debug.Log("TglPause");
+        paused = !paused;
+        if (paused)
+        {
+            Player.self.Freeze();
+            Player.curStage.actors.SetActive(false);
+        }
+        else
+        {
+            Player.self.Melt();
+            Player.curStage.actors.SetActive(true);
+        }
     }
 
     public static void addRed()

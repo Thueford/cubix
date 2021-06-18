@@ -51,7 +51,7 @@ public abstract class ShooterBase : MonoBehaviour
 
     virtual protected void CreateAndLaunch(Vector3 dir)
     {
-        GameObject bullet = Instantiate(bulletPrefab, transform.position + dir * shooterRadius, Quaternion.identity);
+        GameObject bullet = Instantiate(bulletPrefab, transform.position + dir * shooterRadius, Quaternion.identity, Player.curStage.actors.transform);
         bullet.GetComponent<Bullet>().setProperties(p);
         bullet.GetComponent<Bullet>().launch(dir);
         //bullet.tag = tag + "Bullet";

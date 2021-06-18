@@ -55,11 +55,14 @@ public class GameStage : MonoBehaviour
         //if(next != null) next.spawn.Enable();
     }
 
+    // Called when player spawned
     public void OnStageEntered()
     {
         Player.self.Melt();
         foreach (EntityBase eb in GetComponentsInChildren<EntityBase>())
             eb.Melt();
+        foreach (Bullet b in GetComponentsInChildren<Bullet>())
+            b.Melt();
     }
 
     // Called when player steps on portal
@@ -68,6 +71,8 @@ public class GameStage : MonoBehaviour
         Player.self.Freeze();
         foreach (EntityBase eb in GetComponentsInChildren<EntityBase>())
             eb.Freeze();
+        foreach (Bullet b in GetComponentsInChildren<Bullet>())
+            b.Freeze();
     }
 
     // Called when player left the stage

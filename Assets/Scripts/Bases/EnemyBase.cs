@@ -12,14 +12,13 @@ public abstract class EnemyBase : CtxSteer
     override public void Start()
     {
         base.Start();
+        anim.Play("Spawn");
         pnOff = (int)Random.Range(-1e5f, 1e5f);
     }
 
     override public void OnSpawn(AnimationEvent ev)
     {
         base.OnSpawn(ev);
-        Debug.Log("Enemy Spawn");
-        // look at player
         transform.forward = Player.self.transform.position - transform.position;
     }
 

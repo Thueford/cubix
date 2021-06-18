@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InputHandler : MonoBehaviour
+public class InputHandler
 {
     public static bool enableSpace = true;
     public static bool enableNumbers = true;
@@ -10,18 +10,6 @@ public class InputHandler : MonoBehaviour
     public static bool enableMouse = true;
 
     private static Vector3Int lastActivatedColor = new Vector3Int(0, 0, 0);
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     public static void ReadSpaceInput()
     {
@@ -56,6 +44,11 @@ public class InputHandler : MonoBehaviour
             Player.self.bs.updateProperties(rgb);
         }
         return rgb;
+    }
+
+    public static void ReadPauseInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape)) GameState.TogglePause();
     }
 
     public static Vector3 ReadDirInput()

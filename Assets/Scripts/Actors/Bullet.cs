@@ -44,6 +44,18 @@ public class Bullet : MonoBehaviour
         oldVelocity = rb.velocity;
     }
 
+    Vector3 storeVel;
+    public void Freeze()
+    {
+        storeVel = rb.velocity;
+        rb.velocity = Vector3.zero;
+    }
+
+    public void Melt()
+    {
+        rb.velocity = storeVel;
+    }
+
     private void FixedUpdate()
     {
         float distanceToTravel = rb.velocity.magnitude * velocityMultiplier;
