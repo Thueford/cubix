@@ -14,8 +14,8 @@ public abstract class EntityBase : MonoBehaviour
     public bool movable = false;
 
     [Header("HP Settings")]
-    [Range(1, 100)]
-    public float startHP = 5;
+    [Range(1, 100)] public float startHP = 5;
+    [Range(1, 100)] public float maxHP = 5;
     [ReadOnly] public float HP;
 
     public Vector3Int rgb = Vector3Int.zero;
@@ -48,7 +48,7 @@ public abstract class EntityBase : MonoBehaviour
         GetComponentInChildren<Light>().color = c == Color.black ? GameState.glow : c;
     }
 
-    public void Hit(float damage)
+    virtual public void Hit(float damage)
     {
         HP -= damage;
         if (HP <= 0) Die();

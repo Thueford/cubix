@@ -10,6 +10,7 @@ public class Ressource : MonoBehaviour
     [NotNull] public Text TextRed;
     [NotNull] public Text TextGreen;
     [NotNull] public Text TextBlue;
+    [NotNull] public GameObject Space;
 
     [Range(0, 100)]
     public static float valueRed = 50;
@@ -42,6 +43,7 @@ public class Ressource : MonoBehaviour
         SetRessourceText(valueRed, TextRed);
         SetRessourceText(valueGreen, TextGreen);
         SetRessourceText(valueBlue, TextBlue);
+        Space.SetActive(false);
         InvokeRepeating("CoolDown", 1f, 1f);
     }
 
@@ -49,6 +51,19 @@ public class Ressource : MonoBehaviour
     void Update()
     {
         InputHandler.ReadSpaceInput();
+        if (InputHandler.enableSpace)
+        {
+            bool red = valueRed >= 100;
+            bool green = valueGreen >= 100;
+            bool blue = valueBlue >= 100;
+
+            int i = (red ? 1 : 0) +
+                (green ? 1 : 0) +
+                (blue ? 1 : 0);
+
+            if (i >= 2) Space.SetActive(true);
+            else Space.SetActive(false);
+        }
     }
 
     void CoolDown()
@@ -129,6 +144,7 @@ public class Ressource : MonoBehaviour
 
         Player.self.bs.updateProperties(rgb);
     }
+
 
     public void addRes(col c, float value)
     {

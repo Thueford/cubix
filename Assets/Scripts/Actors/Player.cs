@@ -15,6 +15,8 @@ public class Player : EntityBase
     [WarnNull] public Text txtDbg;
     public PlayerShooter bs;
 
+    private float invulnurable = 0;
+
     override public void Awake()
     {
         self = this;
@@ -63,7 +65,19 @@ public class Player : EntityBase
             transform.forward = r.GetPoint(f) - transform.position;
 
             InputHandler.ReadShootInput();
+
+            invulnurable = Mathf.Max(0, invulnurable-Time.deltaTime);
         }
+    }
+
+    override public void Hit(float damage)
+    {
+        if (invulnurable <= 0) 
+        { 
+            HP -= damage;
+            invulnurable = 1;
+        }
+        if (HP <= 0) Die();
     }
 
     public void OnCollisionEnter(Collision c)
@@ -86,6 +100,8 @@ public class Player : EntityBase
         anim.Play("Teleport");
 
         curStage.next.OnStageEntering();
+
+        HP = Mathf.Min(maxHP, HP+1);
     }
 
     void OnTeleport(AnimationEvent ev)

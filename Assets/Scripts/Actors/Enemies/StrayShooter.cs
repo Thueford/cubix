@@ -11,14 +11,14 @@ public class StrayShooter : ShooterBase
 
         singleFire = false;
         amount = 4;
-        rateOfFire = .8f;
+        rateOfFire = 2f;
         spread = 270f;
         timeCounter = Random.Range(0f, rateOfFire);
 
         p.explodes = false;
         p.reflects = 0;
         p.hits = 0;
-        p.speed = 15f;
+        p.speed = 10f;
         p.damage = 1f;
         p.explosionRadius = 0f;
         p.color = new Color(.3f, .3f, .3f, 1f);

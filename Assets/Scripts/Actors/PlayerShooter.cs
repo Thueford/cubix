@@ -23,7 +23,7 @@ public class PlayerShooter : ShooterBase
         p.hits = 0;
         p.speed = 40f;
         p.damage = 1f;
-        p.explosionRadius = 5f;
+        p.explosionRadius = 7.5f;
         p.color = new Color(.3f, .3f, .3f, 1f);
 
     }
@@ -53,6 +53,7 @@ public class PlayerShooter : ShooterBase
 
     public void toggleRed(bool b) {
         p.explodes = b;
+        rateOfFire *= b ? 2 / 3f : 3 / 2f;
         p.speed *= (b ? 2/3f : 1.5f);
     }
 
@@ -67,7 +68,7 @@ public class PlayerShooter : ShooterBase
 
     public void toggleBlue(bool b)
     {
-        rateOfFire *= b ? 2 / 3f : 3 / 2f;
+        //rateOfFire *= b ? 2 / 3f : 3 / 2f;
         p.damage *= b ? 1/2f : 2f;
         singleFire = !b;
     }
