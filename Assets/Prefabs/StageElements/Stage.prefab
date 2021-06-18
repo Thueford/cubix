@@ -54,6 +54,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 6056261645608393575}
   spawn: {fileID: 2521384948425824998}
+  charger: {fileID: 3573863749504846803}
   portal: {fileID: 4635702687571891008}
   actors: {fileID: 5502133812513080169}
   next: {fileID: 0}
@@ -61,6 +62,7 @@ MonoBehaviour:
   colorSlots: 3
   chargeTime: 10
   maxEnemies: 10
+  number: 0
 --- !u!1 &1037097025517605565
 GameObject:
   m_ObjectHideFlags: 0
@@ -516,6 +518,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 331514179851199661}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3573863749504846803 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3819382641382715262, guid: 91fb9d32a6e15d0418b7de3bd49c5570,
+    type: 3}
+  m_PrefabInstance: {fileID: 331514179851199661}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cac98392af0f63240a998cd16d52c196, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &331514180385365094
 PrefabInstance:
   m_ObjectHideFlags: 0

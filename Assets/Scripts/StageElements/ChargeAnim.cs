@@ -6,7 +6,7 @@ public class ChargeAnim : MonoBehaviour
 {
     private Animator anim;
 
-    void Start()
+    void Awake()
     {
         anim = GetComponent<Animator>();
         ResetAnim();
@@ -15,17 +15,23 @@ public class ChargeAnim : MonoBehaviour
     public void ResetAnim()
     {
         anim.Play("Charging");
-        anim.enabled = false;
         transform.localScale = new Vector3(0, 1, 0);
+        SetEnabled(false);
     }
 
-    public void ResetAnim(float time)
+    public void SetEnabled(bool b) { anim.enabled = b; }
+
+    public void ResetAnim(float duration)
     {
         ResetAnim();
-        anim.speed = 1/time;
+        anim.speed = 1 / duration;
     }
 
     void OnCharged(AnimationEvent ev) {
-        GetComponentInParent<Charger>().OnCharged(ev);
+        GetComponentInParent<Charger>().OnCharged();
+    }
+
+    void OnChargeStart(AnimationEvent ev) {
+        GetComponentInParent<Charger>().OnChargeStart();
     }
 }

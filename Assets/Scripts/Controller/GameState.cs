@@ -34,12 +34,6 @@ public class GameState : MonoBehaviour
         StartCoroutine(StartGame());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     IEnumerator StartGame()
     {
         yield return new WaitForSeconds(0);

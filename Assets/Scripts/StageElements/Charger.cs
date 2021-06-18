@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,38 +7,53 @@ using UnityEngine;
 public class Charger : MonoBehaviour
 {
     private Portal portal;
-    private Animator anim;
+    private ChargeAnim anim;
+    public bool charging { get; private set; } = false;
+    public bool charged { get; private set; } = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log("Anim Start");
+        anim = GetComponentInChildren<ChargeAnim>();
+        anim.ResetAnim();
         portal = transform.parent.GetComponentInChildren<Portal>();
-        anim = GetComponentInChildren<Animator>();
     }
 
+    public void SetEnabled(bool e) { anim.SetEnabled(false); }
 
-    // Update is called once per frame
-    void Update()
+    public void OnChargeStart()
     {
-        
+        charging = true;
+        foreach (EnemySpawner es in Player.curStage.actors.GetComponentsInChildren<EnemySpawner>())
+            es.StartSpawning();
     }
-    
-    public void OnCharged(AnimationEvent ev)
+
+    public void OnCharged()
     {
         Debug.Log("Charged");
+        charged = true;
+        anim.SetEnabled(false);
+
+        foreach (EnemySpawner es in Player.curStage.actors.GetComponentsInChildren<EnemySpawner>())
+            es.StopSpawning();
         portal.Enable();
-        anim.enabled = false;
     }
 
     private void OnTriggerEnter(Collider c)
     {
         if (c.CompareTag("Player") && !portal.Enabled())
-            anim.enabled = true;
+            anim.SetEnabled(true);
     }
 
     private void OnTriggerExit(Collider c)
     {
         if (c.CompareTag("Player"))
-            anim.enabled = false;
+            anim.SetEnabled(false);
+    }
+
+    internal void ResetAnim(float duration)
+    {
+        anim.ResetAnim(duration);
     }
 }

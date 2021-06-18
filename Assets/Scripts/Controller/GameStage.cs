@@ -7,6 +7,7 @@ public class GameStage : MonoBehaviour
 {
     [NotNull] public Camera cam;
     [NotNull] public Spawn spawn;
+    [NotNull] public Charger charger;
     [NotNull] public Portal portal;
     [NotNull] public GameObject actors;
     [WarnNull] public GameStage next;
@@ -34,6 +35,7 @@ public class GameStage : MonoBehaviour
     public void OnStageEntering()
     {
         gameObject.SetActive(true);
+
         actors.SetActive(false);
         portal.Disable();
         if (hints != null) hints.ResetHints();
@@ -48,7 +50,7 @@ public class GameStage : MonoBehaviour
         Camera.main.GetComponent<GameCamera>().target = cam.transform.position;
         Camera.main.transform.rotation = cam.transform.rotation;
 
-        GetComponentInChildren<ChargeAnim>().ResetAnim(chargeTime);
+        charger.ResetAnim(chargeTime);
         actors.SetActive(true);
         spawn.Disable();
 
