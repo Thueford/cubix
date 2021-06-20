@@ -85,6 +85,13 @@ public class Ressource : MonoBehaviour
         }
     }
 
+    public static void setModes(bool b)
+    {
+        redMode = b;
+        greenMode = b;
+        blueMode = b;
+    }
+
     private void check(float value)
     {
         if (value == 0)

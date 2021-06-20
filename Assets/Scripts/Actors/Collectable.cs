@@ -47,9 +47,9 @@ public class Collectable : MonoBehaviour
         }
     }
 
-    public static void Clear()
+    public static void Clear(GameStage s)
     {
-        foreach (Collectable coll in Player.curStage.actors.GetComponentsInChildren<Collectable>())
+        foreach (Collectable coll in s.actors.GetComponentsInChildren<Collectable>())
             Destroy(coll.gameObject);
     }
 

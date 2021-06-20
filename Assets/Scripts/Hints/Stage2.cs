@@ -29,21 +29,21 @@ public class Stage2 : Hint
             case State.RED:
                 if (Player.curStage != GetComponentInParent<GameStage>()) return;
                 texts[1].SetActive(true);
-                Collectable.Clear();
+                Collectable.Clear(Player.curStage);
                 state = State.DONE;
                 break;
 
             case State.GREEN:
                 if (Player.curStage != GetComponentInParent<GameStage>()) return;
                 texts[2].SetActive(true);
-                Collectable.Clear();
+                Collectable.Clear(Player.curStage);
                 state = State.DONE;
                 break;
 
             case State.BLUE:
                 if (Player.curStage != GetComponentInParent<GameStage>()) return;
                 texts[3].SetActive(true);
-                Collectable.Clear();
+                Collectable.Clear(Player.curStage);
                 state = State.DONE;
                 break;
 

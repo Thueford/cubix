@@ -33,6 +33,7 @@ public abstract class EntityBase : MonoBehaviour
         HP = startHP;
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
+        anim.keepAnimatorControllerStateOnDisable = true;
         Freeze();
     }
 
@@ -74,7 +75,7 @@ public abstract class EntityBase : MonoBehaviour
         anim.enabled = true;
         anim.Play("Die");
         Freeze();
-        if (this is Player) Player.curStage.OnStageExit();
+        if (this is Player) Player.curStage.FreezeActors();
         if (this is EnemyBase) EnemySpawner.EnemyDied();
     }
 
@@ -93,4 +94,14 @@ public abstract class EntityBase : MonoBehaviour
         anim.enabled = false;
         if (this is EnemyBase) EnemySpawner.EnemySpawned();
     }
+
+    /*
+    virtual public void killStuckAnim()
+    {
+        if (anim.enabled)
+        {
+            Destroy(gameObject);
+        }
+    }
+    */
 }

@@ -26,7 +26,7 @@ public class Stage1 : Hint
 
             case State.CHARGING:
                 if (Player.curStage != GetComponentInParent<GameStage>()) return;
-                //if (!Player.curStage.GetComponentInChildren<Charger>().charging) return;
+                if (!Player.curStage.GetComponentInChildren<Charger>().charging) return;
                 texts[1].SetActive(true);
                 state++;
                 break;

@@ -9,8 +9,6 @@ public class InputHandler
     public static bool enableMovement = true;
     public static bool enableMouse = true;
 
-    private static Vector3Int lastActivatedColor = new Vector3Int(0, 0, 0);
-
     public static void ReadSpaceInput()
     {
         if (Input.GetKeyDown(KeyCode.Space) && enableSpace)

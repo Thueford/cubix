@@ -52,8 +52,10 @@ public class Charger : MonoBehaviour
             anim.SetEnabled(false);
     }
 
-    internal void ResetAnim(float duration)
+    internal void Reset(float duration)
     {
+        charging = false;
+        charged = false;
         anim.ResetAnim(duration);
     }
 }

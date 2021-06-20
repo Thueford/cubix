@@ -7,6 +7,7 @@ public class GameState : MonoBehaviour
 {
     public static GameState self;
     [NotNull] public GameStage startStage;
+    [NotNull] public GameObject PauseOverlay;
 
     public static Color
         black = new Color(.3f, .3f, .3f, 1f),
@@ -21,6 +22,19 @@ public class GameState : MonoBehaviour
     public static bool paused { get; private set; } = false;
 
     [ReadOnly] public Color[] colorOrderNonStatic;
+
+    public struct State
+    {
+        public GameStage stage;
+        public Vector3Int unlockedColors;
+        public Color[] colorOrder;
+        public int colorCount;
+        public float resRed, resGreen, resBlue, hp;
+    }
+
+    public static State stateCurStage;
+    public static State stateBegin;
+    public static State stateEndless;
 
     void Awake()
     {
@@ -52,9 +66,10 @@ public class GameState : MonoBehaviour
             startStage = stages[0];
         }
 
-        startStage.OnStageEntering();
+        startStage.Load();
         yield return new WaitForSeconds(0);
         Player.self.Teleport(startStage);
+        stateBegin = SaveState();
     }
 
     public static void TogglePause()
@@ -63,14 +78,80 @@ public class GameState : MonoBehaviour
         paused = !paused;
         if (paused)
         {
+            self.PauseOverlay.SetActive(true);
+
             Player.self.Freeze();
             Player.curStage.actors.SetActive(false);
+            Player.curStage.charger.SetEnabled(false);
+            foreach (EnemySpawner es in Player.curStage.actors.GetComponentsInChildren<EnemySpawner>())
+                es.StopSpawning();
         }
         else
         {
             Player.self.Melt();
             Player.curStage.actors.SetActive(true);
+            Player.curStage.charger.SetEnabled(true);
+
+            //Any way to resume paused animations?
+            //foreach (EnemyBase eb in Player.curStage.actors.GetComponentsInChildren<EnemyBase>())
+            //    eb.killStuckAnim();
+
+            if (Player.curStage.charger.charging)
+            foreach (EnemySpawner es in Player.curStage.actors.GetComponentsInChildren<EnemySpawner>())
+                es.StartSpawning();
+
+            self.PauseOverlay.SetActive(false);
         }
+    }
+
+    public static void load(State s)
+    {
+        Player.self.bs.updateProperties(Vector3Int.zero);
+        Ressource.setModes(false);
+        Ressource.self.addRes(Ressource.col.Red, s.resRed - Ressource.valueRed);
+        Ressource.self.addRes(Ressource.col.Green, s.resGreen - Ressource.valueGreen);
+        Ressource.self.addRes(Ressource.col.Blue, s.resBlue - Ressource.valueBlue);
+
+        unlockedColors = s.unlockedColors;
+        colorOrder = s.colorOrder;
+        colorCount = s.colorCount;
+
+        if (s.stage == Player.curStage)
+            s.stage.ResetStage();
+            
+        s.stage.Load();
+
+        Player.self.Teleport(s.stage);
+        Player.self.setHP(s.hp);
+    }
+
+    public static void RestartStage()
+    {
+        load(stateCurStage);
+    }
+
+    public static void RestartGame()
+    {
+        load(stateBegin);
+    }
+
+    public static State SaveState()
+    {
+        State s = new State();
+        s.stage = Player.curStage;
+        s.hp = Player.self.HP;
+        s.resRed = Ressource.valueRed;
+        s.resGreen = Ressource.valueGreen;
+        s.resBlue = Ressource.valueBlue;
+        s.colorCount = colorCount;
+        s.colorOrder = colorOrder;
+        s.unlockedColors = unlockedColors;
+        return s;
+    }
+
+    public static void SaveCurState()
+    {
+        stateCurStage = SaveState();
     }
 
     public static void addRed()
@@ -102,4 +183,6 @@ public class GameState : MonoBehaviour
             colorCount++;
         }
     }
+
+
 }

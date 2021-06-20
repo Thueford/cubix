@@ -9,7 +9,8 @@ public class GameStage : MonoBehaviour
     [NotNull] public Spawn spawn;
     [NotNull] public Charger charger;
     [NotNull] public Portal portal;
-    [NotNull] public GameObject actors;
+    public GameObject actors;
+    [NotNull] public GameObject actorsBase;
     [WarnNull] public GameStage next;
     [WarnNull] public Hint hints;
 
@@ -22,22 +23,34 @@ public class GameStage : MonoBehaviour
     public void Awake()
     {
         gameObject.SetActive(false);
+        actorsBase.SetActive(false);
     }
+
 
     // Reset entities
     public void ResetStage()
     {
+        /*
         foreach (EnemySpawner eb in GetComponentsInChildren<EnemySpawner>())
             eb.ResetSpawner();
+        */
+
+        if (actors) Destroy(actors);
+        portal.Disable();
+        if (hints) hints.ResetHints();
+        charger.gameObject.SetActive(false);
+        charger.gameObject.SetActive(true);
     }
 
     // Called when player steps on portal
-    public void OnStageEntering()
+    public void Load()
     {
         gameObject.SetActive(true);
 
-        actors.SetActive(false);
+        actors = Instantiate(actorsBase, gameObject.transform);
+        //actors.SetActive(false);
         portal.Disable();
+
         if (hints != null) hints.ResetHints();
     }
 
@@ -50,25 +63,25 @@ public class GameStage : MonoBehaviour
         Camera.main.GetComponent<GameCamera>().target = cam.transform.position;
         Camera.main.transform.rotation = cam.transform.rotation;
 
-        charger.ResetAnim(chargeTime);
+        charger.Reset(chargeTime);
         actors.SetActive(true);
         spawn.Disable();
 
         //if(next != null) next.spawn.Enable();
     }
 
-    // Called when player spawned
-    public void OnStageEntered()
+    // Called after player finished spawning
+    public void MeltActors()
     {
         Player.self.Melt();
-        foreach (EntityBase eb in GetComponentsInChildren<EntityBase>())
+        foreach (EntityBase eb in actors.GetComponentsInChildren<EntityBase>())
             eb.Melt();
-        foreach (Bullet b in GetComponentsInChildren<Bullet>())
+        foreach (Bullet b in actors.GetComponentsInChildren<Bullet>())
             b.Melt();
     }
 
     // Called when player steps on portal
-    public void OnStageExit()
+    public void FreezeActors()
     {
         Player.self.Freeze();
         foreach (EntityBase eb in GetComponentsInChildren<EntityBase>())
@@ -78,9 +91,9 @@ public class GameStage : MonoBehaviour
     }
 
     // Called when player left the stage
-    public void OnStageExited()
+    public void Unload()
     {
-        GetComponentInChildren<Portal>().Disable();
+        ResetStage();
         gameObject.SetActive(false);
     }
 }

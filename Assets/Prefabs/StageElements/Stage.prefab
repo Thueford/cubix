@@ -56,7 +56,9 @@ MonoBehaviour:
   spawn: {fileID: 2521384948425824998}
   charger: {fileID: 3573863749504846803}
   portal: {fileID: 4635702687571891008}
-  actors: {fileID: 5502133812513080169}
+  actors: {fileID: 0}
+  actorsBase: {fileID: 5502133812513080169}
+  collectables: []
   next: {fileID: 0}
   hints: {fileID: 0}
   colorSlots: 3

@@ -72,11 +72,17 @@ public class Player : EntityBase
 
     override public void Hit(float damage)
     {
-        if (invulnurable <= 0) 
+        if (invulnurable <= 0 && damage > 0) 
         { 
             HP -= damage;
             invulnurable = 1;
         }
+        if (HP <= 0) Die();
+    }
+
+    public void setHP(float value)
+    {
+        HP = value;
         if (HP <= 0) Die();
     }
 
@@ -94,15 +100,16 @@ public class Player : EntityBase
     {
         if (curStage == null || curStage.next == null) return;
 
-        curStage.OnStageExit();
+        curStage.FreezeActors();
 
         anim.enabled = true;
         anim.Play("Teleport");
 
-        curStage.next.OnStageEntering();
+        curStage.next.Load();
 
         HP = Mathf.Min(maxHP, HP+1);
     }
+
 
     void OnTeleport(AnimationEvent ev)
     {
@@ -112,7 +119,7 @@ public class Player : EntityBase
     public void Teleport(GameStage stage)
     {
         if (stage == null) return;
-        if (curStage != null) curStage.OnStageExited();
+        if (curStage != null && curStage != stage) curStage.Unload();
 
         anim.enabled = true;
         anim.Play("Spawn");
@@ -123,12 +130,13 @@ public class Player : EntityBase
 
         curStage = stage;
         stage.OnStageEnter();
+        GameState.SaveCurState();
     }
 
     override public void OnSpawn(AnimationEvent ev)
     {
         base.OnSpawn(ev);
         Debug.Log("Player Spawn");
-        curStage.OnStageEntered();
+        curStage.MeltActors();
     }
 }
