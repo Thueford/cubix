@@ -56,7 +56,7 @@ public abstract class EnemyBase : CtxSteer
         dbgLine(d, d.magnitude, Color.yellow);
 
         // avoid enemies
-        // EnemyBase[] enemies = Player.curStage.GetComponentsInChildren<EnemyBase>();
+        // EnemyBase[] enemies = GameState.curStage.GetComponentsInChildren<EnemyBase>();
         effectors.AddRange(eenemy.getEffs(this));
         return contextSteer(effectors);
     }

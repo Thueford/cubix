@@ -45,10 +45,10 @@ public class EnemySpawner : MonoBehaviour
 
     private void Spawn()
     {
-        // if (Player.curStage == null)
+        // if (GameState.curStage == null)
         // { Invoke("Spawn", 0.1f); return; } // Tried to spawn without curStage
 
-        if (enemyCount < Player.curStage.maxEnemies)
+        if (enemyCount < GameState.curStage.maxEnemies)
         {
             Vector3 pos;
             int tries = 10;

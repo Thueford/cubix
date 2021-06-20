@@ -6,7 +6,7 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class Charger : MonoBehaviour
 {
-    private Portal portal;
+    //private Portal portal;
     private ChargeAnim anim;
     public bool charging { get; private set; } = false;
     public bool charged { get; private set; } = false;
@@ -17,7 +17,7 @@ public class Charger : MonoBehaviour
         Debug.Log("Anim Start");
         anim = GetComponentInChildren<ChargeAnim>();
         anim.ResetAnim();
-        portal = transform.parent.GetComponentInChildren<Portal>();
+        //portal = transform.parent.GetComponentInChildren<Portal>();
     }
 
     public void SetEnabled(bool e) { anim.SetEnabled(false); }
@@ -25,7 +25,7 @@ public class Charger : MonoBehaviour
     public void OnChargeStart()
     {
         charging = true;
-        foreach (EnemySpawner es in Player.curStage.actors.GetComponentsInChildren<EnemySpawner>())
+        foreach (EnemySpawner es in GameState.curStage.actors.GetComponentsInChildren<EnemySpawner>())
             es.StartSpawning();
     }
 
@@ -35,14 +35,14 @@ public class Charger : MonoBehaviour
         charged = true;
         anim.SetEnabled(false);
 
-        foreach (EnemySpawner es in Player.curStage.actors.GetComponentsInChildren<EnemySpawner>())
+        foreach (EnemySpawner es in GameState.curStage.actors.GetComponentsInChildren<EnemySpawner>())
             es.StopSpawning();
-        portal.Enable();
+        GameState.curStage.portal.Enable();
     }
 
     private void OnTriggerEnter(Collider c)
     {
-        if (c.CompareTag("Player") && !portal.Enabled())
+        if (c.CompareTag("Player") && !GameState.curStage.portal.Enabled())
             anim.SetEnabled(true);
     }
 

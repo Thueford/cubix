@@ -19,7 +19,7 @@ public class Stage2 : Hint
         switch (state)
         {
             case State.START:
-                if (Player.curStage != GetComponentInParent<GameStage>()) return;
+                if (GameState.curStage != GetComponentInParent<GameStage>()) return;
                 texts[0].SetActive(true);
                 if (GameState.unlockedColors == Vector3Int.right) state = State.RED;
                 else if (GameState.unlockedColors == Vector3Int.up) state = State.GREEN;
@@ -27,23 +27,23 @@ public class Stage2 : Hint
                 break;
 
             case State.RED:
-                if (Player.curStage != GetComponentInParent<GameStage>()) return;
+                if (GameState.curStage != GetComponentInParent<GameStage>()) return;
                 texts[1].SetActive(true);
-                Collectable.Clear(Player.curStage);
+                Collectable.Clear(GameState.curStage);
                 state = State.DONE;
                 break;
 
             case State.GREEN:
-                if (Player.curStage != GetComponentInParent<GameStage>()) return;
+                if (GameState.curStage != GetComponentInParent<GameStage>()) return;
                 texts[2].SetActive(true);
-                Collectable.Clear(Player.curStage);
+                Collectable.Clear(GameState.curStage);
                 state = State.DONE;
                 break;
 
             case State.BLUE:
-                if (Player.curStage != GetComponentInParent<GameStage>()) return;
+                if (GameState.curStage != GetComponentInParent<GameStage>()) return;
                 texts[3].SetActive(true);
-                Collectable.Clear(Player.curStage);
+                Collectable.Clear(GameState.curStage);
                 state = State.DONE;
                 break;
 

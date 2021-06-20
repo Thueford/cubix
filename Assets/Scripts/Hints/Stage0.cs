@@ -31,7 +31,7 @@ public class Stage0 : Hint
                 break;
 
             case State.CHARGE:
-                if (!Player.curStage.portal.Enabled()) return;
+                if (!GameState.curStage.portal.Enabled()) return;
                 texts[2].SetActive(true);
                 break;
 

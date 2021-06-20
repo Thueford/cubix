@@ -8,6 +8,7 @@ public class GameState : MonoBehaviour
     public static GameState self;
     [NotNull] public GameStage startStage;
     [NotNull] public GameObject PauseOverlay;
+    public static GameStage curStage;
 
     public static Color
         black = new Color(.3f, .3f, .3f, 1f),
@@ -81,23 +82,23 @@ public class GameState : MonoBehaviour
             self.PauseOverlay.SetActive(true);
 
             Player.self.Freeze();
-            Player.curStage.actors.SetActive(false);
-            Player.curStage.charger.SetEnabled(false);
-            foreach (EnemySpawner es in Player.curStage.actors.GetComponentsInChildren<EnemySpawner>())
+            curStage.actors.SetActive(false);
+            curStage.charger.SetEnabled(false);
+            foreach (EnemySpawner es in curStage.actors.GetComponentsInChildren<EnemySpawner>())
                 es.StopSpawning();
         }
         else
         {
             Player.self.Melt();
-            Player.curStage.actors.SetActive(true);
-            Player.curStage.charger.SetEnabled(true);
+            curStage.actors.SetActive(true);
+            curStage.charger.SetEnabled(true);
 
             //Any way to resume paused animations?
-            //foreach (EnemyBase eb in Player.curStage.actors.GetComponentsInChildren<EnemyBase>())
+            //foreach (EnemyBase eb in curStage.actors.GetComponentsInChildren<EnemyBase>())
             //    eb.killStuckAnim();
 
-            if (Player.curStage.charger.charging)
-            foreach (EnemySpawner es in Player.curStage.actors.GetComponentsInChildren<EnemySpawner>())
+            if (curStage.charger.charging)
+            foreach (EnemySpawner es in curStage.actors.GetComponentsInChildren<EnemySpawner>())
                 es.StartSpawning();
 
             self.PauseOverlay.SetActive(false);
@@ -116,7 +117,7 @@ public class GameState : MonoBehaviour
         colorOrder = s.colorOrder;
         colorCount = s.colorCount;
 
-        if (s.stage == Player.curStage)
+        if (s.stage == curStage)
             s.stage.ResetStage();
             
         s.stage.Load();
@@ -138,7 +139,7 @@ public class GameState : MonoBehaviour
     public static State SaveState()
     {
         State s = new State();
-        s.stage = Player.curStage;
+        s.stage = curStage;
         s.hp = Player.self.HP;
         s.resRed = Ressource.valueRed;
         s.resGreen = Ressource.valueGreen;

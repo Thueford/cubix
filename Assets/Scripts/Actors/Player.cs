@@ -9,10 +9,8 @@ public class Player : EntityBase
     private const float floatHeight = 0.5f;
 
     public static Player self;
-    public static GameStage curStage;
 
     [Header("Other Settings")]
-    [WarnNull] public Text txtDbg;
     public PlayerShooter bs;
 
     private float invulnurable = 0;
@@ -98,14 +96,14 @@ public class Player : EntityBase
 
     public void TeleportNext()
     {
-        if (curStage == null || curStage.next == null) return;
+        if (GameState.curStage == null || GameState.curStage.next == null) return;
 
-        curStage.FreezeActors();
+        GameState.curStage.FreezeActors();
 
         anim.enabled = true;
         anim.Play("Teleport");
 
-        curStage.next.Load();
+        GameState.curStage.next.Load();
 
         HP = Mathf.Min(maxHP, HP+1);
     }
@@ -113,13 +111,13 @@ public class Player : EntityBase
 
     void OnTeleport(AnimationEvent ev)
     {
-        Teleport(curStage.next);
+        Teleport(GameState.curStage.next);
     }
 
     public void Teleport(GameStage stage)
     {
         if (stage == null) return;
-        if (curStage != null && curStage != stage) curStage.Unload();
+        if (GameState.curStage != null && GameState.curStage != stage) GameState.curStage.Unload();
 
         anim.enabled = true;
         anim.Play("Spawn");
@@ -128,7 +126,7 @@ public class Player : EntityBase
         spawnPos.y = floatHeight;
         self.transform.position = spawnPos;
 
-        curStage = stage;
+        GameState.curStage = stage;
         stage.OnStageEnter();
         GameState.SaveCurState();
     }
@@ -137,6 +135,6 @@ public class Player : EntityBase
     {
         base.OnSpawn(ev);
         Debug.Log("Player Spawn");
-        curStage.MeltActors();
+        GameState.curStage.MeltActors();
     }
 }

@@ -75,7 +75,7 @@ public abstract class EntityBase : MonoBehaviour
         anim.enabled = true;
         anim.Play("Die");
         Freeze();
-        if (this is Player) Player.curStage.FreezeActors();
+        if (this is Player) GameState.curStage.FreezeActors();
         if (this is EnemyBase) EnemySpawner.EnemyDied();
     }
 
