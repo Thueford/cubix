@@ -18,7 +18,9 @@ public class Player : EntityBase
 
     override public void Awake()
     {
+        base.Awake();
         self = this;
+        bs = GetComponent<PlayerShooter>();
     }
 
     // Start is called before the first frame update
@@ -26,7 +28,6 @@ public class Player : EntityBase
     {
         base.Start();
         HP = startHP;
-        bs = GetComponent<PlayerShooter>();
         if (txtDbg == null) Debug.LogWarning("player.txtDbg not assigned");
     }
 

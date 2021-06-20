@@ -12,11 +12,15 @@ public abstract class ShooterBase : MonoBehaviour
     protected float timeCounter, rateOfFire, spread, shooterRadius;
     protected Bullet.Properties p;
 
+    virtual protected void Awake()
+    {
+        shooterRadius = GetComponent<SphereCollider>().radius;
+    }
+
     // Start is called before the first frame update
     virtual protected void Start()
     {
         p.owner = gameObject.tag;
-        shooterRadius = GetComponent<SphereCollider>().radius;
         timeCounter = rateOfFire;
     }
 

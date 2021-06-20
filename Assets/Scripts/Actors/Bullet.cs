@@ -23,10 +23,14 @@ public class Bullet : MonoBehaviour
         public Color color;
     }
 
+    void Awake()
+    {
+        radius = GetComponent<SphereCollider>().radius;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        radius = GetComponent<SphereCollider>().radius;
         velocityMultiplier = Time.fixedDeltaTime / cc.transform.lossyScale.x;
     }
 

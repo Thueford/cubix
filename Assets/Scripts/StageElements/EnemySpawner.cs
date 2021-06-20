@@ -21,9 +21,13 @@ public class EnemySpawner : MonoBehaviour
     private int spawned = 0;
     private static int enemyCount = 0;
 
-    private void Start()
+    void Awake()
     {
         r = GetComponent<MeshRenderer>();
+    }
+
+    void Start()
+    {
         r.enabled = !Application.isPlaying;
     }
 

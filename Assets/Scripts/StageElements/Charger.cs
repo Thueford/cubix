@@ -6,18 +6,19 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class Charger : MonoBehaviour
 {
-    //private Portal portal;
     private ChargeAnim anim;
     public bool charging { get; private set; } = false;
     public bool charged { get; private set; } = false;
+
+    private void Awake() {
+        anim = GetComponentInChildren<ChargeAnim>();
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         Debug.Log("Anim Start");
-        anim = GetComponentInChildren<ChargeAnim>();
         anim.ResetAnim();
-        //portal = transform.parent.GetComponentInChildren<Portal>();
     }
 
     public void SetEnabled(bool e) { anim.SetEnabled(false); }

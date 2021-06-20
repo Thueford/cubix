@@ -13,10 +13,15 @@ public class shoot : MonoBehaviour
 
     private Vector3 oldVelocity;
     private float radius;
+
+    void Awake()
+    {
+        radius = gameObject.GetComponent<SphereCollider>().radius;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        radius = gameObject.GetComponent<SphereCollider>().radius;
         if (cc == null) Debug.Log("No CapsuleCollider on Bullet");
         transform.rotation = Quaternion.LookRotation(dir);
     }

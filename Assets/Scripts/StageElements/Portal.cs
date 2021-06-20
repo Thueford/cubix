@@ -9,9 +9,10 @@ public class Portal : MonoBehaviour
     SphereCollider sc;
     ParticleSystem ps;
 
-    private void Start()
+    private void Awake()
     {
         sc = GetComponent<SphereCollider>();
+        ps = GetComponentInChildren<ParticleSystem>();
     }
 
     private void OnTriggerEnter(Collider c)
@@ -25,7 +26,7 @@ public class Portal : MonoBehaviour
 
     public void SetEnabled(bool b)
     {
-        if (b) ps.Play(); 
+        if (b) ps.Play();
         else ps.Stop();
         sc.enabled = b;
     }
