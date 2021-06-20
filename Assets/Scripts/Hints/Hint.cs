@@ -12,4 +12,8 @@ public class Hint : MonoBehaviour
         foreach (GameObject o in texts)
             if(o != null) o.SetActive(false);
     }
+
+    public bool isCurStage() {
+        return GameState.curStage == GetComponentInParent<GameStage>();
+    }
 }

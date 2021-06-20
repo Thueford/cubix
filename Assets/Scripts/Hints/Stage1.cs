@@ -19,13 +19,12 @@ public class Stage1 : Hint
         switch (state)
         {
             case State.START:
-                if (GameState.curStage != GetComponentInParent<GameStage>()) return;
+                if (isCurStage()) return;
                 texts[0].SetActive(true);
                 state++;
                 break;
 
             case State.CHARGING:
-                if (GameState.curStage != GetComponentInParent<GameStage>()) return;
                 if (!GameState.curStage.GetComponentInChildren<Charger>().charging) return;
                 texts[1].SetActive(true);
                 state++;

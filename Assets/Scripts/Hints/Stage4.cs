@@ -19,10 +19,10 @@ public class Stage4 : Hint
         switch (state)
         {
             case State.START:
-                if (GameState.curStage != GetComponentInParent<GameStage>()) return;
+                if (isCurStage()) return;
                 Color color1 = GameState.colorOrder[0];
 
-                foreach (Collectable c in GameState.curStage.actors.GetComponentsInChildren<Collectable>())
+                foreach (Collectable c in GameState.curStage.GetActorComponents<Collectable>())
                 {
                     if (color1.r > 0 && c.type == Collectable.cType.Red) Destroy(c.gameObject);
                     if (color1.g > 0 && c.type == Collectable.cType.Green) Destroy(c.gameObject);
@@ -33,7 +33,6 @@ public class Stage4 : Hint
                 break;
 
             case State.WAIT:
-                if (GameState.curStage != GetComponentInParent<GameStage>()) return;
                 Color color2 = GameState.colorOrder[1];
                 if (color2.r > 0) state = State.RED;
                 if (color2.g > 0) state = State.GREEN;
@@ -41,21 +40,18 @@ public class Stage4 : Hint
                 break;
 
             case State.RED:
-                if (GameState.curStage != GetComponentInParent<GameStage>()) return;
                 texts[1].SetActive(true);
                 Collectable.Clear(GameState.curStage);
                 state = State.DONE;
                 break;
 
             case State.GREEN:
-                if (GameState.curStage != GetComponentInParent<GameStage>()) return;
                 texts[2].SetActive(true);
                 Collectable.Clear(GameState.curStage);
                 state = State.DONE;
                 break;
 
             case State.BLUE:
-                if (GameState.curStage != GetComponentInParent<GameStage>()) return;
                 texts[3].SetActive(true);
                 Collectable.Clear(GameState.curStage);
                 state = State.DONE;

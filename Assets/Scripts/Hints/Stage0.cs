@@ -19,6 +19,7 @@ public class Stage0 : Hint
         switch (state)
         {
             case State.START:
+                if (isCurStage()) return;
                 texts[0].SetActive(true);
                 break;
 

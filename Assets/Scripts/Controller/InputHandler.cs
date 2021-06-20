@@ -63,8 +63,6 @@ public class InputHandler
     public static  void ReadShootInput()
     {
         if (Input.GetMouseButton(0) && enableMouse)
-        {
             Player.self.bs.tryShot();
-        }
     }
 }

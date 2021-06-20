@@ -20,6 +20,7 @@ public abstract class EnemyBase : CtxSteer
     {
         base.OnSpawn(ev);
         transform.forward = Player.self.transform.position - transform.position;
+        EnemySpawner.EnemySpawned();
     }
 
 
@@ -59,5 +60,11 @@ public abstract class EnemyBase : CtxSteer
         // EnemyBase[] enemies = GameState.curStage.GetComponentsInChildren<EnemyBase>();
         effectors.AddRange(eenemy.getEffs(this));
         return contextSteer(effectors);
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        EnemySpawner.EnemyDied();
     }
 }

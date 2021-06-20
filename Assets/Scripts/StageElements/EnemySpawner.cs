@@ -81,6 +81,7 @@ public class EnemySpawner : MonoBehaviour
             //Debug.Log(r.material);
         }
     }
+
     private Color getWeightedColor()
     {
         if (maxColors == 0) return Color.black;

@@ -19,7 +19,7 @@ public class Stage8 : Hint
         switch (state)
         {
             case State.START:
-                if (GameState.curStage != GetComponentInParent<GameStage>()) return;
+                if (isCurStage()) return;
                 texts[0].SetActive(true);
                 state++;
                 break;

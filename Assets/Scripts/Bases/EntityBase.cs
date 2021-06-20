@@ -75,14 +75,11 @@ public abstract class EntityBase : MonoBehaviour
         anim.enabled = true;
         anim.Play("Die");
         Freeze();
-        if (this is Player) GameState.curStage.FreezeActors();
-        if (this is EnemyBase) EnemySpawner.EnemyDied();
     }
 
     virtual public void OnDie(AnimationEvent ev)
     {
         Debug.Log("killed " + name);
-        if (!(this is Player)) Destroy(gameObject);
         if (rgb.x == 1) Ressource.self.addRes(Ressource.col.Red, 10);
         if (rgb.y == 1) Ressource.self.addRes(Ressource.col.Green, 10);
         if (rgb.z == 1) Ressource.self.addRes(Ressource.col.Blue, 10);
@@ -92,7 +89,6 @@ public abstract class EntityBase : MonoBehaviour
     {
         Melt();
         anim.enabled = false;
-        if (this is EnemyBase) EnemySpawner.EnemySpawned();
     }
 
     /*

@@ -6,6 +6,14 @@ using UnityEngine;
 [RequireComponent(typeof(SphereCollider))]
 public class Portal : MonoBehaviour
 {
+    SphereCollider sc;
+    ParticleSystem ps;
+
+    private void Start()
+    {
+        sc = GetComponent<SphereCollider>();
+    }
+
     private void OnTriggerEnter(Collider c)
     {
         if(c.CompareTag("Player"))
@@ -15,20 +23,12 @@ public class Portal : MonoBehaviour
         }
     }
 
-    public void Enable()
+    public void SetEnabled(bool b)
     {
-        GetComponentInChildren<ParticleSystem>().Play();
-        GetComponent<SphereCollider>().enabled = true;
+        if (b) ps.Play(); 
+        else ps.Stop();
+        sc.enabled = b;
     }
 
-    public void Disable()
-    {
-        GetComponentInChildren<ParticleSystem>().Stop();
-        GetComponent<SphereCollider>().enabled = false;
-    }
-
-    public bool Enabled()
-    {
-        return GetComponent<SphereCollider>().enabled;
-    }
+    public bool Enabled() { return sc.enabled; }
 }

@@ -26,17 +26,16 @@ public class GameStage : MonoBehaviour
         actorsBase.SetActive(false);
     }
 
-
     // Reset entities
     public void ResetStage()
     {
         /*
-        foreach (EnemySpawner eb in GetComponentsInChildren<EnemySpawner>())
+        foreach (EnemySpawner eb in GetActorComponents<EnemySpawner>())
             eb.ResetSpawner();
         */
 
         if (actors) Destroy(actors);
-        portal.Disable();
+        portal.SetEnabled(false);
         if (hints) hints.ResetHints();
         charger.gameObject.SetActive(false);
         charger.gameObject.SetActive(true);
@@ -49,7 +48,7 @@ public class GameStage : MonoBehaviour
 
         actors = Instantiate(actorsBase, gameObject.transform);
         //actors.SetActive(false);
-        portal.Disable();
+        portal.SetEnabled(false);
 
         if (hints != null) hints.ResetHints();
     }
@@ -74,9 +73,9 @@ public class GameStage : MonoBehaviour
     public void MeltActors()
     {
         Player.self.Melt();
-        foreach (EntityBase eb in actors.GetComponentsInChildren<EntityBase>())
+        foreach (EntityBase eb in GetActorComponents<EntityBase>())
             eb.Melt();
-        foreach (Bullet b in actors.GetComponentsInChildren<Bullet>())
+        foreach (Bullet b in GetActorComponents<Bullet>())
             b.Melt();
     }
 
@@ -84,9 +83,9 @@ public class GameStage : MonoBehaviour
     public void FreezeActors()
     {
         Player.self.Freeze();
-        foreach (EntityBase eb in GetComponentsInChildren<EntityBase>())
+        foreach (EntityBase eb in GetActorComponents<EntityBase>())
             eb.Freeze();
-        foreach (Bullet b in GetComponentsInChildren<Bullet>())
+        foreach (Bullet b in GetActorComponents<Bullet>())
             b.Freeze();
     }
 
@@ -96,4 +95,6 @@ public class GameStage : MonoBehaviour
         ResetStage();
         gameObject.SetActive(false);
     }
+
+    public T[] GetActorComponents<T>() { return actors.GetComponentsInChildren<T>(); }
 }

@@ -84,7 +84,7 @@ public class GameState : MonoBehaviour
             Player.self.Freeze();
             curStage.actors.SetActive(false);
             curStage.charger.SetEnabled(false);
-            foreach (EnemySpawner es in curStage.actors.GetComponentsInChildren<EnemySpawner>())
+            foreach (EnemySpawner es in curStage.GetActorComponents<EnemySpawner>())
                 es.StopSpawning();
         }
         else
@@ -94,11 +94,11 @@ public class GameState : MonoBehaviour
             curStage.charger.SetEnabled(true);
 
             //Any way to resume paused animations?
-            //foreach (EnemyBase eb in curStage.actors.GetComponentsInChildren<EnemyBase>())
+            //foreach (EnemyBase eb in curStage.GetActorComponents<EnemyBase>())
             //    eb.killStuckAnim();
 
             if (curStage.charger.charging)
-            foreach (EnemySpawner es in curStage.actors.GetComponentsInChildren<EnemySpawner>())
+            foreach (EnemySpawner es in curStage.GetActorComponents<EnemySpawner>())
                 es.StartSpawning();
 
             self.PauseOverlay.SetActive(false);

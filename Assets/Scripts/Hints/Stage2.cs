@@ -19,7 +19,7 @@ public class Stage2 : Hint
         switch (state)
         {
             case State.START:
-                if (GameState.curStage != GetComponentInParent<GameStage>()) return;
+                if (isCurStage()) return;
                 texts[0].SetActive(true);
                 if (GameState.unlockedColors == Vector3Int.right) state = State.RED;
                 else if (GameState.unlockedColors == Vector3Int.up) state = State.GREEN;

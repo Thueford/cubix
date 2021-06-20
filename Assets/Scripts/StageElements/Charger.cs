@@ -25,7 +25,7 @@ public class Charger : MonoBehaviour
     public void OnChargeStart()
     {
         charging = true;
-        foreach (EnemySpawner es in GameState.curStage.actors.GetComponentsInChildren<EnemySpawner>())
+        foreach (EnemySpawner es in GameState.curStage.GetActorComponents<EnemySpawner>())
             es.StartSpawning();
     }
 
@@ -35,9 +35,9 @@ public class Charger : MonoBehaviour
         charged = true;
         anim.SetEnabled(false);
 
-        foreach (EnemySpawner es in GameState.curStage.actors.GetComponentsInChildren<EnemySpawner>())
+        foreach (EnemySpawner es in GameState.curStage.GetActorComponents<EnemySpawner>())
             es.StopSpawning();
-        GameState.curStage.portal.Enable();
+        GameState.curStage.portal.SetEnabled(true);
     }
 
     private void OnTriggerEnter(Collider c)

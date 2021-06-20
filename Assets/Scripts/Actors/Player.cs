@@ -11,6 +11,7 @@ public class Player : EntityBase
     public static Player self;
 
     [Header("Other Settings")]
+    [WarnNull] public Text txtDbg;
     public PlayerShooter bs;
 
     private float invulnurable = 0;
@@ -136,5 +137,17 @@ public class Player : EntityBase
         base.OnSpawn(ev);
         Debug.Log("Player Spawn");
         GameState.curStage.MeltActors();
+    }
+
+    public override void OnDie(AnimationEvent ev)
+    {
+        base.OnDie(ev);
+        Destroy(gameObject);
+    }
+
+    public override void Die()
+    {
+        base.Die();
+        GameState.curStage.FreezeActors();
     }
 }
