@@ -2,7 +2,6 @@
 
 struct MeshProperties
 {
-    float4x4 mat;
     float3 pos, vel;
     float4 color;
     float life;
@@ -18,6 +17,6 @@ float4x4 _Rotate;
 [numthreads(128,1,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
-    _Properties[id.x].life -= _DeltaTime;
+    // _Properties[id.x].life -= _DeltaTime;
     // _Properties[id.x].pos += _Properties[id.x].vel * _DeltaTime;
 }

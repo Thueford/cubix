@@ -172,7 +172,6 @@ struct Particle
     public static int Size()
     {
         return
-            sizeof(float) * 4 * 4 + // pos + vel
             sizeof(float) * 3 * 2 + // pos + vel
             sizeof(float) * 4 +     // color
             sizeof(float) * 1;      // life
