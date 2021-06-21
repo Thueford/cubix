@@ -4,10 +4,10 @@ Game Features:
 
 - [ ] Colored Enemy Properties
 - [ ] Stage Builder for Endless Mode
-- [ ] Stage Restart on Player Death
-- [ ] Game Over after some amount of deaths? 
+- [ ] Stage Restart on Player Death         J
+- [ ] Game Over after some amount of deaths?        J
 - - (Resets Endless mode progression so you need te restart at stage 10)
-- [ ] Collectables/Progression in Endless Mode
+- [ ] Collectables/Progression in Endless Mode      J
 - - (Powerups, more Shot types, ...)
 - [ ] Storing of High-Score and whether Endless Mode is unlocked or not
 - [ ] Multiple Portals in Stage 0 to select Tutorial or Endless Mode (or Settings Room?)
@@ -31,7 +31,7 @@ Particles/Visuals:
 - [ ] Animation/Particles on Collectable pickup
 - [ ] Particles on Shot Mode Switch
 
-Sounds:
+Sounds:     J
 
 - [ ] Soudtrack
 - [ ] Shoot
