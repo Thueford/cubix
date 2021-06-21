@@ -12,6 +12,7 @@ Game Features:
 - [ ] Storing of High-Score and whether Endless Mode is unlocked or not     A
 - [ ] Multiple Portals in Stage 0 to select Tutorial or Endless Mode (or Settings Room?)
 - [ ] (Settings Room?)
+- [ ] Bullet Knockback
 
 GUI:
 
