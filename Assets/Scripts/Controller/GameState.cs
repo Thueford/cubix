@@ -136,6 +136,11 @@ public class GameState : MonoBehaviour
         load(stateBegin);
     }
 
+    public static void QuitGame()
+    {
+        Application.Quit();
+    }
+
     public static State SaveState()
     {
         State s = new State();
