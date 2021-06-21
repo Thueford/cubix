@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteAlways]
-public class Particles : MonoBehaviour
+public class CPUParticles : MonoBehaviour
 {
     [NotNull] public Material mat;
     public float emissionRate = 5;
@@ -14,7 +13,7 @@ public class Particles : MonoBehaviour
     public Vector3 startSpeed = Vector3.one;
     public AnimationCurve curve;
 
-    private List<Particle> particles = new List<Particle>();
+    private List<CPUParticle> particles = new List<CPUParticle>();
     private float lastSpawnT = 0;
 
     // Start is called before the first frame update
@@ -34,7 +33,7 @@ public class Particles : MonoBehaviour
         Vector3 vel = 2 * new Vector3(Random.value, Random.value, Random.value) - Vector3.one;
         vel.Normalize();
 
-        particles.Add(new Particle(lifetime, pos, vel, col));
+        particles.Add(new CPUParticle(lifetime, pos, vel, col));
         if (particles.Count > maxParts) particles.RemoveAt(0);
         lastSpawnT = Time.time;
     }
@@ -57,18 +56,18 @@ public class Particles : MonoBehaviour
     }
 }
 
-class Particle
+class CPUParticle
 {
     public Vector3 pos, vel;
     public Color col;
     public float live;
 
-    public Particle(float l, Vector3 p, Vector3 v, Color c)
+    public CPUParticle(float l, Vector3 p, Vector3 v, Color c)
     {
         pos = p; vel = v; live = l; col = c;
     }
 
-    public void Render(Particles p)
+    public void Render(CPUParticles p)
     {
         GL.PushMatrix();
         // Matrix4x4 look = Matrix4x4.LookAt(p.transform.position, Camera.main.transform.position, Vector3.up);

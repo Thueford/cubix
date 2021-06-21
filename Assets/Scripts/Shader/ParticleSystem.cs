@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteAlways]
-public class GPUParticles : MonoBehaviour
+public class Particles : MonoBehaviour
 {
-    [Header("ParticleSystem Properties")]
+    [Header("Particles Properties")]
     [NotNull] public Material mat;
     public float emissionRate = 5;
     public float startDelay = 0;
@@ -19,7 +18,7 @@ public class GPUParticles : MonoBehaviour
     [ReadOnly] public int curParts = 0;
     private float timePerPart, partTimer = 0;
 
-    private GPUParticle[] particles;
+    private Particle[] particles;
     private Matrix4x4[] transforms;
     private int curMaxParts = 1;
 
@@ -32,7 +31,7 @@ public class GPUParticles : MonoBehaviour
     void Start()
     {
         mat.enableInstancing = true;
-        particles = new GPUParticle[maxParts];
+        particles = new Particle[maxParts];
         transforms = new Matrix4x4[maxParts];
     }
 
@@ -77,7 +76,7 @@ public class GPUParticles : MonoBehaviour
         if (curMaxParts != maxParts)
         {
             curMaxParts = maxParts;
-            particles = new GPUParticle[maxParts];
+            particles = new Particle[maxParts];
             transforms = new Matrix4x4[maxParts];
         }
 
@@ -110,26 +109,26 @@ public class GPUParticles : MonoBehaviour
         //mat.SetPass(0);
         //GL.PushMatrix();
         //GL.MultMatrix(transform.localToWorldMatrix);
-        //foreach (GPUParticle p in particles) p.Render(this);
+        //foreach (Particle p in particles) p.Render(this);
         //GL.PopMatrix();
 
         //Graphics.DrawMeshInstanced(mf.mesh, 0, mat, transforms, curMaxParts, null, UnityEngine.Rendering.ShadowCastingMode.Off, false, 0, Camera.main, UnityEngine.Rendering.LightProbeUsage.Off);
     }
 }
 
-struct GPUParticle
+struct Particle
 {
     public Vector3 pos, vel;
     public Color col;
     public float life;
 
-    public GPUParticle(float l, Vector3 p, Vector3 v, Color c)
+    public Particle(float l, Vector3 p, Vector3 v, Color c)
     { pos = p; vel = v; life = l; col = c; }
 
     public void init(float l, Vector3 p, Vector3 v, Color c)
     { pos = p; vel = v; life = l; col = c; }
 
-    public void Render(GPUParticles p)
+    public void Render(CPUParticles p)
     {
         if (life <= 0) return;
         //GL.PushMatrix();
@@ -159,7 +158,7 @@ struct GPUParticle
         col.a -= 2.5f * Time.deltaTime;
     }
 
-    internal Matrix4x4 getTransform(GPUParticles p)
+    internal Matrix4x4 getTransform(Particles p)
     {
         return Matrix4x4.Translate(p.transform.position + pos);
     }

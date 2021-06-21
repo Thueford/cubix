@@ -71,3 +71,8 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 /[Aa]ssets/[Tt]extMesh Pro/*
+
+# Hidden files
+[~]*
+*~
+*~.*
