@@ -10,9 +10,9 @@ Game Features:
 - [ ] Collectables/Progression in Endless Mode      J
 - - (Powerups, more Shot types, ...)
 - [ ] Storing of High-Score and whether Endless Mode is unlocked or not     A
-- [ ] Multiple Portals in Stage 0 to select Tutorial or Endless Mode (or Settings Room?)
+- [ ] Multiple Portals in Stage 0 to select Tutorial or Endless Mode (or Settings Room?)    A
 - [ ] (Settings Room?)
-- [ ] Bullet Knockback
+- [ ] Bullet Knockback      J
 
 GUI:
 
