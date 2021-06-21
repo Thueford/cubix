@@ -16,14 +16,14 @@ struct v2f
     float4 color : COLOR;
 };
 
-struct MeshProperties
+struct Particle
 {
     float3 pos, vel;
     float4 color;
     float life;
 };
 
-StructuredBuffer<MeshProperties> _Properties;
+StructuredBuffer<Particle> _Particles;
 
 sampler2D _MainTex;
 float4 _MainTex_ST;
@@ -32,23 +32,25 @@ v2f vert(appdata_t i, uint instanceID : SV_InstanceID)
 {
     v2f o;
 
-    float4 ppos = float4(_Properties[instanceID].pos, 0);
-
+    float4 ppos = float4(_Particles[instanceID].pos, 0);
+    // o.vertex = UnityObjectToClipPos(ppos + i.vertex);
+    
+    
     // Billboard: https://gist.github.com/kaiware007/8ebad2d28638ff83b6b74970a4f70c9a
     float4 vpos = mul(unity_ObjectToWorld, i.vertex.xyz);
     // worldCoord = PaticlePos + matO2W.translate
     float4 worldCoord = ppos + float4(unity_ObjectToWorld._m03, unity_ObjectToWorld._m13, unity_ObjectToWorld._m23, 1);
     float4 viewPos = mul(UNITY_MATRIX_V, worldCoord) + vpos;
     o.vertex = mul(UNITY_MATRIX_P, viewPos);
-
-
-    // o.vertex = UnityObjectToClipPos(pos);
+    
+    
     o.uv = TRANSFORM_TEX(i.uv, _MainTex);
-    o.color = _Properties[instanceID].color;
+    o.color = _Particles[instanceID].color;
     return o;
 }
 
-float4 frag(v2f i, uint instanceID : SV_InstanceID) : SV_Target
+float4 frag(v2f i) : SV_Target
 {
-    return tex2D(_MainTex, i.uv) * i.color;
+    return i.color * tex2D(_MainTex, i.uv);
+
 }

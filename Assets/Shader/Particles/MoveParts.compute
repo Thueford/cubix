@@ -12,7 +12,7 @@ float4x4 _Rotate;
 
 // We used to just be able to use (1, 1, 1) threads for whatever population (not sure the old limit), but a Unity update
 // imposed a thread limit of 65535.  Now, to render populations above that, we need to be more granular with our threads.
-[numthreads(128,1,1)]
+[numthreads(256,1,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
     float4x4 mat = _Properties[id.x].mat;

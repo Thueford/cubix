@@ -41,8 +41,7 @@ public class Particles : MonoBehaviour
             particles = new Particle[maxParts];
         } */
 
-        // spawn particles
-        /*
+        /* // spawn particles
         timePerPart = 1 / emissionRate;
         partTimer += Time.deltaTime;
         for (float t = timePerPart; t < partTimer; t += timePerPart)
@@ -51,8 +50,8 @@ public class Particles : MonoBehaviour
         */
 
         // set uniforms
-        mat.SetVector("_parentPos", transform.position);
-        mat.SetVector("_scale", scale);
+        compute.SetVector("_ParentPosition", transform.position);
+        compute.SetFloat("_DeltaTime", Time.deltaTime);
         bounds.center = transform.position;
 
         // render
@@ -68,12 +67,15 @@ public class Particles : MonoBehaviour
         particles = new Particle[maxParts];
         for (int i = 0; i < maxParts; i++)
         {
-            Particle props = new Particle();
-            props.pos = new Vector3(Random.Range(-range, range), Random.Range(-range, range), Random.Range(-range, range));
-            props.col = Color.Lerp(Color.white, Color.yellow, Random.value);
-            props.init(lifetime, props.pos, Vector3.zero, props.col);
+            Particle part = new Particle();
+            
+            part.pos = new Vector3(Random.Range(-range, range), Random.Range(-range, range), Random.Range(-range, range));
+            part.col = Color.Lerp(Color.white, Color.yellow, Random.value);
+            part.vel = 2 * new Vector3(Random.value, Random.value, Random.value) - Vector3.one;
+            part.vel = 5 * part.vel.normalized;
+            part.life = lifetime;
 
-            particles[i] = props;
+            particles[i] = part;
         }
     }
 
@@ -90,6 +92,7 @@ public class Particles : MonoBehaviour
 
         uint p = firstUnusedParticle();
         particles[p].init(lifetime, pos, vel, col);
+        meshPropertiesBuffer.SetData(particles);
     }
 
     uint lastUsedParticle = 0;
@@ -147,8 +150,8 @@ public class Particles : MonoBehaviour
     {
         meshPropertiesBuffer = new ComputeBuffer(maxParts, Particle.Size());
         meshPropertiesBuffer.SetData(particles);
-        compute.SetBuffer(kernel, "_Properties", meshPropertiesBuffer);
-        mat.SetBuffer("_Properties", meshPropertiesBuffer);
+        compute.SetBuffer(kernel, "_Particles", meshPropertiesBuffer);
+        mat.SetBuffer("_Particles", meshPropertiesBuffer);
     }
 
     private void OnDisable()

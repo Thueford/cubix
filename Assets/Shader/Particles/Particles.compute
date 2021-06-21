@@ -1,22 +1,21 @@
 ﻿#pragma kernel CSMain
 
-struct MeshProperties
+struct Particle
 {
     float3 pos, vel;
     float4 color;
     float life;
 };
 
-RWStructuredBuffer<MeshProperties> _Properties;
+RWStructuredBuffer<Particle> _Particles;
 float3 _ParentPosition;
 float _DeltaTime;
-float4x4 _Rotate;
 
 // We used to just be able to use (1, 1, 1) threads for whatever population (not sure the old limit), but a Unity update
 // imposed a thread limit of 65535.  Now, to render populations above that, we need to be more granular with our threads.
-[numthreads(128,1,1)]
+[numthreads(256, 1, 1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
-    // _Properties[id.x].life -= _DeltaTime;
-    // _Properties[id.x].pos += _Properties[id.x].vel * _DeltaTime;
+    _Particles[id.x].life -= _DeltaTime;
+    _Particles[id.x].pos += _Particles[id.x].vel * _DeltaTime;
 }
