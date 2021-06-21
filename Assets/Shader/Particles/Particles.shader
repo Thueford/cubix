@@ -8,7 +8,7 @@ Shader "Custom/Particles" {
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            
+
             #include "UnityCG.cginc"
 
             struct appdata_t {
@@ -23,7 +23,9 @@ Shader "Custom/Particles" {
 
             struct MeshProperties {
                 float4x4 mat;
+                float3 pos, vel;
                 float4 color;
+                float life;
             };
 
             StructuredBuffer<MeshProperties> _Properties;
@@ -31,7 +33,8 @@ Shader "Custom/Particles" {
             v2f vert(appdata_t i, uint instanceID: SV_InstanceID) {
                 v2f o;
 
-                float4 pos = mul(_Properties[instanceID].mat, i.vertex);
+                float4 pos = float4(_Properties[instanceID].pos, 0) + i.vertex;
+                //float4 pos = mul(_Properties[instanceID].mat, i.vertex);
                 o.vertex = UnityObjectToClipPos(pos);
                 o.color = _Properties[instanceID].color;
 

@@ -15,24 +15,81 @@ public class Particles : MonoBehaviour
     public Vector3 startSpeed = Vector3.one;
 
     [Header("Other")]
-    [ReadOnly] public int curParts = 0;
-    private float timePerPart, partTimer = 0;
+    //[ReadOnly] public int curParts = 0;
+    private float partTimer = 0, timePerPart; // for spawning new particles
 
     private Particle[] particles;
-    private Matrix4x4[] transforms;
     private int curMaxParts = 1;
 
-    // public MeshFilter mf;
     public Mesh mesh;
-
-    // private float partsPerFrame, partTimer;
 
     // Start is called before the first frame update
     void Start()
     {
         mat.enableInstancing = true;
+        InitParticles();
+        ShaderSetup();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        /* update maxParts
+        if (curMaxParts != maxParts)
+        {
+            curMaxParts = maxParts;
+            particles = new Particle[maxParts];
+        } */
+
+        // spawn particles
+        /*
+        timePerPart = 1 / emissionRate;
+        partTimer += Time.deltaTime;
+        for (float t = timePerPart; t < partTimer; t += timePerPart)
+            spawnParticle();
+        partTimer -= timePerPart * (int)(partTimer / timePerPart);
+        */
+
+        // set uniforms
+        mat.SetVector("_parentPos", transform.position);
+        mat.SetVector("_scale", scale);
+        bounds.center = transform.position;
+
+        // render
+        compute.Dispatch(kernel, Mathf.CeilToInt(maxParts / (float)tgx), 1, 1);
+        Graphics.DrawMeshInstancedIndirect(mesh, 0, mat, bounds, argsBuffer);
+    }
+
+
+    /************   Particle stuff   ****************/
+
+    private void InitParticles()
+    {
         particles = new Particle[maxParts];
-        transforms = new Matrix4x4[maxParts];
+        for (int i = 0; i < maxParts; i++)
+        {
+            Particle props = new Particle();
+            props.pos = new Vector3(Random.Range(-range, range), Random.Range(-range, range), Random.Range(-range, range));
+            props.col = Color.Lerp(Color.white, Color.yellow, Random.value);
+            props.init(lifetime, props.pos, Vector3.zero, props.col);
+
+            particles[i] = props;
+        }
+    }
+
+    public void spawnParticle()
+    {
+        Vector3 pos = Vector3.zero; // new Vector3(Random.value, Random.value, Random.value);
+        pos.Scale(transform.lossyScale);
+
+        float c = 0.5f + Random.value / 2;
+        Color col = new Vector4(c, c, c, 1);
+
+        Vector3 vel = 2 * new Vector3(Random.value, Random.value, Random.value) - Vector3.one;
+        vel.Normalize();
+
+        uint p = firstUnusedParticle();
+        particles[p].init(lifetime, pos, vel, col);
     }
 
     uint lastUsedParticle = 0;
@@ -49,70 +106,60 @@ public class Particles : MonoBehaviour
         return 0; // lastUsedParticle = (uint)(Random.value*curMaxParts);
     }
 
-    public void spawnParticle()
+
+    /************   Shader stuff   ****************/
+
+    public ComputeShader compute;
+    private ComputeBuffer meshPropertiesBuffer;
+    private ComputeBuffer argsBuffer;
+
+    public float range = 5;
+    private Bounds bounds;
+
+    private int kernel;
+    private uint tgx, tgy, tgz;
+
+    private void ShaderSetup()
     {
-        Vector3 pos = Vector3.zero; // new Vector3(Random.value, Random.value, Random.value);
-        pos.Scale(transform.lossyScale);
+        bounds = new Bounds(transform.position, Vector3.one * (range + 1));
+        kernel = compute.FindKernel("CSMain");
+        compute.GetKernelThreadGroupSizes(kernel, out tgx, out tgy, out tgz);
 
-        float c = 0.5f + Random.value/2;
-        Color col = new Vector4(c, c, c, 1);
-
-        Vector3 vel = 2 * new Vector3(Random.value, Random.value, Random.value) - Vector3.one;
-        vel.Normalize();
-
-        uint p = firstUnusedParticle();
-        particles[p].init(lifetime, pos, vel, col);
+        InitializeMeshBuffer();
+        InitializePartBuffer();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void InitializeMeshBuffer()
     {
-        timePerPart = 1/emissionRate;
-
-        mat.SetVector("_parentPos", transform.position);
-        mat.SetVector("_scale", scale);
-
-        // update maxParts
-        if (curMaxParts != maxParts)
-        {
-            curMaxParts = maxParts;
-            particles = new Particle[maxParts];
-            transforms = new Matrix4x4[maxParts];
-        }
-
-        // spawn particles
-        partTimer += Time.deltaTime;
-        for (float t = timePerPart; t < partTimer; t += timePerPart)
-            spawnParticle();
-        partTimer -= timePerPart * (int)(partTimer / timePerPart);
+        // Argument buffer used by DrawMeshInstancedIndirect.
+        uint[] args = new uint[5] { 0, 0, 0, 0, 0 };
+        // Arguments for drawing mesh.
+        args[0] = mesh.GetIndexCount(0); // number of triangle indices
+        args[1] = (uint)maxParts;        // population
+        args[2] = mesh.GetIndexStart(0); // submesh start
+        args[3] = mesh.GetBaseVertex(0); // submesh bv
         
-        // update particles
-        curParts = 0;
-        for (int i = 0; i < maxParts; i++) {
-            particles[i].Update();
-            transforms[i] = particles[i].getTransform(this);
-            // Matrix4x4.Translate(particles[i].pos);
-            if (particles[i].life > 0) curParts++;
-            if (particles[i].life > 0) {
-                // Debug.DrawLine(transform.position, transform.position + particles[i].pos);
-                //Graphics.DrawMesh(mesh, transform.position + particles[i].pos, 
-                //    Quaternion.identity, mat, 0);
-                Graphics.DrawMesh(mesh, transforms[i], mat, 0);
-            }
-        }
-
-        //Graphics.DrawMeshInstanced(mesh, 0, mat, transforms, 10);
+        argsBuffer = new ComputeBuffer(1, args.Length * sizeof(uint), ComputeBufferType.IndirectArguments);
+        argsBuffer.SetData(args);
     }
 
-    void OnRenderObject()
+    private void InitializePartBuffer()
     {
-        //mat.SetPass(0);
-        //GL.PushMatrix();
-        //GL.MultMatrix(transform.localToWorldMatrix);
-        //foreach (Particle p in particles) p.Render(this);
-        //GL.PopMatrix();
+        meshPropertiesBuffer = new ComputeBuffer(maxParts, Particle.Size());
+        meshPropertiesBuffer.SetData(particles);
+        compute.SetBuffer(kernel, "_Properties", meshPropertiesBuffer);
+        mat.SetBuffer("_Properties", meshPropertiesBuffer);
+    }
 
-        //Graphics.DrawMeshInstanced(mf.mesh, 0, mat, transforms, curMaxParts, null, UnityEngine.Rendering.ShadowCastingMode.Off, false, 0, Camera.main, UnityEngine.Rendering.LightProbeUsage.Off);
+    private void OnDisable()
+    {
+        if (meshPropertiesBuffer != null)
+            meshPropertiesBuffer.Release();
+        meshPropertiesBuffer = null;
+
+        if (argsBuffer != null)
+            argsBuffer.Release();
+        argsBuffer = null;
     }
 }
 
@@ -122,44 +169,18 @@ struct Particle
     public Color col;
     public float life;
 
+    public static int Size()
+    {
+        return
+            sizeof(float) * 4 * 4 + // pos + vel
+            sizeof(float) * 3 * 2 + // pos + vel
+            sizeof(float) * 4 +     // color
+            sizeof(float) * 1;      // life
+    }
+
     public Particle(float l, Vector3 p, Vector3 v, Color c)
     { pos = p; vel = v; life = l; col = c; }
 
     public void init(float l, Vector3 p, Vector3 v, Color c)
     { pos = p; vel = v; life = l; col = c; }
-
-    public void Render(CPUParticles p)
-    {
-        if (life <= 0) return;
-        //GL.PushMatrix();
-        // Matrix4x4 look = Matrix4x4.LookAt(pos, Camera.main.transform.position, Vector3.up)
-        //GL.MultMatrix(Matrix4x4.Translate(pos));
-
-        GL.Begin(GL.QUADS);
-        GL.Color(col);
-        GL.TexCoord(Vector3.zero);
-        GL.Vertex3(0, 0, 0);
-        GL.TexCoord(Vector3.up);
-        GL.Vertex3(0, 1, 0);
-        GL.TexCoord(new Vector3(1, 1, 0));
-        GL.Vertex3(1, 1, 0);
-        GL.TexCoord(Vector3.right);
-        GL.Vertex3(1, 0, 0);
-        GL.End();
-        //GL.PopMatrix();
-    }
-
-    public void Update()
-    {
-        if (life < 0) return;
-        life -= Time.deltaTime;
-
-        pos += vel * Time.deltaTime;
-        col.a -= 2.5f * Time.deltaTime;
-    }
-
-    internal Matrix4x4 getTransform(Particles p)
-    {
-        return Matrix4x4.Translate(p.transform.position + pos);
-    }
 }
