@@ -8,7 +8,6 @@ Shader "Custom/Particles"
     {
         Pass
         {
-            Name "TransparentParticles"
             Tags {
                 "Queue" = "Transparent" 
                 "IgnoreProjector" = "True" 
@@ -16,12 +15,13 @@ Shader "Custom/Particles"
             }
             
             Blend One OneMinusSrcAlpha
+            // Cull Back
+            Lighting Off
             ZWrite Off // necessary major slowdown (1e6:7/20, 5e6:17/94) for transparency
             
             CGPROGRAM
+            #pragma target 5.0
             #include "Particles.cginc"
-            #pragma vertex vert
-            #pragma fragment frag
             ENDCG
         }
     }
