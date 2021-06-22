@@ -8,11 +8,12 @@
 
 #define P_POSSHP B(0)
 #define P_SPDSHP B(1)
+#define P_FORCESHP B(2)
 
 
 struct Particle
 {
-    float3 pos, vel;
+    float3 pos, vel, force;
     float4 color;
     float2 life;
 };

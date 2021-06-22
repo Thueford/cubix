@@ -6,7 +6,7 @@ namespace Particles
 
     struct Particle
     {
-        public Vector3 pos, vel;
+        public Vector3 pos, vel, force;
         public Color col;
         public Vector2 life;
     }

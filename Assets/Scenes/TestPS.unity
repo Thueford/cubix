@@ -475,16 +475,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcd8c9859cf8d264e906b77119cdc2f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxParts: 10000
-  lifetime: 1
-  emissionRate: 9000
+  maxParts: 60000
+  lifetime: 4
+  emissionRate: 10000
   startDelay: 0
-  posOffset: {x: 20, y: 0, z: 20}
+  posOffset: {x: 0, y: 0, z: 0}
   posScale: {x: 0, y: 0, z: 0}
   posShape: 0
-  spdOffset: {x: 0, y: 0, z: 0, w: 0}
-  spdScale: {x: 0, y: 0, z: 0, w: 0}
-  spdShape: 0
+  spdOffset: {x: 0, y: 30, z: 0}
+  spdScale: {x: 6, y: 0, z: 6}
+  spdShape: 1
+  forceOffset: {x: 0, y: -14, z: 0}
+  forceScale: {x: 0, y: 0, z: 0}
+  forceShape: 1
   size: {x: 0.2, y: 0.2}
   color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   mat: {fileID: 2100000, guid: 2b107359638558a449200c6c4ee07e3a, type: 2}

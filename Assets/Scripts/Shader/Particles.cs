@@ -29,6 +29,13 @@ public class Particles : MonoBehaviour
     public Shape spdShape;
     #endregion
 
+    #region constant force
+    [Header("constant force")]
+    public Vector3 forceOffset = Vector3.one;
+    public Vector3 forceScale = Vector3.zero;
+    public Shape forceShape;
+    #endregion
+
     [Header("Other")]
     public Vector2 size = new Vector2(0.2f, 0.2f);
     public Color color = Color.yellow;
@@ -41,6 +48,7 @@ public class Particles : MonoBehaviour
         return 
             F((int)posShape, 0) +
             F((int)spdShape, 1) +
+            F((int)forceShape, 2) +
             0;
     }
 
@@ -193,11 +201,12 @@ public class Particles : MonoBehaviour
 
         compute.SetVector("_PosOffset", posOffset);
         compute.SetVector("_PosScale", posScale);
-        //compute.SetVector("_PosVary", posVary);
 
         compute.SetVector("_SpdOffset", spdOffset);
         compute.SetVector("_SpdScale", spdScale);
-        //compute.SetVector("_SpdVary", spdVary);
+
+        compute.SetVector("_ForceOffset", forceOffset);
+        compute.SetVector("_ForceScale", forceScale);
 
         // compute.SetVector("_ParentPosition", transform.position);
 

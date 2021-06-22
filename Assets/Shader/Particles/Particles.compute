@@ -52,6 +52,7 @@ void DoUpdate(uint3 id)
     }
     
     p.life.x -= _DeltaTime;
+    p.vel += p.force * _DeltaTime;
     p.pos += p.vel * _DeltaTime;
 
     _Particles[id.x] = p;
@@ -79,7 +80,8 @@ float3 _PosScale;
 float3 _SpdOffset;
 float3 _SpdScale;
 
-float _SpdPosFac;
+float3 _ForceOffset;
+float3 _ForceScale;
 
 float4 _Color;
 
@@ -99,19 +101,26 @@ void EmitOne()
 
     p.life = _Lifetime;
     
+    float3 d;
     float f;
     
     // position
-    float3 dpos = float3(ran(_Seeds.xzy), ran(_Seeds.yxz), ran(_Seeds.zyx));
-    if (F(P_POSSHP)) dpos = normalize(PI * sin(dpos));
-    else dpos = sqrNormalize(dpos);
-    p.pos = dpos * (_PosOffset + _PosScale * rand(_Seeds.wxy));
+    d = float3(ran(_Seeds.xzy), ran(_Seeds.yxz), ran(_Seeds.zyx));
+    if (F(P_POSSHP)) d = normalize(PI * sin(d));
+    else d = sqrNormalize(d);
+    p.pos = d * (_PosOffset + _PosScale * rand(_Seeds.wxy));
     
     // velocity
-    float3 dspd = float3(ran(_Seeds.xyz), ran(_Seeds.yzx), ran(_Seeds.zxy));
-    if (F(P_SPDSHP)) dspd = normalize(PI * sin(dspd));
-    else dspd = sqrNormalize(dspd);
-    p.vel = _SpdOffset.xyz + dspd * _SpdScale.xyz;
+    d = float3(ran(_Seeds.xyz), ran(_Seeds.yzx), ran(_Seeds.zxy));
+    if (F(P_SPDSHP)) d = normalize(PI * sin(d));
+    else d = sqrNormalize(d);
+    p.vel = _SpdOffset.xyz + d * _SpdScale.xyz;
+    
+    // force
+    d = float3(ran(_Seeds.xyw), ran(_Seeds.yzw), ran(_Seeds.zxw));
+    if (F(P_FORCESHP)) d = normalize(PI * sin(d));
+    else d = sqrNormalize(d);
+    p.force = _ForceOffset.xyz + d * _ForceScale.xyz;
     
     p.color = lerp(_Color, 1, rand(_Seeds.xxz));
     p.color.a = _Color.a;
