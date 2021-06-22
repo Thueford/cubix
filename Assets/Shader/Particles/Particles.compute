@@ -1,21 +1,73 @@
-﻿#pragma kernel CSMain
+﻿#pragma kernel Init
+#pragma kernel Update
+#pragma kernel Emit
+
+#define THREADS 256
 
 struct Particle
 {
     float3 pos, vel;
     float4 color;
-    float life;
+    float2 t2l;
 };
 
+
+float rand(float3 o) {
+    return frac(sin(dot(o, float3(12.9898, 78.233, 45.5432))) * 43758.5453);
+}
+
+
 RWStructuredBuffer<Particle> _Particles;
+AppendStructuredBuffer<uint> _Dead;
+ConsumeStructuredBuffer<uint> _Alive;
+
+
 float3 _ParentPosition;
 float _DeltaTime;
 
-// We used to just be able to use (1, 1, 1) threads for whatever population (not sure the old limit), but a Unity update
-// imposed a thread limit of 65535.  Now, to render populations above that, we need to be more granular with our threads.
-[numthreads(256, 1, 1)]
-void CSMain (uint3 id : SV_DispatchThreadID)
+// limited to 65536 threadgroups
+[numthreads(THREADS, 1, 1)]
+void Init(uint3 id : SV_DispatchThreadID)
 {
-    _Particles[id.x].life -= _DeltaTime;
-    _Particles[id.x].pos += _Particles[id.x].vel * _DeltaTime;
+    _Particles[id.x].t2l = 0;
+    _Dead.Append(id.x);
+}
+
+[numthreads(THREADS, 1, 1)]
+void Update(uint3 id : SV_DispatchThreadID)
+{
+    Particle p = _Particles[id.x];
+    
+    if (p.t2l.x < _DeltaTime)
+    {
+        p.t2l.x = 0;
+        _Dead.Append(id.x);
+        return;
+    }
+    
+    p.t2l.x -= _DeltaTime;
+    p.pos += p.vel * _DeltaTime;
+    
+    _Particles[id.x] = p;
+}
+
+float3 _Seeds;
+float3 _Speed;
+float _Lifetime;
+float _Range;
+float4 _Color;
+
+[numthreads(THREADS, 1, 1)]
+void Emit()
+{
+    uint id = _Alive.Consume(), c = id;
+    Particle p = _Particles[id];
+    if (c == 0) id = 1;
+
+    p.t2l = _Lifetime;
+    p.pos = _Range * float3(rand(_Seeds.xyz / c), rand(_Seeds.yzx / c), rand(_Seeds.zxy / c));
+    p.vel = _Speed * float3(rand(_Seeds.xzy / c), rand(_Seeds.yxz / c), rand(_Seeds.zyx / c));
+    p.color = _Color * rand(_Seeds.xxz / c);
+
+    _Particles[id] = p;
 }

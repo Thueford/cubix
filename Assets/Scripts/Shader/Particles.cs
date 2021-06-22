@@ -1,39 +1,53 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class Particles : MonoBehaviour
 {
-    [Header("Particles Properties")]
-    [NotNull] public Material mat;
+    #region General
+    [Header("ParticleSystem Properties")]
+    public int maxParts = 1;
+    public float lifetime = 3;
+
     public float emissionRate = 5;
     public float startDelay = 0;
-    public float lifetime = 3;
-    [Range(1,(int)1e6)]
-    public int maxParts = 1;
-    public Vector2 scale = new Vector2(0.2f, 0.2f);
-    public Vector3 startSpeed = Vector3.one;
+    public float range = 5;
+    private Bounds bounds;
 
+    [Range(1,(int)1e6)]
+    public Vector2 size = new Vector2(0.2f, 0.2f);
+    public Vector3 speed = Vector3.one;
+    public Color color = Color.yellow;
+    #endregion
+
+    #region Other
     [Header("Other")]
     //[ReadOnly] public int curParts = 0;
     private float partTimer = 0, timePerPart; // for spawning new particles
+    private Vector3 lastPos;
 
-    private Particle[] particles;
+    // private Particle[] particles;
     private int curMaxParts = 1;
 
-    public Mesh mesh;
+    [NotNull] public Material mat;
+    [NotNull] public Mesh mesh;
+    #endregion
 
+    #region Unity
     // Start is called before the first frame update
     void Start()
     {
         mat.enableInstancing = true;
-        InitParticles();
+        //InitParticles();
         ShaderSetup();
     }
 
     // Update is called once per frame
     void Update()
     {
+        DispatchUpdate();
+
         /* update maxParts
         if (curMaxParts != maxParts)
         {
@@ -41,27 +55,29 @@ public class Particles : MonoBehaviour
             particles = new Particle[maxParts];
         } */
 
-        /* // spawn particles
+
+        // spawn particles
         timePerPart = 1 / emissionRate;
         partTimer += Time.deltaTime;
-        for (float t = timePerPart; t < partTimer; t += timePerPart)
-            spawnParticle();
+        DispatchEmit((int)(partTimer / timePerPart));
         partTimer -= timePerPart * (int)(partTimer / timePerPart);
-        */
-
+        
         // set uniforms
         compute.SetVector("_ParentPosition", transform.position);
         compute.SetFloat("_DeltaTime", Time.deltaTime);
-        bounds.center = transform.position;
+
+        // mat.SetFloat("_Time", Time.time);
 
         // render
-        compute.Dispatch(kernel, Mathf.CeilToInt(maxParts / (float)tgx), 1, 1);
-        Graphics.DrawMeshInstancedIndirect(mesh, 0, mat, bounds, argsBuffer);
+        compute.Dispatch(kernelUpdate, Mathf.CeilToInt(maxParts / (float)tgx), 1, 1);
+        bounds.center = transform.position;
+        Graphics.DrawMeshInstancedIndirect(mesh, 0, mat, bounds, meshArgsBuf);
     }
+    #endregion
 
-
+    #region Particles
     /************   Particle stuff   ****************/
-
+    /*
     private void InitParticles()
     {
         particles = new Particle[maxParts];
@@ -72,7 +88,7 @@ public class Particles : MonoBehaviour
             part.pos = new Vector3(Random.Range(-range, range), Random.Range(-range, range), Random.Range(-range, range));
             part.col = Color.Lerp(Color.white, Color.yellow, Random.value);
             part.vel = 2 * new Vector3(Random.value, Random.value, Random.value) - Vector3.one;
-            part.vel = 5 * part.vel.normalized;
+            part.vel = 0 * part.vel.normalized;
             part.life = lifetime;
 
             particles[i] = part;
@@ -108,28 +124,32 @@ public class Particles : MonoBehaviour
 
         return 0; // lastUsedParticle = (uint)(Random.value*curMaxParts);
     }
+    */
+    #endregion
 
-
+    #region Shader
     /************   Shader stuff   ****************/
 
     public ComputeShader compute;
-    private ComputeBuffer meshPropertiesBuffer;
-    private ComputeBuffer argsBuffer;
+    private ComputeBuffer particlesBuf, deadBuf;
+    private ComputeBuffer meshArgsBuf;
 
-    public float range = 5;
-    private Bounds bounds;
-
-    private int kernel;
+    private int kernelInit, kernelEmit, kernelUpdate;
     private uint tgx, tgy, tgz;
 
+    #region Shader Setup
     private void ShaderSetup()
     {
         bounds = new Bounds(transform.position, Vector3.one * (range + 1));
-        kernel = compute.FindKernel("CSMain");
-        compute.GetKernelThreadGroupSizes(kernel, out tgx, out tgy, out tgz);
+        kernelInit= compute.FindKernel("Init");
+        kernelEmit = compute.FindKernel("Emit");
+        kernelUpdate = compute.FindKernel("Update");
+        compute.GetKernelThreadGroupSizes(kernelInit, out tgx, out tgy, out tgz);
 
+        ReleaseBuffers();
         InitializeMeshBuffer();
         InitializePartBuffer();
+        compute.Dispatch(kernelInit, Mathf.CeilToInt(maxParts / (float)tgx), 1, 1);
     }
 
     private void InitializeMeshBuffer()
@@ -142,47 +162,72 @@ public class Particles : MonoBehaviour
         args[2] = mesh.GetIndexStart(0); // submesh start
         args[3] = mesh.GetBaseVertex(0); // submesh bv
         
-        argsBuffer = new ComputeBuffer(1, args.Length * sizeof(uint), ComputeBufferType.IndirectArguments);
-        argsBuffer.SetData(args);
+        meshArgsBuf = new ComputeBuffer(1, args.Length * sizeof(uint), ComputeBufferType.IndirectArguments);
+        meshArgsBuf.SetData(args);
     }
 
     private void InitializePartBuffer()
     {
-        meshPropertiesBuffer = new ComputeBuffer(maxParts, Particle.Size());
-        meshPropertiesBuffer.SetData(particles);
-        compute.SetBuffer(kernel, "_Particles", meshPropertiesBuffer);
-        mat.SetBuffer("_Particles", meshPropertiesBuffer);
+        particlesBuf = new ComputeBuffer(maxParts, Marshal.SizeOf(typeof(Particle)));
+        compute.SetBuffer(kernelInit, "_Particles", particlesBuf);
+        mat.SetBuffer("_Particles", particlesBuf);
+
+        deadBuf = new ComputeBuffer(maxParts, sizeof(int), ComputeBufferType.Append);
+        deadBuf.SetCounterValue(0);
+        compute.SetBuffer(kernelInit, "_Dead", deadBuf);
     }
+
+    private void ReleaseBuffers()
+    {
+        if (particlesBuf != null) particlesBuf.Release();
+        if (meshArgsBuf != null) meshArgsBuf.Release();
+        if (deadBuf != null) deadBuf.Release();
+    }
+
+    #endregion
+
+    #region Shader Loop
+
+    public void DispatchEmit(int count)
+    {
+        if (count <= 0) return;
+
+        Vector3 velocity = (transform.position - lastPos) / Time.deltaTime;
+        lastPos = transform.position;
+
+        compute.SetBuffer(kernelEmit, "_Particles", particlesBuf);
+        compute.SetBuffer(kernelEmit, "_Alive", deadBuf);
+
+        compute.SetVector("_Seeds", new Vector4(Random.value, Random.value, Random.value, Random.value));
+        compute.SetVector("_Speed", speed);
+        compute.SetVector("_ParentPosition", transform.position);
+        compute.SetFloat("_Lifetime", lifetime);
+        compute.SetFloat("_Range", range);
+        compute.SetVector("_Color", color);
+
+        compute.Dispatch(kernelEmit, count, 1, 1);
+    }
+
+    private void DispatchUpdate()
+    {
+        compute.SetBuffer(kernelUpdate, "_Particles", particlesBuf);
+        compute.SetBuffer(kernelUpdate, "_Dead", deadBuf);
+
+        compute.Dispatch(kernelUpdate, Mathf.CeilToInt(maxParts / (float)tgx), 1, 1);
+    }
+
+    #endregion
 
     private void OnDisable()
     {
-        if (meshPropertiesBuffer != null)
-            meshPropertiesBuffer.Release();
-        meshPropertiesBuffer = null;
-
-        if (argsBuffer != null)
-            argsBuffer.Release();
-        argsBuffer = null;
+        ReleaseBuffers();
     }
+    #endregion
 }
 
 struct Particle
 {
     public Vector3 pos, vel;
     public Color col;
-    public float life;
-
-    public static int Size()
-    {
-        return
-            sizeof(float) * 3 * 2 + // pos + vel
-            sizeof(float) * 4 +     // color
-            sizeof(float) * 1;      // life
-    }
-
-    public Particle(float l, Vector3 p, Vector3 v, Color c)
-    { pos = p; vel = v; life = l; col = c; }
-
-    public void init(float l, Vector3 p, Vector3 v, Color c)
-    { pos = p; vel = v; life = l; col = c; }
+    public Vector2 life;
 }
