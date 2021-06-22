@@ -8,8 +8,9 @@
 
 #include "./Particle.cginc"
 
+float c : SV_DispatchThreadID;
 float rand(float3 o) {
-    return frac(sin(dot(o, float3(12.9898, 78.233, 45.5432))) * 43758.5453);
+    return frac(sin(dot(o*c, float3(12.9898, 78.233, 45.5432))) * 43758.5453);
 }
 float ran(float3 o) {
     return 2 * rand(o) - 1;
@@ -68,28 +69,51 @@ void Update(uint3 id : SV_DispatchThreadID)
     DoUpdate(id);
 }
 
-
+int _Flags;
 float4 _Seeds;
-float4 _Speed;
 float _Lifetime;
-float _Range;
+
+float3 _PosOffset;
+float3 _PosScale;
+
+float3 _SpdOffset;
+float3 _SpdScale;
+
+float _SpdPosFac;
+
 float4 _Color;
+
+#define F(X) (_Flags & X)
+
+float3 sqrNormalize(float3 v) {
+    float3 av = abs(v);
+    return v / max(max(av.x, av.y), av.z);
+}
 
 [numthreads(1, 1, 1)]
 void EmitOne()
 {
-    uint id = _Alive.Consume(), c = id;
+    uint id = _Alive.Consume();
     Particle p = _Particles[id];
-    if (c == 0) c = 0.5;
-    
+    c = id + 1;
+
     p.life = _Lifetime;
-    float3 dir = float3(ran(_Seeds.xzy * c), ran(_Seeds.yxz * c), ran(_Seeds.zyx * c));
-    dir = normalize(dir);
     
-    p.vel = _Speed.xyz * dir;
-    p.pos = _Range * pow(rand(_Seeds.xyz * c), 0.2) * normalize(dir);
+    float f;
     
-    p.color = lerp(_Color, 1, rand(_Seeds.xxz * c));
+    // position
+    float3 dpos = float3(ran(_Seeds.xzy), ran(_Seeds.yxz), ran(_Seeds.zyx));
+    if (F(P_POSSHP)) dpos = normalize(PI * sin(dpos));
+    else dpos = sqrNormalize(dpos);
+    p.pos = dpos * (_PosOffset + _PosScale * rand(_Seeds.wxy));
+    
+    // velocity
+    float3 dspd = float3(ran(_Seeds.xyz), ran(_Seeds.yzx), ran(_Seeds.zxy));
+    if (F(P_SPDSHP)) dspd = normalize(PI * sin(dspd));
+    else dspd = sqrNormalize(dspd);
+    p.vel = _SpdOffset.xyz + dspd * _SpdScale.xyz;
+    
+    p.color = lerp(_Color, 1, rand(_Seeds.xxz));
     p.color.a = _Color.a;
     
     _Particles[id] = p;

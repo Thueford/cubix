@@ -3,6 +3,13 @@
 #ifndef _PARTICLE_H_
 #define _PARTICLE_H_
 
+#define PI 3.1415926535
+#define B(X) (1<<X)
+
+#define P_POSSHP B(0)
+#define P_SPDSHP B(1)
+
+
 struct Particle
 {
     float3 pos, vel;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
+namespace Particles {
 public class Particles : MonoBehaviour
 {
     #region General
@@ -12,12 +13,37 @@ public class Particles : MonoBehaviour
 
     public float emissionRate = 5;
     public float startDelay = 0;
-    public float range = 5;
     private Bounds bounds;
 
+    #region position
+    [Header("Position")]
+    public Vector3 posOffset = Vector3.one;
+    public Vector3 posScale = Vector3.zero;
+    public Shape posShape;
+    #endregion
+
+    #region speed
+    [Header("Speed")]
+    public Vector3 spdOffset = Vector3.one;
+    public Vector3 spdScale = Vector3.zero;
+    public Shape spdShape;
+    #endregion
+
+    [Header("Other")]
     public Vector2 size = new Vector2(0.2f, 0.2f);
-    public Vector3 speed = Vector3.one;
     public Color color = Color.yellow;
+
+    private static int F(bool v, int p) { return v ? 1 << p : 0; }
+    private static int F(int v, int p) { return v * 1 << p; }
+
+    int GetFlags()
+    {
+        return 
+            F((int)posShape, 0) +
+            F((int)spdShape, 1) +
+            0;
+    }
+
     #endregion
 
     #region Other
@@ -32,6 +58,7 @@ public class Particles : MonoBehaviour
 
     [NotNull] public Material mat;
     // [NotNull] public Mesh mesh;
+
     #endregion
 
     #region Unity
@@ -159,11 +186,21 @@ public class Particles : MonoBehaviour
         compute.SetBuffer(kernelEmit, "_Particles", particlesBuf);
         compute.SetBuffer(kernelEmit, "_Alive", deadBuf);
 
+        compute.SetInt("_Flags", GetFlags());
+        // Debug.Log(System.Convert.ToString(GetFlags(), 2));
         compute.SetVector("_Seeds", new Vector4(Random.value, Random.value, Random.value, Random.value));
-        compute.SetVector("_Speed", speed);
-        compute.SetVector("_ParentPosition", transform.position);
         compute.SetFloat("_Lifetime", lifetime);
-        compute.SetFloat("_Range", range);
+
+        compute.SetVector("_PosOffset", posOffset);
+        compute.SetVector("_PosScale", posScale);
+        //compute.SetVector("_PosVary", posVary);
+
+        compute.SetVector("_SpdOffset", spdOffset);
+        compute.SetVector("_SpdScale", spdScale);
+        //compute.SetVector("_SpdVary", spdVary);
+
+        // compute.SetVector("_ParentPosition", transform.position);
+
         compute.SetVector("_Color", color);
 
         compute.Dispatch(kernelEmit, count, 1, 1);
@@ -205,16 +242,4 @@ public class Particles : MonoBehaviour
     }
     #endregion
 }
-
-struct Particle
-{
-    public Vector3 pos, vel;
-    public Color col;
-    public Vector2 life;
-}
-
-struct Vertex2D
-{
-    public Vector2 pos;
-    public Vector2 uv;
 }
