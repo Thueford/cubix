@@ -15,26 +15,10 @@ public class Particles : MonoBehaviour
     public float startDelay = 0;
     private Bounds bounds;
 
-    #region position
-    [Header("Position")]
-    public Vector3 posOffset = Vector3.one;
-    public Vector3 posScale = Vector3.zero;
-    public Shape posShape;
-    #endregion
-
-    #region speed
-    [Header("Speed")]
-    public Vector3 spdOffset = Vector3.one;
-    public Vector3 spdScale = Vector3.zero;
-    public Shape spdShape;
-    #endregion
-
-    #region constant force
-    [Header("constant force")]
-    public Vector3 forceOffset = Vector3.one;
-    public Vector3 forceScale = Vector3.zero;
-    public Shape forceShape;
-    #endregion
+    [Header("Dynamics")]
+    public DynamicEffect pos;
+    public DynamicEffect vel;
+    public DynamicEffect force;
 
     [Header("Other")]
     public Vector2 size = new Vector2(0.2f, 0.2f);
@@ -46,9 +30,9 @@ public class Particles : MonoBehaviour
     int GetFlags()
     {
         return 
-            F((int)posShape, 0) +
-            F((int)spdShape, 1) +
-            F((int)forceShape, 2) +
+            F(pos.shape == Shape.SPHERE, 0) +
+            F(vel.shape == Shape.SPHERE, 1) +
+            F(force.shape == Shape.SPHERE, 2) +
             0;
     }
 
@@ -199,14 +183,9 @@ public class Particles : MonoBehaviour
         compute.SetVector("_Seeds", new Vector4(Random.value, Random.value, Random.value, Random.value));
         compute.SetFloat("_Lifetime", lifetime);
 
-        compute.SetVector("_PosOffset", posOffset);
-        compute.SetVector("_PosScale", posScale);
-
-        compute.SetVector("_SpdOffset", spdOffset);
-        compute.SetVector("_SpdScale", spdScale);
-
-        compute.SetVector("_ForceOffset", forceOffset);
-        compute.SetVector("_ForceScale", forceScale);
+        pos.Uniform(compute, "_Pos");
+        vel.Uniform(compute, "_Spd");
+        force.Uniform(compute, "_Force");
 
         // compute.SetVector("_ParentPosition", transform.position);
 
