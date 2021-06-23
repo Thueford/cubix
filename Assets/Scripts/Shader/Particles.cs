@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 namespace Particles {
+[ExecuteAlways]
 public class Particles : MonoBehaviour
 {
     #region General
@@ -43,6 +44,7 @@ public class Particles : MonoBehaviour
     #region Privates
     private float partTimer = 0, timePerPart; // for spawning new particles
     private Vector3 lastPos;
+    private bool initialized = false;
 
     // private Particle[] particles;
     private int curMaxParts = 1;
@@ -57,13 +59,27 @@ public class Particles : MonoBehaviour
 
     void Awake()
     {
-        // mat.enableInstancing = true;
         ShaderSetup();
+        initialized = true;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (!Application.isPlaying && stats.editorDrawMode == EditorDrawMode.FAST)
+        {
+            UnityEditor.EditorApplication.QueuePlayerLoopUpdate();
+            UnityEditor.SceneView.RepaintAll();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!initialized) Awake();
+
+        if (!Application.isPlaying && stats.editorDrawMode == EditorDrawMode.SLOW)
+            UnityEditor.EditorApplication.delayCall += UnityEditor.EditorApplication.QueuePlayerLoopUpdate;
+
         DispatchUpdate();
 
         /* //update maxParts
@@ -81,6 +97,8 @@ public class Particles : MonoBehaviour
 
     void OnRenderObject()
     {
+        if (!initialized) Awake();
+
         // set uniforms
         mat.SetBuffer("_Particles", particlesBuf);
         mat.SetBuffer("_QuadVert", quadVertBuf);
@@ -157,6 +175,7 @@ public class Particles : MonoBehaviour
 
     private void ReleaseBuffers()
     {
+        initialized = false;
         if (particlesBuf != null) particlesBuf.Release();
         if (quadVertBuf != null) quadVertBuf.Release();
         if (counterBuf != null) counterBuf.Release();

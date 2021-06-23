@@ -476,10 +476,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats:
-    alive: 0
-    dead: 0
-    bufferSize: 0
-    groupCount: 0
+    alive: 171233
+    dead: 828767
+    bufferSize: 1000192
+    groupCount: 3907
   properties:
     maxParts: 1000000
     lifetime: 5

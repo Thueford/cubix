@@ -4,6 +4,7 @@ using UnityEngine.Rendering;
 namespace Particles
 {
     public enum Shape { SPHERE, CUBE };
+    public enum EditorDrawMode { OFF, SLOW, FAST };
 
     public struct Particle
     {
@@ -14,6 +15,7 @@ namespace Particles
     [System.Serializable]
     public struct Stats
     {
+        public EditorDrawMode editorDrawMode;
         [ReadOnly]
         public int alive, dead;
         [ReadOnly, HideInInspector] 
