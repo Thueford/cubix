@@ -430,18 +430,18 @@ MonoBehaviour:
     bufferSize: 0
     groupCount: 0
   properties:
-    maxParts: 10000
-    lifetime: 4
-    emissionRate: 2000
+    maxParts: 100000
+    lifetime: 1
+    emissionRate: 90000
     startDelay: 0
   renderSettings:
-    srcBlend: 1
+    srcBlend: 2
     dstBlend: 10
   size:
     val: {x: 0.5, y: 0.5, z: 0}
   pos:
-    offset: {x: 10, y: 10, z: 10}
-    scale: {x: -3, y: -3, z: -3}
+    offset: {x: 10, y: 9, z: 10}
+    scale: {x: -3, y: 0, z: -3}
     shape: 0
   vel:
     offset: {x: 0, y: 0, z: 0}
@@ -452,10 +452,10 @@ MonoBehaviour:
     scale: {x: 0, y: 0, z: 0}
     shape: 0
   posFac:
-    offset: {x: 0, y: 0, z: 0}
+    offset: {x: 1, y: -0.6, z: 0}
     scale: {x: 0, y: 0, z: 0}
     shape: 0
-  color: {r: 1, g: 1, b: 0, a: 1}
+  color: {r: 0.8396226, g: 0.25691152, b: 0.20198467, a: 1}
   assets:
     mat: {fileID: 2100000, guid: 2b107359638558a449200c6c4ee07e3a, type: 2}
     compute: {fileID: 7200000, guid: 9c8f180a7d9416542955f198a3544f54, type: 3}
@@ -625,6 +625,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0681b8991c05fc41afbcf2efbd4f30c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeScale: 4
+  radius: 5
 --- !u!1 &1457025287
 GameObject:
   m_ObjectHideFlags: 0
