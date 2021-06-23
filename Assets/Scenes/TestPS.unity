@@ -476,14 +476,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats:
-    alive: 171233
-    dead: 828767
-    bufferSize: 1000192
-    groupCount: 3907
+    editorDrawMode: 0
+    reset: 0
+    initialized: 1
+    alive: 16
+    dead: 984
+    bufferSize: 1000
+    groupCount: 1000
   properties:
-    maxParts: 1000000
+    maxParts: 1000
     lifetime: 5
-    emissionRate: 190000
+    emissionRate: 50
     startDelay: 0
   renderSettings:
     srcBlend: 1

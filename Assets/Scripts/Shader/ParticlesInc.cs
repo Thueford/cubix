@@ -16,9 +16,12 @@ namespace Particles
     public struct Stats
     {
         public EditorDrawMode editorDrawMode;
+        public bool reset;
+        [HideInInspector]
+        public bool initialized;
         [ReadOnly]
         public int alive, dead;
-        [ReadOnly, HideInInspector] 
+        [HideInInspector] 
         public int bufferSize, groupCount;
     }
 

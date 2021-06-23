@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.Rendering;
+using UnityEditor;
 
 namespace Particles {
 [ExecuteAlways]
@@ -44,7 +44,6 @@ public class Particles : MonoBehaviour
     #region Privates
     private float partTimer = 0, timePerPart; // for spawning new particles
     private Vector3 lastPos;
-    private bool initialized = false;
 
     // private Particle[] particles;
     private int curMaxParts = 1;
@@ -60,33 +59,34 @@ public class Particles : MonoBehaviour
     void Awake()
     {
         ShaderSetup();
-        initialized = true;
+        stats.initialized = true;
     }
 
     private void OnDrawGizmosSelected()
     {
-        if (!Application.isPlaying && stats.editorDrawMode == EditorDrawMode.FAST)
+        if (!Application.isPlaying && stats.editorDrawMode == EditorDrawMode.FAST && !EditorApplication.isPaused)
         {
-            UnityEditor.EditorApplication.QueuePlayerLoopUpdate();
-            UnityEditor.SceneView.RepaintAll();
+            EditorApplication.QueuePlayerLoopUpdate();
+            SceneView.RepaintAll();
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!initialized) Awake();
+        if (!Application.isPlaying && stats.editorDrawMode == EditorDrawMode.SLOW && !EditorApplication.isPaused)
+            EditorApplication.delayCall += EditorApplication.QueuePlayerLoopUpdate;
 
-        if (!Application.isPlaying && stats.editorDrawMode == EditorDrawMode.SLOW)
-            UnityEditor.EditorApplication.delayCall += UnityEditor.EditorApplication.QueuePlayerLoopUpdate;
+        //update maxParts
+        if (curMaxParts != properties.maxParts)
+        {
+            curMaxParts = properties.maxParts;
+            stats.reset = true;
+        }
+        if (stats.reset) ReleaseBuffers();
+        if (!stats.initialized) Awake();
 
         DispatchUpdate();
-
-        /* //update maxParts
-        if (curMaxParts != maxParts) {
-            curMaxParts = maxParts;
-            particles = new Particle[maxParts];
-        } */
 
         // spawn particles
         timePerPart = 1 / properties.emissionRate;
@@ -97,7 +97,7 @@ public class Particles : MonoBehaviour
 
     void OnRenderObject()
     {
-        if (!initialized) Awake();
+        if (!stats.initialized) Awake();
 
         // set uniforms
         mat.SetBuffer("_Particles", particlesBuf);
@@ -126,12 +126,12 @@ public class Particles : MonoBehaviour
         kernelEmit = compute.FindKernel("EmitOne");
         kernelUpdate = compute.FindKernel("Update");
         compute.GetKernelThreadGroupSizes(kernelInit, out uint threads, out _, out _);
-        stats.groupCount = Mathf.CeilToInt((float)properties.maxParts / threads);
+        stats.groupCount = Mathf.CeilToInt((float)curMaxParts / threads);
         stats.bufferSize = stats.groupCount * (int)threads;
 
-        if (properties.maxParts < (1 << 14))
+        if (curMaxParts < (1 << 14))
         {
-            stats.bufferSize = stats.groupCount = properties.maxParts;
+            stats.bufferSize = stats.groupCount = curMaxParts;
             kernelInit = compute.FindKernel("InitOne");
             kernelUpdate = compute.FindKernel("UpdateOne");
         }
@@ -175,7 +175,8 @@ public class Particles : MonoBehaviour
 
     private void ReleaseBuffers()
     {
-        initialized = false;
+        stats.initialized = false;
+        stats.reset = false;
         if (particlesBuf != null) particlesBuf.Release();
         if (quadVertBuf != null) quadVertBuf.Release();
         if (counterBuf != null) counterBuf.Release();
@@ -188,7 +189,7 @@ public class Particles : MonoBehaviour
 
     public int DispatchEmit(int count)
     {
-        count = Mathf.Min(count, 1<<15, properties.maxParts - (stats.bufferSize - stats.dead));
+        count = Mathf.Min(count, 1<<15, curMaxParts - (stats.bufferSize - stats.dead));
         if (count <= 0) return 0;
 
         Vector3 velocity = (transform.position - lastPos) / Time.deltaTime;
@@ -235,7 +236,7 @@ public class Particles : MonoBehaviour
         ComputeBuffer.CopyCount(deadBuf, counterBuf, 0);
         counterBuf.GetData(counterArray);
         stats.dead = counterArray[0];
-        stats.alive = properties.maxParts - stats.dead;
+        stats.alive = curMaxParts - stats.dead;
     }
 
     #endregion
