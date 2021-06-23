@@ -23,35 +23,38 @@ ConsumeStructuredBuffer<uint> _Alive;
 
 
 float3 _ParentPosition;
+float _SizeVel;
 float _DeltaTime;
 
 // limited to 65536 threadgroups
 [numthreads(1, 1, 1)]
 void InitOne(uint3 id : SV_DispatchThreadID)
 {
-    _Particles[id.x].life = 0;
+    _Particles[id.x].size.w = 0;
     _Dead.Append(id.x);
 }
 
 [numthreads(THREADS, 1, 1)]
 void Init(uint3 id : SV_DispatchThreadID)
 {
-    //InitOne(id);
+    _Particles[id.x].size.w = 0;
+    _Dead.Append(id.x);
 }
 
 void DoUpdate(uint3 id)
 {
     Particle p = _Particles[id.x];
-    if (p.life.y == 0) return;
+    if (p.size.w == 0) return;
     
-    if (p.life.x < _DeltaTime)
+    if (p.size.z < _DeltaTime)
     {
         _Dead.Append(id.x);
-        _Particles[id.x].life.y = 0;
+        _Particles[id.x].size.w = 0;
         return;
     }
     
-    p.life.x -= _DeltaTime;
+    p.size.z -= _DeltaTime;
+    p.size.xy += _SizeVel * _DeltaTime;
     p.vel += p.force * _DeltaTime;
     p.pos += p.vel * _DeltaTime;
 
@@ -73,6 +76,8 @@ void Update(uint3 id : SV_DispatchThreadID)
 int _Flags;
 float4 _Seeds;
 float _Lifetime;
+
+float2 _Size;
 
 float3 _PosOffset;
 float3 _PosScale;
@@ -98,11 +103,11 @@ void EmitOne()
     uint id = _Alive.Consume();
     Particle p = _Particles[id];
     c = id + 1;
-
-    p.life = _Lifetime;
+    
+    p.size.xy = _Size;
+    p.size.zw = _Lifetime;
     
     float3 d;
-    float f;
     
     // position
     d = float3(ran(_Seeds.xzy), ran(_Seeds.yxz), ran(_Seeds.zyx));
@@ -123,7 +128,7 @@ void EmitOne()
     p.force = _ForceOffset.xyz + d * _ForceScale.xyz;
     
     p.color = lerp(_Color, 1, rand(_Seeds.xxz));
-    p.color.a = _Color.a;
+    p.color = _Color;
     
     _Particles[id] = p;
 }

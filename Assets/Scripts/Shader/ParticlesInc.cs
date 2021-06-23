@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Particles
 {
@@ -7,14 +8,39 @@ namespace Particles
     public struct Particle
     {
         public Vector3 pos, vel, force;
-        public Color col;
-        public Vector2 life;
+        public Vector4 col, size; // xy: size, zw: life
     }
 
-    public struct Vertex2D
+    [System.Serializable]
+    public struct Stats
     {
-        public Vector2 pos;
-        public Vector2 uv;
+        [ReadOnly]
+        public int alive, dead;
+        [ReadOnly, HideInInspector] 
+        public int bufferSize, groupCount;
+    }
+
+    [System.Serializable]
+    public struct GeneralProps
+    {
+        public int maxParts;
+        public float lifetime;
+
+        public float emissionRate;
+        public float startDelay;
+
+        public static GeneralProps dflt =
+            new GeneralProps((int)1e6, 2, (float)4e5);
+
+        public GeneralProps(
+            int maxParts = 1, float lifetime = 3, 
+            float emissionRate = 5, float startDelay = 0)
+        {
+            this.maxParts = maxParts;
+            this.lifetime = lifetime;
+            this.emissionRate = emissionRate;
+            this.startDelay = startDelay;
+        }
     }
 
     [System.Serializable]
@@ -40,10 +66,33 @@ namespace Particles
     }
 
     [System.Serializable]
-    public struct DynamicEffects
+    public struct Capsule<T>
     {
-        public DynamicEffect pos;
-        public DynamicEffect vel;
-        public DynamicEffect force;
+        public T val;
+        public Capsule(T val) { this.val = val; }
+    }
+
+
+    [System.Serializable]
+    public struct RenderSettigns
+    {
+        // public BlendOp blendOp;
+        public BlendMode srcBlend;
+        public BlendMode dstBlend;
+
+        public static RenderSettigns dflt =
+            new RenderSettigns((BlendMode)1, (BlendMode)10);
+
+        public RenderSettigns(BlendMode srcBlend, BlendMode dstBlend)
+        {
+            this.srcBlend = srcBlend;
+            this.dstBlend = dstBlend;
+        }
+
+        public void Uniform(Material mat)
+        {
+            mat.SetInt("_BlendSrc", (int)srcBlend);
+            mat.SetInt("_BlendDst", (int)dstBlend);
+        }
     }
 }

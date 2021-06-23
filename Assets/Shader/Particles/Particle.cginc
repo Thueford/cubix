@@ -14,8 +14,7 @@
 struct Particle
 {
     float3 pos, vel, force;
-    float4 color;
-    float2 life;
+    float4 color, size;
 };
 
 #endif
