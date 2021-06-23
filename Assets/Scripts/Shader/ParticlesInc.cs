@@ -85,25 +85,57 @@ namespace Particles
     }
 
     [System.Serializable]
-    public struct RenderSettigns
+    public struct RenderSettings
     {
-        // public BlendOp blendOp;
+        public Preset preset;
+        private Preset prev;
+        public BlendOp blendOp;
         public BlendMode srcBlend;
         public BlendMode dstBlend;
 
-        public static RenderSettigns dflt =
-            new RenderSettigns((BlendMode)1, (BlendMode)10);
+        public static RenderSettings
+            Default = new RenderSettings(0, BlendMode.One, BlendMode.OneMinusSrcAlpha),
+            Darken = new RenderSettings(BlendOp.Min, BlendMode.One, BlendMode.One),
+            Lighten = new RenderSettings(BlendOp.Max, BlendMode.One, BlendMode.One),
+            LinearBurn = new RenderSettings(BlendOp.ReverseSubtract, BlendMode.One, BlendMode.One),
+            LinearDodge = new RenderSettings(0, BlendMode.One, BlendMode.One),
+            Multiply = new RenderSettings(0, BlendMode.DstColor, BlendMode.OneMinusSrcAlpha);
 
-        public RenderSettigns(BlendMode srcBlend, BlendMode dstBlend)
+        public enum Preset { Default, Custom, Darken, Lighten, LinearBurn, LinearDodge, Multiply }
+
+        public RenderSettings(BlendOp blendOp, BlendMode srcBlend, BlendMode dstBlend)
         {
+            preset = prev = 0;
+            this.blendOp = blendOp;
             this.srcBlend = srcBlend;
             this.dstBlend = dstBlend;
         }
 
         public void Uniform(Material mat)
         {
+            mat.SetInt("_BlendOp", (int)blendOp);
             mat.SetInt("_BlendSrc", (int)srcBlend);
             mat.SetInt("_BlendDst", (int)dstBlend);
+        }
+
+        public void setPreset()
+        {
+            if (preset == prev) {
+                prev = preset = Preset.Custom;
+                return;
+            }
+
+            Preset p = preset;
+            switch (preset)
+            {
+                case Preset.Default: this = Default; break;
+                case Preset.Darken: this = Darken; break;
+                case Preset.Lighten: this = Lighten; break;
+                case Preset.LinearBurn: this = LinearBurn; break;
+                case Preset.LinearDodge: this = LinearDodge; break;
+                case Preset.Multiply: this = Multiply; break;
+            }
+            preset = prev = p;
         }
     }
 }

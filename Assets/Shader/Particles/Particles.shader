@@ -18,7 +18,7 @@ Shader "Custom/Particles"
                 "RenderType" = "Transparent"
             }
 
-            // Blend Op [_BlendOp]
+            BlendOp [_BlendOp]
             Blend [_BlendSrc] [_BlendDst]
 
             // Cull Back
