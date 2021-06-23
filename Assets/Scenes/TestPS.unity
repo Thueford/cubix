@@ -390,6 +390,89 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &819726962
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 819726964}
+  - component: {fileID: 819726963}
+  m_Layer: 0
+  m_Name: EyeOfDoom
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &819726963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 819726962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcd8c9859cf8d264e906b77119cdc2f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stats:
+    editorDrawMode: 0
+    reset: 0
+    initialized: 0
+    alive: 0
+    dead: 0
+    ppf: 0
+    pps: 0
+    bufferSize: 0
+    groupCount: 0
+  properties:
+    maxParts: 10000
+    lifetime: 4
+    emissionRate: 2000
+    startDelay: 0
+  renderSettings:
+    srcBlend: 1
+    dstBlend: 10
+  size:
+    val: {x: 0.5, y: 0.5, z: 0}
+  pos:
+    offset: {x: 10, y: 10, z: 10}
+    scale: {x: -3, y: -3, z: -3}
+    shape: 0
+  vel:
+    offset: {x: 0, y: 0, z: 0}
+    scale: {x: 0, y: 0, z: 0}
+    shape: 0
+  force:
+    offset: {x: 0, y: 0, z: 0}
+    scale: {x: 0, y: 0, z: 0}
+    shape: 0
+  posFac:
+    offset: {x: 0, y: 0, z: 0}
+    scale: {x: 0, y: 0, z: 0}
+    shape: 0
+  color: {r: 1, g: 1, b: 0, a: 1}
+  assets:
+    mat: {fileID: 2100000, guid: 2b107359638558a449200c6c4ee07e3a, type: 2}
+    compute: {fileID: 7200000, guid: 9c8f180a7d9416542955f198a3544f54, type: 3}
+--- !u!4 &819726964
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 819726962}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1200671576
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,8 +539,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1259161803}
   - component: {fileID: 1259161802}
+  - component: {fileID: 1259161804}
   m_Layer: 0
-  m_Name: Particles
+  m_Name: Tornado
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -478,15 +562,17 @@ MonoBehaviour:
   stats:
     editorDrawMode: 0
     reset: 0
-    initialized: 1
-    alive: 16
-    dead: 984
-    bufferSize: 1000
-    groupCount: 1000
+    initialized: 0
+    alive: 0
+    dead: 0
+    ppf: 0
+    pps: 0
+    bufferSize: 0
+    groupCount: 0
   properties:
-    maxParts: 1000
-    lifetime: 5
-    emissionRate: 50
+    maxParts: 1000000
+    lifetime: 2.5
+    emissionRate: 100000
     startDelay: 0
   renderSettings:
     srcBlend: 1
@@ -505,9 +591,14 @@ MonoBehaviour:
     offset: {x: 0, y: -6, z: 0}
     scale: {x: -0.5, y: 0, z: -0.5}
     shape: 0
-  color: {r: 0.015686274, g: 0.4311255, b: 1, a: 1}
-  mat: {fileID: 2100000, guid: 2b107359638558a449200c6c4ee07e3a, type: 2}
-  compute: {fileID: 7200000, guid: 9c8f180a7d9416542955f198a3544f54, type: 3}
+  posFac:
+    offset: {x: 0, y: 0, z: 0}
+    scale: {x: 0, y: 0, z: 0}
+    shape: 0
+  color: {r: 0.4506942, g: 0.45159626, b: 0.4528302, a: 1}
+  assets:
+    mat: {fileID: 2100000, guid: 2b107359638558a449200c6c4ee07e3a, type: 2}
+    compute: {fileID: 7200000, guid: 9c8f180a7d9416542955f198a3544f54, type: 3}
 --- !u!4 &1259161803
 Transform:
   m_ObjectHideFlags: 0
@@ -522,6 +613,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1259161804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1259161801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0681b8991c05fc41afbcf2efbd4f30c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1457025287
 GameObject:
   m_ObjectHideFlags: 0

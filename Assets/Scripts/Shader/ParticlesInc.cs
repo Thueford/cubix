@@ -20,7 +20,7 @@ namespace Particles
         [HideInInspector]
         public bool initialized;
         [ReadOnly]
-        public int alive, dead;
+        public int alive, dead, ppf, pps;
         [HideInInspector] 
         public int bufferSize, groupCount;
     }
@@ -71,12 +71,18 @@ namespace Particles
     }
 
     [System.Serializable]
+    public struct Assets
+    {
+        [NotNull] public Material mat;
+        [NotNull] public ComputeShader compute;
+    }
+
+    [System.Serializable]
     public struct Capsule<T>
     {
         public T val;
         public Capsule(T val) { this.val = val; }
     }
-
 
     [System.Serializable]
     public struct RenderSettigns

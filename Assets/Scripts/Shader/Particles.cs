@@ -20,7 +20,8 @@ public class Particles : MonoBehaviour
     public DynamicEffect pos;
     public DynamicEffect vel;
     public DynamicEffect force;
-    
+    public DynamicEffect posFac;
+
     [Header("Other")]
     //public Vector2 size = new Vector2(0.2f, 0.2f);
     public Color color = Color.yellow;
@@ -45,12 +46,8 @@ public class Particles : MonoBehaviour
     private float partTimer = 0, timePerPart; // for spawning new particles
     private Vector3 lastPos;
 
-    // private Particle[] particles;
     private int curMaxParts = 1;
     private Vector2[] meshVerts;
-
-    [NotNull] public Material mat;
-    // [NotNull] public Mesh mesh;
 
     #endregion
 
@@ -59,27 +56,30 @@ public class Particles : MonoBehaviour
     void Awake()
     {
         ShaderSetup();
-        stats.initialized = true;
     }
 
     private void OnDrawGizmosSelected()
     {
-        if (!Application.isPlaying && stats.editorDrawMode == EditorDrawMode.FAST && !EditorApplication.isPaused)
-        {
+        if (isEditorPaused()) { ReleaseBuffers(); return; }
+        if (isEditorPlaying(EditorDrawMode.FAST)) {
             EditorApplication.QueuePlayerLoopUpdate();
             SceneView.RepaintAll();
         }
     }
 
+    private bool isEditorPlaying(EditorDrawMode edm) { return isEditorPlaying() && stats.editorDrawMode == edm; }
+    private bool isEditorPlaying() { return !Application.isPlaying && !EditorApplication.isPaused; }
+    private bool isEditorPaused() { return !Application.isPlaying && (EditorApplication.isPaused || stats.editorDrawMode == 0); }
+
     // Update is called once per frame
     void Update()
     {
-        if (!Application.isPlaying && stats.editorDrawMode == EditorDrawMode.SLOW && !EditorApplication.isPaused)
+        if (isEditorPlaying(EditorDrawMode.SLOW))
             EditorApplication.delayCall += EditorApplication.QueuePlayerLoopUpdate;
+        if (isEditorPaused()) return;
 
         //update maxParts
-        if (curMaxParts != properties.maxParts)
-        {
+        if (curMaxParts != properties.maxParts) {
             curMaxParts = properties.maxParts;
             stats.reset = true;
         }
@@ -97,23 +97,24 @@ public class Particles : MonoBehaviour
 
     void OnRenderObject()
     {
+        if (isEditorPaused()) return;
         if (!stats.initialized) Awake();
 
         // set uniforms
-        mat.SetBuffer("_Particles", particlesBuf);
-        mat.SetBuffer("_QuadVert", quadVertBuf);
-        renderSettings.Uniform(mat);
+        assets.mat.SetBuffer("_Particles", particlesBuf);
+        assets.mat.SetBuffer("_QuadVert", quadVertBuf);
+        renderSettings.Uniform(assets.mat);
 
-        // mat.SetFloat("_Time", Time.time);
-        mat.SetPass(0);
+        // assets.mat.SetFloat("_Time", Time.time);
+        assets.mat.SetPass(0);
 
         Graphics.DrawProceduralNow(MeshTopology.Triangles, meshVerts.Length, deadBuf.count);
     }
+
     #endregion
 
     #region Shader
-
-    public ComputeShader compute;
+    public Assets assets;
     private ComputeBuffer particlesBuf, deadBuf;
     private ComputeBuffer counterBuf, quadVertBuf;
 
@@ -122,18 +123,20 @@ public class Particles : MonoBehaviour
     #region Shader Setup
     private void ShaderSetup()
     {
-        kernelInit = compute.FindKernel("Init");
-        kernelEmit = compute.FindKernel("EmitOne");
-        kernelUpdate = compute.FindKernel("Update");
-        compute.GetKernelThreadGroupSizes(kernelInit, out uint threads, out _, out _);
+        kernelInit = assets.compute.FindKernel("Init");
+        kernelEmit = assets.compute.FindKernel("EmitOne");
+        kernelUpdate = assets.compute.FindKernel("Update");
+        assets.compute.GetKernelThreadGroupSizes(kernelInit, out uint threads, out _, out _);
+
+        curMaxParts = properties.maxParts;
         stats.groupCount = Mathf.CeilToInt((float)curMaxParts / threads);
         stats.bufferSize = stats.groupCount * (int)threads;
 
         if (curMaxParts < (1 << 14))
         {
             stats.bufferSize = stats.groupCount = curMaxParts;
-            kernelInit = compute.FindKernel("InitOne");
-            kernelUpdate = compute.FindKernel("UpdateOne");
+            kernelInit = assets.compute.FindKernel("InitOne");
+            kernelUpdate = assets.compute.FindKernel("UpdateOne");
         }
 
         meshVerts = new[] {
@@ -147,12 +150,12 @@ public class Particles : MonoBehaviour
 
         InitializePartBuffer();
         DispatchInit();
+
+        stats.initialized = true;
     }
 
     private void InitializePartBuffer()
     {
-        ReleaseBuffers();
-
         particlesBuf = new ComputeBuffer(stats.bufferSize, Marshal.SizeOf<Particle>());
 
         deadBuf = new ComputeBuffer(stats.bufferSize, sizeof(int), ComputeBufferType.Append);
@@ -168,15 +171,18 @@ public class Particles : MonoBehaviour
 
     private void DispatchInit()
     {
-        compute.SetBuffer(kernelInit, "_Particles", particlesBuf);
-        compute.SetBuffer(kernelInit, "_Dead", deadBuf);
-        compute.Dispatch(kernelInit, stats.groupCount, 1, 1);
+        assets.compute.SetBuffer(kernelInit, "_Particles", particlesBuf);
+        assets.compute.SetBuffer(kernelInit, "_Dead", deadBuf);
+        assets.compute.Dispatch(kernelInit, stats.groupCount, 1, 1);
     }
 
     private void ReleaseBuffers()
     {
-        stats.initialized = false;
-        stats.reset = false;
+        if (!stats.initialized) return;
+        EditorDrawMode edm = stats.editorDrawMode;
+        stats = new Stats();
+        stats.editorDrawMode = edm;
+
         if (particlesBuf != null) particlesBuf.Release();
         if (quadVertBuf != null) quadVertBuf.Release();
         if (counterBuf != null) counterBuf.Release();
@@ -190,37 +196,42 @@ public class Particles : MonoBehaviour
     public int DispatchEmit(int count)
     {
         count = Mathf.Min(count, 1<<15, curMaxParts - (stats.bufferSize - stats.dead));
+        stats.ppf = count;
+        stats.pps = Mathf.RoundToInt(count / Time.deltaTime);
         if (count <= 0) return 0;
 
         Vector3 velocity = (transform.position - lastPos) / Time.deltaTime;
         lastPos = transform.position;
 
-        compute.SetBuffer(kernelEmit, "_Particles", particlesBuf);
-        compute.SetBuffer(kernelEmit, "_Alive", deadBuf);
+        assets.compute.SetBuffer(kernelEmit, "_Particles", particlesBuf);
+        assets.compute.SetBuffer(kernelEmit, "_Alive", deadBuf);
 
-        compute.SetInt("_Flags", GetFlags());
-        compute.SetVector("_Seeds", new Vector4(Random.value, Random.value, Random.value, Random.value));
-        compute.SetFloat("_Lifetime", properties.lifetime);
+        assets.compute.SetInt("_Flags", GetFlags());
+        assets.compute.SetVector("_PosParent", transform.position);
+        assets.compute.SetVector("_SpdParent", velocity);
+        assets.compute.SetVector("_Seeds", new Vector4(Random.value, Random.value, Random.value, Random.value));
+        assets.compute.SetFloat("_Lifetime", properties.lifetime);
 
-        pos.Uniform(compute, "_Pos");
-        vel.Uniform(compute, "_Spd");
-        force.Uniform(compute, "_Force");
+        pos.Uniform(assets.compute, "_Pos");
+        vel.Uniform(assets.compute, "_Spd");
+        force.Uniform(assets.compute, "_Force");
+        posFac.Uniform(assets.compute, "_PosFac");
 
-        compute.SetVector("_Size", size.val);
-        compute.SetVector("_Color", color);
+        assets.compute.SetVector("_Size", size.val);
+        assets.compute.SetVector("_Color", color);
 
-        compute.Dispatch(kernelEmit, count, 1, 1);
+        assets.compute.Dispatch(kernelEmit, count, 1, 1);
         return count;
     }
 
     private void DispatchUpdate()
     {
-        compute.SetFloat("_SizeVel", size.val.z);
-        compute.SetFloat("_DeltaTime", Time.deltaTime);
-        compute.SetBuffer(kernelUpdate, "_Particles", particlesBuf);
-        compute.SetBuffer(kernelUpdate, "_Dead", deadBuf);
+        assets.compute.SetFloat("_SizeVel", size.val.z);
+        assets.compute.SetFloat("_DeltaTime", Time.deltaTime);
+        assets.compute.SetBuffer(kernelUpdate, "_Particles", particlesBuf);
+        assets.compute.SetBuffer(kernelUpdate, "_Dead", deadBuf);
 
-        compute.Dispatch(kernelUpdate, stats.groupCount, 1, 1);
+        assets.compute.Dispatch(kernelUpdate, stats.groupCount, 1, 1);
         ReadDeadCount();
     }
 
@@ -247,6 +258,7 @@ public class Particles : MonoBehaviour
     private void OnDestroy() {
         ReleaseBuffers();
     }
+
     #endregion
 }
 }
