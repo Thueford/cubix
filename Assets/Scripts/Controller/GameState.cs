@@ -160,6 +160,11 @@ public class GameState : MonoBehaviour
         stateCurStage = SaveState();
     }
 
+    public static Color getLightColor(Color color)
+    {
+        return color == black ? glow : color;
+    }
+
     public static void addRed()
     {
         if (unlockedColors.x != 1)

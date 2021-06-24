@@ -66,5 +66,15 @@ public abstract class EnemyBase : CtxSteer
     {
         base.Die();
         EnemySpawner.EnemyDied();
+
+        if (rgb.x == 1) Ressource.self.addRes(Ressource.col.Red, 10);
+        if (rgb.y == 1) Ressource.self.addRes(Ressource.col.Green, 10);
+        if (rgb.z == 1) Ressource.self.addRes(Ressource.col.Blue, 10);
+    }
+
+    public override void OnDie(AnimationEvent ev)
+    {
+        base.OnDie(ev);
+        Destroy(gameObject);
     }
 }

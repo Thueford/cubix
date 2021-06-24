@@ -13,6 +13,7 @@ public class Player : EntityBase
     [Header("Other Settings")]
     [WarnNull] public Text txtDbg;
     public PlayerShooter bs;
+    public Particles.Particles ps;
 
     private float invulnurable = 0;
 
@@ -21,6 +22,7 @@ public class Player : EntityBase
         base.Awake();
         self = this;
         bs = GetComponent<PlayerShooter>();
+        ps = GetComponentInChildren<Particles.Particles>();
     }
 
     // Start is called before the first frame update
@@ -57,6 +59,8 @@ public class Player : EntityBase
             rb.AddForce(dir*Time.deltaTime*1000, ForceMode.Acceleration);
             if(rb.velocity.magnitude > maxSpeed)
                 rb.velocity = rb.velocity.normalized * maxSpeed;
+
+            ps.properties.emissionRate = ps.properties.maxParts * Mathf.Pow(Mathf.Clamp(rb.velocity.magnitude / maxSpeed, 0, 0.9f), 3);
 
             // look in movement direction
             Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -138,12 +142,6 @@ public class Player : EntityBase
         base.OnSpawn(ev);
         Debug.Log("Player Spawn");
         GameState.curStage.MeltActors();
-    }
-
-    public override void OnDie(AnimationEvent ev)
-    {
-        base.OnDie(ev);
-        Destroy(gameObject);
     }
 
     public override void Die()

@@ -80,7 +80,7 @@ public class Bullet : MonoBehaviour
     private void setColor(Color color)
     {
         GetComponent<Renderer>().material.color = color;
-        GetComponent<Light>().color = color == GameState.black ? GameState.glow : color;
+        GetComponent<Light>().color = GameState.getLightColor(color);
     }
 
     public void launch(Vector3 dir)

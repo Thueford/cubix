@@ -5,28 +5,26 @@ using UnityEngine;
 public class Explosion : MonoBehaviour
 {
     [NotNull] public SphereCollider sc;
-    [NotNull] public Light light;
+    [NotNull] public Particles.Particles ps;
     private float lifespan = 0.1f, age = 0, damage = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        Invoke("StopExplosion", 0.6f);
+        Invoke("StopCollision", lifespan);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        age += Time.deltaTime;
-        if (age > lifespan) Destroy(gameObject);
-    }
+    void StopExplosion() { Destroy(gameObject); }
+    void StopCollision() { sc.enabled = false; }
 
     public void SetProperties(Bullet.Properties p)
     {
         gameObject.layer = p.owner == "Player" ? 16 : 15;
         tag = tag = p.owner + "Bullet";
         sc.radius = p.explosionRadius;
-        light.range = p.explosionRadius*2;
+        ps.vel.scale = 2 * ps.vel.scale.normalized * p.explosionRadius / ps.properties.lifetime;
+        // light.range = p.explosionRadius*2;
         damage = p.damage;
     }
 
