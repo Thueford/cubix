@@ -100,7 +100,7 @@ namespace Particles {
             }
 
             // spawn particles
-            if (properties.emissionRate > 1e-2)
+            if (properties.enabled && properties.emissionRate > 1e-2)
             {
                 timePerPart = 1 / properties.emissionRate;
                 if (partTimer == 0) partTimer = -10*Time.deltaTime;
@@ -134,6 +134,17 @@ namespace Particles {
         public float velocityFactor = 0;
         //public Vector3 posOffset;
         //public Quaternion rotation;
+
+        public void Play()
+        {
+            properties.enabled = true;
+        }
+
+        public void Stop()
+        {
+            properties.enabled = false;
+        }
+
         #endregion
 
         #region Shader

@@ -1,5 +1,125 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &7030370300776529098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3864911399004993224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcd8c9859cf8d264e906b77119cdc2f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stats:
+    editorDrawMode: 0
+    reset: 0
+    initialized: 0
+    alive: 0
+    dead: 0
+    emitted: 0
+    ppf: 0
+    pps: 0
+    bufferSize: 0
+    groupCount: 0
+  properties:
+    repeat: 1
+    maxParts: 50
+    lifetime: 2
+    emissionRate: 20
+    startDelay: 0
+  renderSettings:
+    preset: 1
+    blendOp: 0
+    srcBlend: 1
+    dstBlend: 10
+  size:
+    val: {x: 0.3, y: 0.3, z: -0.1}
+  pos:
+    offset: {x: 0.8, y: 0, z: 0.8}
+    scale: {x: 0, y: 0, z: 0}
+    shape: 0
+  vel:
+    offset: {x: 0, y: 0.8, z: 0}
+    scale: {x: 0, y: 0, z: 0}
+    shape: 0
+  force:
+    offset: {x: 0, y: 0, z: 0}
+    scale: {x: 0, y: 0, z: 0}
+    shape: 0
+  posFac:
+    offset: {x: 0.6, y: 0, z: 0.6}
+    scale: {x: 0, y: 0, z: 0}
+    shape: 0
+  color:
+    color: {r: 0.2216981, g: 1, b: 0.2216981, a: 1}
+    color2: {r: 0.8915094, g: 1, b: 0.8915094, a: 1}
+    useVariation: 1
+    useGradient: 0
+    steps: 16
+    gradient:
+      serializedVersion: 2
+      key0: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 1, g: 1, b: 1, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+    gradient2:
+      serializedVersion: 2
+      key0: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 1, g: 1, b: 1, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
+  velocityFactor: 0
+  tex: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
+  mat: {fileID: 2100000, guid: 2b107359638558a449200c6c4ee07e3a, type: 2}
+  compute: {fileID: 7200000, guid: 9c8f180a7d9416542955f198a3544f54, type: 3}
 --- !u!1001 &1108464135107586395
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -34,6 +154,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c070ac4a26db4ce479bbf3c9929b5d88, type: 3}
+--- !u!1 &3864911399004993224 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4233632357213921171, guid: c070ac4a26db4ce479bbf3c9929b5d88,
+    type: 3}
+  m_PrefabInstance: {fileID: 1108464135107586395}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3864911399004993232 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4233632357213921163, guid: c070ac4a26db4ce479bbf3c9929b5d88,
@@ -121,6 +247,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PS_Cont
+      objectReference: {fileID: 0}
+    - target: {fileID: 8579378822483621015, guid: 1b3a92465fc9e004f93b66924ee84c54,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b3a92465fc9e004f93b66924ee84c54, type: 3}

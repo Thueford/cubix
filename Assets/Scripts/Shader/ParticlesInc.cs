@@ -30,6 +30,7 @@ namespace Particles
     [System.Serializable]
     public struct GeneralProps
     {
+        public bool enabled;
         public bool repeat;
         public int maxParts;
         public float lifetime;
@@ -44,6 +45,7 @@ namespace Particles
             int maxParts = 1, float lifetime = 3, 
             float emissionRate = 5, float startDelay = 0)
         {
+            enabled = true;
             repeat = true;
             this.maxParts = maxParts;
             this.lifetime = lifetime;
