@@ -36,6 +36,7 @@ namespace Particles {
                 F(vel.shape == Shape.SPHERE, 1) +
                 F(force.shape == Shape.SPHERE, 2) +
                 F(color.useGradient, 3) +
+                F(color.useVariation, 4) +
                 0;
         }
         #endregion
@@ -174,7 +175,6 @@ namespace Particles {
 
         private void InitializePartBuffer()
         {
-            Debug.Log("Init Buffers");
             particlesBuf = new ComputeBuffer(stats.bufferSize, Marshal.SizeOf<Particle>());
 
             deadBuf = new ComputeBuffer(stats.bufferSize, sizeof(int), ComputeBufferType.Append);
@@ -237,7 +237,7 @@ namespace Particles {
             posFac.Uniform(compute, "_PosFac");
 
             compute.SetVector("_Size", size.val);
-            compute.SetVector("_Color", color.color);
+            color.UniformEmit(compute, "_Color");
 
             compute.Dispatch(kernelEmit, count, 1, 1);
             return count;

@@ -11,6 +11,7 @@ namespace Particles
     {
         public Vector3 pos, vel, force;
         public Vector4 col, size; // xy: size, zw: life
+        public float seed;
     }
 
     [System.Serializable]
@@ -82,31 +83,37 @@ namespace Particles
     public struct Colors
     {
         public static Colors dflt = new Colors(Color.white);
-        public Color color;
+        public Color color, color2;
+        public bool useVariation;
         public bool useGradient;
         [Range(2, 256)]
         public int steps;
-        public Gradient gradient;
+        public Gradient gradient, gradient2;
+        private static Texture2D dfltTex;
 
-        public Colors(Color color)
+        public Colors(Color clr)
         {
+            useVariation = false;
             useGradient = false;
-            this.color = color;
+            color = color2 = clr;
             steps = 16;
-            gradient = null;
+            gradient = gradient2 = null;
             tex = null;
         }
 
         private Texture2D tex;
         private Texture2D getTexture()
         {
-            if (tex == null || tex.width != steps)
-                tex = new Texture2D(steps, 1);
+            int height = useVariation ? 2 : 1;
+            if (tex == null || tex.height != height || tex.width != steps)
+                tex = new Texture2D(steps, height);
 
             if (gradient != null)
             {
-                for (int i = 0; i < steps; i++)
+                for (int i = 0; i < steps; i++) {
                     tex.SetPixel(i, 0, gradient.Evaluate(i / (float)steps));
+                    if(useVariation) tex.SetPixel(i, 1, gradient2.Evaluate(i / (float)steps));
+                }
                 tex.Apply();
             }
             else Debug.LogWarning("Colors.gradient is null");
@@ -116,9 +123,16 @@ namespace Particles
 
         public void Uniform(ComputeShader compute, int kernel, string name)
         {
-            if (!useGradient) return;
-            compute.SetFloat(name + "Steps", steps);
-            compute.SetTexture(kernel, name + "Grad", getTexture());
+            // if (!useGradient) return;
+            if (dfltTex == null) dfltTex = new Texture2D(0, 0);
+            compute.SetFloat(name + "Steps", useGradient ? steps : 0);
+            compute.SetTexture(kernel, name + "Grad", useGradient ? getTexture() : dfltTex);
+        }
+
+        public void UniformEmit(ComputeShader compute, string name)
+        {
+            compute.SetVector(name, color);
+            if(useVariation) compute.SetVector(name + "2", color2);
         }
     }
 

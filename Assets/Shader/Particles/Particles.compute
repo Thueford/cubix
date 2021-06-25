@@ -31,9 +31,16 @@ float _ColorSteps;
 
 #define getAge(life) (1 - life.x / life.y)
 
-float4 getLifeColor(float2 life)
-{ 
-    return _ColorGrad.Load(int3(round(_ColorSteps * getAge(life)), 0, 0));
+float4 getLifeColor(float2 life, float seed)
+{
+    float4 color, color2;
+    color = _ColorGrad.Load(int3(round(_ColorSteps * getAge(life)), 0, 0));
+    if (F(P_CLRVARY))
+    {
+        color2 = _ColorGrad.Load(int3(round(_ColorSteps * getAge(life)), 1, 0));
+        color = lerp(color, color2, seed);
+    }
+    return color;
 }
 
 void DoUpdate(uint3 id)
@@ -52,7 +59,7 @@ void DoUpdate(uint3 id)
     p.size.xy += _SizeVel * _DeltaTime;
     p.vel += p.force * _DeltaTime;
     p.pos += p.vel * _DeltaTime;
-    if (F(P_CLRGRAD)) p.color = getLifeColor(p.size.zw);
+    if (F(P_CLRGRAD)) p.color = getLifeColor(p.size.zw, p.seed);
 
     _Particles[id.x] = p;
 }
@@ -90,7 +97,7 @@ float3 _ForceScale;
 float3 _PosFacOffset;
 float3 _PosFacScale;
 
-float4 _Color;
+float4 _Color, _Color2;
 
 float3 sqrNormalize(float3 v) {
     float3 av = abs(v);
@@ -106,6 +113,7 @@ void EmitOne()
     
     p.size.xy = _Size;
     p.size.zw = _Lifetime;
+    p.seed = rand(_Seeds.wzy);
     
     float3 d;
     
@@ -132,9 +140,8 @@ void EmitOne()
     
     p.pos += _PosParent;
     p.vel += _SpdParent;
-    p.color = lerp(_Color, 1, rand(_Seeds.xxz));
-    p.color = _Color;
-    
+    p.color = F(P_CLRVARY) ? lerp(_Color, _Color2, p.seed) : _Color;
+        
     _Particles[id] = p;
 }
 
