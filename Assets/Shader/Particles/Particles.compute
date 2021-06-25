@@ -35,8 +35,7 @@ float4 getLifeColor(float2 life, float seed)
 {
     float4 color, color2;
     color = _ColorGrad.Load(int3(round(_ColorSteps * getAge(life)), 0, 0));
-    if (F(P_CLRVARY))
-    {
+    if (F(P_CLRVARY)) {
         color2 = _ColorGrad.Load(int3(round(_ColorSteps * getAge(life)), 1, 0));
         color = lerp(color, color2, seed);
     }
@@ -48,8 +47,7 @@ void DoUpdate(uint3 id)
     Particle p = _Particles[id.x];
     if (p.size.w == 0) return;
     
-    if (p.size.z < _DeltaTime)
-    {
+    if (p.size.z < _DeltaTime) {
         _Dead.Append(id.x);
         _Particles[id.x].size.w = 0;
         return;
@@ -82,7 +80,6 @@ float _Lifetime;
 
 float2 _Size;
 
-// float4x4 _Rotation;
 float3 _PosParent;
 float3 _PosOffset;
 float3 _PosScale;

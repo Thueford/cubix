@@ -4,6 +4,7 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
+  - tex: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
   - mat: {fileID: 2100000, guid: 2b107359638558a449200c6c4ee07e3a, type: 2}
   - compute: {fileID: 7200000, guid: 9c8f180a7d9416542955f198a3544f54, type: 3}
   executionOrder: 0

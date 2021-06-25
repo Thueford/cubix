@@ -60,7 +60,8 @@ public class Player : EntityBase
             if(rb.velocity.magnitude > maxSpeed)
                 rb.velocity = rb.velocity.normalized * maxSpeed;
 
-            ps.properties.emissionRate = ps.properties.maxParts * Mathf.Pow(Mathf.Clamp(rb.velocity.magnitude / maxSpeed, 0, 0.9f), 3);
+            float pvel = Mathf.Clamp(rb.velocity.magnitude / maxSpeed, 1e-2f, 0.96f);
+            ps.properties.emissionRate = ps.properties.maxParts * Mathf.Pow(pvel, 3);
 
             // look in movement direction
             Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);

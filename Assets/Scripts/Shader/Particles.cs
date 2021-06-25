@@ -49,6 +49,7 @@ namespace Particles {
 
         private int curMaxParts = 1;
         private Vector2[] meshVerts;
+        private bool hasEmitted;
 
         #endregion
 
@@ -92,8 +93,15 @@ namespace Particles {
 
             DispatchUpdate();
 
+            /* if (Application.isPlaying && !hasEmitted && !properties.repeat && stats.emitted >= curMaxParts && stats.alive == 0)
+            {
+                Debug.Log(stats.emitted + " " + stats.alive + " " + curMaxParts);
+                Destroy(this);
+            } */
+
             // spawn particles
-            if(properties.emissionRate > 1e-2)
+            hasEmitted = false;
+            if (properties.emissionRate > 1e-2)
             {
                 timePerPart = 1 / properties.emissionRate;
                 if (partTimer == 0) partTimer = -10*Time.deltaTime;
@@ -214,10 +222,16 @@ namespace Particles {
 
         public int DispatchEmit(int count)
         {
-            count = Mathf.Min(count, 1<<15, curMaxParts - (stats.bufferSize - stats.dead));
+            count = Mathf.Min(count, 1<<15, curMaxParts - stats.alive);
+            if (!properties.repeat && stats.emitted + count > properties.maxParts)
+                count = properties.maxParts - stats.emitted;
+
             stats.ppf = count;
             stats.pps = Mathf.RoundToInt(count / Time.deltaTime);
             if (count <= 0) return 0;
+
+            stats.emitted += count;
+            hasEmitted = true;
 
             Vector3 velocity = (transform.position - lastPos); // / Time.deltaTime;
             lastPos = transform.position;

@@ -1915,31 +1915,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 264834383789653468, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
-        type: 3}
-      propertyPath: stats.ppf
-      value: -2147483648
-      objectReference: {fileID: 0}
-    - target: {fileID: 264834383789653468, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
-        type: 3}
-      propertyPath: stats.pps
-      value: -2147483648
-      objectReference: {fileID: 0}
-    - target: {fileID: 264834383789653468, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
-        type: 3}
-      propertyPath: stats.dead
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 264834383789653468, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
-        type: 3}
-      propertyPath: stats.alive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 264834383789653468, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
-        type: 3}
-      propertyPath: properties.emissionRate
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1432198949064338186, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
         type: 3}
       propertyPath: m_Enabled

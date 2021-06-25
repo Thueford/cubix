@@ -22,7 +22,7 @@ namespace Particles
         [HideInInspector]
         public bool initialized;
         [ReadOnly]
-        public int alive, dead, ppf, pps;
+        public int alive, dead, emitted, ppf, pps;
         [HideInInspector] 
         public int bufferSize, groupCount;
     }
@@ -30,6 +30,7 @@ namespace Particles
     [System.Serializable]
     public struct GeneralProps
     {
+        public bool repeat;
         public int maxParts;
         public float lifetime;
 
@@ -43,6 +44,7 @@ namespace Particles
             int maxParts = 1, float lifetime = 3, 
             float emissionRate = 5, float startDelay = 0)
         {
+            repeat = true;
             this.maxParts = maxParts;
             this.lifetime = lifetime;
             this.emissionRate = emissionRate;
