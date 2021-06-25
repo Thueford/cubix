@@ -9,7 +9,9 @@
 #define P_POSSHP B(0)
 #define P_SPDSHP B(1)
 #define P_FORCESHP B(2)
+#define P_CLRGRAD B(3)
 
+#define F(X) (_Flags & X)
 
 struct Particle
 {

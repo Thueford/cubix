@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -35,7 +36,7 @@ namespace Particles
         public float startDelay;
 
         public static GeneralProps dflt =
-            new GeneralProps((int)1e6, 2, (float)4e5);
+            new GeneralProps((int)1e3, 2, (float)4e2);
 
         public GeneralProps(
             int maxParts = 1, float lifetime = 3, 
@@ -75,6 +76,50 @@ namespace Particles
     {
         [NotNull] public Material mat;
         [NotNull] public ComputeShader compute;
+    }
+
+    [System.Serializable]
+    public struct Colors
+    {
+        public static Colors dflt = new Colors(Color.white);
+        public Color color;
+        public bool useGradient;
+        [Range(2, 256)]
+        public int steps;
+        public Gradient gradient;
+
+        public Colors(Color color)
+        {
+            useGradient = false;
+            this.color = color;
+            steps = 16;
+            gradient = null;
+            tex = null;
+        }
+
+        private Texture2D tex;
+        private Texture2D getTexture()
+        {
+            if (tex == null || tex.width != steps)
+                tex = new Texture2D(steps, 1);
+
+            if (gradient != null)
+            {
+                for (int i = 0; i < steps; i++)
+                    tex.SetPixel(i, 0, gradient.Evaluate(i / (float)steps));
+                tex.Apply();
+            }
+            else Debug.LogWarning("Colors.gradient is null");
+
+            return tex;
+        }
+
+        public void Uniform(ComputeShader compute, int kernel, string name)
+        {
+            if (!useGradient) return;
+            compute.SetFloat(name + "Steps", steps);
+            compute.SetTexture(kernel, name + "Grad", getTexture());
+        }
     }
 
     [System.Serializable]

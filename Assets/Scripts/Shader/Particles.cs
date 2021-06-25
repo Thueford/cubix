@@ -23,12 +23,11 @@ namespace Particles {
         public DynamicEffect posFac;
 
         [Header("Other")]
-        //public Vector2 size = new Vector2(0.2f, 0.2f);
-        public Color color = Color.yellow;
+        public Colors color = Colors.dflt;
 
         #region Flags
-        private static int F(bool v, int p) { return v ? 1 << p : 0; }
-        private static int F(int v, int p) { return v * 1 << p; }
+        private static int F(bool v, int p) => v ? 1 << p : 0;
+        private static int F(int v, int p) => v * 1 << p;
 
         int GetFlags()
         {
@@ -36,6 +35,7 @@ namespace Particles {
                 F(pos.shape == Shape.SPHERE, 0) +
                 F(vel.shape == Shape.SPHERE, 1) +
                 F(force.shape == Shape.SPHERE, 2) +
+                F(color.useGradient, 3) +
                 0;
         }
         #endregion
@@ -174,6 +174,7 @@ namespace Particles {
 
         private void InitializePartBuffer()
         {
+            Debug.Log("Init Buffers");
             particlesBuf = new ComputeBuffer(stats.bufferSize, Marshal.SizeOf<Particle>());
 
             deadBuf = new ComputeBuffer(stats.bufferSize, sizeof(int), ComputeBufferType.Append);
@@ -224,7 +225,6 @@ namespace Particles {
             compute.SetBuffer(kernelEmit, "_Particles", particlesBuf);
             compute.SetBuffer(kernelEmit, "_Alive", deadBuf);
 
-            compute.SetInt("_Flags", GetFlags());
             compute.SetVector("_PosParent", transform.position); // + posOffset
             // compute.SetMatrix("_Rotation", Matrix4x4.Rotate(rotation));
             compute.SetVector("_SpdParent", velocityFactor * velocity);
@@ -237,7 +237,7 @@ namespace Particles {
             posFac.Uniform(compute, "_PosFac");
 
             compute.SetVector("_Size", size.val);
-            compute.SetVector("_Color", color);
+            compute.SetVector("_Color", color.color);
 
             compute.Dispatch(kernelEmit, count, 1, 1);
             return count;
@@ -247,10 +247,12 @@ namespace Particles {
         {
             if (!stats.initialized || particlesBuf == null) Awake();
 
+            compute.SetInt("_Flags", GetFlags());
             compute.SetFloat("_SizeVel", size.val.z);
             compute.SetFloat("_DeltaTime", Time.deltaTime);
             compute.SetBuffer(kernelUpdate, "_Particles", particlesBuf);
             compute.SetBuffer(kernelUpdate, "_Dead", deadBuf);
+            color.Uniform(compute, kernelUpdate, "_Color");
 
             compute.Dispatch(kernelUpdate, stats.groupCount, 1, 1);
             ReadDeadCount();
