@@ -12,7 +12,7 @@ namespace Particles {
         [Header("General")]
         public Stats stats;
         public GeneralProps properties = GeneralProps.dflt;
-        public RenderSettings renderSettings;
+        public RenderSettings renderSettings = RenderSettings.Default;
 
         [Header("Emission")]
         [Tooltip("xy: offset, z: timefac")]
@@ -49,7 +49,6 @@ namespace Particles {
 
         private int curMaxParts = 1;
         private Vector2[] meshVerts;
-        private bool hasEmitted;
 
         #endregion
 
@@ -58,6 +57,7 @@ namespace Particles {
         void Awake()
         {
             if (tex == null && mat.mainTexture != null) tex = mat.mainTexture;
+            stats = new Stats();
             ShaderSetup();
         }
 
@@ -68,7 +68,7 @@ namespace Particles {
             //update maxParts
             if (curMaxParts != properties.maxParts) {
                 curMaxParts = properties.maxParts;
-                ReleaseBuffers(); Awake();
+                ReleaseBuffers(); ShaderSetup();
             }
 
             if (stats.reset) ReleaseBuffers();
@@ -93,14 +93,13 @@ namespace Particles {
 
             DispatchUpdate();
 
-            /* if (Application.isPlaying && !hasEmitted && !properties.repeat && stats.emitted >= curMaxParts && stats.alive == 0)
+            if (Application.isPlaying && !properties.repeat && stats.emitted >= curMaxParts && stats.alive == 0)
             {
-                Debug.Log(stats.emitted + " " + stats.alive + " " + curMaxParts);
-                Destroy(this);
-            } */
+                Destroy(gameObject);
+                return;
+            }
 
             // spawn particles
-            hasEmitted = false;
             if (properties.emissionRate > 1e-2)
             {
                 timePerPart = 1 / properties.emissionRate;
@@ -113,7 +112,7 @@ namespace Particles {
         void OnRenderObject()
         {
             if (isEditorPaused()) return;
-            if (!stats.initialized) Awake();
+            if (!stats.initialized) ShaderSetup();
             mat.mainTexture = tex;
 
             // set uniforms
@@ -226,12 +225,12 @@ namespace Particles {
             if (!properties.repeat && stats.emitted + count > properties.maxParts)
                 count = properties.maxParts - stats.emitted;
 
+            if (count <= 0) count = 0;
             stats.ppf = count;
             stats.pps = Mathf.RoundToInt(count / Time.deltaTime);
             if (count <= 0) return 0;
 
             stats.emitted += count;
-            hasEmitted = true;
 
             Vector3 velocity = (transform.position - lastPos); // / Time.deltaTime;
             lastPos = transform.position;
@@ -259,7 +258,7 @@ namespace Particles {
 
         private void DispatchUpdate()
         {
-            if (!stats.initialized || particlesBuf == null) Awake();
+            if (!stats.initialized || particlesBuf == null) ShaderSetup();
 
             compute.SetInt("_Flags", GetFlags());
             compute.SetFloat("_SizeVel", size.val.z);

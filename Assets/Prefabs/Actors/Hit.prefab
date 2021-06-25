@@ -47,9 +47,9 @@ MonoBehaviour:
     editorDrawMode: 2
     reset: 0
     initialized: 1
-    alive: 20
-    dead: 0
-    emitted: 20
+    alive: 0
+    dead: 20
+    emitted: 360
     ppf: 0
     pps: 0
     bufferSize: 20

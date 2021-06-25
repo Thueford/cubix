@@ -85,7 +85,7 @@ MonoBehaviour:
     groupCount: 0
   properties:
     repeat: 0
-    maxParts: 1000
+    maxParts: 300
     lifetime: 0.7
     emissionRate: 50000
     startDelay: 0

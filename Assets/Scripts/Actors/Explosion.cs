@@ -11,11 +11,12 @@ public class Explosion : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Invoke("StopExplosion", 0.6f);
+        // Invoke("StopExplosion", 0.6f);
         Invoke("StopCollision", lifespan);
     }
 
-    void StopExplosion() { Destroy(gameObject); }
+    // destroyed by ParticleSystem
+    // void StopExplosion() { Destroy(gameObject); }
     void StopCollision() { sc.enabled = false; }
 
     public void SetProperties(Bullet.Properties p)

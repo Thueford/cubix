@@ -108,6 +108,7 @@ public class Bullet : MonoBehaviour
     void OnCollisionEnter(Collision c)
     {
         if (p.explodes) explode();
+        else hit();
 
         if (--p.reflects < 0)
         {
