@@ -17,7 +17,7 @@ public class StageBuilder : MonoBehaviour
     void Start()
     {
         if (!self) self = this;
-        ActorBases = GetAllChildren(ActorContainer);
+        //ActorBases = GetAllChildren(ActorContainer);
         WallBases = GetAllChildren(WallContainer);
     }
 
