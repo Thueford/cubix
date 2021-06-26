@@ -88,6 +88,11 @@ public abstract class EntityBase : MonoBehaviour
         anim.enabled = false;
     }
 
+    virtual public void KnockBack(Vector3 force)
+    {
+        rb.AddForce(force, ForceMode.Impulse);
+    }
+
     /*
     virtual public void killStuckAnim()
     {

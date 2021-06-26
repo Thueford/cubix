@@ -56,9 +56,14 @@ public class Player : EntityBase
             dir = dir.normalized * accelerationForce;
 
             // apply direction
-            rb.AddForce(dir*Time.deltaTime*1000, ForceMode.Acceleration);
+            //float vel = rb.velocity.magnitude;
+            rb.AddForce(Time.deltaTime * 1000 * dir, ForceMode.Acceleration);
             if(rb.velocity.magnitude > maxSpeed)
+            {
+                //if (rb.velocity.magnitude > vel) rb.velocity = rb.velocity.normalized * vel;
                 rb.velocity = rb.velocity.normalized * maxSpeed;
+                //rb.AddForce(-Time.deltaTime * 2000 * (rb.velocity.normalized), ForceMode.Acceleration);
+            }
 
             float pvel = Mathf.Clamp(rb.velocity.magnitude / maxSpeed, 1e-2f, 0.96f);
             ps.properties.emissionRate = ps.properties.maxParts * Mathf.Pow(pvel, 3);
