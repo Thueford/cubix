@@ -44,7 +44,7 @@ public class Ressource : MonoBehaviour
         SetRessourceText(valueGreen, TextGreen);
         SetRessourceText(valueBlue, TextBlue);
         Space.SetActive(false);
-        InvokeRepeating("CoolDown", 1f, 1f);
+        InvokeRepeating(nameof(CoolDown), 1f, 1f);
     }
 
     // Update is called once per frame
@@ -87,19 +87,17 @@ public class Ressource : MonoBehaviour
 
     public static void setModes(bool b)
     {
-        redMode = b;
-        greenMode = b;
-        blueMode = b;
+        redMode = greenMode = blueMode = b;
+        if (!b)
+        {
+            InputHandler.enableNumbers = true;
+            Player.self.bs.updateProperties(Vector3Int.zero);
+        }
     }
 
     private void check(float value)
     {
-        if (value == 0)
-        {
-            InputHandler.enableNumbers = true;
-            Player.self.bs.updateProperties(Vector3Int.zero);
-            CancelInvoke("CoolDown");
-        }
+        if (value == 0) setModes(false);
     }
 
     void SetRessourceText(float value, Text textObject)
@@ -158,15 +156,15 @@ public class Ressource : MonoBehaviour
         switch (c)
         {
             case col.Red:
-                valueRed = Mathf.Max(0, Mathf.Min(100, valueRed + value));
+                valueRed = Mathf.Clamp(valueRed + value, 0, 100);
                 SetRessourceText(valueRed, TextRed);
                 break;
             case col.Green:
-                valueGreen = Mathf.Max(0, Mathf.Min(100, valueGreen + value));
+                valueGreen = Mathf.Clamp(valueBlue + value, 0, 100);
                 SetRessourceText(valueGreen, TextGreen);
                 break;
             case col.Blue:
-                valueBlue = Mathf.Max(0, Mathf.Min(100, valueBlue + value));
+                valueBlue = Mathf.Clamp(valueGreen + value, 0, 100);
                 SetRessourceText(valueBlue, TextBlue);
                 break;
             default:

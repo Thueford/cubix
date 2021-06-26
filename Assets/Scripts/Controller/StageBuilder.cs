@@ -8,8 +8,6 @@ public class StageBuilder : MonoBehaviour
     [NotNull] public GameObject StagePrefab;
     [WarnNull] public GameObject ActorContainer;
     [WarnNull] public GameObject WallContainer;
-    private GameStage StageScript;
-    //private List<GameObject> ActorBases;
     private List<GameObject> WallBases;
 
 
@@ -41,9 +39,10 @@ public class StageBuilder : MonoBehaviour
     public GameStage Generate(Transform t)
     {
         Vector3 pos = t.position;
-        pos.z += 40;
+        if (!GameState.curStage.isProcedural) pos.z += 40;
         GameObject Stage = Instantiate(StagePrefab, pos, Quaternion.identity);
-        StageScript = Stage.GetComponent<GameStage>();
+        GameStage StageScript = Stage.GetComponent<GameStage>();
+        StageScript.isProcedural = true;
         StageScript.actorsBase = Instantiate(
             ActorContainer.transform.GetChild(Random.Range(0, ActorContainer.transform.childCount)).gameObject, 
             StageScript.actorsBase.transform.position, 

@@ -126,7 +126,17 @@ public class Player : EntityBase
     public void Teleport(GameStage stage)
     {
         if (stage == null) return;
-        if (GameState.curStage != null && GameState.curStage != stage) GameState.curStage.Unload();
+        if (GameState.curStage != null && GameState.curStage != stage)
+        {
+            GameState.curStage.Unload();
+            if (GameState.curStage.isProcedural)
+            {
+                Destroy(GameState.curStage.gameObject);
+                Vector3 camPos = Camera.main.transform.position;
+                camPos.z -= 40;
+                Camera.main.transform.position = camPos;
+            }
+        }
 
         anim.enabled = true;
         anim.Play("Spawn");

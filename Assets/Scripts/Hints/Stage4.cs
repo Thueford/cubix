@@ -19,7 +19,7 @@ public class Stage4 : Hint
         switch (state)
         {
             case State.START:
-                if (isCurStage()) return;
+                if (!isCurStage()) return;
                 Color color1 = GameState.colorOrder[0];
 
                 foreach (Collectable c in GameState.curStage.GetActorComponents<Collectable>())
