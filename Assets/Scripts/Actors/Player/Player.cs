@@ -78,9 +78,10 @@ public class Player : EntityBase
     override public void Hit(float damage)
     {
         if (invulnurable <= 0 && damage > 0) 
-        { 
+        {
             HP -= damage;
             invulnurable = 1;
+            PostProcessing.self.PlayerHitEffect(0.2f);
         }
         if (HP <= 0) Die();
     }
