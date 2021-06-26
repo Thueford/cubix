@@ -9,6 +9,7 @@ public class Bullet : MonoBehaviour
     [NotNull] public Rigidbody rb;
     [NotNull] public CapsuleCollider cc;
     [NotNull] public GameObject explosionPrefab;
+    [NotNull] public GameObject hitPrefab;
 
     private Vector3 dir, oldVelocity;
     private float radius, velocityMultiplier;
@@ -80,7 +81,8 @@ public class Bullet : MonoBehaviour
     private void setColor(Color color)
     {
         GetComponent<Renderer>().material.color = color;
-        GetComponent<Light>().color = color == GameState.black ? GameState.glow : color;
+        GetComponent<Light>().color = GameState.getLightColor(color);
+        GetComponent<Particles.Particles>().color.color = GameState.getLightColor(color);
     }
 
     public void launch(Vector3 dir)
@@ -88,6 +90,11 @@ public class Bullet : MonoBehaviour
         this.dir = dir;
         if (rb) rb.velocity = this.dir * p.speed;
         transform.rotation = Quaternion.LookRotation(dir);
+    }
+
+    private void hit()
+    {
+        Instantiate(hitPrefab, transform.position, Quaternion.identity);
     }
 
     private void explode()
@@ -101,6 +108,7 @@ public class Bullet : MonoBehaviour
     void OnCollisionEnter(Collision c)
     {
         if (p.explodes) explode();
+        else hit();
 
         if (--p.reflects < 0)
         {
@@ -127,50 +135,32 @@ public class Bullet : MonoBehaviour
     private void OnTriggerEnter(Collider c)
     {
         //Debug.Log("BTrigger: " + c.name + " " + tag + " " + c.tag);
+        EntityBase b = c.GetComponentInParent<EntityBase>();
+
         if (c.CompareTag("Enemy") && CompareTag("PlayerBullet"))
         {
-            EntityBase b = c.GetComponentInParent<EntityBase>();
-            if (b)
-            {
-                Debug.Log("bullet hit Enemy");
-                if (p.explodes) explode();
-                else
-                {
-                    b.Hit(p.damage);
-                }
-                if (--p.hits < 0) Destroy(gameObject);
-            }
-            else Debug.LogWarning("bullet hit non-Entity");
+            if (!b) Debug.LogWarning("bullet hit non-Entity");
+            if (!p.explodes) b.Hit(p.damage);
         }
         else if (c.CompareTag("Player") && CompareTag("EnemyBullet"))
         {
-            EntityBase b = c.GetComponentInParent<EntityBase>();
-            if (b)
-            {
-                Debug.Log("bullet hit Player");
-                if (p.explodes) explode();
-                else
-                {
-                    b.Hit(p.damage);
-                }
-                if (--p.hits < 0) Destroy(gameObject);
-            }
-            else Debug.LogWarning("bullet hit non-Entity");
+            if (!b) Debug.LogWarning("bullet hit non-Entity");
+            else if (!p.explodes) b.Hit(p.damage);
         }
         else if (c.CompareTag("EnemyBullet") && CompareTag("PlayerBullet"))
         {
             //Debug.Log("BulletBulletCollision");
             //Destroy(c.transform.parent.gameObject);
-            if (p.explodes) explode();
-            if (--p.hits < 0) Destroy(gameObject);
         }
         else if (c.CompareTag("PlayerBullet") && CompareTag("EnemyBullet"))
         {
             //Debug.Log("BulletBulletCollision");
             //Destroy(c.transform.parent.gameObject);
-            if (p.explodes) explode();
-            if (--p.hits < 0) Destroy(gameObject);
         }
+
+        if (p.explodes) explode();
+        else hit();
+        if (--p.hits < 0) Destroy(gameObject);
     }
 
 }

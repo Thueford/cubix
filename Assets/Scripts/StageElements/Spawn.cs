@@ -7,11 +7,13 @@ public class Spawn : MonoBehaviour
 {
     public void Enable()
     {
-        GetComponentInChildren<ParticleSystem>().Play();
+        // GetComponentInChildren<ParticleSystem>().Play();
+        GetComponent<Particles.Particles>().Play();
     }
 
     public void Disable()
     {
-        GetComponentInChildren<ParticleSystem>().Stop();
+        // GetComponentInChildren<ParticleSystem>().Stop();
+        GetComponent<Particles.Particles>().Stop();
     }
 }

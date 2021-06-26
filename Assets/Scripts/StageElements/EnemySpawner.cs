@@ -101,7 +101,6 @@ public class EnemySpawner : MonoBehaviour
             else if (rand < prob.x+prob.y) c += GameState.colorOrder[1];
             else if (rand < prob.x+prob.y+prob.z) c += GameState.colorOrder[2];
         }
-        Debug.Log(c);
         return c;
     }
 }

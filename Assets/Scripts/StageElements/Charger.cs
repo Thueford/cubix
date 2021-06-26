@@ -17,7 +17,6 @@ public class Charger : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Anim Start");
         anim.ResetAnim();
     }
 

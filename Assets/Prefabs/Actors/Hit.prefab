@@ -9,11 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3411859011857359190}
-  - component: {fileID: 4033041906860793440}
-  - component: {fileID: 1599605250593376769}
   - component: {fileID: 490701671554870233}
   m_Layer: 16
-  m_Name: Explosion
+  m_Name: Hit
   m_TagString: PlayerBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,33 +31,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &4033041906860793440
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 609184826687653396}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.00001
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1599605250593376769
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 609184826687653396}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6763b338196d22c448dd4704cf4b2ce2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sc: {fileID: 4033041906860793440}
-  ps: {fileID: 490701671554870233}
 --- !u!114 &490701671554870233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73,21 +44,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats:
-    editorDrawMode: 0
+    editorDrawMode: 2
     reset: 0
-    initialized: 0
+    initialized: 1
     alive: 0
-    dead: 0
-    emitted: 0
+    dead: 20
+    emitted: 360
     ppf: 0
     pps: 0
-    bufferSize: 0
-    groupCount: 0
+    bufferSize: 20
+    groupCount: 20
   properties:
     repeat: 0
-    maxParts: 300
-    lifetime: 0.7
-    emissionRate: 50000
+    maxParts: 20
+    lifetime: 0.5
+    emissionRate: 5000
     startDelay: 0
   renderSettings:
     preset: 1
@@ -95,14 +66,14 @@ MonoBehaviour:
     srcBlend: 1
     dstBlend: 10
   size:
-    val: {x: 0.5, y: 0.5, z: -0.5}
+    val: {x: 0.5, y: 0.5, z: -3}
   pos:
-    offset: {x: 1, y: 1, z: 1}
+    offset: {x: 0, y: 0, z: 0}
     scale: {x: 0, y: 0, z: 0}
     shape: 0
   vel:
     offset: {x: 0, y: 0, z: 0}
-    scale: {x: 30, y: 0, z: 30}
+    scale: {x: 10, y: 0, z: 10}
     shape: 0
   force:
     offset: {x: 0, y: 0, z: 0}
@@ -113,15 +84,15 @@ MonoBehaviour:
     scale: {x: 0, y: 0, z: 0}
     shape: 0
   color:
-    color: {r: 1, g: 0.0141509175, b: 0.0141509175, a: 1}
-    color2: {r: 0.93372107, g: 1, b: 0, a: 1}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    color2: {r: 1, g: 1, b: 1, a: 1}
     useVariation: 1
-    useGradient: 1
+    useGradient: 0
     steps: 16
     gradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 0, a: 1}
-      key1: {r: 1, g: 0, b: 0, a: 1}
+      key0: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 1, g: 1, b: 1, a: 1}
       key2: {r: 0, g: 0, b: 0, a: 1}
       key3: {r: 1, g: 1, b: 1, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -129,7 +100,7 @@ MonoBehaviour:
       key6: {r: 0, g: 0, b: 0, a: 0}
       key7: {r: 0, g: 0, b: 0, a: 0}
       ctime0: 0
-      ctime1: 15613
+      ctime1: 65535
       ctime2: 33153
       ctime3: 55512
       ctime4: 0
@@ -145,12 +116,12 @@ MonoBehaviour:
       atime6: 0
       atime7: 0
       m_Mode: 0
-      m_NumColorKeys: 3
+      m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     gradient2:
       serializedVersion: 2
       key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 1, g: 0.52679175, b: 0, a: 1}
+      key1: {r: 1, g: 1, b: 1, a: 1}
       key2: {r: 1, g: 0.058691293, b: 0, a: 0}
       key3: {r: 1, g: 1, b: 1, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -158,7 +129,7 @@ MonoBehaviour:
       key6: {r: 0, g: 0, b: 0, a: 0}
       key7: {r: 0, g: 0, b: 0, a: 0}
       ctime0: 0
-      ctime1: 12529
+      ctime1: 65535
       ctime2: 65535
       ctime3: 55512
       ctime4: 0
@@ -174,7 +145,7 @@ MonoBehaviour:
       atime6: 0
       atime7: 0
       m_Mode: 0
-      m_NumColorKeys: 3
+      m_NumColorKeys: 2
       m_NumAlphaKeys: 2
   velocityFactor: 0
   tex: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}

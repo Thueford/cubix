@@ -12,23 +12,22 @@ namespace Particles {
         [Header("General")]
         public Stats stats;
         public GeneralProps properties = GeneralProps.dflt;
-        public RenderSettings renderSettings;
+        public RenderSettings renderSettings = RenderSettings.Default;
 
         [Header("Emission")]
         [Tooltip("xy: offset, z: timefac")]
-        public Capsule<Vector3> size = new Capsule<Vector3>(Vector3.one);
+        public Capsule<Vector3> size = new Capsule<Vector3>(new Vector3(1,1,0));
         public DynamicEffect pos;
         public DynamicEffect vel;
         public DynamicEffect force;
         public DynamicEffect posFac;
 
         [Header("Other")]
-        //public Vector2 size = new Vector2(0.2f, 0.2f);
-        public Color color = Color.yellow;
+        public Colors color = Colors.dflt;
 
         #region Flags
-        private static int F(bool v, int p) { return v ? 1 << p : 0; }
-        private static int F(int v, int p) { return v * 1 << p; }
+        private static int F(bool v, int p) => v ? 1 << p : 0;
+        private static int F(int v, int p) => v * 1 << p;
 
         int GetFlags()
         {
@@ -36,9 +35,11 @@ namespace Particles {
                 F(pos.shape == Shape.SPHERE, 0) +
                 F(vel.shape == Shape.SPHERE, 1) +
                 F(force.shape == Shape.SPHERE, 2) +
+                F(color.useGradient, 3) +
+                F(color.useVariation, 4) +
                 0;
         }
-            #endregion
+        #endregion
 
         #endregion
 
@@ -55,13 +56,24 @@ namespace Particles {
 
         void Awake()
         {
+            if (tex == null && mat.mainTexture != null) tex = mat.mainTexture;
+            stats = new Stats();
             ShaderSetup();
         }
 
         private void OnDrawGizmosSelected()
         {
             if (isEditorPaused()) { ReleaseBuffers(); return; }
+
+            //update maxParts
+            if (curMaxParts != properties.maxParts) {
+                curMaxParts = properties.maxParts;
+                ReleaseBuffers(); ShaderSetup();
+            }
+
+            if (stats.reset) ReleaseBuffers();
             renderSettings.setPreset();
+
             if (isEditorPlaying(EditorDrawMode.FAST)) {
                 EditorApplication.QueuePlayerLoopUpdate();
                 SceneView.RepaintAll();
@@ -79,43 +91,67 @@ namespace Particles {
                 EditorApplication.delayCall += EditorApplication.QueuePlayerLoopUpdate;
             if (isEditorPaused()) return;
 
-            //update maxParts
-            if (curMaxParts != properties.maxParts) {
-                curMaxParts = properties.maxParts;
-                stats.reset = true;
-            }
-            if (stats.reset) ReleaseBuffers();
-            if (!stats.initialized) Awake();
-
             DispatchUpdate();
 
+            if (Application.isPlaying && !properties.repeat && stats.emitted >= curMaxParts && stats.alive == 0)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
             // spawn particles
-            timePerPart = 1 / properties.emissionRate;
-            if (partTimer == 0) partTimer = -10*Time.deltaTime;
-            partTimer += Time.deltaTime;
-            partTimer -= timePerPart * DispatchEmit((int)(partTimer / timePerPart));
+            if (properties.enabled && properties.emissionRate > 1e-2)
+            {
+                timePerPart = 1 / properties.emissionRate;
+                if (partTimer == 0) partTimer = -10*Time.deltaTime;
+                partTimer += Time.deltaTime;
+                partTimer -= timePerPart * DispatchEmit((int)(partTimer / timePerPart));
+            }
         }
 
         void OnRenderObject()
         {
             if (isEditorPaused()) return;
-            if (!stats.initialized) Awake();
+            if (!stats.initialized) ShaderSetup();
+            mat.mainTexture = tex;
 
             // set uniforms
-            assets.mat.SetBuffer("_Particles", particlesBuf);
-            assets.mat.SetBuffer("_QuadVert", quadVertBuf);
-            renderSettings.Uniform(assets.mat);
+            mat.SetBuffer("_Particles", particlesBuf);
+            mat.SetBuffer("_QuadVert", quadVertBuf);
+            renderSettings.Uniform(mat);
 
-            // assets.mat.SetFloat("_Time", Time.time);
-            assets.mat.SetPass(0);
+            // mat.SetFloat("_Time", Time.time);
+            mat.SetPass(0);
 
-            Graphics.DrawProceduralNow(MeshTopology.Triangles, meshVerts.Length, deadBuf.count);
+            if (deadBuf == null) Debug.LogWarning("... " + stats.initialized);
+            else Graphics.DrawProceduralNow(MeshTopology.Triangles, meshVerts.Length, deadBuf.count);
+        }
+
+        #endregion
+
+        #region User
+        [Range(-10, 10)]
+        public float velocityFactor = 0;
+        //public Vector3 posOffset;
+        //public Quaternion rotation;
+
+        public void Play()
+        {
+            properties.enabled = true;
+        }
+
+        public void Stop()
+        {
+            properties.enabled = false;
         }
 
         #endregion
 
         #region Shader
-        public Assets assets;
+        // public Assets assets; // not visible in script inspector :(
+        [NotNull] public Texture tex;
+        [NotNull] public Material mat;
+        [NotNull] public ComputeShader compute;
         private ComputeBuffer particlesBuf, deadBuf;
         private ComputeBuffer counterBuf, quadVertBuf;
 
@@ -124,10 +160,10 @@ namespace Particles {
         #region Shader Setup
         private void ShaderSetup()
         {
-            kernelInit = assets.compute.FindKernel("Init");
-            kernelEmit = assets.compute.FindKernel("EmitOne");
-            kernelUpdate = assets.compute.FindKernel("Update");
-            assets.compute.GetKernelThreadGroupSizes(kernelInit, out uint threads, out _, out _);
+            kernelInit = compute.FindKernel("Init");
+            kernelEmit = compute.FindKernel("EmitOne");
+            kernelUpdate = compute.FindKernel("Update");
+            compute.GetKernelThreadGroupSizes(kernelInit, out uint threads, out _, out _);
 
             curMaxParts = properties.maxParts;
             stats.groupCount = Mathf.CeilToInt((float)curMaxParts / threads);
@@ -136,8 +172,8 @@ namespace Particles {
             if (curMaxParts < (1 << 14))
             {
                 stats.bufferSize = stats.groupCount = curMaxParts;
-                kernelInit = assets.compute.FindKernel("InitOne");
-                kernelUpdate = assets.compute.FindKernel("UpdateOne");
+                kernelInit = compute.FindKernel("InitOne");
+                kernelUpdate = compute.FindKernel("UpdateOne");
             }
 
             meshVerts = new[] {
@@ -172,9 +208,9 @@ namespace Particles {
 
         private void DispatchInit()
         {
-            assets.compute.SetBuffer(kernelInit, "_Particles", particlesBuf);
-            assets.compute.SetBuffer(kernelInit, "_Dead", deadBuf);
-            assets.compute.Dispatch(kernelInit, stats.groupCount, 1, 1);
+            compute.SetBuffer(kernelInit, "_Particles", particlesBuf);
+            compute.SetBuffer(kernelInit, "_Dead", deadBuf);
+            compute.Dispatch(kernelInit, stats.groupCount, 1, 1);
         }
 
         private void ReleaseBuffers()
@@ -196,43 +232,53 @@ namespace Particles {
 
         public int DispatchEmit(int count)
         {
-            count = Mathf.Min(count, 1<<15, curMaxParts - (stats.bufferSize - stats.dead));
+            count = Mathf.Min(count, 1<<15, curMaxParts - stats.alive);
+            if (!properties.repeat && stats.emitted + count > properties.maxParts)
+                count = properties.maxParts - stats.emitted;
+
+            if (count <= 0) count = 0;
             stats.ppf = count;
             stats.pps = Mathf.RoundToInt(count / Time.deltaTime);
             if (count <= 0) return 0;
 
-            Vector3 velocity = (transform.position - lastPos) / Time.deltaTime;
+            stats.emitted += count;
+
+            Vector3 velocity = (transform.position - lastPos); // / Time.deltaTime;
             lastPos = transform.position;
 
-            assets.compute.SetBuffer(kernelEmit, "_Particles", particlesBuf);
-            assets.compute.SetBuffer(kernelEmit, "_Alive", deadBuf);
+            compute.SetBuffer(kernelEmit, "_Particles", particlesBuf);
+            compute.SetBuffer(kernelEmit, "_Alive", deadBuf);
 
-            assets.compute.SetInt("_Flags", GetFlags());
-            assets.compute.SetVector("_PosParent", transform.position);
-            assets.compute.SetVector("_SpdParent", velocity);
-            assets.compute.SetVector("_Seeds", new Vector4(Random.value, Random.value, Random.value, Random.value));
-            assets.compute.SetFloat("_Lifetime", properties.lifetime);
+            compute.SetVector("_PosParent", transform.position); // + posOffset
+            // compute.SetMatrix("_Rotation", Matrix4x4.Rotate(rotation));
+            compute.SetVector("_SpdParent", velocityFactor * velocity);
+            compute.SetVector("_Seeds", new Vector4(Random.value, Random.value, Random.value, Random.value));
+            compute.SetFloat("_Lifetime", properties.lifetime);
 
-            pos.Uniform(assets.compute, "_Pos");
-            vel.Uniform(assets.compute, "_Spd");
-            force.Uniform(assets.compute, "_Force");
-            posFac.Uniform(assets.compute, "_PosFac");
+            pos.Uniform(compute, "_Pos");
+            vel.Uniform(compute, "_Spd");
+            force.Uniform(compute, "_Force");
+            posFac.Uniform(compute, "_PosFac");
 
-            assets.compute.SetVector("_Size", size.val);
-            assets.compute.SetVector("_Color", color);
+            compute.SetVector("_Size", size.val);
+            color.UniformEmit(compute, "_Color");
 
-            assets.compute.Dispatch(kernelEmit, count, 1, 1);
+            compute.Dispatch(kernelEmit, count, 1, 1);
             return count;
         }
 
         private void DispatchUpdate()
         {
-            assets.compute.SetFloat("_SizeVel", size.val.z);
-            assets.compute.SetFloat("_DeltaTime", Time.deltaTime);
-            assets.compute.SetBuffer(kernelUpdate, "_Particles", particlesBuf);
-            assets.compute.SetBuffer(kernelUpdate, "_Dead", deadBuf);
+            if (!stats.initialized || particlesBuf == null) ShaderSetup();
 
-            assets.compute.Dispatch(kernelUpdate, stats.groupCount, 1, 1);
+            compute.SetInt("_Flags", GetFlags());
+            compute.SetFloat("_SizeVel", size.val.z);
+            compute.SetFloat("_DeltaTime", Time.deltaTime);
+            compute.SetBuffer(kernelUpdate, "_Particles", particlesBuf);
+            compute.SetBuffer(kernelUpdate, "_Dead", deadBuf);
+            color.Uniform(compute, kernelUpdate, "_Color");
+
+            compute.Dispatch(kernelUpdate, stats.groupCount, 1, 1);
             ReadDeadCount();
         }
 

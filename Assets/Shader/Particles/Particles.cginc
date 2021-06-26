@@ -23,7 +23,7 @@ v2f vert(uint vid : SV_VertexID, uint iid : SV_INSTANCEID)
 {
     v2f o = { 0,0,0,0,0,0,0,0,0,0 };
     Particle p = _Particles[iid];
-    if (p.size.w == 0) return o;
+    if (p.size.w == 0 || p.size.x < 0 || p.size.y < 0) return o;
     
     float3 vpos = float3(p.size.xy * _QuadVert[vid], 0);
     float4 ppos = float4(p.pos, 1);

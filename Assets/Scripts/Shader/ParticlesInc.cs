@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -10,6 +11,7 @@ namespace Particles
     {
         public Vector3 pos, vel, force;
         public Vector4 col, size; // xy: size, zw: life
+        public float seed;
     }
 
     [System.Serializable]
@@ -20,7 +22,7 @@ namespace Particles
         [HideInInspector]
         public bool initialized;
         [ReadOnly]
-        public int alive, dead, ppf, pps;
+        public int alive, dead, emitted, ppf, pps;
         [HideInInspector] 
         public int bufferSize, groupCount;
     }
@@ -28,6 +30,8 @@ namespace Particles
     [System.Serializable]
     public struct GeneralProps
     {
+        public bool enabled;
+        public bool repeat;
         public int maxParts;
         public float lifetime;
 
@@ -35,12 +39,14 @@ namespace Particles
         public float startDelay;
 
         public static GeneralProps dflt =
-            new GeneralProps((int)1e6, 2, (float)4e5);
+            new GeneralProps((int)1e3, 2, (float)4e2);
 
         public GeneralProps(
             int maxParts = 1, float lifetime = 3, 
             float emissionRate = 5, float startDelay = 0)
         {
+            enabled = true;
+            repeat = true;
             this.maxParts = maxParts;
             this.lifetime = lifetime;
             this.emissionRate = emissionRate;
@@ -75,6 +81,63 @@ namespace Particles
     {
         [NotNull] public Material mat;
         [NotNull] public ComputeShader compute;
+    }
+
+    [System.Serializable]
+    public struct Colors
+    {
+        public static Colors dflt = new Colors(Color.white);
+        public Color color, color2;
+        public bool useVariation;
+        public bool useGradient;
+        [Range(2, 256)]
+        public int steps;
+        public Gradient gradient, gradient2;
+        private static Texture2D dfltTex;
+
+        public Colors(Color clr)
+        {
+            useVariation = false;
+            useGradient = false;
+            color = color2 = clr;
+            steps = 16;
+            gradient = gradient2 = null;
+            tex = null;
+        }
+
+        private Texture2D tex;
+        private Texture2D getTexture()
+        {
+            int height = useVariation ? 2 : 1;
+            if (tex == null || tex.height != height || tex.width != steps)
+                tex = new Texture2D(steps, height);
+
+            if (gradient != null)
+            {
+                for (int i = 0; i < steps; i++) {
+                    tex.SetPixel(i, 0, gradient.Evaluate(i / (float)steps));
+                    if(useVariation) tex.SetPixel(i, 1, gradient2.Evaluate(i / (float)steps));
+                }
+                tex.Apply();
+            }
+            else Debug.LogWarning("Colors.gradient is null");
+
+            return tex;
+        }
+
+        public void Uniform(ComputeShader compute, int kernel, string name)
+        {
+            // if (!useGradient) return;
+            if (dfltTex == null) dfltTex = new Texture2D(0, 0);
+            compute.SetFloat(name + "Steps", useGradient ? steps : 0);
+            compute.SetTexture(kernel, name + "Grad", useGradient ? getTexture() : dfltTex);
+        }
+
+        public void UniformEmit(ComputeShader compute, string name)
+        {
+            compute.SetVector(name, color);
+            if(useVariation) compute.SetVector(name + "2", color2);
+        }
     }
 
     [System.Serializable]

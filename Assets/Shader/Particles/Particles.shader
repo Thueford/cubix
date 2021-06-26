@@ -1,8 +1,8 @@
 Shader "Custom/Particles"
 {
     Properties {
-        // [MainTexture] 
-        _MainTex ("Texture", 2D) = "white" {}
+        [MainTexture] 
+        _MainTex ("Main Texture", 2D) = "white" {}
         [HideInInspector] _BlendSrc ("Source BlendMode", int) = 0
         [HideInInspector] _BlendDst ("Dest BlendMode", int) = 0
         [HideInInspector] _BlendOp ("BlendOp", int) = 0

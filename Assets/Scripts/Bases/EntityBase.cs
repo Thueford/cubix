@@ -44,11 +44,9 @@ public abstract class EntityBase : MonoBehaviour
 
     public void setColor(Color c)
     {
-        rgb.x = (int)c.r;
-        rgb.y = (int)c.g;
-        rgb.z = (int)c.b;
+        rgb = Vector3Int.FloorToInt((Vector4)c);
         GetComponentInChildren<Renderer>().material.color = c;
-        GetComponentInChildren<Light>().color = c == Color.black ? GameState.glow : c;
+        GetComponentInChildren<Light>().color = GameState.getLightColor(c);
     }
 
     virtual public void Hit(float damage)
@@ -81,10 +79,7 @@ public abstract class EntityBase : MonoBehaviour
 
     virtual public void OnDie(AnimationEvent ev)
     {
-        Debug.Log("killed " + name);
-        if (rgb.x == 1) Ressource.self.addRes(Ressource.col.Red, 10);
-        if (rgb.y == 1) Ressource.self.addRes(Ressource.col.Green, 10);
-        if (rgb.z == 1) Ressource.self.addRes(Ressource.col.Blue, 10);
+        // Debug.Log("killed " + name);
     }
 
     virtual public void OnSpawn(AnimationEvent ev)
