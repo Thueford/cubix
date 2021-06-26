@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: a47d5a2faf3456c4dbe03c7806f634c7
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - StagePrefab: {fileID: 331514180023121776, guid: c757194044ae0bd40bbc234134156d13,
+      type: 3}
+  - ActorContainer: {fileID: 822300351745354751, guid: 83ab6cd1159f5264e8f4ce52e638400b,
+      type: 3}
+  - WallContainer: {fileID: 1713134809352025210, guid: f34375946b42d534aaba67d8c3b1d9b3,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

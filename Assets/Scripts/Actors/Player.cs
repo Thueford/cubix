@@ -98,7 +98,9 @@ public class Player : EntityBase
 
     public void TeleportNext()
     {
-        if (GameState.curStage == null || GameState.curStage.next == null) return;
+        if (GameState.curStage == null) return;
+        else if (GameState.curStage.next == null)
+            GameState.curStage.next = StageBuilder.self.Generate(GameState.curStage.transform);
 
         GameState.curStage.FreezeActors();
 
