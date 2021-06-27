@@ -57,9 +57,14 @@ public class Player : EntityBase
             dir = dir.normalized * accelerationForce;
 
             // apply direction
-            rb.AddForce(dir*Time.deltaTime*1000, ForceMode.Acceleration);
+            //float vel = rb.velocity.magnitude;
+            rb.AddForce(Time.deltaTime * 1000 * dir, ForceMode.Acceleration);
             if(rb.velocity.magnitude > maxSpeed)
+            {
+                //if (rb.velocity.magnitude > vel) rb.velocity = rb.velocity.normalized * vel;
                 rb.velocity = rb.velocity.normalized * maxSpeed;
+                //rb.AddForce(-Time.deltaTime * 2000 * (rb.velocity.normalized), ForceMode.Acceleration);
+            }
 
             float pvel = Mathf.Clamp(rb.velocity.magnitude / maxSpeed, 1e-2f, 0.96f);
             ps.properties.emissionRate = ps.properties.maxParts * Mathf.Pow(pvel, 3);
@@ -79,9 +84,10 @@ public class Player : EntityBase
     override public void Hit(float damage)
     {
         if (invulnurable <= 0 && damage > 0) 
-        { 
+        {
             HP -= damage;
             invulnurable = 1;
+            PostProcessing.self.PlayerHitEffect(0.2f);
         }
         if (HP <= 0) Die();
     }
@@ -104,7 +110,9 @@ public class Player : EntityBase
 
     public void TeleportNext()
     {
-        if (GameState.curStage == null || GameState.curStage.next == null) return;
+        if (GameState.curStage == null) return;
+        else if (GameState.curStage.next == null)
+            GameState.curStage.next = StageBuilder.self.Generate(GameState.curStage.transform);
 
         GameState.curStage.FreezeActors();
 
@@ -125,7 +133,17 @@ public class Player : EntityBase
     public void Teleport(GameStage stage)
     {
         if (stage == null) return;
-        if (GameState.curStage != null && GameState.curStage != stage) GameState.curStage.Unload();
+        if (GameState.curStage != null && GameState.curStage != stage)
+        {
+            GameState.curStage.Unload();
+            if (GameState.curStage.isProcedural)
+            {
+                Destroy(GameState.curStage.gameObject);
+                Vector3 camPos = Camera.main.transform.position;
+                camPos.z -= 40;
+                Camera.main.transform.position = camPos;
+            }
+        }
 
         anim.enabled = true;
         anim.Play("Spawn");

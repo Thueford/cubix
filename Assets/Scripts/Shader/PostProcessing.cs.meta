@@ -5,18 +5,16 @@ MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - bloom: {fileID: 7200000, guid: 47862c77207702b4b811ee8ab5a54fea, type: 3}
-  - chromaticAberration: {fileID: 7200000, guid: b44717a65c53e5d40a78a11956cae06b,
-      type: 3}
   - lensFlare: {fileID: 7200000, guid: 65efdfcf4ae3e8d4183f89140b4ccf50, type: 3}
-  - blurrMat: {fileID: 2100000, guid: 274b1b0192379f441995496a3b24ed5c, type: 2}
+  - postProcMat: {fileID: 2100000, guid: 274b1b0192379f441995496a3b24ed5c, type: 2}
+  - lensDirtTex: {fileID: 2800000, guid: 145b2f0760f8c9642bcdc4459df91931, type: 3}
+  - starburstTex: {fileID: 2800000, guid: 283a61b575bfb8a49955039e0bfa4a74, type: 3}
   - sourceTex: {instanceID: 0}
   - brightTex: {instanceID: 0}
   - blurrBuff: {instanceID: 0}
   - caResult: {instanceID: 0}
   - lfResult: {instanceID: 0}
   - lensDirt: {instanceID: 0}
-  - lensDirtTex: {fileID: 2800000, guid: 145b2f0760f8c9642bcdc4459df91931, type: 3}
-  - starburstTex: {fileID: 2800000, guid: 283a61b575bfb8a49955039e0bfa4a74, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

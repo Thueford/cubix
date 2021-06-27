@@ -40,9 +40,12 @@ public class Explosion : MonoBehaviour
         // TODO: knockback, damageMult
         if (c.CompareTag("Enemy") && CompareTag("PlayerBullet"))
         {
-            float damageMult = Mathf.SmoothStep(sc.radius, 0, (c.transform.position - transform.position).magnitude);
-            Debug.Log("explosion hit Enemy " + damage + "*" + damageMult);
+            Vector3 distance = c.transform.position - transform.position;
+            float distanceMultiplier = distance.magnitude > sc.radius/2 ? sc.radius/2 : sc.radius;
+            //float damageMult = Mathf.SmoothStep(sc.radius, 0, (c.transform.position - transform.position).magnitude);
+            Debug.Log("explosion hit Enemy" + damage);
             b.Hit(damage);
+            b.KnockBack(distance.normalized * distanceMultiplier * 4f);
         }
         else if (c.CompareTag("Player") && CompareTag("EnemyBullet"))
         {

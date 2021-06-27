@@ -19,6 +19,7 @@ public class GameStage : MonoBehaviour
     [Range(1,100)] public int maxEnemies = 10;
 
     public int number;
+    public bool isProcedural = false;
 
     public void Awake()
     {

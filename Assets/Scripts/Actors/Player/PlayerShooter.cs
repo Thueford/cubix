@@ -55,14 +55,14 @@ public class PlayerShooter : ShooterBase
 
     public void toggleRed(bool b) {
         p.explodes = b;
-        rateOfFire *= b ? 2 / 3f : 3 / 2f;
+        //rateOfFire *= b ? 2 / 3f : 3 / 2f;
         p.speed *= (b ? 2/3f : 1.5f);
     }
 
     public void toggleGreen(bool b)
     {
         p.speed *= (b ? 3f : 1/3f);
-        rateOfFire *= (b ? 2f : 1/2f);
+        rateOfFire *= (b ? 1.5f : 2/3f);
         p.reflects = b ? 2 : 0;
         p.hits = b ? 4 : 0;
         p.damage *= b ? 2f : 1/2f;
@@ -70,7 +70,7 @@ public class PlayerShooter : ShooterBase
 
     public void toggleBlue(bool b)
     {
-        //rateOfFire *= b ? 2 / 3f : 3 / 2f;
+        rateOfFire *= b ? 2 / 3f : 3 / 2f;
         p.damage *= b ? 1/2f : 2f;
         singleFire = !b;
     }
@@ -78,5 +78,6 @@ public class PlayerShooter : ShooterBase
     override protected void shoot(Vector3 dir)
     {
         base.shoot(dir);
+        //Player.self.KnockBack(-dir.normalized * p.speed * 3);
     }
 }
