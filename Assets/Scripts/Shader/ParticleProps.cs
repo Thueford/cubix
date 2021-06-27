@@ -4,7 +4,7 @@ using UnityEngine.Rendering;
 
 namespace ParticleProps
 {
-    public enum Shape { SPHERE, CUBE };
+    public enum Shape { DOT, CIRCLE, RECT, SPHERE, CUBE };
     public enum EditorDrawMode { OFF, SLOW, FAST };
 
     public struct Particle
@@ -74,11 +74,18 @@ namespace ParticleProps
             this.shape = shape;
         }
 
-        public void Uniform(ComputeShader sh, string name)
+        public void Uniform(ComputeShader sh, string name) //, Vector3 parent)
         {
             sh.SetVector(name + "Offset", offset);
             sh.SetVector(name + "Scale", scale);
-            // sh.SetInt(name + "Shape", (int)shape);
+            // sh.SetVector(name + "Parent", parent);
+            sh.SetInt(name + "Shape", (int)shape);
+        }
+
+        public void Correct()
+        {
+            if (shape == 0) shape = Shape.SPHERE;
+            if (shape == Shape.CIRCLE) shape = Shape.CUBE;
         }
     }
 

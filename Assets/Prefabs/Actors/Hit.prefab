@@ -47,6 +47,7 @@ MonoBehaviour:
     editorDrawMode: 0
     reset: 0
     initialized: 0
+    prewarmed: 0
     alive: 0
     dead: 0
     emitted: 0
@@ -57,6 +58,7 @@ MonoBehaviour:
   properties:
     enabled: 1
     repeat: 0
+    prewarm: 0
     destroyOnFinished: 1
     maxParts: 20
     lifetime: 0.5
@@ -76,15 +78,15 @@ MonoBehaviour:
   vel:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 10, y: 0, z: 10}
-    shape: 0
+    shape: 3
   force:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 0, y: 0, z: 0}
-    shape: 0
+    shape: 3
   posFac:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 0, y: 0, z: 0}
-    shape: 0
+    shape: 3
   color:
     color: {r: 1, g: 1, b: 1, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}

@@ -18,8 +18,8 @@ public class Particles : MonoBehaviour
     [Header("Emission")]
     [Tooltip("xy: offset, z: timefac")]
     public Capsule<Vector3> size = new Capsule<Vector3>(new Vector3(1,1,0));
-    public DynamicEffect pos;
-    public DynamicEffect vel;
+    public DynamicEffect pos = new DynamicEffect(Vector3.one, Vector3.zero, Shape.SPHERE);
+    public DynamicEffect vel = new DynamicEffect(Vector3.one, Vector3.zero, 0);
     public DynamicEffect force;
     public DynamicEffect posFac;
 
@@ -32,13 +32,10 @@ public class Particles : MonoBehaviour
 
     int GetFlags()
     {
-        return 
-            F(pos.shape == Shape.SPHERE, 0) +
-            F(vel.shape == Shape.SPHERE, 1) +
-            F(force.shape == Shape.SPHERE, 2) +
-            F(color.useGradient, 3) +
-            F(color.useVariation, 4) +
-            F(!stats.prewarmed, 5) +
+        return
+            F(!stats.prewarmed, 0) +
+            F(color.useGradient, 1) +
+            F(color.useVariation, 2) +
             0;
     }
     #endregion
@@ -71,6 +68,7 @@ public class Particles : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        // pos.Correct(); vel.Correct(); force.Correct(); posFac.Correct();
         if (!editorDrawing) return;
         if (isAnimPaused()) { ReleaseBuffers(); return; }
 

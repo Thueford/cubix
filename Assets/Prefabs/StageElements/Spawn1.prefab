@@ -15,15 +15,15 @@ MonoBehaviour:
   stats:
     editorDrawMode: 0
     reset: 0
-    initialized: 1
-    prewarmed: 1
-    alive: 473
-    dead: 27
-    emitted: 504
-    ppf: 2
-    pps: 22
-    bufferSize: 500
-    groupCount: 500
+    initialized: 0
+    prewarmed: 0
+    alive: 0
+    dead: 0
+    emitted: 0
+    ppf: 0
+    pps: 0
+    bufferSize: 0
+    groupCount: 0
   properties:
     enabled: 1
     repeat: 1
@@ -43,19 +43,19 @@ MonoBehaviour:
   pos:
     offset: {x: 0.8, y: 0, z: 0.8}
     scale: {x: 0, y: 0, z: 0}
-    shape: 0
+    shape: 3
   vel:
     offset: {x: 0, y: 0.8, z: 0}
     scale: {x: 0, y: 0, z: 0}
-    shape: 0
+    shape: 3
   force:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 0, y: 0, z: 0}
-    shape: 0
+    shape: 3
   posFac:
     offset: {x: 0.6, y: 0, z: 0.6}
     scale: {x: 0, y: 0, z: 0}
-    shape: 0
+    shape: 3
   color:
     color: {r: 0.2216981, g: 1, b: 0.2216981, a: 1}
     color2: {r: 0.8915094, g: 1, b: 0.8915094, a: 1}

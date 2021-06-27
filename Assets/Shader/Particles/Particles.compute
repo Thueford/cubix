@@ -90,24 +90,51 @@ float _Lifetime;
 float2 _Size;
 
 float3 _PosParent;
+float3 _SpdParent;
+
 float3 _PosOffset;
 float3 _PosScale;
+int _PosShape;
 
-float3 _SpdParent;
 float3 _SpdOffset;
 float3 _SpdScale;
+int _SpdShape;
 
 float3 _ForceOffset;
 float3 _ForceScale;
+int _ForceShape;
 
 float3 _PosFacOffset;
 float3 _PosFacScale;
+int _PosFacShape;
 
 float4 _Color, _Color2;
 
 float3 sqrNormalize(float3 v) {
     float3 av = abs(v);
     return v / max(max(av.x, av.y), av.z);
+}
+
+float3 getShaped(float3 d, int shape)
+{
+    switch (shape)
+    {
+        case S_DOT: return 0;
+        
+        // TODO 2d: x: rel w/h 
+        case S_CIRCLE: 
+            d.y = 0;
+            return normalize(PI * sin(d));
+        
+        case S_RECT:
+            d.y = 0;
+            return sqrNormalize(d);
+        
+        case S_SPHERE: return normalize(PI * sin(d));
+        case S_CUBE: return sqrNormalize(d);
+    }
+    
+    return d;
 }
 
 [numthreads(1, 1, 1)]
@@ -125,29 +152,26 @@ void EmitOne()
     
     // position
     d = float3(ran(_Seeds.xzy), ran(_Seeds.yxz), ran(_Seeds.zyx));
-    if (F(P_POSSHP)) d = normalize(PI * sin(d));
-    else d = sqrNormalize(d);
+    d = getShaped(d, _PosShape);
     p.pos = d * (_PosOffset + _PosScale * rand(_Seeds.wxy));
     //p.pos = mul(_Rotation, float4(p.pos, 1)).xyz;
     
     // velocity
     d = float3(ran(_Seeds.xyz), ran(_Seeds.yzx), ran(_Seeds.zxy));
-    if (F(P_SPDSHP)) d = normalize(PI * sin(d));
-    else d = sqrNormalize(d);
+    d = getShaped(d, _SpdShape);
     p.vel = _SpdOffset.xyz + _PosFacOffset * p.pos + d * _SpdScale.xyz;
     //p.vel = mul(_Rotation, float4(p.vel, 1)).xyz;
     
     // force
     d = float3(ran(_Seeds.xyw), ran(_Seeds.yzw), ran(_Seeds.zxw));
-    if (F(P_FORCESHP)) d = normalize(PI * sin(d));
-    else d = sqrNormalize(d);
+    d = getShaped(d, _ForceShape);
     p.force = _ForceOffset.xyz + _PosFacScale * p.pos + d * _ForceScale.xyz;
     //p.force = mul(_Rotation, float4(p.force, 1)).xyz;
     
     p.pos += _PosParent;
     p.vel += _SpdParent;
     p.color = F(P_CLRVARY) ? lerp(_Color, _Color2, p.rand) : _Color;
-        
+    
     _Particles[id] = p;
 }
 

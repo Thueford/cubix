@@ -6,12 +6,15 @@
 #define PI 3.1415926535
 #define B(X) (1<<X)
 
-#define P_POSSHP B(0)
-#define P_SPDSHP B(1)
-#define P_FORCESHP B(2)
-#define P_CLRGRAD B(3)
-#define P_CLRVARY B(4)
-#define P_PREWARM B(5)
+#define P_PREWARM B(0)
+#define P_CLRGRAD B(1)
+#define P_CLRVARY B(2)
+
+#define S_DOT    0
+#define S_CIRCLE 1
+#define S_RECT   2
+#define S_SPHERE 3
+#define S_CUBE   4
 
 #define F(X) (_Flags & X)
 
