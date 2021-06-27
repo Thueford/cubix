@@ -1818,13 +1818,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bloom: {fileID: 7200000, guid: 47862c77207702b4b811ee8ab5a54fea, type: 3}
   lensFlare: {fileID: 7200000, guid: 65efdfcf4ae3e8d4183f89140b4ccf50, type: 3}
-  blurrMat: {fileID: 2100000, guid: 274b1b0192379f441995496a3b24ed5c, type: 2}
-  sourceTex: {fileID: 1092632210}
-  brightTex: {fileID: 1468754090}
-  blurrBuff: {fileID: 1246474093}
-  caResult: {fileID: 1712711134}
-  lfResult: {fileID: 1372455206}
-  lensDirt: {fileID: 726520418}
+  postProcMat: {fileID: 2100000, guid: 274b1b0192379f441995496a3b24ed5c, type: 2}
   lensDirtTex: {fileID: 2800000, guid: 145b2f0760f8c9642bcdc4459df91931, type: 3}
   starburstTex: {fileID: 2800000, guid: 283a61b575bfb8a49955039e0bfa4a74, type: 3}
   skipAll: 0
@@ -1839,9 +1833,15 @@ MonoBehaviour:
   lfThreshold: 0.737
   lfGhostSpacing: 1.4
   lfCAStrength: 0.2
-  useVignette: 1
+  useCTREffect: 1
   vignetteAmount: 0.8
   vignetteWidth: 0.1
+  sourceTex: {fileID: 1092632210}
+  brightTex: {fileID: 1468754090}
+  blurrBuff: {fileID: 1246474093}
+  caResult: {fileID: 1712711134}
+  lfResult: {fileID: 1372455206}
+  lensDirt: {fileID: 726520418}
 --- !u!1001 &2044247609
 PrefabInstance:
   m_ObjectHideFlags: 0

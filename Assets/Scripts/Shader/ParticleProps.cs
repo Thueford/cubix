@@ -11,7 +11,7 @@ namespace ParticleProps
     {
         public Vector3 pos, vel, force;
         public Vector4 col, size; // xy: size, zw: life
-        public float seed;
+        public float rand;
     }
 
     [System.Serializable]
@@ -20,7 +20,7 @@ namespace ParticleProps
         public EditorDrawMode editorDrawMode;
         public bool reset;
         [HideInInspector]
-        public bool initialized;
+        public bool initialized, prewarmed;
         [ReadOnly]
         public int alive, dead, emitted, ppf, pps;
         [HideInInspector] 
@@ -32,7 +32,9 @@ namespace ParticleProps
     {
         public bool enabled;
         public bool repeat;
+        public bool prewarm;
         public bool destroyOnFinished;
+
         public int maxParts;
         public float lifetime;
 
@@ -48,6 +50,7 @@ namespace ParticleProps
         {
             enabled = true;
             repeat = true;
+            prewarm = false;
             destroyOnFinished = false;
 
             this.maxParts = maxParts;

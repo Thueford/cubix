@@ -57,21 +57,30 @@ void DoUpdate(uint3 id)
     p.size.xy += _SizeVel * _DeltaTime;
     p.vel += p.force * _DeltaTime;
     p.pos += p.vel * _DeltaTime;
-    if (F(P_CLRGRAD)) p.color = getLifeColor(p.size.zw, p.seed);
+    if (F(P_CLRGRAD)) p.color = getLifeColor(p.size.zw, p.rand);
 
     _Particles[id.x] = p;
+}
+
+void DoInitUpdate(uint3 id)
+{
+    Particle p = _Particles[id.x];
+    float age = p.size.w * p.rand - _DeltaTime;
+    for (float i = 0; i < age; i += _DeltaTime) DoUpdate(id);
 }
 
 [numthreads(1, 1, 1)]
 void UpdateOne(uint3 id : SV_DispatchThreadID)
 {
-    DoUpdate(id);
+    if (F(P_PREWARM)) DoInitUpdate(id);
+    else DoUpdate(id);
 }
 
 [numthreads(THREADS, 1, 1)]
 void Update(uint3 id : SV_DispatchThreadID)
 {
-    DoUpdate(id);
+    if (F(P_PREWARM)) DoInitUpdate(id);
+    else DoUpdate(id);
 }
 
 
@@ -110,7 +119,7 @@ void EmitOne()
     
     p.size.xy = _Size;
     p.size.zw = _Lifetime;
-    p.seed = rand(_Seeds.wzy);
+    p.rand = rand(_Seeds.wzy);
     
     float3 d;
     
@@ -137,11 +146,10 @@ void EmitOne()
     
     p.pos += _PosParent;
     p.vel += _SpdParent;
-    p.color = F(P_CLRVARY) ? lerp(_Color, _Color2, p.seed) : _Color;
+    p.color = F(P_CLRVARY) ? lerp(_Color, _Color2, p.rand) : _Color;
         
     _Particles[id] = p;
 }
-
 
 // limited to 65536 threadgroups
 [numthreads(1, 1, 1)]

@@ -11,6 +11,7 @@
 #define P_FORCESHP B(2)
 #define P_CLRGRAD B(3)
 #define P_CLRVARY B(4)
+#define P_PREWARM B(5)
 
 #define F(X) (_Flags & X)
 
@@ -18,7 +19,7 @@ struct Particle
 {
     float3 pos, vel, force;
     float4 color, size;
-    float seed;
+    float rand;
 };
 
 #endif

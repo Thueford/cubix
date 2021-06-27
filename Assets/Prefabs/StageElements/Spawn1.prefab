@@ -15,17 +15,21 @@ MonoBehaviour:
   stats:
     editorDrawMode: 0
     reset: 0
-    initialized: 0
-    alive: 0
-    dead: 0
-    emitted: 0
-    ppf: 0
-    pps: 0
-    bufferSize: 0
-    groupCount: 0
+    initialized: 1
+    prewarmed: 1
+    alive: 473
+    dead: 27
+    emitted: 504
+    ppf: 2
+    pps: 22
+    bufferSize: 500
+    groupCount: 500
   properties:
+    enabled: 1
     repeat: 1
-    maxParts: 50
+    prewarm: 1
+    destroyOnFinished: 0
+    maxParts: 500
     lifetime: 2
     emissionRate: 20
     startDelay: 0
@@ -35,7 +39,7 @@ MonoBehaviour:
     srcBlend: 1
     dstBlend: 10
   size:
-    val: {x: 0.3, y: 0.3, z: -0.1}
+    val: {x: 0.3, y: 0.3, z: -0.15}
   pos:
     offset: {x: 0.8, y: 0, z: 0.8}
     scale: {x: 0, y: 0, z: 0}

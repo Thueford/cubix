@@ -38,6 +38,7 @@ public class Particles : MonoBehaviour
             F(force.shape == Shape.SPHERE, 2) +
             F(color.useGradient, 3) +
             F(color.useVariation, 4) +
+            F(!stats.prewarmed, 5) +
             0;
     }
     #endregion
@@ -59,7 +60,7 @@ public class Particles : MonoBehaviour
     {
         if (tex == null && mat.mainTexture != null) tex = mat.mainTexture;
         stats = new Stats();
-        ShaderSetup();
+        Initialize();
     }
 
     private void OnDrawGizmosSelected()
@@ -69,7 +70,7 @@ public class Particles : MonoBehaviour
         //update maxParts
         if (curMaxParts != properties.maxParts) {
             curMaxParts = properties.maxParts;
-            ReleaseBuffers(); ShaderSetup();
+            ReleaseBuffers(); Initialize();
         }
 
         if (stats.reset) ReleaseBuffers();
@@ -114,7 +115,7 @@ public class Particles : MonoBehaviour
     void OnRenderObject()
     {
         if (isEditorPaused()) return;
-        if (!stats.initialized) ShaderSetup();
+        if (!stats.initialized) Initialize();
         mat.mainTexture = tex;
 
         // set uniforms
@@ -137,6 +138,25 @@ public class Particles : MonoBehaviour
     //public Vector3 posOffset;
     //public Quaternion rotation;
     private System.Action _onFinished;
+
+    public void Initialize()
+    {
+        ShaderSetup();
+        InitializePartBuffer();
+        DispatchInit();
+
+        stats.initialized = true;
+
+        if (properties.prewarm)
+        {
+            int count = (int)(properties.emissionRate * properties.lifetime);
+            count = Mathf.Min(properties.maxParts, count);
+            DispatchEmit(count);
+            DispatchUpdate();
+        }
+
+        stats.prewarmed = true;
+    }
 
     public void Play()
     {
@@ -164,7 +184,9 @@ public class Particles : MonoBehaviour
 
     private int kernelInit, kernelEmit, kernelUpdate;
 
+
     #region Shader Setup
+
     private void ShaderSetup()
     {
         kernelInit = compute.FindKernel("Init");
@@ -191,11 +213,6 @@ public class Particles : MonoBehaviour
             new Vector2(-0.5f,-0.5f),
             new Vector2(-0.5f,0.5f),
         };
-
-        InitializePartBuffer();
-        DispatchInit();
-
-        stats.initialized = true;
     }
 
     private void InitializePartBuffer()
@@ -237,25 +254,16 @@ public class Particles : MonoBehaviour
 
     #region Shader Loop
 
-    public int DispatchEmit(int count)
+
+    private void UniformEmit(int kernel)
     {
-        count = Mathf.Min(count, 1<<15, curMaxParts - stats.alive);
-        if (!properties.repeat && stats.emitted + count > properties.maxParts)
-            count = properties.maxParts - stats.emitted;
-
-        if (count <= 0) count = 0;
-        stats.ppf = count;
-        stats.pps = Mathf.RoundToInt(count / Time.deltaTime);
-        if (count <= 0) return 0;
-
-        stats.emitted += count;
-
         Vector3 velocity = (transform.position - lastPos); // / Time.deltaTime;
         lastPos = transform.position;
 
-        compute.SetBuffer(kernelEmit, "_Particles", particlesBuf);
-        compute.SetBuffer(kernelEmit, "_Alive", deadBuf);
+        compute.SetBuffer(kernel, "_Particles", particlesBuf);
+        compute.SetBuffer(kernel, "_Alive", deadBuf);
 
+        compute.SetInt("_Flags", GetFlags());
         compute.SetVector("_PosParent", transform.position); // + posOffset
         // compute.SetMatrix("_Rotation", Matrix4x4.Rotate(rotation));
         compute.SetVector("_SpdParent", velocityFactor * velocity);
@@ -269,22 +277,41 @@ public class Particles : MonoBehaviour
 
         compute.SetVector("_Size", size.val);
         color.UniformEmit(compute, "_Color");
+    }
 
+    public int DispatchEmit(int count)
+    {
+        count = Mathf.Min(count, 1<<15, curMaxParts - stats.alive);
+        if (!properties.repeat && stats.emitted + count > properties.maxParts)
+            count = properties.maxParts - stats.emitted;
+
+        if (count <= 0) count = 0;
+        stats.ppf = count;
+        stats.pps = Mathf.RoundToInt(count / Time.deltaTime);
+        if (count <= 0) return 0;
+
+        stats.emitted += count;
+
+        UniformEmit(kernelEmit);
         compute.Dispatch(kernelEmit, count, 1, 1);
         return count;
     }
 
-    private void DispatchUpdate()
+    private void UniformUpdate(int kernel)
     {
-        if (!stats.initialized || particlesBuf == null) ShaderSetup();
+        compute.SetBuffer(kernel, "_Particles", particlesBuf);
+        compute.SetBuffer(kernel, "_Dead", deadBuf);
+        color.Uniform(compute, kernel, "_Color");
 
         compute.SetInt("_Flags", GetFlags());
         compute.SetFloat("_SizeVel", size.val.z);
-        compute.SetFloat("_DeltaTime", Time.deltaTime);
-        compute.SetBuffer(kernelUpdate, "_Particles", particlesBuf);
-        compute.SetBuffer(kernelUpdate, "_Dead", deadBuf);
-        color.Uniform(compute, kernelUpdate, "_Color");
+        compute.SetFloat("_DeltaTime", stats.initialized ? Time.deltaTime : Time.fixedDeltaTime);
+    }
 
+    private void DispatchUpdate()
+    {
+        if (!stats.initialized || particlesBuf == null) Initialize();
+        UniformUpdate(kernelUpdate);
         compute.Dispatch(kernelUpdate, stats.groupCount, 1, 1);
         ReadDeadCount();
     }

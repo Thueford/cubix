@@ -58,13 +58,13 @@ MonoBehaviour:
   portal: {fileID: 4635702687571891008}
   actors: {fileID: 0}
   actorsBase: {fileID: 5502133812513080169}
-  collectables: []
   next: {fileID: 0}
   hints: {fileID: 0}
   colorSlots: 3
   chargeTime: 10
   maxEnemies: 10
   number: 0
+  isProcedural: 0
 --- !u!1 &1037097025517605565
 GameObject:
   m_ObjectHideFlags: 0
@@ -473,7 +473,7 @@ PrefabInstance:
     - target: {fileID: 7752741785395244087, guid: ee175145e72731d498b8ac2e7c9d7113,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7752741785395244087, guid: ee175145e72731d498b8ac2e7c9d7113,
         type: 3}
@@ -736,6 +736,21 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 4294967295
       objectReference: {fileID: 0}
+    - target: {fileID: 7030370300776529098, guid: 761c9f5d6528b6a4089602a48663c90f,
+        type: 3}
+      propertyPath: stats.bufferSize
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 7030370300776529098, guid: 761c9f5d6528b6a4089602a48663c90f,
+        type: 3}
+      propertyPath: stats.groupCount
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 7030370300776529098, guid: 761c9f5d6528b6a4089602a48663c90f,
+        type: 3}
+      propertyPath: stats.initialized
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 761c9f5d6528b6a4089602a48663c90f, type: 3}
 --- !u!4 &9134499372753192476 stripped
@@ -776,7 +791,7 @@ PrefabInstance:
     - target: {fileID: 4766244561199489389, guid: 21cc65091c60e5f42ad4e33b72fae25e,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -9
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 4766244561199489389, guid: 21cc65091c60e5f42ad4e33b72fae25e,
         type: 3}
