@@ -12,8 +12,8 @@ public class Player : EntityBase
 
     [Header("Other Settings")]
     [WarnNull] public Text txtDbg;
-    public PlayerShooter bs;
-    public Particles ps;
+    [NotNull] public PlayerShooter bs;
+    [NotNull] public Particles psTrail, psColorSwitch;
 
     private float invulnurable = 0;
 
@@ -21,8 +21,6 @@ public class Player : EntityBase
     {
         base.Awake();
         self = this;
-        bs = GetComponent<PlayerShooter>();
-        ps = GetComponentInChildren<Particles>();
     }
 
     // Start is called before the first frame update
@@ -47,13 +45,25 @@ public class Player : EntityBase
 
         if (movable)
         {
-            Vector3 dir = Vector3.zero;
-
             Vector3Int nrgb = InputHandler.ReadColorInput(rgb);
-            if(rgb != nrgb) bs.updateProperties(rgb = nrgb);
+            if (rgb != nrgb)
+            {
+                bs.updateProperties(rgb = nrgb);
+
+                psTrail.color.color = GameState.getLightColor(GameState.V2Color(rgb));
+                psTrail.color.color2 = 0.4f * psTrail.color.color;
+                psTrail.color.color2.a = 1;
+
+                psColorSwitch.color.color = psTrail.color.color;
+                psColorSwitch.color.color2 = psTrail.color.color2;
+
+                Debug.Log("Switch");
+                psColorSwitch.ResetPS();
+                psColorSwitch.Play();
+            }
 
             // read input keys
-            dir = InputHandler.ReadDirInput();
+            Vector3 dir = InputHandler.ReadDirInput();
             dir = dir.normalized * accelerationForce;
 
             // apply direction
@@ -67,7 +77,7 @@ public class Player : EntityBase
             }
 
             float pvel = Mathf.Clamp(rb.velocity.magnitude / maxSpeed, 1e-2f, 0.96f);
-            ps.properties.emissionRate = ps.properties.maxParts * Mathf.Pow(pvel, 3);
+            psTrail.properties.emissionRate = psTrail.properties.maxParts * Mathf.Pow(pvel, 3);
 
             // look in movement direction
             Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);

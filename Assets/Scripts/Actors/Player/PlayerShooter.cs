@@ -24,7 +24,7 @@ public class PlayerShooter : ShooterBase
         p.speed = 40f;
         p.damage = 1f;
         p.explosionRadius = 7.5f;
-        updateColor(Vector3Int.zero);
+        p.color = GameState.V2Color(Vector3Int.zero);
     }
 
     // Update is called once per frame
@@ -35,13 +35,6 @@ public class PlayerShooter : ShooterBase
 
     private void updateColor(Vector3Int rgb)
     {
-        if (rgb == Vector3Int.zero) p.color = GameState.black;
-        else if (rgb == Vector3Int.forward) p.color = GameState.blue;
-        else if (rgb == Vector3Int.up) p.color = GameState.green;
-        else p.color = new Color(rgb.x, rgb.y, rgb.z, 1f);
-        Player.self.ps.color.color = GameState.getLightColor(p.color);
-        Player.self.ps.color.color2 = 0.4f * Player.self.ps.color.color;
-        Player.self.ps.color.color2.a = 1;
     }
 
     public void updateProperties(Vector3Int rgbNew)
@@ -49,8 +42,8 @@ public class PlayerShooter : ShooterBase
         if (rgbNew.x != rgb.x) toggleRed(rgbNew.x == 1);
         if (rgbNew.y != rgb.y) toggleGreen(rgbNew.y == 1);
         if (rgbNew.z != rgb.z) toggleBlue(rgbNew.z == 1);
+        p.color = GameState.V2Color(rgbNew);
         rgb = rgbNew;
-        updateColor(rgb);
     }
 
     public void toggleRed(bool b) {

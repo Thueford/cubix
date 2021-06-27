@@ -162,6 +162,14 @@ public class GameState : MonoBehaviour
         return color == black ? glow : color;
     }
 
+    public static Color V2Color(Vector3Int rgb)
+    {
+        if (rgb == Vector3Int.zero) return black;
+        else if (rgb == Vector3Int.forward) return blue;
+        else if (rgb == Vector3Int.up) return green;
+        else return new Color(rgb.x, rgb.y, rgb.z, 1f);
+    }
+
     public static void addRed()
     {
         if (unlockedColors.x != 1)

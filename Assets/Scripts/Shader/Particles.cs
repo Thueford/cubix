@@ -6,7 +6,7 @@ using UnityEditor;
 using ParticleProps;
 using RenderSettings = ParticleProps.RenderSettings;
 
-[ExecuteAlways]
+// [ExecuteAlways]
 public class Particles : MonoBehaviour
 {
     #region General
@@ -46,11 +46,16 @@ public class Particles : MonoBehaviour
     #endregion
 
     #region Privates
-    private float partTimer = 0, timePerPart; // for spawning new particles
+    private float partTimer = 0; // for spawning new particles
     private Vector3 lastPos;
 
     private int curMaxParts = 1;
     private Vector2[] meshVerts;
+    private static bool editorDrawing = false;
+
+    private bool isEditorPlaying(EditorDrawMode edm) { return isAnimPlaying() && stats.editorDrawMode == edm; }
+    private bool isAnimPlaying() { return Application.isPlaying || (editorDrawing && !EditorApplication.isPaused); }
+    private bool isAnimPaused() { return !Application.isPlaying && (!editorDrawing || (EditorApplication.isPaused || stats.editorDrawMode == 0)); }
 
     #endregion
 
@@ -60,12 +65,14 @@ public class Particles : MonoBehaviour
     {
         if (tex == null && mat.mainTexture != null) tex = mat.mainTexture;
         stats = new Stats();
-        Initialize();
+        stats.editorDrawMode = EditorDrawMode.OFF;
+        if(isAnimPlaying()) Initialize();
     }
 
     private void OnDrawGizmosSelected()
     {
-        if (isEditorPaused()) { ReleaseBuffers(); return; }
+        if (!editorDrawing) return;
+        if (isAnimPaused()) { ReleaseBuffers(); return; }
 
         //update maxParts
         if (curMaxParts != properties.maxParts) {
@@ -82,16 +89,12 @@ public class Particles : MonoBehaviour
         }
     }
 
-    private bool isEditorPlaying(EditorDrawMode edm) { return isEditorPlaying() && stats.editorDrawMode == edm; }
-    private bool isEditorPlaying() { return !Application.isPlaying && !EditorApplication.isPaused; }
-    private bool isEditorPaused() { return !Application.isPlaying && (EditorApplication.isPaused || stats.editorDrawMode == 0); }
-
     // Update is called once per frame
     void Update()
     {
-        if (isEditorPlaying(EditorDrawMode.SLOW))
+        if (editorDrawing && isEditorPlaying(EditorDrawMode.SLOW))
             EditorApplication.delayCall += EditorApplication.QueuePlayerLoopUpdate;
-        if (isEditorPaused()) return;
+        if (isAnimPaused()) return;
 
         DispatchUpdate();
 
@@ -105,16 +108,17 @@ public class Particles : MonoBehaviour
         // spawn particles
         if (properties.enabled && properties.emissionRate > 1e-2)
         {
-            timePerPart = 1 / properties.emissionRate;
             if (partTimer == 0) partTimer = -10*Time.deltaTime;
             partTimer += Time.deltaTime;
-            partTimer -= timePerPart * DispatchEmit((int)(partTimer / timePerPart));
+
+            DispatchEmit((int)(partTimer * properties.emissionRate));
+            partTimer -= (int)(partTimer * properties.emissionRate) / properties.emissionRate;
         }
     }
 
     void OnRenderObject()
     {
-        if (isEditorPaused()) return;
+        if (isAnimPaused()) return;
         if (!stats.initialized) Initialize();
         mat.mainTexture = tex;
 
@@ -129,6 +133,9 @@ public class Particles : MonoBehaviour
         if (deadBuf == null) Debug.LogWarning("... " + stats.initialized);
         else Graphics.DrawProceduralNow(MeshTopology.Triangles, meshVerts.Length, deadBuf.count);
     }
+
+    private void OnDisable() { ReleaseBuffers(); }
+    private void OnDestroy() { ReleaseBuffers(); }
 
     #endregion
 
@@ -146,6 +153,17 @@ public class Particles : MonoBehaviour
         DispatchInit();
 
         stats.initialized = true;
+
+        ResetPS();
+    }
+
+    public void ResetPS()
+    {
+        deadBuf.SetCounterValue((uint)curMaxParts);
+        ReadDeadCount();
+        stats.alive = 0;
+        stats.dead = curMaxParts;
+        stats.emitted = 0;
 
         if (properties.prewarm)
         {
@@ -222,8 +240,8 @@ public class Particles : MonoBehaviour
         deadBuf = new ComputeBuffer(stats.bufferSize, sizeof(int), ComputeBufferType.Append);
         deadBuf.SetCounterValue(0);
 
-        counterBuf = new ComputeBuffer(4, sizeof(int), ComputeBufferType.IndirectArguments);
-        counterArray = new int[] { 0, 1, 0, 0 };
+        counterBuf = new ComputeBuffer(counterArray.Length, sizeof(int), ComputeBufferType.IndirectArguments);
+        counterBuf.SetData(counterArray);
 
         quadVertBuf = new ComputeBuffer(meshVerts.Length, Marshal.SizeOf<Vector2>());
         quadVertBuf.SetData(meshVerts);
@@ -235,6 +253,7 @@ public class Particles : MonoBehaviour
         compute.SetBuffer(kernelInit, "_Particles", particlesBuf);
         compute.SetBuffer(kernelInit, "_Dead", deadBuf);
         compute.Dispatch(kernelInit, stats.groupCount, 1, 1);
+        ReadDeadCount();
     }
 
     private void ReleaseBuffers()
@@ -253,7 +272,6 @@ public class Particles : MonoBehaviour
     #endregion
 
     #region Shader Loop
-
 
     private void UniformEmit(int kernel)
     {
@@ -316,15 +334,9 @@ public class Particles : MonoBehaviour
         ReadDeadCount();
     }
 
-    private int[] counterArray;
+    private static int[] counterArray = new int[1];
     private void ReadDeadCount()
     {
-        if (deadBuf == null || counterBuf == null || counterArray == null)
-        {
-            stats.dead = stats.bufferSize;
-            return;
-        }
-        counterBuf.SetData(counterArray);
         ComputeBuffer.CopyCount(deadBuf, counterBuf, 0);
         counterBuf.GetData(counterArray);
         stats.dead = counterArray[0];
@@ -332,13 +344,6 @@ public class Particles : MonoBehaviour
     }
 
     #endregion
-
-    private void OnDisable() {
-        ReleaseBuffers();
-    }
-    private void OnDestroy() {
-        ReleaseBuffers();
-    }
 
     #endregion
 }
