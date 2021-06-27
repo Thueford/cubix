@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace Particles
+namespace ParticleProps
 {
     public enum Shape { SPHERE, CUBE };
     public enum EditorDrawMode { OFF, SLOW, FAST };
@@ -32,6 +32,7 @@ namespace Particles
     {
         public bool enabled;
         public bool repeat;
+        public bool destroyOnFinished;
         public int maxParts;
         public float lifetime;
 
@@ -47,6 +48,8 @@ namespace Particles
         {
             enabled = true;
             repeat = true;
+            destroyOnFinished = false;
+
             this.maxParts = maxParts;
             this.lifetime = lifetime;
             this.emissionRate = emissionRate;

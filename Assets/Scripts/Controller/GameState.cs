@@ -54,6 +54,7 @@ public class GameState : MonoBehaviour
     private void Update()
     {
         colorOrderNonStatic = colorOrder;
+        if (InputHandler.ReadPauseInput()) TogglePause();
     }
 
     IEnumerator StartGame()

@@ -8,7 +8,7 @@ public class Bullet : MonoBehaviour
 {
     [NotNull] public Rigidbody rb;
     [NotNull] public CapsuleCollider cc;
-    [NotNull] public GameObject explosionPrefab;
+    [NotNull] public Explosion explosionPrefab;
     [NotNull] public GameObject hitPrefab;
 
     private Vector3 dir, oldVelocity;
@@ -82,7 +82,7 @@ public class Bullet : MonoBehaviour
     {
         GetComponent<Renderer>().material.color = color;
         GetComponent<Light>().color = GameState.getLightColor(color);
-        GetComponent<Particles.Particles>().color.color = GameState.getLightColor(color);
+        GetComponent<Particles>().color.color = GameState.getLightColor(color);
     }
 
     public void launch(Vector3 dir)
@@ -99,7 +99,7 @@ public class Bullet : MonoBehaviour
 
     private void explode()
     {
-        GameObject explosion = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        Explosion explosion = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         explosion.GetComponent<Explosion>().SetProperties(p);
     }
 

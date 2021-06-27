@@ -13,7 +13,7 @@ public class Player : EntityBase
     [Header("Other Settings")]
     [WarnNull] public Text txtDbg;
     public PlayerShooter bs;
-    public Particles.Particles ps;
+    public Particles ps;
 
     private float invulnurable = 0;
 
@@ -22,7 +22,7 @@ public class Player : EntityBase
         base.Awake();
         self = this;
         bs = GetComponent<PlayerShooter>();
-        ps = GetComponentInChildren<Particles.Particles>();
+        ps = GetComponentInChildren<Particles>();
     }
 
     // Start is called before the first frame update
@@ -44,13 +44,14 @@ public class Player : EntityBase
     override public void Update()
     {
         base.Update();
-        InputHandler.ReadPauseInput();
 
         if (movable)
         {
             Vector3 dir = Vector3.zero;
 
-            rgb = InputHandler.ReadColorInput(rgb);
+            Vector3Int nrgb = InputHandler.ReadColorInput(rgb);
+            if(rgb != nrgb) bs.updateProperties(rgb = nrgb);
+
             // read input keys
             dir = InputHandler.ReadDirInput();
             dir = dir.normalized * accelerationForce;
@@ -69,7 +70,7 @@ public class Player : EntityBase
             float f = (transform.position.y-r.origin.y)/r.direction.y;
             transform.forward = r.GetPoint(f) - transform.position;
 
-            InputHandler.ReadShootInput();
+            if(InputHandler.ReadShootInput()) bs.tryShot();
 
             invulnurable = Mathf.Max(0, invulnurable-Time.deltaTime);
         }

@@ -44,18 +44,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats:
-    editorDrawMode: 2
+    editorDrawMode: 0
     reset: 0
-    initialized: 1
+    initialized: 0
     alive: 0
-    dead: 20
-    emitted: 360
+    dead: 0
+    emitted: 0
     ppf: 0
     pps: 0
-    bufferSize: 20
-    groupCount: 20
+    bufferSize: 0
+    groupCount: 0
   properties:
+    enabled: 1
     repeat: 0
+    destroyOnFinished: 1
     maxParts: 20
     lifetime: 0.5
     emissionRate: 5000

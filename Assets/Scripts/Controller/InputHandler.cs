@@ -9,44 +9,36 @@ public class InputHandler
     public static bool enableMovement = true;
     public static bool enableMouse = true;
 
-    public static void ReadSpaceInput()
+    public static bool ReadSpaceInput()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && enableSpace)
-        {
-            Ressource.activateColors();
-        }
+        return Input.GetKeyDown(KeyCode.Space) && enableSpace;
     }
 
-    public static Vector3Int ReadColorInput(Vector3Int rgb)
+    public static Vector3Int ReadColorInput(Vector3Int old)
     {
-        if (!enableNumbers || GameState.unlockedColors == Vector3Int.zero) return rgb;
-        Vector3Int oldrgb = rgb;
+        if (!enableNumbers || GameState.unlockedColors == Vector3Int.zero) return old;
 
         if (Input.GetKeyDown(KeyCode.Alpha1) && GameState.unlockedColors.x == 1)
         {
-            rgb.x = 1 - rgb.x;
-            if (rgb.x == 1) rgb = Vector3Int.right;
+            old.x = 1 - old.x;
+            if (old.x == 1) old = Vector3Int.right;
         }
         if (Input.GetKeyDown(KeyCode.Alpha2) && GameState.unlockedColors.y == 1)
         {
-            rgb.y = 1 - rgb.y;
-            if (rgb.y == 1) rgb = Vector3Int.up;
+            old.y = 1 - old.y;
+            if (old.y == 1) old = Vector3Int.up;
         }
         if (Input.GetKeyDown(KeyCode.Alpha3) && GameState.unlockedColors.z == 1)
         {
-            rgb.z = 1 - rgb.z;
-            if (rgb.z == 1) rgb = Vector3Int.forward;
+            old.z = 1 - old.z;
+            if (old.z == 1) old = Vector3Int.forward;
         }
-        if (rgb != oldrgb)
-        {
-            Player.self.bs.updateProperties(rgb);
-        }
-        return rgb;
+        return old;
     }
 
-    public static void ReadPauseInput()
+    public static bool ReadPauseInput()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)) GameState.TogglePause();
+        return Input.GetKeyDown(KeyCode.Escape);
     }
 
     public static Vector3 ReadDirInput()
@@ -60,9 +52,8 @@ public class InputHandler
         return dir;
     }
 
-    public static  void ReadShootInput()
+    public static bool ReadShootInput()
     {
-        if (Input.GetMouseButton(0) && enableMouse)
-            Player.self.bs.tryShot();
+        return Input.GetMouseButton(0) && enableMouse;
     }
 }

@@ -50,7 +50,8 @@ public class Ressource : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        InputHandler.ReadSpaceInput();
+        if(InputHandler.ReadSpaceInput()) activateColors();
+
         if (InputHandler.enableSpace)
         {
             bool red = valueRed >= 100;

@@ -117,7 +117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: -1933708595300179592}
   cc: {fileID: 5159200350898634485}
-  explosionPrefab: {fileID: 609184826687653396, guid: 4c7549379cd08db4e921ed6fc2a7fbda,
+  explosionPrefab: {fileID: 1599605250593376769, guid: 4c7549379cd08db4e921ed6fc2a7fbda,
     type: 3}
   hitPrefab: {fileID: 609184826687653396, guid: 24420fcb8a274ea488859c8fe1a04b46,
     type: 3}
@@ -214,11 +214,15 @@ MonoBehaviour:
     initialized: 0
     alive: 0
     dead: 0
+    emitted: 0
     ppf: 0
     pps: 0
     bufferSize: 0
     groupCount: 0
   properties:
+    enabled: 1
+    repeat: 1
+    destroyOnFinished: 0
     maxParts: 100
     lifetime: 2
     emissionRate: 10

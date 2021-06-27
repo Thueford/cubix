@@ -84,7 +84,9 @@ MonoBehaviour:
     bufferSize: 0
     groupCount: 0
   properties:
+    enabled: 1
     repeat: 0
+    destroyOnFinished: 1
     maxParts: 300
     lifetime: 0.7
     emissionRate: 50000
