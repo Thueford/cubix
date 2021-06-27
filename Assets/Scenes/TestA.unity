@@ -1465,18 +1465,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c757194044ae0bd40bbc234134156d13, type: 3}
---- !u!114 &1640590575 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 757038173234545941, guid: c757194044ae0bd40bbc234134156d13,
-    type: 3}
-  m_PrefabInstance: {fileID: 1640590574}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c8eca009189bf640ae700592bb0c1dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1653965243
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1528,7 +1516,7 @@ PrefabInstance:
         type: 3}
       propertyPath: next
       value: 
-      objectReference: {fileID: 1640590575}
+      objectReference: {fileID: 1653965245}
     - target: {fileID: 757038173234545941, guid: c757194044ae0bd40bbc234134156d13,
         type: 3}
       propertyPath: chargeTime
@@ -1984,11 +1972,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 5082109809681214106, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
-        type: 3}
-      propertyPath: properties.maxParts
-      value: 300
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2, type: 3}

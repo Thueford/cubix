@@ -15,5 +15,6 @@ public class Spawn : MonoBehaviour
     {
         // GetComponentInChildren<ParticleSystem>().Stop();
         GetComponent<Particles>().Stop();
+        GetComponent<Particles>().ResetPS();
     }
 }
