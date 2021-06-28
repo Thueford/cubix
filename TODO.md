@@ -20,7 +20,7 @@ Game Features:
 
 GUI:
 
-- [ ] display High Score and current Stage      A
+- [x] display High Score and current Stage      A
 - [x] Show Active Shot Color (maybe display on Player Model)    A
 - [ ] Redesign of GUI?      A
 

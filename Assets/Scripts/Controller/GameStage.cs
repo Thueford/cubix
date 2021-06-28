@@ -5,12 +5,13 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class GameStage : MonoBehaviour
 {
-    [NotNull] public Camera cam;
-    [NotNull] public Spawn spawn;
-    [NotNull] public Charger charger;
-    [NotNull] public Portal portal;
+    [NotNull, HideInInspector] public Camera cam;
+    [NotNull, HideInInspector] public Spawn spawn;
+    [NotNull, HideInInspector] public Charger charger;
+    [NotNull, HideInInspector] public Portal portal;
+    [NotNull, HideInInspector] public GameObject actorsBase;
+    [NotNull, HideInInspector] public TMPro.TextMeshPro stageText;
     public GameObject actors;
-    [NotNull] public GameObject actorsBase;
     [WarnNull] public GameStage next;
     [WarnNull] public StageController hints;
 
@@ -25,6 +26,11 @@ public class GameStage : MonoBehaviour
     {
         gameObject.SetActive(false);
         actorsBase.SetActive(false);
+    }
+
+    public void Start()
+    {
+        stageText.text = "Stage: " + number;
     }
 
     // Reset entities

@@ -164,6 +164,7 @@ public class Particles : MonoBehaviour
     public void ResetPS()
     {
         if (!enableParticles) return;
+        if (deadBuf == null) return;
         deadBuf.SetCounterValue((uint)curMaxParts);
         ReadDeadCount();
         stats.alive = 0;
