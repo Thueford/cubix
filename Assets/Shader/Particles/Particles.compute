@@ -124,13 +124,13 @@ float3 getShaped(float3 d, int shape)
         // TODO 2d: x: rel w/h 
         case S_CIRCLE: 
             d.y = 0;
-            return normalize(PI * sin(d));
+            return normalize(d);
         
         case S_RECT:
             d.y = 0;
             return sqrNormalize(d);
         
-        case S_SPHERE: return normalize(PI * sin(d));
+        case S_SPHERE: return normalize(d);
         case S_CUBE: return sqrNormalize(d);
     }
     
