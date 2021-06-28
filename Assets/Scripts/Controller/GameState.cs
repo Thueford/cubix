@@ -9,6 +9,8 @@ public class GameState : MonoBehaviour
     [NotNull] public GameStage startStage;
     [NotNull] public GameObject PauseOverlay;
     public static GameStage curStage;
+    public static PlayerSettings settings;
+    public PlayerSettings sets;
 
     public static Color
         black = new Color(.3f, .3f, .3f, 1f),
@@ -19,7 +21,7 @@ public class GameState : MonoBehaviour
 
     public static Vector3Int unlockedColors = Vector3Int.zero;
     public static Color[] colorOrder = { Color.black, Color.black, Color.black };
-    public static int colorCount = 0, stage = 0;
+    public static int colorCount = 0;
     public static bool paused { get; private set; } = false;
 
     [ReadOnly] public Color[] colorOrderNonStatic;
@@ -39,7 +41,10 @@ public class GameState : MonoBehaviour
 
     void Awake()
     {
-       self = this;
+        self = this;
+        sets = settings = PlayerSettings.LoadProfile(1);
+        settings.startNo++;
+        settings.Save();
     }
 
     // Start is called before the first frame update

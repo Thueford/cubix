@@ -131,9 +131,20 @@ public class Player : EntityBase
 
     public void TeleportNext()
     {
+
+        if (GameState.curStage.number > GameState.settings.stageHighscore)
+        {
+            GameState.settings.stageHighscore = GameState.curStage.number;
+            GameState.settings.Save();
+        }
+
         if (GameState.curStage == null) return;
         else if (GameState.curStage.next == null)
+        {
+            GameState.settings.reachedEndless = true;
+            GameState.settings.Save();
             GameState.curStage.next = StageBuilder.self.Generate(GameState.curStage.transform);
+        }
 
         GameState.curStage.FreezeActors();
 

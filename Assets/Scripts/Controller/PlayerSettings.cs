@@ -5,12 +5,28 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerSettings
 {
-    public static byte curProfile = 1;
+    private byte profile = 1;
+
+    public int startNo = 0;
+    public int stageHighscore = 0;
+    public bool reachedEndless = false;
+
+    public PlayerSettings(byte profile)
+    {
+        this.profile = profile;
+    }
+
+    public void Save()
+    {
+        Save(this);
+    }
 
 
+    #region statics
+
+    private static string SAVEDATA_DIR { get { return Application.dataPath + "/saves/"; } }
     private const string SAVEDATA_BASE = "player";
     private const string SAVEDATA_EXT = ".save";
-    private static string SAVEDATA_DIR { get { return Application.dataPath + "/saves/"; } }
 
     public static string GetSavePath(byte profile)
     {
@@ -19,24 +35,27 @@ public class PlayerSettings
         return SAVEDATA_DIR + SAVEDATA_BASE + profile + SAVEDATA_EXT;
     }
 
-    public static void SaveProfile(PlayerSettings s)
+    public static void Save(PlayerSettings s)
     {
         string json = JsonUtility.ToJson(s, true);
-        File.WriteAllText(GetSavePath(curProfile), json);
+        File.WriteAllText(GetSavePath(s.profile), json);
     }
 
-    public static PlayerSettings LoadProfile()
+    public static PlayerSettings LoadProfile(byte profile)
     {
-        string filePath = GetSavePath(curProfile);
+        string filePath = GetSavePath(profile);
         if (!File.Exists(filePath)) goto returnDefault;
 
         string data = File.ReadAllText(filePath);
         if (string.IsNullOrEmpty(data)) goto returnDefault;
 
-        return JsonUtility.FromJson<PlayerSettings>(data);
+        PlayerSettings p = JsonUtility.FromJson<PlayerSettings>(data);
+        p.profile = profile;
+        return p;
 
     returnDefault:
-        Debug.LogErrorFormat("{0} not found. Loading default profile", filePath);
-        return new PlayerSettings();
+        Debug.LogWarningFormat("{0} not found. Loading default profile", filePath);
+        return new PlayerSettings(profile);
     }
+    #endregion
 }
