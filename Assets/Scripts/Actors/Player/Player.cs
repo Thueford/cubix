@@ -87,7 +87,12 @@ public class Player : EntityBase
 
             if(InputHandler.ReadShootInput()) bs.tryShot();
 
-            invulnurable = Mathf.Max(0, invulnurable-Time.deltaTime);
+            if (invulnurable > 0)
+            {
+                Debug.Log("Play Flicker Animation");
+                invulnurable = Mathf.Max(0, invulnurable - Time.deltaTime);
+                if (invulnurable == 0) Debug.Log("Stop Flicker Animation");
+            }
         }
     }
 
@@ -178,5 +183,11 @@ public class Player : EntityBase
     {
         base.Die();
         GameState.curStage.FreezeActors();
+    }
+
+    public override void OnDie(AnimationEvent ev)
+    {
+        base.OnDie(ev);
+        GameState.load(GameState.stateCurStage);
     }
 }

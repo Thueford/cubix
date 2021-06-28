@@ -80,6 +80,7 @@ public abstract class EntityBase : MonoBehaviour
 
     virtual public void OnDie(AnimationEvent ev)
     {
+        anim.enabled = false;
         // Debug.Log("killed " + name);
     }
 
