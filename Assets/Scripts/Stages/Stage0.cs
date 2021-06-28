@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Stage0 : Hint
+public class Stage0 : StageController
 {
     enum State { START, WASD, CHARGE, PORTAL }
     private State state;
+
+    [Multiline]
+    public string txtHighScore = "HighScore:\nStage: {0}";
 
     override public void ResetHints()
     {
@@ -13,13 +16,25 @@ public class Stage0 : Hint
         state = State.START;
     }
 
-    // Update is called once per frame
-    void Update()
+    override public void EndlessHints()
     {
         switch (state)
         {
             case State.START:
-                if (isCurStage()) return;
+                
+                texts[3].GetComponent<TMPro.TextMeshPro>().text =
+                    string.Format(txtHighScore, GameState.settings.stageHighscore);
+                texts[3].SetActive(true);
+                break;
+        }
+        state++;
+    }
+
+    override public void NewbieHints()
+    {
+        switch (state)
+        {
+            case State.START:
                 texts[0].SetActive(true);
                 break;
 

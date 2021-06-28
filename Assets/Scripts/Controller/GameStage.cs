@@ -12,7 +12,7 @@ public class GameStage : MonoBehaviour
     public GameObject actors;
     [NotNull] public GameObject actorsBase;
     [WarnNull] public GameStage next;
-    [WarnNull] public Hint hints;
+    [WarnNull] public StageController hints;
 
     [Range(0,  3)] public int colorSlots = 3;
     [Range(1,100)] public float chargeTime = 10;

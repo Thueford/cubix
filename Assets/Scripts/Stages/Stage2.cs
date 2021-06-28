@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Stage2 : Hint
+public class Stage2 : StageController
 {
     enum State { START, RED, GREEN, BLUE, DONE }
     private State state;
@@ -13,13 +13,11 @@ public class Stage2 : Hint
         state = State.START;
     }
 
-    // Update is called once per frame
-    void Update()
+    override public void NewbieHints()
     {
         switch (state)
         {
             case State.START:
-                if (isCurStage()) return;
                 texts[0].SetActive(true);
                 if (GameState.unlockedColors == Vector3Int.right) state = State.RED;
                 else if (GameState.unlockedColors == Vector3Int.up) state = State.GREEN;
