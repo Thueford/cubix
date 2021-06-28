@@ -17,20 +17,20 @@ Game Features:
 GUI:
 
 - [ ] display High Score and current Stage      A
-- [ ] Show Active Shot Color (maybe display on Player Model)    A
+- [x] Show Active Shot Color (maybe display on Player Model)    A
 - [ ] Redesign of GUI?      A
 
 Particles/Visuals: A
 
 - [ ] Player Model (+ some way to indicate HP and Active Shot Color?)
-- [ ] Bullet Particle Trails
-- [ ] Bullet Hit Particles
-- [ ] Charger active Particles
-- [ ] Explosion Animation/Particles
-- [ ] Player Movement Particles
+- [x] Bullet Particle Trails
+- [x] Bullet Hit Particles
+- [x] Charger active Particles
+- [x] Explosion Animation/Particles
+- [x] Player Movement Particles
 - [ ] Particles on Entity Death
-- [ ] Animation/Particles on Collectable pickup
-- [ ] Particles on Shot Mode Switch
+- [x] Animation/Particles on Collectable pickup
+- [x] Particles on Shot Mode Switch
 
 Sounds:     J
 
