@@ -2,23 +2,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteAlways]
 public class EnemySpawner : MonoBehaviour
 {
-    [NotNull] public Material[] modes;
-    [NotNull] public EntityBase prefab;
-    private MeshRenderer r;
+    [NotNull, HideInInspector] 
+    public EntityBase b_archer, b_hunter, b_stride;
+    [Header("Type Probes")]
+    [Range(0, 100)] public int p_hunter = 100;
+    [Range(0, 100)] public int p_archer = 100;
+    [Range(0, 100)] public int p_stride = 100;
 
-    [Range(0, 3)] public int maxColors = 0;
-    [Range(1, 100)] public int amount = 1;
-    [Range(1,  10)] public int wavesize = 1;
-    [Range(0, 100)] public float delay = 1;
-    [Range(0, 10)] public float variation = 0.2f;
+    [Header("Color Probes")]
+    [Range(0, 100)] public int p_prim = 0;
+    [Range(0, 100)] public int p_secd = 0;
+    [Range(0, 100)] public int p_tert = 0;
 
-    [Tooltip("Probability for primary, secondary and tertiary color")]
-    public Vector4 colors = new Vector4(1, 1, 1, 10);
+    [Header("Other")]
+    [Range(0,   3)] public int maxColors = 3;
+    [Range(1, 100)] public int amount = 10;
+    [Range(1,  10)] public int wavesize = 2;
+    [Range(0, 100)] public float delay = 5;
+    [Range(0,  10)] public float variation = 1f;
 
     private int spawned = 0;
+    private MeshRenderer r;
     private static int enemyCount = 0;
 
     void Awake()
@@ -66,41 +72,45 @@ public class EnemySpawner : MonoBehaviour
             }
 
             pos.y = 0.5f;
-            EntityBase e = Instantiate(prefab, pos, Quaternion.identity, transform.parent);
+            EntityBase e = Instantiate(getRandomPrefab(), pos, Quaternion.identity, transform.parent);
             e.setColor(getWeightedColor());
             if (++spawned < amount) InitiateSpawn();
         }
         else InitiateSpawn();
     }
 
-    void Update()
-    {
-        if (!Application.isPlaying && Time.frameCount % Application.targetFrameRate == 0)
-        {
-            if (prefab is E_Hunter) r.material = modes[2];
-            else if (prefab is E_Archer) r.material = modes[3];
-            else if (prefab is E_Stray) r.material = modes[4];
-            else if (prefab is Player) r.material = modes[1];
-            else r.material = modes[0]; 
-            //Debug.Log(r.material);
-        }
-    }
-
+    // This is madness ngl
     private Color getWeightedColor()
     {
         if (maxColors == 0) return Color.black;
-
-        Vector4 prob = colors;                  //Probability vector
-        prob /= Vector4.Dot(prob, Vector4.one); // normalize to sum=1
+        List<int> l = new List<int>();
 
         Color c = Color.black;
-        for (int i = 0; i < maxColors; i++)
+        if (100 * Random.value < p_prim) l.Add(0);
+        if (100 * Random.value < p_secd) l.Add(1);
+        if (100 * Random.value < p_tert) l.Add(2);
+
+        Debug.Log(l.ToArray());
+        for (int i = 0; i < maxColors && l.Count > 0; i++)
         {
-            float rand = Random.value;
-            if (rand < prob.x) c += GameState.colorOrder[0];
-            else if (rand < prob.x+prob.y) c += GameState.colorOrder[1];
-            else if (rand < prob.x+prob.y+prob.z) c += GameState.colorOrder[2];
+            int x = Random.Range(0, l.Count);
+            c += GameState.colorOrder[l[x]];
+            Debug.Log("WC: " + x + " " + l[x] + " -> " + c);
+            l.RemoveAt(x);
         }
+
         return c;
+    }
+
+    private EntityBase getRandomPrefab()
+    {
+        int sum = p_hunter + p_archer + p_stride;
+        int val = Mathf.RoundToInt(sum * Random.value);
+
+        if ((val -= p_hunter) <= 0) return b_hunter;
+        if ((val -= p_archer) <= 0) return b_archer;
+        if ((val -= p_stride) <= 0) return b_stride;
+        Debug.LogError("Why does this happen to me");
+        return null;
     }
 }

@@ -41,8 +41,7 @@ public class Collectable : MonoBehaviour
 
     public static void Clear(GameStage s)
     {
-        foreach (Collectable coll in s.actors.GetComponentsInChildren<Collectable>())
-            Destroy(coll.gameObject);
+        foreach (Collectable c in s.actors.GetComponentsInChildren<Collectable>()) c.Kill();
     }
 
     private void setColor(Color color)
@@ -59,11 +58,17 @@ public class Collectable : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            Kill();
             OnCollect();
-            gameObject.GetComponentInChildren<Light>().enabled = false;
-            gameObject.GetComponent<Particles>().SetEnabled(false);
-            GetComponent<Animator>().Play("Die");
         }
+    }
+
+    public void Kill()
+    {
+        GetComponent<SphereCollider>().enabled = false;
+        gameObject.GetComponentInChildren<Light>().enabled = false;
+        gameObject.GetComponent<Particles>().SetEnabled(false);
+        GetComponent<Animator>().Play("Die");
     }
 
     public void OnDie() { Destroy(gameObject); }

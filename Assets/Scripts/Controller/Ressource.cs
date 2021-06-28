@@ -29,12 +29,7 @@ public class Ressource : MonoBehaviour
 
     string bar = "█";
 
-    public enum col
-    {
-        Red,
-        Green,
-        Blue
-    }
+    public enum col { Red, Green, Blue }
 
     // Start is called before the first frame update
     void Start()
@@ -50,8 +45,6 @@ public class Ressource : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(InputHandler.ReadSpaceInput()) activateColors();
-
         if (InputHandler.enableSpace)
         {
             bool red = valueRed >= 100;
@@ -89,10 +82,9 @@ public class Ressource : MonoBehaviour
     public static void setModes(bool b)
     {
         redMode = greenMode = blueMode = b;
-        if (!b)
-        {
+        if (!b) {
             InputHandler.enableNumbers = true;
-            Player.self.bs.updateProperties(Vector3Int.zero);
+            Player.self.SetShooterColor(Vector3Int.zero);
         }
     }
 
@@ -123,8 +115,9 @@ public class Ressource : MonoBehaviour
         textObject.text = tmp;
     }
 
-    public static void activateColors()
+    public static Vector3Int activateColors()
     {
+        Vector3Int rgb = Vector3Int.zero;
         bool red = valueRed >= 100;
         bool green = valueGreen >= 100;
         bool blue = valueBlue >= 100;
@@ -133,11 +126,9 @@ public class Ressource : MonoBehaviour
             (green ? 1 : 0) +
             (blue ? 1 : 0);
 
-        if (i < 2) return;
+        if (i < 2) return rgb;
 
         InputHandler.enableNumbers = false;
-
-        Vector3Int rgb = Vector3Int.zero;
 
         redMode = red;
         rgb.x = red ? 1 : 0;
@@ -148,7 +139,7 @@ public class Ressource : MonoBehaviour
         blueMode = blue;
         rgb.z = blue ? 1 : 0;
 
-        Player.self.bs.updateProperties(rgb);
+        return rgb;
     }
 
 

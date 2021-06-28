@@ -38,6 +38,25 @@ public class Player : EntityBase
         if (self && self.txtDbg) self.txtDbg.text += "\n" + msg;
     }
 
+    public void SwitchColor()
+    {
+        psTrail.color.color = GameState.getLightColor(GameState.V2Color(rgb));
+        psTrail.color.color2 = 0.4f * psTrail.color.color;
+        psTrail.color.color2.a = 1;
+
+        psColorSwitch.color.color = psTrail.color.color;
+        psColorSwitch.color.color2 = psTrail.color.color2;
+
+        psColorSwitch.ResetPS();
+        psColorSwitch.SetEnabled(true);
+    }
+
+    public void SetShooterColor(Vector3Int c)
+    {
+        bs.updateProperties(rgb = c);
+        SwitchColor();
+    }
+
     // Update is called once per frame
     override public void Update()
     {
@@ -45,22 +64,14 @@ public class Player : EntityBase
 
         if (movable)
         {
-            Vector3Int nrgb = InputHandler.ReadColorInput(rgb);
-            if (rgb != nrgb)
+            if (InputHandler.ReadSpaceInput())
             {
-                bs.updateProperties(rgb = nrgb);
-
-                psTrail.color.color = GameState.getLightColor(GameState.V2Color(rgb));
-                psTrail.color.color2 = 0.4f * psTrail.color.color;
-                psTrail.color.color2.a = 1;
-
-                psColorSwitch.color.color = psTrail.color.color;
-                psColorSwitch.color.color2 = psTrail.color.color2;
-
-                Debug.Log("Switch");
-                psColorSwitch.ResetPS();
-                psColorSwitch.SetEnabled(true);
+                Vector3Int col = Ressource.activateColors();
+                if(col != Vector3.zero) SetShooterColor(col);
             }
+            
+            Vector3Int nrgb = InputHandler.ReadColorInput(rgb);
+            if (rgb != nrgb) SetShooterColor(nrgb);
 
             // read input keys
             Vector3 dir = InputHandler.ReadDirInput();

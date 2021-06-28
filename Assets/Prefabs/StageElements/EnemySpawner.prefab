@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3252922743604121005}
   - component: {fileID: 3252922743604121004}
   - component: {fileID: 3252922743604121011}
-  - component: {fileID: 3252922743604121006}
+  - component: {fileID: 3952618277718233167}
   m_Layer: 0
   m_Name: EnemySpawner
   m_TagString: Untagged
@@ -82,7 +82,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &3252922743604121006
+--- !u!114 &3952618277718233167
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,15 +94,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 993e3299641e81844af947dfac3c5d99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  modes:
-  - {fileID: 2100000, guid: e3d0a9b10247e6b4ea0a8c526f8760ab, type: 2}
-  - {fileID: 2100000, guid: 5a3501597e3c7d746af29d1d7a7f4f62, type: 2}
-  - {fileID: 2100000, guid: 309262eb1a73fd34594eb25b5d4cea1d, type: 2}
-  - {fileID: 2100000, guid: 3d1a9604b0370e84d89865fb58fb22bb, type: 2}
-  - {fileID: 2100000, guid: 7a4d506d09ef6974894bcf698558ef5d, type: 2}
-  prefab: {fileID: 0}
-  amount: 1
-  wavesize: 1
-  delay: 1
-  variation: 0.2
-  colors: {x: 1, y: 1, z: 1, w: 1}
+  b_archer: {fileID: 8452632988693228686, guid: d1695d8d7ce0254499686bc9ad288bb7,
+    type: 3}
+  b_hunter: {fileID: -7602710152866961878, guid: 60580c159fb96a8458a29dd2496e3b5a,
+    type: 3}
+  b_stride: {fileID: -4640050622551136409, guid: 858f3bb5482b2fa4da6fa48d4a9ee6b3,
+    type: 3}
+  p_hunter: 100
+  p_archer: 100
+  p_stride: 100
+  p_prim: 0
+  p_secd: 0
+  p_tert: 0
+  maxColors: 3
+  amount: 10
+  wavesize: 2
+  delay: 5
+  variation: 1

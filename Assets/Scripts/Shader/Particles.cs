@@ -43,6 +43,8 @@ public class Particles : MonoBehaviour
     #endregion
 
     #region Privates
+    private static bool enableParticles = true;
+
     private float partTimer = 0; // for spawning new particles
     private Vector3 lastPos;
 
@@ -60,6 +62,7 @@ public class Particles : MonoBehaviour
 
     void Awake()
     {
+        if(!enableParticles) return;
         if (tex == null && mat.mainTexture != null) tex = mat.mainTexture;
         stats = new Stats();
         stats.editorDrawMode = EditorDrawMode.OFF;
@@ -91,6 +94,7 @@ public class Particles : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!enableParticles) return;
         if (editorDrawing && isEditorPlaying(EditorDrawMode.SLOW))
             EditorApplication.delayCall += EditorApplication.QueuePlayerLoopUpdate;
         if (isAnimPaused()) return;
@@ -117,6 +121,7 @@ public class Particles : MonoBehaviour
 
     void OnRenderObject()
     {
+        if (!enableParticles) return;
         if (isAnimPaused()) return;
         if (!stats.initialized) Initialize();
         mat.mainTexture = tex;
@@ -158,6 +163,7 @@ public class Particles : MonoBehaviour
 
     public void ResetPS()
     {
+        if (!enableParticles) return;
         deadBuf.SetCounterValue((uint)curMaxParts);
         ReadDeadCount();
         stats.alive = 0;
