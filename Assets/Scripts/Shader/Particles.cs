@@ -175,15 +175,11 @@ public class Particles : MonoBehaviour
         stats.prewarmed = true;
     }
 
-    public void Play()
+    public void SetEnabled(bool b)
     {
-        properties.enabled = true;
+        properties.enabled = b;
     }
 
-    public void Stop()
-    {
-        properties.enabled = false;
-    }
     public void SetOnFinished(System.Action p)
     {
         _onFinished = p;

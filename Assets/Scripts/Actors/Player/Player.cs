@@ -59,7 +59,7 @@ public class Player : EntityBase
 
                 Debug.Log("Switch");
                 psColorSwitch.ResetPS();
-                psColorSwitch.Play();
+                psColorSwitch.SetEnabled(true);
             }
 
             // read input keys

@@ -6,13 +6,13 @@ using UnityEngine;
 [RequireComponent(typeof(SphereCollider))]
 public class Portal : MonoBehaviour
 {
-    SphereCollider sc;
-    ParticleSystem ps;
+    private SphereCollider sc;
+    private Particles ps;
 
     private void Awake()
     {
         sc = GetComponent<SphereCollider>();
-        ps = GetComponentInChildren<ParticleSystem>();
+        ps = GetComponent<Particles>();
     }
 
     private void OnTriggerEnter(Collider c)
@@ -26,8 +26,7 @@ public class Portal : MonoBehaviour
 
     public void SetEnabled(bool b)
     {
-        if (b) ps.Play();
-        else ps.Stop();
+        ps.SetEnabled(b);
         sc.enabled = b;
     }
 

@@ -8,13 +8,13 @@ public class Spawn : MonoBehaviour
     public void Enable()
     {
         // GetComponentInChildren<ParticleSystem>().Play();
-        GetComponent<Particles>().Play();
+        GetComponent<Particles>().SetEnabled(true);
     }
 
     public void Disable()
     {
         // GetComponentInChildren<ParticleSystem>().Stop();
-        GetComponent<Particles>().Stop();
+        GetComponent<Particles>().SetEnabled(false);
         GetComponent<Particles>().ResetPS();
     }
 }
