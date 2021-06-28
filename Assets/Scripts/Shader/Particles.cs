@@ -69,6 +69,8 @@ public class Particles : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         // pos.Correct(); vel.Correct(); force.Correct(); posFac.Correct();
+        renderSettings.setPreset();
+
         if (!editorDrawing) return;
         if (isAnimPaused()) { ReleaseBuffers(); return; }
 
@@ -79,7 +81,6 @@ public class Particles : MonoBehaviour
         }
 
         if (stats.reset) ReleaseBuffers();
-        renderSettings.setPreset();
 
         if (isEditorPlaying(EditorDrawMode.FAST)) {
             EditorApplication.QueuePlayerLoopUpdate();

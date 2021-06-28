@@ -156,6 +156,7 @@ MonoBehaviour:
     editorDrawMode: 0
     reset: 0
     initialized: 1
+    prewarmed: 0
     alive: 0
     dead: 0
     emitted: 0
@@ -164,7 +165,10 @@ MonoBehaviour:
     bufferSize: 1000448
     groupCount: 977
   properties:
+    enabled: 1
     repeat: 1
+    prewarm: 0
+    destroyOnFinished: 0
     maxParts: 1000000
     lifetime: 5
     emissionRate: 100000
@@ -179,19 +183,19 @@ MonoBehaviour:
   pos:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 0, y: 0, z: 0}
-    shape: 0
+    shape: 3
   vel:
     offset: {x: 0, y: 15, z: 0}
     scale: {x: 4, y: 0, z: 4}
-    shape: 0
+    shape: 3
   force:
     offset: {x: 0, y: -6, z: 0}
     scale: {x: -0.5, y: 0, z: -0.5}
-    shape: 0
+    shape: 3
   posFac:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 0, y: 0, z: 0}
-    shape: 0
+    shape: 3
   color:
     color: {r: 0, g: 0.5827389, b: 1, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
@@ -268,7 +272,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 131927831}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 30, y: 0, z: 20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -307,6 +311,7 @@ MonoBehaviour:
     editorDrawMode: 0
     reset: 0
     initialized: 0
+    prewarmed: 0
     alive: 0
     dead: 0
     emitted: 0
@@ -315,7 +320,10 @@ MonoBehaviour:
     bufferSize: 0
     groupCount: 0
   properties:
+    enabled: 1
     repeat: 1
+    prewarm: 0
+    destroyOnFinished: 0
     maxParts: 1000
     lifetime: 0.5
     emissionRate: 10000
@@ -330,19 +338,19 @@ MonoBehaviour:
   pos:
     offset: {x: 1, y: 1, z: 1}
     scale: {x: 0, y: 0, z: 0}
-    shape: 0
+    shape: 3
   vel:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 30, y: 0, z: 30}
-    shape: 0
+    shape: 3
   force:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 0, y: 0, z: 0}
-    shape: 0
+    shape: 3
   posFac:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 0, y: 0, z: 0}
-    shape: 0
+    shape: 3
   color:
     color: {r: 1, g: 0.0141509175, b: 0.0141509175, a: 1}
     color2: {r: 0.93372107, g: 1, b: 0, a: 1}
@@ -419,7 +427,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 511568247}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -30, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -725,6 +733,7 @@ MonoBehaviour:
     editorDrawMode: 0
     reset: 0
     initialized: 1
+    prewarmed: 0
     alive: 0
     dead: 0
     emitted: 0
@@ -733,7 +742,10 @@ MonoBehaviour:
     bufferSize: 100352
     groupCount: 98
   properties:
+    enabled: 1
     repeat: 1
+    prewarm: 0
+    destroyOnFinished: 0
     maxParts: 100000
     lifetime: 1
     emissionRate: 90000
@@ -748,19 +760,19 @@ MonoBehaviour:
   pos:
     offset: {x: 10, y: 9, z: 10}
     scale: {x: -3, y: 0, z: -3}
-    shape: 0
+    shape: 3
   vel:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 0, y: 0, z: 0}
-    shape: 0
+    shape: 3
   force:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 0, y: 0, z: 0}
-    shape: 0
+    shape: 3
   posFac:
     offset: {x: 1, y: -0.6, z: 0}
     scale: {x: 0, y: 0, z: 0}
-    shape: 0
+    shape: 3
   color:
     color: {r: 0.8018868, g: 0, b: 0, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
@@ -837,7 +849,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 819726962}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -885,36 +897,39 @@ MonoBehaviour:
     bufferSize: 1000448
     groupCount: 977
   properties:
+    enabled: 1
     repeat: 1
+    prewarm: 0
+    destroyOnFinished: 0
     maxParts: 1000000
     lifetime: 2.5
     emissionRate: 100000
     startDelay: 0
   renderSettings:
     preset: 1
-    blendOp: 0
-    srcBlend: 1
+    blendOp: 21
+    srcBlend: 3
     dstBlend: 10
   size:
-    val: {x: 0.2, y: 0.2, z: 0}
+    val: {x: 0.1, y: 0.1, z: 0}
   pos:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 0, y: 0, z: 0}
-    shape: 0
+    shape: 3
   vel:
     offset: {x: 0, y: 15, z: 0}
     scale: {x: 4, y: 0, z: 4}
-    shape: 0
+    shape: 3
   force:
     offset: {x: 0, y: -6, z: 0}
     scale: {x: -0.5, y: 0, z: -0.5}
-    shape: 0
+    shape: 3
   posFac:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 0, y: 0, z: 0}
-    shape: 0
+    shape: 3
   color:
-    color: {r: 0.6037736, g: 0.6037736, b: 0.6037736, a: 1}
+    color: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
     useVariation: 0
     useGradient: 0
@@ -989,7 +1004,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1259161801}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -30, y: 0, z: 20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1135,6 +1150,7 @@ MonoBehaviour:
     editorDrawMode: 2
     reset: 0
     initialized: 1
+    prewarmed: 0
     alive: 198
     dead: 102
     emitted: 9538
@@ -1143,7 +1159,10 @@ MonoBehaviour:
     bufferSize: 300
     groupCount: 300
   properties:
+    enabled: 1
     repeat: 1
+    prewarm: 0
+    destroyOnFinished: 0
     maxParts: 300
     lifetime: 2
     emissionRate: 100
@@ -1158,19 +1177,19 @@ MonoBehaviour:
   pos:
     offset: {x: 0.8, y: 0, z: 0.8}
     scale: {x: 0, y: 0, z: 0}
-    shape: 0
+    shape: 3
   vel:
     offset: {x: 0, y: 1, z: 0}
     scale: {x: 0, y: 0, z: 0}
-    shape: 0
+    shape: 3
   force:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 0, y: 0, z: 0}
-    shape: 0
+    shape: 3
   posFac:
     offset: {x: 0.2, y: 0, z: 0.2}
     scale: {x: 0, y: 0, z: 0}
-    shape: 0
+    shape: 3
   color:
     color: {r: 0.2216981, g: 1, b: 0.2216981, a: 1}
     color2: {r: 0.8915094, g: 1, b: 0.8915094, a: 1}
@@ -1247,7 +1266,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2016171631}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.14622, y: -9.599506, z: -19.147245}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
