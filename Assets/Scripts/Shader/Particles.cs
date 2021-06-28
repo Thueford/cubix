@@ -17,11 +17,11 @@ public class Particles : MonoBehaviour
 
     [Header("Emission")]
     [Tooltip("xy: offset, z: timefac")]
-    public Capsule<Vector3> size = new Capsule<Vector3>(new Vector3(1,1,0));
+    public Capsule<Vector3> size = new Capsule<Vector3>(new Vector3(.2f, .2f, 0));
     public DynamicEffect pos = new DynamicEffect(Vector3.one, Vector3.zero, Shape.SPHERE);
-    public DynamicEffect vel = new DynamicEffect(Vector3.one, Vector3.zero, 0);
-    public DynamicEffect force;
-    public DynamicEffect posFac;
+    public DynamicEffect vel = new DynamicEffect(Vector3.zero, Vector3.zero, Shape.SPHERE);
+    public DynamicEffect force = new DynamicEffect(Vector3.zero, Vector3.zero, Shape.SPHERE);
+    public DynamicEffect posFac = new DynamicEffect(Vector3.one, Vector3.zero, Shape.SPHERE);
 
     [Header("Other")]
     public Colors color = Colors.dflt;

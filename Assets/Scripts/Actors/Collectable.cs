@@ -24,7 +24,7 @@ public class Collectable : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void setType(cType t)
@@ -32,18 +32,10 @@ public class Collectable : MonoBehaviour
         type = t;
         switch (type)
         {
-            case cType.Red:
-                setColor(GameState.red);
-                break;
-            case cType.Green:
-                setColor(GameState.green);
-                break;
-            case cType.Blue:
-                setColor(GameState.blue);
-                break;
-            default:
-                setColor(GameState.black);
-                break;
+            case cType.Red: setColor(GameState.red); break;
+            case cType.Green: setColor(GameState.green); break;
+            case cType.Blue: setColor(GameState.blue); break;
+            default: setColor(GameState.black); break;
         }
     }
 
@@ -56,7 +48,11 @@ public class Collectable : MonoBehaviour
     private void setColor(Color color)
     {
         gameObject.GetComponentInChildren<Renderer>().material.color = color;
-        gameObject.GetComponentInChildren<Light>().color = color == GameState.black ? GameState.glow : color;
+        gameObject.GetComponentInChildren<Light>().color = GameState.getLightColor(color);
+
+        Particles ps = gameObject.GetComponent<Particles>();
+        ps.color.color = GameState.getLightColor(color);
+        ps.color.color2 = (Color.white + 0.3f * GameState.getLightColor(color)) / 1.3f;
     }
 
     private void OnTriggerEnter(Collider other)
