@@ -59,6 +59,7 @@ public class Collectable : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            GetComponent<SphereCollider>().enabled = false;
             OnCollect();
             gameObject.GetComponentInChildren<Light>().enabled = false;
             gameObject.GetComponent<Particles>().SetEnabled(false);
