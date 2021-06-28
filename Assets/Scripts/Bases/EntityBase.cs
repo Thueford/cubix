@@ -72,6 +72,7 @@ public abstract class EntityBase : MonoBehaviour
     virtual public void Die()
     {
         Debug.Log("killing " + name);
+        gameObject.GetComponentInChildren<Light>().enabled = false;
         anim.enabled = true;
         anim.Play("Die");
         Freeze();

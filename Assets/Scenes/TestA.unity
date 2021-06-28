@@ -1540,7 +1540,7 @@ PrefabInstance:
     - target: {fileID: 2092887341787963931, guid: c757194044ae0bd40bbc234134156d13,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2147880986454734492, guid: c757194044ae0bd40bbc234134156d13,
         type: 3}
@@ -1592,6 +1592,11 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 4294967295
       objectReference: {fileID: 0}
+    - target: {fileID: 6691507357696101841, guid: c757194044ae0bd40bbc234134156d13,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7730873502653545410, guid: c757194044ae0bd40bbc234134156d13,
         type: 3}
       propertyPath: InitialModule.startSpeed.scalar
@@ -1637,7 +1642,13 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 4294967295
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 9208422189711708090, guid: c757194044ae0bd40bbc234134156d13,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 3544540941782998582, guid: c757194044ae0bd40bbc234134156d13, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c757194044ae0bd40bbc234134156d13, type: 3}
 --- !u!4 &1653965244 stripped
 Transform:

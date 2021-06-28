@@ -7,11 +7,13 @@ using UnityEngine;
 public class Charger : MonoBehaviour
 {
     private ChargeAnim anim;
+    private Particles ps;
     public bool charging { get; private set; } = false;
     public bool charged { get; private set; } = false;
 
     private void Awake() {
         anim = GetComponentInChildren<ChargeAnim>();
+        ps = GetComponent<Particles>();
     }
 
     // Start is called before the first frame update
@@ -20,7 +22,9 @@ public class Charger : MonoBehaviour
         anim.ResetAnim();
     }
 
-    public void SetEnabled(bool e) { anim.SetEnabled(false); }
+    public void SetEnabled(bool e) {
+        anim.SetEnabled(false);
+    }
 
     public void OnChargeStart()
     {
@@ -31,9 +35,9 @@ public class Charger : MonoBehaviour
 
     public void OnCharged()
     {
-        Debug.Log("Charged");
         charged = true;
         anim.SetEnabled(false);
+        ps.SetEnabled(true);
 
         foreach (EnemySpawner es in GameState.curStage.GetActorComponents<EnemySpawner>())
             es.StopSpawning();
@@ -57,5 +61,6 @@ public class Charger : MonoBehaviour
         charging = false;
         charged = false;
         anim.ResetAnim(duration);
+        ps.SetEnabled(false);
     }
 }

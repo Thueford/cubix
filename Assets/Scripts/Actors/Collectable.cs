@@ -60,10 +60,13 @@ public class Collectable : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             OnCollect();
-            //Animation
-            Destroy(gameObject);
+            gameObject.GetComponentInChildren<Light>().enabled = false;
+            gameObject.GetComponent<Particles>().SetEnabled(false);
+            GetComponent<Animator>().Play("Die");
         }
     }
+
+    public void OnDie() { Destroy(gameObject); }
 
     private void OnCollect()
     {
