@@ -225,9 +225,9 @@ MonoBehaviour:
     repeat: 1
     prewarm: 0
     destroyOnFinished: 0
-    maxParts: 100
-    lifetime: 2
-    emissionRate: 10
+    maxParts: 10000
+    lifetime: 0.2
+    emissionRate: 100
     startDelay: 0
   renderSettings:
     preset: 1
@@ -235,7 +235,7 @@ MonoBehaviour:
     srcBlend: 1
     dstBlend: 10
   size:
-    val: {x: 0.2, y: 0.2, z: -0.05}
+    val: {x: 0.2, y: 0.2, z: -1}
   pos:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 0, y: 0, z: 0}
@@ -250,7 +250,7 @@ MonoBehaviour:
     shape: 3
   posFac:
     offset: {x: 0, y: 0, z: 0}
-    scale: {x: 0, y: 0, z: 0}
+    scale: {x: 5, y: 0, z: 5}
     shape: 3
   color:
     color: {r: 1, g: 1, b: 1, a: 1}

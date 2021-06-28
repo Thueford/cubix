@@ -19,7 +19,7 @@ public class ChargeAnim : MonoBehaviour
     private void Update()
     {
         level = transform.localScale.x / maxScale;
-        SetPsSize(1.2f * level);
+        if(level < 0.98) SetPsSize(level);
     }
 
     public void ResetAnim()
@@ -30,11 +30,12 @@ public class ChargeAnim : MonoBehaviour
 
     private void SetPsSize(float v)
     {
-        ps.pos.offset.x = v;
-        ps.pos.offset.z = v;
-        ps.pos.scale.x = -v / 2;
-        ps.pos.scale.z = -v / 2;
-        ps.properties.emissionRate = level * ps.properties.maxParts;
+        const float f = 1.2f;
+        ps.pos.offset.x = v * f;
+        ps.pos.offset.z = v * f;
+        ps.pos.scale.x = -v * f / 2;
+        ps.pos.scale.z = -v * f / 2;
+        ps.properties.emissionRate = v * ps.properties.maxParts;
     }
 
     public void SetEnabled(bool b) { anim.enabled = b; }
@@ -47,6 +48,7 @@ public class ChargeAnim : MonoBehaviour
 
     void OnCharged(AnimationEvent ev) {
         transform.localScale = new Vector3(maxScale, 1, maxScale);
+        SetPsSize(0);
         GetComponentInParent<Charger>().OnCharged();
     }
 
