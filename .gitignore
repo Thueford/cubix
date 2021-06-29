@@ -73,6 +73,7 @@ crashlytics-build.properties
 /[Aa]ssets/[Tt]extMesh Pro/*
 
 # Hidden files
+Assets/saves*
 [~]*
 *~
 *~.*

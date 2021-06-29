@@ -12,15 +12,15 @@ Game Features:
 - [ ] Collectables/Progression in Endless Mode      J
 - - [ ] Powerups (Shot Halo, Shield, Health, Ressources)
 - - [ ] Progressively harder Spawners/Enemies, Boss Stages?
-- [ ] Storing of High-Score and whether Endless Mode is unlocked or not     A
+- [x] Storing of High-Score and whether Endless Mode is unlocked or not     A
 - [ ] Multiple Portals in Stage 0 to select Tutorial or Endless Mode (or Settings Room?)    A
-- [ ] (Settings Room?)
+- [ ] _ (Settings Room?)
 - [ ] Entity Speed not hard capped      A
 - [ ] Bullet Knockback                  J
 
 GUI:
 
-- [ ] display High Score and current Stage      A
+- [x] display High Score and current Stage      A
 - [x] Show Active Shot Color (maybe display on Player Model)    A
 - [ ] Redesign of GUI?      A
 

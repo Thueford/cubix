@@ -134,18 +134,31 @@ public class Player : EntityBase
         }
     }
 
-    public void TeleportNext()
+    private GameStage tpTarget;
+    public void TeleportNext(GameStage target = null)
     {
+        if (target == null) target = GameState.curStage.next;
+
+        if (GameState.curStage.number > GameState.settings.stageHighscore)
+        {
+            GameState.settings.stageHighscore = GameState.curStage.number;
+            GameState.settings.Save();
+        }
+
         if (GameState.curStage == null) return;
-        else if (GameState.curStage.next == null)
-            GameState.curStage.next = StageBuilder.self.Generate(GameState.curStage.transform);
+        else if (target == null)
+        {
+            GameState.settings.reachedEndless = true;
+            GameState.settings.Save();
+            target = StageBuilder.self.Generate(GameState.curStage.transform);
+        }
 
         GameState.curStage.FreezeActors();
 
+        tpTarget = target;
         anim.enabled = true;
         anim.Play("Teleport");
-
-        GameState.curStage.next.Load();
+        target.Load();
 
         HP = Mathf.Min(maxHP, HP+1);
     }
@@ -153,7 +166,8 @@ public class Player : EntityBase
 
     void OnTeleport(AnimationEvent ev)
     {
-        Teleport(GameState.curStage.next);
+        if (tpTarget == null) Debug.LogWarning("Tp Target is null");
+        Teleport(tpTarget ? tpTarget : GameState.curStage.next);
     }
 
     public void Teleport(GameStage stage)

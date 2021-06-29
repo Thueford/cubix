@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Stage9 : Hint
+public class Stage7 : StageController
 {
     enum State { START, DONE }
     private State state;
@@ -13,13 +13,11 @@ public class Stage9 : Hint
         state = State.START;
     }
 
-    // Update is called once per frame
-    void Update()
+    override public void NewbieHints()
     {
         switch (state)
         {
             case State.START:
-                if (isCurStage()) return;
                 texts[0].SetActive(true);
                 state++;
                 break;

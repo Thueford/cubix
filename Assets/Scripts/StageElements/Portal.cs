@@ -8,6 +8,7 @@ public class Portal : MonoBehaviour
 {
     private SphereCollider sc;
     private Particles ps;
+    public GameStage target;
 
     private void Awake()
     {
@@ -20,7 +21,7 @@ public class Portal : MonoBehaviour
         if(c.CompareTag("Player"))
         {
             Debug.Log("Teleporting");
-            Player.self.TeleportNext();
+            Player.self.TeleportNext(target);
         }
     }
 

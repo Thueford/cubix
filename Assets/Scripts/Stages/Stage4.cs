@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Stage4 : Hint
+public class Stage4 : StageController
 {
     enum State { START, WAIT, RED, GREEN, BLUE, DONE }
     private State state;
@@ -13,13 +13,11 @@ public class Stage4 : Hint
         state = State.START;
     }
 
-    // Update is called once per frame
-    void Update()
+    override public void NewbieHints()
     {
         switch (state)
         {
             case State.START:
-                if (!isCurStage()) return;
                 Color color1 = GameState.colorOrder[0];
 
                 foreach (Collectable c in GameState.curStage.GetActorComponents<Collectable>())
