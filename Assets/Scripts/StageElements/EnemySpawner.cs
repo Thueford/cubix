@@ -90,7 +90,6 @@ public class EnemySpawner : MonoBehaviour
         if (100 * Random.value < p_secd) l.Add(1);
         if (100 * Random.value < p_tert) l.Add(2);
 
-        Debug.Log(l.ToArray());
         for (int i = 0; i < maxColors && l.Count > 0; i++)
         {
             int x = Random.Range(0, l.Count);

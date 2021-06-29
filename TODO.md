@@ -13,7 +13,7 @@ Game Features:
 - - [ ] Powerups (Shot Halo, Shield, Health, Ressources)
 - - [ ] Progressively harder Spawners/Enemies, Boss Stages?
 - [x] Storing of High-Score and whether Endless Mode is unlocked or not     A
-- [ ] Multiple Portals in Stage 0 to select Tutorial or Endless Mode (or Settings Room?)    A
+- [x] Multiple Portals in Stage 0 to select Tutorial or Endless Mode (or Settings Room?)    A
 - [ ] _ (Settings Room?)
 - [ ] Entity Speed not hard capped      A
 - [ ] Bullet Knockback                  J
