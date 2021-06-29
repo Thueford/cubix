@@ -79,18 +79,19 @@ public class Ressource : MonoBehaviour
         }
     }
 
-    public static void setModes(bool b)
-    {
-        redMode = greenMode = blueMode = b;
-        if (!b) {
-            InputHandler.enableNumbers = true;
-            Player.self.SetShooterColor(Vector3Int.zero);
-        }
-    }
-
     private void check(float value)
     {
         if (value == 0) setModes(false);
+    }
+
+    public static void setModes(bool b)
+    {
+        redMode = greenMode = blueMode = b;
+        if (!b)
+        {
+            InputHandler.enableNumbers = true;
+            Player.self.SetShooterColor(Vector3Int.zero);
+        }
     }
 
     void SetRessourceText(float value, Text textObject)
@@ -152,11 +153,11 @@ public class Ressource : MonoBehaviour
                 SetRessourceText(valueRed, TextRed);
                 break;
             case col.Green:
-                valueGreen = Mathf.Clamp(valueBlue + value, 0, 100);
+                valueGreen = Mathf.Clamp(valueGreen + value, 0, 100);
                 SetRessourceText(valueGreen, TextGreen);
                 break;
             case col.Blue:
-                valueBlue = Mathf.Clamp(valueGreen + value, 0, 100);
+                valueBlue = Mathf.Clamp(valueBlue + value, 0, 100);
                 SetRessourceText(valueBlue, TextBlue);
                 break;
             default:
