@@ -7,10 +7,13 @@ using UnityEngine;
 public abstract class EntityBase : MonoBehaviour
 {
     [Header("Movement Settings")]
-    [Range(1, 50)]
-    public float accelerationForce = 15;
-    [Range(1, 50)]
-    public float maxSpeed = 10;
+    [Range(1, 1000), Tooltip(
+        "maxSpeed awkwardly dependent on force, drag & fixedDeltaTime\n\n" +
+        "for dt=0.02, drag=10:  vmax = 0.08*force = force/12.5\n\n" +
+        "generally for dt=0.02:\n  vmax = force / (2*drag - 3.4)\n\n" +
+        "I definitely did not try to overengineer that for force=f(vmax,drag,dt)")]
+    public float accelerationForce = 250;
+    [ReadOnly] public float maxSpeed = 20;
     public bool movable = false;
 
     [Header("HP Settings")]
@@ -39,7 +42,10 @@ public abstract class EntityBase : MonoBehaviour
         Freeze();
     }
 
-    virtual public void Update() {}
+    virtual public void Update()
+    {
+        maxSpeed = accelerationForce / 12.5f;
+    }
     virtual public void FixedUpdate() {}
 
     public void setColor(Color c)

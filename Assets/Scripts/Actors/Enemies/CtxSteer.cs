@@ -45,9 +45,7 @@ public abstract class CtxSteer : EntityBase
             }
 
             // apply direction
-            rb.AddForce(Time.deltaTime * 1000 * steerDir, ForceMode.Acceleration);
-            if (rb.velocity.magnitude > maxSpeed)
-                rb.velocity = rb.velocity.normalized * maxSpeed;
+            rb.AddForce(steerDir, ForceMode.Acceleration);
         }
     }
 

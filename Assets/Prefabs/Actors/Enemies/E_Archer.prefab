@@ -27,10 +27,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ee53909801c0cf4d92f7408a6b7792e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  accelerationForce: 15
+  accelerationForce: 75
   maxSpeed: 6
   movable: 0
   startHP: 3
+  maxHP: 5
   HP: 0
   rgb: {x: 0, y: 0, z: 0}
   color: {r: 0, g: 0, b: 0, a: 0}
