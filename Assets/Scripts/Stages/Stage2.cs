@@ -13,37 +13,33 @@ public class Stage2 : StageController
         state = State.START;
     }
 
-    override public void NewbieHints()
+    override public void General()
     {
         switch (state)
         {
             case State.START:
-                texts[0].SetActive(true);
                 if (GameState.unlockedColors == Vector3Int.right) state = State.RED;
                 else if (GameState.unlockedColors == Vector3Int.up) state = State.GREEN;
                 else if (GameState.unlockedColors == Vector3Int.forward) state = State.BLUE;
                 break;
 
             case State.RED:
-                texts[1].SetActive(true);
-                Collectable.Clear(GameState.curStage);
-                state = State.DONE;
-                break;
-
             case State.GREEN:
-                texts[2].SetActive(true);
-                Collectable.Clear(GameState.curStage);
-                state = State.DONE;
-                break;
-
             case State.BLUE:
-                texts[3].SetActive(true);
                 Collectable.Clear(GameState.curStage);
                 state = State.DONE;
                 break;
-
-            default: return;
         }
-        
+    }
+
+    override public void Newbie()
+    {
+        switch (state)
+        {
+            case State.START: texts[0].SetActive(true); break;
+            case State.RED  : texts[1].SetActive(true); break;
+            case State.GREEN: texts[2].SetActive(true); break;
+            case State.BLUE : texts[3].SetActive(true); break;
+        }
     }
 }

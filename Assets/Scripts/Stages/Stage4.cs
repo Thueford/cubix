@@ -13,7 +13,7 @@ public class Stage4 : StageController
         state = State.START;
     }
 
-    override public void NewbieHints()
+    override public void General()
     {
         switch (state)
         {
@@ -26,7 +26,6 @@ public class Stage4 : StageController
                     if (color1.g > 0 && c.type == Collectable.cType.Green) Destroy(c.gameObject);
                     if (color1.b > 0 && c.type == Collectable.cType.Blue) Destroy(c.gameObject);
                 }
-                texts[0].SetActive(true);
                 state++;
                 break;
 
@@ -38,25 +37,22 @@ public class Stage4 : StageController
                 break;
 
             case State.RED:
-                texts[1].SetActive(true);
-                Collectable.Clear(GameState.curStage);
-                state = State.DONE;
-                break;
-
             case State.GREEN:
-                texts[2].SetActive(true);
-                Collectable.Clear(GameState.curStage);
-                state = State.DONE;
-                break;
-
             case State.BLUE:
-                texts[3].SetActive(true);
                 Collectable.Clear(GameState.curStage);
                 state = State.DONE;
                 break;
-
-            default: return;
         }
-        
+    }
+
+    override public void Newbie()
+    {
+        switch (state)
+        {
+            case State.START: texts[0].SetActive(true); break;
+            case State.RED  : texts[1].SetActive(true); break;
+            case State.GREEN: texts[2].SetActive(true); break;
+            case State.BLUE : texts[3].SetActive(true); break;
+        }
     }
 }

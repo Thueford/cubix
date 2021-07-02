@@ -61,12 +61,15 @@ public class Player : EntityBase
     {
         base.FixedUpdate();
 
-        // apply input force
-        Vector3 dir = InputHandler.ReadDirInput().normalized;
-        rb.AddForce(accelerationForce * dir, ForceMode.Acceleration);
+        if (movable)
+        {
+            // apply input force
+            Vector3 dir = InputHandler.ReadDirInput().normalized;
+            rb.AddForce(accelerationForce * dir, ForceMode.Acceleration);
 
-        float pvel = Mathf.Clamp(rb.velocity.magnitude / maxSpeed, 1e-2f, 0.96f);
-        psTrail.properties.emissionRate = psTrail.properties.maxParts * Mathf.Pow(pvel, 3);
+            float pvel = Mathf.Clamp(rb.velocity.magnitude / maxSpeed, 1e-2f, 0.96f);
+            psTrail.properties.emissionRate = psTrail.properties.maxParts * Mathf.Pow(pvel, 3);
+        }
     }
 
     // Update is called once per frame

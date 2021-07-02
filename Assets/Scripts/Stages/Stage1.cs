@@ -13,7 +13,7 @@ public class Stage1 : StageController
         state = State.START;
     }
 
-    override public void NewbieHints()
+    override public void Newbie()
     {
         switch (state)
         {
@@ -27,8 +27,6 @@ public class Stage1 : StageController
                 texts[1].SetActive(true);
                 state++;
                 break;
-            default: return;
         }
-        
     }
 }
