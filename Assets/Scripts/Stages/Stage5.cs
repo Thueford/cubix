@@ -18,6 +18,7 @@ public class Stage5 : StageController
         switch (state)
         {
             case State.START:
+                InputHandler.enableSpace = true;
                 texts[0].SetActive(true);
                 state++;
                 break;

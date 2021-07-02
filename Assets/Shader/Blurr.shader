@@ -111,13 +111,16 @@ Shader "Hidden/Blurr"
 
             fixed4 getVignetteCol(float2 uv) 
             {
+                //store original color
                 fixed4 col = tex2D(_MainTex, uv);
 
+                // uv from -1 to 1
                 float2 texcoord = uv * 2 - 1;
 
-                float scanLine = smoothstep(.8, 1.41422, length(texcoord));
-                if (scanLine > 0)
-                    col.rgb *= 1-(sin(texcoord.y * 6.28*100) / 2 + .5) * scanLine;
+                // Scanlines are more prominent at the corners
+                float scanLineIntensity = smoothstep(.8, 1.41422, length(texcoord));
+                if (scanLineIntensity > 0)
+                    col.rgb *= 1-(sin(texcoord.y * 6.28*100) / 2 + .5) * scanLineIntensity;
 
                 texcoord = abs(texcoord);
 
@@ -130,15 +133,19 @@ Shader "Hidden/Blurr"
 
             fixed4 frag(v2f i) : SV_Target
             {
+                // uv from -1 to 1
                 float2 uv = i.uv * 2 - 1;
 
+                // Warp Coordinates at the corners
                 uv.x *= 1 + pow(abs(uv.y) / 8, 2);
                 uv.y *= 1 + pow(abs(uv.x) / 8, 2);
 
+                // uv from 0 to 1
                 uv = uv / 2 + .5;
 
                 fixed4 col = fixed4(0, 0, 0, 1);
 
+                // pixels outside the main texture (at the corners) remain black
                 if (uv.x <= 1 && uv.x >= 0 && uv.y <= 1 && uv.y >= 0)
                     col = getVignetteCol(uv);
 
