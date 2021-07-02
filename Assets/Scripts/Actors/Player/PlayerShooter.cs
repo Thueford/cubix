@@ -46,25 +46,25 @@ public class PlayerShooter : ShooterBase
         rgb = rgbNew;
     }
 
+    private float cndinv(float f, bool b) => b ? 1 / f : f;
     public void toggleRed(bool b) {
         p.explodes = b;
-        //rateOfFire *= b ? 2 / 3f : 3 / 2f;
-        p.speed *= (b ? 2/3f : 1.5f);
+        p.speed *= cndinv(2/3f, b);
     }
 
     public void toggleGreen(bool b)
     {
-        p.speed *= (b ? 3f : 1/3f);
-        rateOfFire *= (b ? 1.5f : 2/3f);
+        p.speed *= cndinv(3, b);
+        rateOfFire *= cndinv(1.5f, b);
+        p.damage *= cndinv(2, b);
         p.reflects = b ? 2 : 0;
         p.hits = b ? 4 : 0;
-        p.damage *= b ? 2f : 1/2f;
     }
 
     public void toggleBlue(bool b)
     {
-        rateOfFire *= b ? 2 / 3f : 3 / 2f;
-        p.damage *= b ? 1/2f : 2f;
+        rateOfFire *= cndinv(2/3f, b);
+        p.damage *= cndinv(0.5f, b);
         singleFire = !b;
     }
 

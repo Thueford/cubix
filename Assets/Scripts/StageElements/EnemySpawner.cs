@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [NotNull, HideInInspector] 
-    public EntityBase b_archer, b_hunter, b_stride;
+    public EnemyBase b_archer, b_hunter, b_stride;
     [Header("Type Probes")]
     [Range(0, 100)] public int p_hunter = 100;
     [Range(0, 100)] public int p_archer = 100;
@@ -45,38 +45,35 @@ public class EnemySpawner : MonoBehaviour
 
     public void InitiateSpawn()
     {
-        Invoke("SpawnWave", delay + Random.Range(-variation, variation));
+        Invoke(nameof(SpawnWave), delay + Random.Range(-variation, variation));
     }
 
     private void SpawnWave()
     {
-        Invoke("Spawn", Random.value * variation);
+        Invoke(nameof(Spawn), Random.value * variation);
     }
 
     private void Spawn()
     {
-        // if (GameState.curStage == null)
-        // { Invoke("Spawn", 0.1f); return; } // Tried to spawn without curStage
+        Color col = getWeightedColor();
+        for (int i = col.b == 1 ? 3 : 1; i > 0; i--) {
 
-        if (enemyCount < GameState.curStage.maxEnemies)
-        {
             Vector3 pos;
             int tries = 10;
             do pos = transform.position + new Vector3((Random.value - 0.5f) * transform.lossyScale.x, 0, (Random.value - 0.5f) * transform.lossyScale.z);
-            while (Vector3.Distance(pos, Player.self.transform.position) < 2 && --tries > 0);
+            while (Vector3.Distance(pos, Player.self.transform.position) < 5 && --tries > 0);
             
             if (tries == 0) {
-                InitiateSpawn();
                 Debug.LogWarning("max spawn tries reached");
-                return;
+                break;
             }
 
             pos.y = 0.5f;
-            EntityBase e = Instantiate(getRandomPrefab(), pos, Quaternion.identity, transform.parent);
-            e.setColor(getWeightedColor());
-            if (++spawned < amount) InitiateSpawn();
+            EnemyBase e = Instantiate(getRandomPrefab(), pos, Quaternion.identity, transform.parent);
+            e.setColor(col);
         }
-        else InitiateSpawn();
+
+        if (++spawned < amount) InitiateSpawn();
     }
 
     // This is madness ngl
@@ -101,7 +98,7 @@ public class EnemySpawner : MonoBehaviour
         return c;
     }
 
-    private EntityBase getRandomPrefab()
+    private EnemyBase getRandomPrefab()
     {
         int sum = p_hunter + p_archer + p_stride;
         int val = Mathf.RoundToInt(sum * Random.value);

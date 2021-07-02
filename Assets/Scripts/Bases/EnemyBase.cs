@@ -25,6 +25,17 @@ public abstract class EnemyBase : CtxSteer
         EnemySpawner.EnemySpawned();
     }
 
+    public void setColor(Color c)
+    {
+        rgb = Vector3Int.FloorToInt((Vector4)c);
+        GetComponentInChildren<Renderer>().material.color = c;
+        GetComponentInChildren<Light>().color = GameState.getLightColor(c);
+
+        if (c.r == 1) { maxSpeed -= 1; HP = startHP *= 3/2f; }
+        if (c.g == 1) maxSpeed += 1;
+        if (c.b == 1) HP = maxHP *= 2/3f;
+    }
+
 
     public bool isFocused()
     {

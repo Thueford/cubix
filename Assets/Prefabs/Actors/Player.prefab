@@ -50,7 +50,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f42f7f57e1a68e748bf6930ee0277d2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  accelerationForce: 250
   maxSpeed: 18
   movable: 1
   startHP: 3
@@ -74,7 +73,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   active: 1
-  bulletPrefab: {fileID: 7958330587720593824, guid: da2792a8ce1e4d54388cd8c5a606e116,
+  bulletPrefab: {fileID: 484546216173710262, guid: da2792a8ce1e4d54388cd8c5a606e116,
     type: 3}
 --- !u!95 &1432198949064338186
 Animator:
