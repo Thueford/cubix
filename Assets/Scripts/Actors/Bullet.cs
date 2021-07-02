@@ -147,20 +147,9 @@ public class Bullet : MonoBehaviour
             if (!b) Debug.LogWarning("bullet hit non-Entity");
             else if (!p.explodes) b.Hit(p.damage);
         }
-        else if (c.CompareTag("EnemyBullet") && CompareTag("PlayerBullet"))
-        {
-            //Debug.Log("BulletBulletCollision");
-            //Destroy(c.transform.parent.gameObject);
-        }
-        else if (c.CompareTag("PlayerBullet") && CompareTag("EnemyBullet"))
-        {
-            //Debug.Log("BulletBulletCollision");
-            //Destroy(c.transform.parent.gameObject);
-        }
 
         if (p.explodes) explode();
         else hit();
         if (--p.hits < 0) Destroy(gameObject);
     }
-
 }

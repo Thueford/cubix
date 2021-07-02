@@ -7,10 +7,7 @@ using UnityEngine;
 public abstract class EntityBase : MonoBehaviour
 {
     [Header("Movement Settings")]
-    [Range(1, 50)]
-    public float accelerationForce = 15;
-    [Range(1, 50)]
-    public float maxSpeed = 10;
+    public float maxSpeed = 20;
     public bool movable = false;
 
     [Header("HP Settings")]
@@ -24,6 +21,11 @@ public abstract class EntityBase : MonoBehaviour
 
     protected Animator anim;
     protected Rigidbody rb;
+
+    public static float forceByDrag(float vmax, float d)
+    {
+        return vmax * (0.05f * Mathf.Pow(d, 2) + 0.65f*d + 1);
+    }
 
     virtual public void Awake()
     {
@@ -41,13 +43,6 @@ public abstract class EntityBase : MonoBehaviour
 
     virtual public void Update() {}
     virtual public void FixedUpdate() {}
-
-    public void setColor(Color c)
-    {
-        rgb = Vector3Int.FloorToInt((Vector4)c);
-        GetComponentInChildren<Renderer>().material.color = c;
-        GetComponentInChildren<Light>().color = GameState.getLightColor(c);
-    }
 
     virtual public void Hit(float damage)
     {

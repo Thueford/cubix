@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class ShooterBase : MonoBehaviour
 {
     public bool active;
-    [NotNull] public GameObject bulletPrefab;
+    [NotNull] public Bullet bulletPrefab;
 
     protected bool singleFire;
     protected int amount;
@@ -41,10 +41,7 @@ public abstract class ShooterBase : MonoBehaviour
 
     virtual protected void shoot(Vector3 dir)
     {
-        if (singleFire)
-        {
-            CreateAndLaunch(dir);
-        }
+        if (singleFire) CreateAndLaunch(dir);
         else
         {
             float ang = spread / (amount - 1);
@@ -55,9 +52,9 @@ public abstract class ShooterBase : MonoBehaviour
 
     virtual protected void CreateAndLaunch(Vector3 dir)
     {
-        GameObject bullet = Instantiate(bulletPrefab, transform.position + dir * shooterRadius, Quaternion.identity, GameState.curStage.actors.transform);
-        bullet.GetComponent<Bullet>().setProperties(p);
-        bullet.GetComponent<Bullet>().launch(dir);
+        Bullet bullet = Instantiate(bulletPrefab, transform.position + dir * shooterRadius, Quaternion.identity, GameState.curStage.actors.transform);
+        bullet.setProperties(p);
+        bullet.launch(dir);
         //bullet.tag = tag + "Bullet";
     }
 }

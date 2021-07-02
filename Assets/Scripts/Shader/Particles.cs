@@ -49,7 +49,10 @@ public class Particles : MonoBehaviour
     private Vector3 lastPos;
 
     private int curMaxParts = 1;
-    private Vector2[] meshVerts;
+    private static Vector2[] meshVerts = new[] {
+            new Vector2(-0.5f,0.5f), new Vector2(0.5f,0.5f), new Vector2(0.5f,-0.5f),
+            new Vector2(0.5f,-0.5f), new Vector2(-0.5f,-0.5f), new Vector2(-0.5f,0.5f),
+        };
     private static bool editorDrawing = false;
 
     private bool isEditorPlaying(EditorDrawMode edm) { return isAnimPlaying() && stats.editorDrawMode == edm; }
@@ -60,7 +63,7 @@ public class Particles : MonoBehaviour
 
     #region Unity
 
-    void Awake()
+    void Start()
     {
         if(!enableParticles) return;
         if (tex == null && mat.mainTexture != null) tex = mat.mainTexture;
@@ -201,6 +204,9 @@ public class Particles : MonoBehaviour
     [NotNull] public ComputeShader compute;
     private ComputeBuffer particlesBuf, deadBuf;
     private ComputeBuffer counterBuf, quadVertBuf;
+    private CmpBufferManager particlesMgr, deadMgr;
+    private CmpBufferManager counterMgr, quadVertMgr;
+    private static int[] counterArray = new int[1];
 
     private int kernelInit, kernelEmit, kernelUpdate;
 
@@ -225,30 +231,25 @@ public class Particles : MonoBehaviour
             kernelUpdate = compute.FindKernel("UpdateOne");
         }
 
-        meshVerts = new[] {
-            new Vector2(-0.5f,0.5f),
-            new Vector2(0.5f,0.5f),
-            new Vector2(0.5f,-0.5f),
-            new Vector2(0.5f,-0.5f),
-            new Vector2(-0.5f,-0.5f),
-            new Vector2(-0.5f,0.5f),
-        };
+        particlesMgr = CmpBufferManager.getManager(stats.bufferSize, Marshal.SizeOf<Particle>(), 0, 50);
+        deadMgr = CmpBufferManager.getManager(stats.bufferSize, sizeof(int), ComputeBufferType.Append, 50);
+        counterMgr = CmpBufferManager.getManager(counterArray.Length, sizeof(int), ComputeBufferType.IndirectArguments, 100);
+        quadVertMgr = CmpBufferManager.getManager(meshVerts.Length, Marshal.SizeOf<Vector2>(), 0, 100);
     }
 
     private void InitializePartBuffer()
     {
-        particlesBuf = new ComputeBuffer(stats.bufferSize, Marshal.SizeOf<Particle>());
+        particlesBuf = particlesMgr.getBuffer();
 
-        deadBuf = new ComputeBuffer(stats.bufferSize, sizeof(int), ComputeBufferType.Append);
+        deadBuf = deadMgr.getBuffer();
         deadBuf.SetCounterValue(0);
 
-        counterBuf = new ComputeBuffer(counterArray.Length, sizeof(int), ComputeBufferType.IndirectArguments);
+        counterBuf = counterMgr.getBuffer();
         counterBuf.SetData(counterArray);
 
-        quadVertBuf = new ComputeBuffer(meshVerts.Length, Marshal.SizeOf<Vector2>());
+        quadVertBuf = quadVertMgr.getBuffer();
         quadVertBuf.SetData(meshVerts);
     }
-
 
     private void DispatchInit()
     {
@@ -265,10 +266,11 @@ public class Particles : MonoBehaviour
         stats = new Stats();
         stats.editorDrawMode = edm;
 
-        if (particlesBuf != null) particlesBuf.Release();
-        if (quadVertBuf != null) quadVertBuf.Release();
-        if (counterBuf != null) counterBuf.Release();
-        if (deadBuf != null) deadBuf.Release();
+        if (particlesBuf != null) particlesMgr.releaseBuffer(particlesBuf);
+        if (quadVertBuf != null) quadVertMgr.releaseBuffer(quadVertBuf);
+        if (counterBuf != null) counterMgr.releaseBuffer(counterBuf);
+        if (deadBuf != null) deadMgr.releaseBuffer(deadBuf);
+        particlesBuf = quadVertBuf = counterBuf = deadBuf = null;
     }
 
     #endregion
@@ -336,7 +338,6 @@ public class Particles : MonoBehaviour
         ReadDeadCount();
     }
 
-    private static int[] counterArray = new int[1];
     private void ReadDeadCount()
     {
         ComputeBuffer.CopyCount(deadBuf, counterBuf, 0);

@@ -57,6 +57,21 @@ public class Player : EntityBase
         SwitchColor();
     }
 
+    override public void FixedUpdate()
+    {
+        base.FixedUpdate();
+
+        if (movable)
+        {
+            // apply input force
+            Vector3 dir = InputHandler.ReadDirInput().normalized;
+            rb.AddForce(forceByDrag(maxSpeed, rb.drag) * dir, ForceMode.Acceleration);
+
+            float pvel = Mathf.Clamp(rb.velocity.magnitude / maxSpeed, 1e-2f, 0.96f);
+            psTrail.properties.emissionRate = psTrail.properties.maxParts * Mathf.Pow(pvel, 3);
+        }
+    }
+
     // Update is called once per frame
     override public void Update()
     {
@@ -72,23 +87,6 @@ public class Player : EntityBase
             
             Vector3Int nrgb = InputHandler.ReadColorInput(rgb);
             if (rgb != nrgb) SetShooterColor(nrgb);
-
-            // read input keys
-            Vector3 dir = InputHandler.ReadDirInput();
-            dir = dir.normalized * accelerationForce;
-
-            // apply direction
-            //float vel = rb.velocity.magnitude;
-            rb.AddForce(Time.deltaTime * 1000 * dir, ForceMode.Acceleration);
-            if(rb.velocity.magnitude > maxSpeed)
-            {
-                //if (rb.velocity.magnitude > vel) rb.velocity = rb.velocity.normalized * vel;
-                rb.velocity = rb.velocity.normalized * maxSpeed;
-                //rb.AddForce(-Time.deltaTime * 2000 * (rb.velocity.normalized), ForceMode.Acceleration);
-            }
-
-            float pvel = Mathf.Clamp(rb.velocity.magnitude / maxSpeed, 1e-2f, 0.96f);
-            psTrail.properties.emissionRate = psTrail.properties.maxParts * Mathf.Pow(pvel, 3);
 
             // look in movement direction
             Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);

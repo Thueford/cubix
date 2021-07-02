@@ -8,8 +8,10 @@ public abstract class CtxSteer : EntityBase
         ANGULAR_NOISE = 30,
         F_PERLIN = 0.5f;
 
+    public static bool ctxAglNoise = true;
+
     public static Effector_T
-        eplayer = new Effector_T("Player", 2, 30, false),
+        eplayer = new Effector_T("Player", 2, 40, false),
         eenemy = new Effector_T("Enemy", -1, 10),
         ewall = new Effector_T("Wall", -2, 10);
 
@@ -45,9 +47,7 @@ public abstract class CtxSteer : EntityBase
             }
 
             // apply direction
-            rb.AddForce(Time.deltaTime * 1000 * steerDir, ForceMode.Acceleration);
-            if (rb.velocity.magnitude > maxSpeed)
-                rb.velocity = rb.velocity.normalized * maxSpeed;
+            rb.AddForce(forceByDrag(maxSpeed, rb.drag) * steerDir, ForceMode.Acceleration);
         }
     }
 
@@ -55,6 +55,8 @@ public abstract class CtxSteer : EntityBase
     protected Vector3 contextSteer(List<Vector3> effectors)
     {
         Vector3 dir = Vector3.zero;
+        foreach (Vector3 d in effectors)
+            dbgLine(d, d.magnitude, Color.yellow);
 
         for (int i = 0; i < DIRS; ++i)
         {
@@ -74,7 +76,8 @@ public abstract class CtxSteer : EntityBase
         }
 
         if (dir.sqrMagnitude > 1) dir.Normalize();
-        return Quaternion.Euler(0, ANGULAR_NOISE * perlinNoise(0.4f * Time.time, pnD), 0) * dir;
+        if (ctxAglNoise) dir = Quaternion.Euler(0, ANGULAR_NOISE * perlinNoise(0.4f * Time.time, pnD), 0) * dir;
+        return dir;
     }
 
     public static float perlinNoise(float time, int seed)

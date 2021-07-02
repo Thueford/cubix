@@ -16,7 +16,7 @@ public class Stage0 : StageController
         state = State.START;
     }
 
-    override public void EndlessHints()
+    override public void Experienced()
     {
         switch (state)
         {
@@ -25,18 +25,19 @@ public class Stage0 : StageController
                 texts[3].GetComponent<TMPro.TextMeshPro>().text =
                     string.Format(txtHighScore, GameState.settings.stageHighscore);
                 texts[3].SetActive(true);
+                state++;
                 break;
         }
-        state++;
     }
 
-    override public void NewbieHints()
+    override public void Newbie()
     {
         switch (state)
         {
             case State.START:
                 endPortal.gameObject.SetActive(false);
                 texts[0].SetActive(true);
+                state++;
                 break;
 
             case State.WASD:
@@ -45,15 +46,14 @@ public class Stage0 : StageController
                     Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W) ||
                     Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))) return;
                 texts[1].SetActive(true);
+                state++;
                 break;
 
             case State.CHARGE:
                 if (!GameState.curStage.portal.Enabled()) return;
                 texts[2].SetActive(true);
+                state++;
                 break;
-
-            default: return;
         }
-        state++;
     }
 }

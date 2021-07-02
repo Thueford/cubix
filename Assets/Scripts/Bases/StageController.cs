@@ -16,15 +16,18 @@ public abstract class StageController : MonoBehaviour
     private void Update()
     {
         if (!isCurStage()) return;
-        if (GameState.settings.reachedEndless) EndlessHints(); 
-        else NewbieHints();
+        if (GameState.settings.reachedEndless) Experienced(); 
+        else Newbie();
+        General();
     }
 
     public bool isCurStage() {
         return GameState.curStage == GetComponentInParent<GameStage>();
     }
 
-    public abstract void NewbieHints();
+    public virtual void Newbie() { }
 
-    public virtual void EndlessHints() { }
+    public virtual void Experienced() { }
+
+    public virtual void General() { }
 }

@@ -8,6 +8,8 @@ public abstract class EnemyBase : CtxSteer
     public Color color;
     protected int pnOff;
 
+    public static bool ctxIDLE = true;
+
     // Start is called before the first frame update
     override public void Start()
     {
@@ -21,6 +23,17 @@ public abstract class EnemyBase : CtxSteer
         base.OnSpawn(ev);
         transform.forward = Player.self.transform.position - transform.position;
         EnemySpawner.EnemySpawned();
+    }
+
+    public void setColor(Color c)
+    {
+        rgb = Vector3Int.FloorToInt((Vector4)c);
+        GetComponentInChildren<Renderer>().material.color = c;
+        GetComponentInChildren<Light>().color = GameState.getLightColor(c);
+
+        if (c.r == 1) { maxSpeed -= 1; HP = startHP *= 3/2f; }
+        if (c.g == 1) maxSpeed += 1;
+        if (c.b == 1) HP = maxHP *= 2/3f;
     }
 
 
@@ -38,7 +51,7 @@ public abstract class EnemyBase : CtxSteer
     protected Vector3 contextSteer2Player(List<Vector3> effectors)
     {
         bool focused = isFocused();
-        if (focused) effectors.Add(eplayer.getEff(gameObject, Player.self.gameObject));
+        if (focused) effectors.Add(eplayer.getEff(this, Player.self));
         // eplayer.factor * (Player.self.transform.position - transform.position).normalized);
         
         return (focused ? 1 : 0.4f) * contextSteerIDLE(effectors);
@@ -52,9 +65,10 @@ public abstract class EnemyBase : CtxSteer
         if (rb.velocity.magnitude > 0.01) fnoise += 2 / rb.velocity.magnitude;
         noiseTime += 0.4f * steerdt * fnoise;
 
-        Vector3 d = new Vector3(perlinNoise(noiseTime, pnOff), 0, perlinNoise(noiseTime, -pnD));
-        effectors.Add(F_PERLIN * d.normalized);
-        dbgLine(d, d.magnitude, Color.yellow);
+        if(ctxIDLE) {
+            Vector3 d = new Vector3(perlinNoise(noiseTime, pnOff), 0, perlinNoise(noiseTime, -pnD));
+            effectors.Add(F_PERLIN * d.normalized);
+        }
 
         // avoid enemies
         // EnemyBase[] enemies = GameState.curStage.GetComponentsInChildren<EnemyBase>();
