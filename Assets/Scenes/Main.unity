@@ -2297,7 +2297,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80f6418a9a800ca40b6dc19bbafe8e26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startStage: {fileID: 689028336}
+  startStage: {fileID: 1184953859}
   PauseOverlay: {fileID: 1405544324}
   sets:
     startNo: 0
@@ -5112,6 +5112,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 281136049463302606, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
+        type: 3}
+      propertyPath: m_Drag
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2703775900557845817, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
         type: 3}
       propertyPath: m_RootOrder
@@ -5161,6 +5166,11 @@ PrefabInstance:
         type: 3}
       propertyPath: acceleration
       value: 5000
+      objectReference: {fileID: 0}
+    - target: {fileID: 2703775900557845819, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
+        type: 3}
+      propertyPath: accelerationForce
+      value: 212
       objectReference: {fileID: 0}
     - target: {fileID: 2703775900557845821, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
         type: 3}

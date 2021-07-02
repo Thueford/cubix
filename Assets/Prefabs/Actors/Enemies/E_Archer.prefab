@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &236654566384133876
+--- !u!114 &7948427989888214663
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6ebfb08718d80449a41e64db8bbcb05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   bulletPrefab: {fileID: 7958330587720593824, guid: da2792a8ce1e4d54388cd8c5a606e116,
     type: 3}
 --- !u!114 &8452632988693228686
@@ -27,9 +27,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ee53909801c0cf4d92f7408a6b7792e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  accelerationForce: 75
-  maxSpeed: 6
-  movable: 0
+  maxSpeed: 7
+  movable: 1
   startHP: 3
   maxHP: 5
   HP: 0

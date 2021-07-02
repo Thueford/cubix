@@ -65,7 +65,7 @@ public class Player : EntityBase
         {
             // apply input force
             Vector3 dir = InputHandler.ReadDirInput().normalized;
-            rb.AddForce(accelerationForce * dir, ForceMode.Acceleration);
+            rb.AddForce(forceByDrag(maxSpeed, rb.drag) * dir, ForceMode.Acceleration);
 
             float pvel = Mathf.Clamp(rb.velocity.magnitude / maxSpeed, 1e-2f, 0.96f);
             psTrail.properties.emissionRate = psTrail.properties.maxParts * Mathf.Pow(pvel, 3);

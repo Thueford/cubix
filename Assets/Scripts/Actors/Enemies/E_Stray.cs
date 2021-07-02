@@ -6,7 +6,7 @@ public class E_Stray : EnemyBase
 {
     override public Vector3 steer()
     {
-        return contextSteerIDLE(new List<Vector3>(10)) * accelerationForce;
+        return contextSteerIDLE(new List<Vector3>(10));
     }
 
     override public void Update()

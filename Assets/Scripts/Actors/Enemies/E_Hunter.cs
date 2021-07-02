@@ -6,7 +6,7 @@ public class E_Hunter : EnemyBase
 {
     override public Vector3 steer()
     {
-        return contextSteer2Player(new List<Vector3>(10)) * accelerationForce;
+        return contextSteer2Player(new List<Vector3>(10));
     }
 
     override public void Update()
