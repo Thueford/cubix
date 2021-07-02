@@ -43,11 +43,12 @@ public class StageBuilder : MonoBehaviour
         GameObject Stage = Instantiate(StagePrefab, pos, Quaternion.identity);
         GameStage StageScript = Stage.GetComponent<GameStage>();
         StageScript.isProcedural = true;
-        StageScript.actorsBase = Instantiate(
+        StageScript.actorsBase = ActorContainer.transform.GetChild(Random.Range(0, ActorContainer.transform.childCount)).gameObject;
+        /* StageScript.actorsBase = Instantiate(
             ActorContainer.transform.GetChild(Random.Range(0, ActorContainer.transform.childCount)).gameObject, 
             StageScript.actorsBase.transform.position, 
             Quaternion.identity, 
-            Stage.transform);
+            Stage.transform); */
         /* StageScript.wallBase = Instantiate(
             WallBases[Random.Range(0, WallBases.Count)],
             StageScript.wallBase.transform.position,

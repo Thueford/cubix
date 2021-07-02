@@ -53,7 +53,7 @@ public class GameStage : MonoBehaviour
     {
         gameObject.SetActive(true);
 
-        actors = Instantiate(actorsBase, gameObject.transform);
+        actors = Instantiate(actorsBase, transform.position, Quaternion.identity, transform);
         //actors.SetActive(false);
         portal.SetEnabled(false);
 
