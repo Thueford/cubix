@@ -2,7 +2,7 @@ TODO List
 
 Game Features:
 
-- [ ] Colored Enemy Properties      (A/J)
+- [x] Colored Enemy Properties      (A/J)
 - [x] Stage Builder for Endless Mode        A/J
 - - [ ] More Spawner Layouts                A/J
 - - [ ] More Wall Layouts                   A/J
@@ -15,8 +15,9 @@ Game Features:
 - [x] Storing of High-Score and whether Endless Mode is unlocked or not     A
 - [x] Multiple Portals in Stage 0 to select Tutorial or Endless Mode (or Settings Room?)    A
 - [ ] _ (Settings Room?)
-- [ ] Entity Speed not hard capped      A
-- [ ] Bullet Knockback                  J
+- [x] Entity Speed not hard capped      A
+- [x] Bullet Knockback                  J
+- [ ] Player flicker while invulnurable J
 
 GUI:
 
