@@ -25,7 +25,8 @@ public class Stage0 : StageController
                 texts[3].GetComponent<TMPro.TextMeshPro>().text =
                     string.Format(txtHighScore, GameState.settings.stageHighscore);
                 texts[3].SetActive(true);
-                state++;
+                texts[2].SetActive(true);
+                texts[4].SetActive(true);
                 break;
         }
     }
@@ -37,23 +38,34 @@ public class Stage0 : StageController
             case State.START:
                 endPortal.gameObject.SetActive(false);
                 texts[0].SetActive(true);
-                state++;
                 break;
-
             case State.WASD:
-                if (!(Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S) ||
-                    Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D) ||
-                    Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W) ||
-                    Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))) return;
                 texts[1].SetActive(true);
-                state++;
                 break;
-
             case State.CHARGE:
-                if (!GameState.curStage.portal.Enabled()) return;
                 texts[2].SetActive(true);
+                break;
+        }
+    }
+
+    public override void General()
+    {
+        base.General();
+        switch (state)
+        {
+            case State.START:
+                InputHandler.enableSpace = false;
+                if (InputHandler.ReadDirInput() == Vector3.zero) return;
                 state++;
                 break;
+            case State.WASD:
+                if (!GameState.curStage.portal.Enabled()) return;
+                state++;
+                break;
+            case State.CHARGE:
+                state++;
+                break;
+            default: break;
         }
     }
 }

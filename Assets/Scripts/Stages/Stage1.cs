@@ -18,16 +18,26 @@ public class Stage1 : StageController
         switch (state)
         {
             case State.START:
-                InputHandler.enableSpace = false;
                 texts[0].SetActive(true);
-                state++;
                 break;
 
             case State.CHARGING:
                 if (!GameState.curStage.charger.charging) return;
                 texts[1].SetActive(true);
-                state++;
+                ++state;
                 break;
+        }
+    }
+
+    public override void General()
+    {
+        base.General();
+        switch (state)
+        {
+            case State.START:
+                ++state;
+                break;
+            default: break;
         }
     }
 }

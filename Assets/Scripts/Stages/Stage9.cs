@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Stage9 : StageController
 {
-    enum State { START, DONE }
+    enum State { START, CONGRATS, DONE }
     private State state;
 
     override public void ResetHints()
@@ -19,6 +19,18 @@ public class Stage9 : StageController
         {
             case State.START:
                 texts[0].SetActive(true);
+                state++;
+                break;
+        }
+    }
+
+    override public void General()
+    {
+        switch (state)
+        {
+            case State.CONGRATS:
+                if (!GameState.curStage.charger.charged) return;
+                texts[1].SetActive(true);
                 state++;
                 break;
         }

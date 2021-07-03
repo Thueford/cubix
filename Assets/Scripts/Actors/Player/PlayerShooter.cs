@@ -46,7 +46,8 @@ public class PlayerShooter : ShooterBase
         rgb = rgbNew;
     }
 
-    private float cndinv(float f, bool b) => b ? 1 / f : f;
+    private float cndinv(float f, bool b) => b ? f : 1/f;
+
     public void toggleRed(bool b) {
         p.explodes = b;
         p.speed *= cndinv(2/3f, b);
@@ -64,7 +65,7 @@ public class PlayerShooter : ShooterBase
     public void toggleBlue(bool b)
     {
         rateOfFire *= cndinv(2/3f, b);
-        p.damage *= cndinv(0.5f, b);
+        p.damage *= cndinv(1/3f, b);
         singleFire = !b;
     }
 

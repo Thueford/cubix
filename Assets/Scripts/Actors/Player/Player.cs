@@ -143,11 +143,15 @@ public class Player : EntityBase
             GameState.settings.Save();
         }
 
-        if (GameState.curStage == null) return;
-        else if (target == null)
+        if (target == GameState.self.endlessStartStage)
         {
             GameState.settings.reachedEndless = true;
             GameState.settings.Save();
+        }
+
+        if (GameState.curStage == null) return;
+        else if (target == null)
+        {
             target = StageBuilder.self.Generate(GameState.curStage.transform);
         }
 

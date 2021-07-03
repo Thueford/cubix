@@ -33,7 +33,7 @@ public class Explosion : MonoBehaviour
         //Debug.Log("BTrigger: " + c.name + " " + tag + " " + c.tag);
         EntityBase b = c.GetComponentInParent<EntityBase>();
         if (!b) {
-            Debug.LogWarning("Explosion hit non-Entity");
+            //Debug.LogWarning("Explosion hit non-Entity");
             return;
         }
 
@@ -45,7 +45,7 @@ public class Explosion : MonoBehaviour
             //float damageMult = Mathf.SmoothStep(sc.radius, 0, (c.transform.position - transform.position).magnitude);
             Debug.Log("explosion hit Enemy" + damage);
             b.Hit(damage);
-            b.KnockBack(distance.normalized * distanceMultiplier * 4f);
+            b.KnockBack(distance.normalized * distanceMultiplier * 3f);
         }
         else if (c.CompareTag("Player") && CompareTag("EnemyBullet"))
         {

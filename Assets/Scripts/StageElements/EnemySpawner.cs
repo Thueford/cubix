@@ -56,24 +56,29 @@ public class EnemySpawner : MonoBehaviour
     private void Spawn()
     {
         Color col = getWeightedColor();
-        for (int i = col.b == 1 ? 3 : 1; i > 0; i--) {
+        for (int j = 0; j < wavesize && spawned < amount; j++)
+        {
+            for (int i = col.b == 1 ? 3 : 1; i > 0; i--)
+            {
 
-            Vector3 pos;
-            int tries = 10;
-            do pos = transform.position + new Vector3((Random.value - 0.5f) * transform.lossyScale.x, 0, (Random.value - 0.5f) * transform.lossyScale.z);
-            while (Vector3.Distance(pos, Player.self.transform.position) < 5 && --tries > 0);
-            
-            if (tries == 0) {
-                Debug.LogWarning("max spawn tries reached");
-                break;
+                Vector3 pos;
+                int tries = 10;
+                do pos = transform.position + new Vector3((Random.value - 0.5f) * transform.lossyScale.x, 0, (Random.value - 0.5f) * transform.lossyScale.z);
+                while (Vector3.Distance(pos, Player.self.transform.position) < 5 && --tries > 0);
+
+                if (tries == 0)
+                {
+                    Debug.LogWarning("max spawn tries reached");
+                    break;
+                }
+
+                pos.y = 0.5f;
+                EnemyBase e = Instantiate(getRandomPrefab(), pos, Quaternion.identity, transform.parent);
+                e.setColor(col);
             }
-
-            pos.y = 0.5f;
-            EnemyBase e = Instantiate(getRandomPrefab(), pos, Quaternion.identity, transform.parent);
-            e.setColor(col);
+            ++spawned;
         }
-
-        if (++spawned < amount) InitiateSpawn();
+        if (spawned < amount) InitiateSpawn();
     }
 
     // This is madness ngl

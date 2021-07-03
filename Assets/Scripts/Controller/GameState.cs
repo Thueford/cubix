@@ -7,6 +7,7 @@ public class GameState : MonoBehaviour
 {
     public static GameState self;
     [NotNull] public GameStage startStage;
+    [NotNull] public GameStage endlessStartStage;
     [NotNull] public GameObject PauseOverlay;
     public static GameStage curStage;
     public static PlayerSettings settings;

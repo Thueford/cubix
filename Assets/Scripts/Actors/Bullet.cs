@@ -140,7 +140,11 @@ public class Bullet : MonoBehaviour
         if (c.CompareTag("Enemy") && CompareTag("PlayerBullet"))
         {
             if (!b) Debug.LogWarning("bullet hit non-Entity");
-            if (!p.explodes) b.Hit(p.damage);
+            else if (!p.explodes)
+            {
+                b.Hit(p.damage);
+                b.KnockBack(rb.velocity.normalized*(5+p.speed*0.15f));
+            }
         }
         else if (c.CompareTag("Player") && CompareTag("EnemyBullet"))
         {

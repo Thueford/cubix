@@ -89,14 +89,4 @@ public abstract class EntityBase : MonoBehaviour
     {
         rb.AddForce(force, ForceMode.Impulse);
     }
-
-    /*
-    virtual public void killStuckAnim()
-    {
-        if (anim.enabled)
-        {
-            Destroy(gameObject);
-        }
-    }
-    */
 }
