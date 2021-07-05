@@ -23,7 +23,11 @@ public class Explosion : MonoBehaviour
         gameObject.layer = p.owner == "Player" ? 16 : 15;
         tag = p.owner + "Bullet";
         sc.radius = p.explosionRadius;
-        ps.vel.scale = 2 * ps.vel.scale.normalized * p.explosionRadius / ps.properties.lifetime;
+
+        ps.vel.scale = 3 * sc.radius * ps.vel.scale.normalized;
+        ps.properties.lifetime = sc.radius / ps.vel.scale.x;
+        ps.size.val.z = -ps.size.val.y / ps.properties.lifetime;
+
         // light.range = p.explosionRadius*2;
         damage = p.damage;
     }
