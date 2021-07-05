@@ -96,11 +96,11 @@ public class Player : EntityBase
 
             if(InputHandler.ReadShootInput()) bs.tryShot();
 
-            if (invulnurable > 0)
+            if (invulnurable > 0) invulnurable -= Time.deltaTime;
+            else if (invulnurable < 0)
             {
-                Debug.Log("Play Flicker Animation");
-                invulnurable = Mathf.Max(0, invulnurable - Time.deltaTime);
-                if (invulnurable == 0) Debug.Log("Stop Flicker Animation");
+                invulnurable = 0;
+                anim.Play("NonInvulnerable");
             }
         }
     }
@@ -110,7 +110,9 @@ public class Player : EntityBase
         if (invulnurable <= 0 && damage > 0) 
         {
             HP -= damage;
-            invulnurable = 1;
+            invulnurable = 1.25f;
+            anim.enabled = true;
+            anim.Play("Invulnerable", 0, 0.5f);
             PostProcessing.self.PlayerHitEffect(0.2f);
         }
         if (HP <= 0) Die();

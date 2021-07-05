@@ -27,9 +27,10 @@ public abstract class EnemyBase : CtxSteer
 
     public void setColor(Color c)
     {
+        _color = c;
         rgb = Vector3Int.FloorToInt((Vector4)c);
-        GetComponentInChildren<Renderer>().material.color = c;
-        GetComponentInChildren<Light>().color = GameState.getLightColor(c);
+        rend.material.color = c;
+        vlight.color = GameState.getLightColor(c);
 
         if (c.r == 1) { maxSpeed -= 1; HP = startHP *= 2f; }
         if (c.g == 1) maxSpeed += 2;

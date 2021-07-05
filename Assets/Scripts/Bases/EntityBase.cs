@@ -21,6 +21,9 @@ public abstract class EntityBase : MonoBehaviour
 
     protected Animator anim;
     protected Rigidbody rb;
+    protected Renderer rend;
+    protected Light vlight;
+    protected Color _color;
 
     public static float forceByDrag(float vmax, float d)
     {
@@ -29,8 +32,11 @@ public abstract class EntityBase : MonoBehaviour
 
     virtual public void Awake()
     {
+        _color = Color.white;
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
+        rend = GetComponentInChildren<Renderer>();
+        vlight = GetComponentInChildren<Light>();
     }
 
     // Start is called before the first frame update
@@ -67,7 +73,7 @@ public abstract class EntityBase : MonoBehaviour
     virtual public void Die()
     {
         Debug.Log("killing " + name);
-        gameObject.GetComponentInChildren<Light>().enabled = false;
+        vlight.enabled = false;
         anim.enabled = true;
         anim.Play("Die");
         Freeze();
