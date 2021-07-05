@@ -35,7 +35,6 @@ Transform:
   m_Children:
   - {fileID: 2185484865760989443}
   - {fileID: 2169153629063608180}
-  - {fileID: 6181796285060066419}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -323,7 +322,8 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 6181796285060066419}
   m_Father: {fileID: 2703775900557845817}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -586,12 +586,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9186481488205223290}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2703775900557845817}
-  m_RootOrder: 2
+  m_Father: {fileID: 2185484865760989443}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8826235761362021055
 MonoBehaviour:
@@ -607,5 +607,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HPCubePrefab: {fileID: 5242382221400745151, guid: 4e4895c51e32cd84392f3acd0defacc6,
     type: 3}
+  hp: 0
   rotSpeed: 70
   dist: 1.3

@@ -7669,19 +7669,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2703775900557845819, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
         type: 3}
-      propertyPath: maxHP
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 2703775900557845819, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
-        type: 3}
       propertyPath: txtDbg
       value: 
       objectReference: {fileID: 336807975}
-    - target: {fileID: 2703775900557845819, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
-        type: 3}
-      propertyPath: startHP
-      value: 47.4
-      objectReference: {fileID: 0}
     - target: {fileID: 2703775900557845819, guid: 0640d2d495f6eeb459fa3e2ae9cd05a2,
         type: 3}
       propertyPath: startStage

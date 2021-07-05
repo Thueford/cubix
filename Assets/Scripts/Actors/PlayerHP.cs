@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerHP : MonoBehaviour
 {
     public GameObject HPCubePrefab;
-    private int hp = 0;
+    [ReadOnly] public int hp = 0;
     public int rotSpeed = 90;
     [Range(0,5)]
     public float dist = 1.3f;
@@ -32,7 +32,8 @@ public class PlayerHP : MonoBehaviour
 
     public void addHP(int hp)
     {
-        while(hp-- > 0) {
+        this.hp += hp;
+        while (hp-- > 0) {
             GameObject c = Instantiate(HPCubePrefab, transform.position + dist * Vector3.back, Quaternion.identity, transform);
             cubes.Push(c);
         }
@@ -41,6 +42,7 @@ public class PlayerHP : MonoBehaviour
 
     public void subHP(int hp)
     {
+        this.hp -= hp;
         while (hp-- > 0) Destroy(cubes.Pop());
         updateHP();
     }

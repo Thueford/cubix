@@ -28,8 +28,7 @@ public class Player : EntityBase
     override public void Start()
     {
         base.Start();
-        HP = startHP;
-        hpDisplay.SetHP((int)HP);
+        setHP(HP);
         if (txtDbg == null) Debug.LogWarning("player.txtDbg not assigned");
     }
 
@@ -109,27 +108,29 @@ public class Player : EntityBase
 
     override public void Hit(float damage)
     {
-        if (invulnurable <= 0 && damage > 0) 
+        if (invulnurable <= 0 && damage > 0)
         {
-            HP -= damage;
             invulnurable = 1.25f;
             anim.enabled = true;
             anim.Play("Invulnerable", 0, 0.5f);
+
+            setHP(HP - damage);
+            
             PostProcessing.self.PlayerHitEffect(0.2f);
         }
-        if (HP <= 0) Die();
     }
 
     public void setHP(float value)
     {
         HP = value;
+        Debug.Log("SetHp: " + HP);
         hpDisplay.SetHP((int)HP);
         if (HP <= 0) Die();
     }
 
     public void OnCollisionEnter(Collision c)
     {
-        if (c.collider.CompareTag("Enemy"))
+        if (invulnurable == 0 && c.collider.CompareTag("Enemy"))
         {
             c.collider.GetComponent<EntityBase>().Die();
             c.collider.GetComponent<SphereCollider>().isTrigger = true;
@@ -167,7 +168,7 @@ public class Player : EntityBase
         anim.Play("Teleport");
         target.Load();
 
-        HP = Mathf.Min(maxHP, HP+1);
+        setHP(Mathf.Min(maxHP, HP+1));
     }
 
 
