@@ -1,6 +1,9 @@
-TODO List
+#TODO List
 
-Game Features:
+### Bugs
+- UnlockedColors are reset somehow btw. stage4 and 5
+
+### Game Features:
 
 - [x] Colored Enemy Properties      (A/J)
 - [x] Stage Builder for Endless Mode        A/J
@@ -24,13 +27,13 @@ Game Features:
 - [x] Bullet Knockback                  J
 - [x] Player flicker while invulnurable A
 
-GUI:
+### GUI:
 
 - [x] display High Score and current Stage      A
 - [x] Show Active Shot Color (maybe display on Player Model)    A
 - [ ] Redesign of GUI?      A
 
-Particles/Visuals: A
+### Particles/Visuals: A
 
 - [ ] Player Model (+ some way to indicate HP and Active Shot Color?)
 - [x] Bullet Particle Trails
@@ -42,7 +45,7 @@ Particles/Visuals: A
 - [x] Animation/Particles on Collectable pickup
 - [x] Particles on Shot Mode Switch
 
-Sounds:     J
+### Sounds:     J
 
 - [ ] Soudtrack
 - [ ] Shoot
