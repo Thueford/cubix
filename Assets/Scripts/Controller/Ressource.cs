@@ -13,11 +13,11 @@ public class Ressource : MonoBehaviour
     [NotNull] public GameObject Space;
 
     [Range(0, 100)]
-    public static float valueRed = 50;
+    public static float valueRed = 0;
     [Range(0, 100)]
-    public static float valueGreen = 50;
+    public static float valueGreen = 0;
     [Range(0, 100)]
-    public static float valueBlue = 50;
+    public static float valueBlue = 0;
 
     public static float cooldown = 10;
 
@@ -27,7 +27,7 @@ public class Ressource : MonoBehaviour
 
     private const float alpha = 0.6862745098f;
 
-    string bar = "█";
+    const string bar = "█";
 
     public enum col { Red, Green, Blue }
 
