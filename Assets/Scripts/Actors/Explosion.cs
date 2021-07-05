@@ -41,7 +41,7 @@ public class Explosion : MonoBehaviour
         if (c.CompareTag("Enemy") && CompareTag("PlayerBullet"))
         {
             Vector3 distance = c.transform.position - transform.position;
-            float distanceMultiplier = distance.magnitude > sc.radius/2 ? sc.radius/2 : sc.radius;
+            float distanceMultiplier = distance.magnitude > sc.radius/2 ? 3 : 6;
             //float damageMult = Mathf.SmoothStep(sc.radius, 0, (c.transform.position - transform.position).magnitude);
             Debug.Log("explosion hit Enemy" + damage);
             b.Hit(damage);
