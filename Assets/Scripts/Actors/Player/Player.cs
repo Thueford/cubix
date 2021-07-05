@@ -12,6 +12,7 @@ public class Player : EntityBase
 
     [Header("Other Settings")]
     [WarnNull] public Text txtDbg;
+    [NotNull] public PlayerHP hpDisplay;
     [NotNull] public PlayerShooter bs;
     [NotNull] public Particles psTrail, psColorSwitch;
 
@@ -28,6 +29,7 @@ public class Player : EntityBase
     {
         base.Start();
         HP = startHP;
+        hpDisplay.SetHP((int)HP);
         if (txtDbg == null) Debug.LogWarning("player.txtDbg not assigned");
     }
 
@@ -121,6 +123,7 @@ public class Player : EntityBase
     public void setHP(float value)
     {
         HP = value;
+        hpDisplay.SetHP((int)HP);
         if (HP <= 0) Die();
     }
 
