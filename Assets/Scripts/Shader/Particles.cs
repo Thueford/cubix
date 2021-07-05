@@ -56,8 +56,17 @@ public class Particles : MonoBehaviour
     private static bool editorDrawing = false;
 
     private bool isEditorPlaying(EditorDrawMode edm) { return isAnimPlaying() && stats.editorDrawMode == edm; }
-    private bool isAnimPlaying() { return Application.isPlaying || (editorDrawing && !EditorApplication.isPaused); }
-    private bool isAnimPaused() { return !Application.isPlaying && (!editorDrawing || (EditorApplication.isPaused || stats.editorDrawMode == 0)); }
+
+    #if UNITY_EDITOR
+        private bool isAnimPlaying() { return Application.isPlaying || (editorDrawing && !EditorApplication.isPaused); }
+        private bool isAnimPaused() { return !Application.isPlaying && (!editorDrawing || (EditorApplication.isPaused || stats.editorDrawMode == 0)); }
+
+    #else
+
+        private bool isAnimPlaying() { return Application.isPlaying; }
+        private bool isAnimPaused() { return !Application.isPlaying; }
+
+    #endif
 
     #endregion
 
@@ -88,18 +97,22 @@ public class Particles : MonoBehaviour
 
         if (stats.reset) ReleaseBuffers();
 
-        if (isEditorPlaying(EditorDrawMode.FAST)) {
-            EditorApplication.QueuePlayerLoopUpdate();
-            SceneView.RepaintAll();
-        }
+        #if UNITY_EDITOR
+            if (isEditorPlaying(EditorDrawMode.FAST)) {
+                EditorApplication.QueuePlayerLoopUpdate();
+                SceneView.RepaintAll();
+            }
+        #endif
     }
 
     // Update is called once per frame
     void Update()
     {
         if (!enableParticles) return;
-        if (editorDrawing && isEditorPlaying(EditorDrawMode.SLOW))
-            EditorApplication.delayCall += EditorApplication.QueuePlayerLoopUpdate;
+        #if UNITY_EDITOR
+            if (editorDrawing && isEditorPlaying(EditorDrawMode.SLOW))
+                EditorApplication.delayCall += EditorApplication.QueuePlayerLoopUpdate;
+        #endif
         if (isAnimPaused()) return;
 
         DispatchUpdate();
@@ -144,9 +157,9 @@ public class Particles : MonoBehaviour
     private void OnDisable() { ReleaseBuffers(); }
     private void OnDestroy() { ReleaseBuffers(); }
 
-    #endregion
+#endregion
 
-    #region User
+#region User
     [Range(-10, 10)]
     public float velocityFactor = 0;
     //public Vector3 posOffset;
@@ -195,9 +208,9 @@ public class Particles : MonoBehaviour
         _onFinished = p;
     }
 
-    #endregion
+#endregion
 
-    #region Shader
+#region Shader
     // public Assets assets; // not visible in script inspector :(
     [NotNull] public Texture tex;
     [NotNull] public Material mat;
@@ -211,7 +224,7 @@ public class Particles : MonoBehaviour
     private int kernelInit, kernelEmit, kernelUpdate;
 
 
-    #region Shader Setup
+#region Shader Setup
 
     private void ShaderSetup()
     {
@@ -273,9 +286,9 @@ public class Particles : MonoBehaviour
         particlesBuf = quadVertBuf = counterBuf = deadBuf = null;
     }
 
-    #endregion
+#endregion
 
-    #region Shader Loop
+#region Shader Loop
 
     private void UniformEmit(int kernel)
     {
@@ -346,7 +359,7 @@ public class Particles : MonoBehaviour
         stats.alive = curMaxParts - stats.dead;
     }
 
-    #endregion
+#endregion
 
-    #endregion
+#endregion
 }
