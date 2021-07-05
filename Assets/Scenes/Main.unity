@@ -7601,15 +7601,15 @@ MonoBehaviour:
   skipAll: 0
   useBloom: 1
   bloomBlurrAmount: 4
-  bloomThreshold: 0.725
+  bloomThreshold: 0.75
   useCA: 1
-  caAmount: 0.001
+  caAmount: 0.0005
   useLensFlare: 1
-  lfGhostCount: 5
+  lfGhostCount: 6
   lfBlurrCount: 3
   lfThreshold: 0.75
-  lfGhostSpacing: 1.422
-  lfCAStrength: 0.1
+  lfGhostSpacing: 0.69
+  lfCAStrength: 0.15
   useCTREffect: 1
   vignetteAmount: 0.8
   vignetteWidth: 0.1

@@ -20,18 +20,18 @@ public class PostProcessing : MonoBehaviour
 
     [Header("Bloom")]
     public bool useBloom = true;
-    [Range(1, 20)] public int bloomBlurrAmount = 1;
-    [Range(0.01f, 1f)] public float bloomThreshold = .65f;
+    [Range(1, 20)] public int bloomBlurrAmount = 4;
+    [Range(0.01f, 1f)] public float bloomThreshold = .75f;
 
     [Header("Chromatic Aberration")]
     public bool useCA = true;
-    [Range(0f, 0.01f)] public float caAmount = 0.001f;
+    [Range(0f, 0.01f)] public float caAmount = 0.0005f;
 
     [Header("Lens Flare")]
     public bool useLensFlare = true;
-    [Range(1, 10)] public int lfGhostCount = 3;
-    [Range(1, 20)] public int lfBlurrCount = 4;
-    [Range(0.01f, 1f)] public float lfThreshold = 0.7f;
+    [Range(1, 10)] public int lfGhostCount = 6;
+    [Range(1, 20)] public int lfBlurrCount = 3;
+    [Range(0.01f, 1f)] public float lfThreshold = 0.77f;
     [Range(0.1f, 2f)] public float lfGhostSpacing = .69f;
     [Range(0.0f, 0.3f)] public float lfCAStrength = 0.15f;
 
