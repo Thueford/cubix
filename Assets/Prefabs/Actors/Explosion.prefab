@@ -60,6 +60,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sc: {fileID: 4033041906860793440}
   ps: {fileID: 490701671554870233}
+  hitPrefab: {fileID: 609184826687653396, guid: 24420fcb8a274ea488859c8fe1a04b46,
+    type: 3}
 --- !u!114 &490701671554870233
 MonoBehaviour:
   m_ObjectHideFlags: 0
