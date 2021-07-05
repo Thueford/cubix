@@ -5,12 +5,18 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class Collectable : MonoBehaviour
 {
+    private static HaloShooter hs;
+    [NotNull] public Explosion explosion;
 
     public enum cType
     {
-        Red,
-        Green,
-        Blue
+        RED,
+        GREEN,
+        BLUE,
+        HALO, 
+        INVIS,
+        ATKSPD,
+        ENDALLEXISTENCE
     }
 
     public cType type;
@@ -19,6 +25,12 @@ public class Collectable : MonoBehaviour
     void Start()
     {
         setType(type);
+    }
+
+    private void Awake()
+    {
+        hs = Player.self.GetComponent<HaloShooter>();
+        if (!hs) Debug.LogError("HaloShooter not found");
     }
 
     // Update is called once per frame
@@ -32,9 +44,9 @@ public class Collectable : MonoBehaviour
         type = t;
         switch (type)
         {
-            case cType.Red: setColor(GameState.red); break;
-            case cType.Green: setColor(GameState.green); break;
-            case cType.Blue: setColor(GameState.blue); break;
+            case cType.RED: setColor(GameState.red); break;
+            case cType.GREEN: setColor(GameState.green); break;
+            case cType.BLUE: setColor(GameState.blue); break;
             default: setColor(GameState.black); break;
         }
     }
@@ -77,17 +89,30 @@ public class Collectable : MonoBehaviour
     {
         switch (type)
         {
-            case cType.Red:
+            case cType.RED:
                 GameState.addRed();
                 Ressource.self.addRes(Ressource.col.Red, 50);
                 break;
-            case cType.Green:
+            case cType.GREEN:
                 GameState.addGreen();
                 Ressource.self.addRes(Ressource.col.Green, 50);
                 break;
-            case cType.Blue:
+            case cType.BLUE:
                 GameState.addBlue();
                 Ressource.self.addRes(Ressource.col.Blue, 50);
+                break;
+            case cType.HALO:
+                hs.activate(5);
+                break;
+            case cType.INVIS:
+                Player.self.MakeInvulnurable(5f);
+                break;
+            case cType.ATKSPD:
+                //Player.self.bs.atkSpd;
+                break;
+            case cType.ENDALLEXISTENCE:
+                Instantiate(explosion, transform.position, Quaternion.identity)
+                    .SetProperties("Player", 20, 10);
                 break;
             default:
                 break;

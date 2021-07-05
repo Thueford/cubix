@@ -9,12 +9,13 @@ public abstract class EnemyBase : CtxSteer
     protected int pnOff;
 
     public static bool ctxIDLE = true;
+    public const float resDrop = 10;
 
     // Start is called before the first frame update
     override public void Start()
     {
         base.Start();
-        anim.Play("Spawn");
+        animGeneral.Play("Spawn");
         pnOff = (int)Random.Range(-1e5f, 1e5f);
     }
 
@@ -81,10 +82,10 @@ public abstract class EnemyBase : CtxSteer
     {
         base.Die();
         EnemySpawner.EnemyDied();
-
-        if (rgb.x == 1) Ressource.self.addRes(Ressource.col.Red, 10);
-        if (rgb.y == 1) Ressource.self.addRes(Ressource.col.Green, 10);
-        if (rgb.z == 1) Ressource.self.addRes(Ressource.col.Blue, 10);
+        float res = rgb.z == 1 ? resDrop / 2 : resDrop;
+        if (rgb.x == 1) Ressource.self.addRes(Ressource.col.Red, res);
+        if (rgb.y == 1) Ressource.self.addRes(Ressource.col.Green, res);
+        if (rgb.z == 1) Ressource.self.addRes(Ressource.col.Blue, res);
     }
 
     public override void OnDie(AnimationEvent ev)

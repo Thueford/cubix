@@ -22,9 +22,9 @@ public class Stage4 : StageController
 
                 foreach (Collectable c in GameState.curStage.GetActorComponents<Collectable>())
                 {
-                    if (color1.r > 0 && c.type == Collectable.cType.Red) Destroy(c.gameObject);
-                    if (color1.g > 0 && c.type == Collectable.cType.Green) Destroy(c.gameObject);
-                    if (color1.b > 0 && c.type == Collectable.cType.Blue) Destroy(c.gameObject);
+                    if (color1.r > 0 && c.type == Collectable.cType.RED) Destroy(c.gameObject);
+                    if (color1.g > 0 && c.type == Collectable.cType.GREEN) Destroy(c.gameObject);
+                    if (color1.b > 0 && c.type == Collectable.cType.BLUE) Destroy(c.gameObject);
                 }
                 state++;
                 break;

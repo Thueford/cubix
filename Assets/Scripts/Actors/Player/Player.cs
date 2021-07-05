@@ -13,8 +13,10 @@ public class Player : EntityBase
     [Header("Other Settings")]
     [WarnNull] public Text txtDbg;
     [NotNull] public PlayerHP hpDisplay;
+    [NotNull] public Light playerLight;
     [NotNull] public PlayerShooter bs;
     [NotNull] public Particles psTrail, psColorSwitch;
+    [NotNull] public Animator animFlicker;
 
     private float invulnurable = 0;
 
@@ -30,6 +32,8 @@ public class Player : EntityBase
         base.Start();
         setHP(HP);
         if (txtDbg == null) Debug.LogWarning("player.txtDbg not assigned");
+        SetShooterColor(rgb);
+        //animFlicker.enabled = false;
     }
 
     public static void dbgSet(string msg) {
@@ -41,7 +45,8 @@ public class Player : EntityBase
 
     public void SwitchColor()
     {
-        psTrail.color.color = GameState.getLightColor(GameState.V2Color(rgb));
+        Color col = GameState.V2Color(rgb);
+        psTrail.color.color = GameState.getLightColor(col);
         psTrail.color.color2 = 0.4f * psTrail.color.color;
         psTrail.color.color2.a = 1;
 
@@ -50,6 +55,9 @@ public class Player : EntityBase
 
         psColorSwitch.ResetPS();
         psColorSwitch.SetEnabled(true);
+
+        playerLight.color = psTrail.color.color;
+        hpDisplay.mat.color = col;
     }
 
     public void SetShooterColor(Vector3Int c)
@@ -83,25 +91,30 @@ public class Player : EntityBase
             if (InputHandler.ReadSpaceInput())
             {
                 Vector3Int col = Ressource.activateColors();
-                if(col != Vector3.zero) SetShooterColor(col);
+                if (col != Vector3.zero) SetShooterColor(col);
             }
-            
+
             Vector3Int nrgb = InputHandler.ReadColorInput(rgb);
             if (rgb != nrgb) SetShooterColor(nrgb);
 
             // look in movement direction
             Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
             // intersect mouse ray with floor plane
-            float f = (transform.position.y-r.origin.y)/r.direction.y;
+            float f = (transform.position.y - r.origin.y) / r.direction.y;
             transform.forward = r.GetPoint(f) - transform.position;
 
-            if(InputHandler.ReadShootInput()) bs.tryShot();
+            if (InputHandler.ReadShootInput()) bs.tryShot();
 
-            if (invulnurable > 0) invulnurable -= Time.deltaTime;
-            else if (invulnurable < 0)
+        }
+
+        if (invulnurable > 0)
+        {
+            invulnurable -= Time.deltaTime;
+            if (invulnurable <= 0)
             {
                 invulnurable = 0;
-                anim.Play("NonInvulnerable");
+                animFlicker.Play("Empty");
+                rend.enabled = true;
             }
         }
     }
@@ -110,22 +123,29 @@ public class Player : EntityBase
     {
         if (invulnurable <= 0 && damage > 0)
         {
-            invulnurable = 1.25f;
-            anim.enabled = true;
-            anim.Play("Invulnerable", 0, 0.5f);
+            MakeInvulnurable(1.25f);
 
             setHP(HP - damage);
-            
+
             PostProcessing.self.PlayerHitEffect(0.2f);
         }
     }
 
     public void setHP(float value)
     {
-        HP = value;
+        HP = Mathf.Max(value, 0);
         Debug.Log("SetHp: " + HP);
         hpDisplay.SetHP((int)HP);
         if (HP <= 0) Die();
+    }
+
+    public void MakeInvulnurable(float duration)
+    {
+        if (invulnurable <= 0)
+        {
+            animFlicker.Play("E_Invuln", 0, 0f);
+        }
+        invulnurable += duration;
     }
 
     public void OnCollisionEnter(Collision c)
@@ -164,8 +184,8 @@ public class Player : EntityBase
         GameState.curStage.FreezeActors();
 
         tpTarget = target;
-        anim.enabled = true;
-        anim.Play("Teleport");
+        animGeneral.enabled = true;
+        animGeneral.Play("Teleport");
         target.Load();
 
         setHP(Mathf.Min(maxHP, HP+1));
@@ -193,8 +213,8 @@ public class Player : EntityBase
             }
         }
 
-        anim.enabled = true;
-        anim.Play("Spawn");
+        animGeneral.enabled = true;
+        animGeneral.Play("Spawn");
 
         Vector3 spawnPos = stage.spawn.transform.position;
         spawnPos.y = floatHeight;

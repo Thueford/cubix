@@ -110,7 +110,7 @@ public class GameState : MonoBehaviour
 
     public static void load(State s)
     {
-        Player.self.bs.updateProperties(Vector3Int.zero);
+        Player.self.SetShooterColor(Vector3Int.zero);
         Ressource.setModes(false);
         Ressource.self.addRes(Ressource.col.Red, s.resRed - Ressource.valueRed);
         Ressource.self.addRes(Ressource.col.Green, s.resGreen - Ressource.valueGreen);

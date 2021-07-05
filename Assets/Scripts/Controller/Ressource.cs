@@ -29,7 +29,7 @@ public class Ressource : MonoBehaviour
 
     const string bar = "█";
 
-    public enum col { Red, Green, Blue }
+    public enum col { Red, Green, Blue}
 
     // Start is called before the first frame update
     void Start()

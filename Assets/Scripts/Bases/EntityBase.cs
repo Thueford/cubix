@@ -19,7 +19,7 @@ public abstract class EntityBase : MonoBehaviour
 
     // [Header("Other Settings")]
 
-    protected Animator anim;
+    public Animator animGeneral;
     protected Rigidbody rb;
     protected Renderer rend;
     protected Light vlight;
@@ -34,7 +34,7 @@ public abstract class EntityBase : MonoBehaviour
     {
         _color = Color.white;
         rb = GetComponent<Rigidbody>();
-        anim = GetComponent<Animator>();
+        if (!animGeneral) animGeneral = GetComponent<Animator>();
         rend = GetComponentInChildren<Renderer>();
         vlight = GetComponentInChildren<Light>();
     }
@@ -43,7 +43,7 @@ public abstract class EntityBase : MonoBehaviour
     virtual public void Start()
     {
         HP = startHP;
-        anim.keepAnimatorControllerStateOnDisable = true;
+        animGeneral.keepAnimatorControllerStateOnDisable = true;
         Freeze();
     }
 
@@ -74,21 +74,21 @@ public abstract class EntityBase : MonoBehaviour
     {
         Debug.Log("killing " + name);
         vlight.enabled = false;
-        anim.enabled = true;
-        anim.Play("Die");
+        animGeneral.enabled = true;
+        animGeneral.Play("Die");
         Freeze();
     }
 
     virtual public void OnDie(AnimationEvent ev)
     {
-        anim.enabled = false;
+        animGeneral.enabled = false;
         // Debug.Log("killed " + name);
     }
 
     virtual public void OnSpawn(AnimationEvent ev)
     {
         Melt();
-        anim.enabled = false;
+        animGeneral.enabled = false;
     }
 
     virtual public void KnockBack(Vector3 force)

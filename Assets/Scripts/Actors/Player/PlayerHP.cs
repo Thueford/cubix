@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PlayerHP : MonoBehaviour
 {
-    public GameObject HPCubePrefab;
+    [NotNull] public GameObject HPCubePrefab;
+    [ReadOnly] public Material mat;
     [ReadOnly] public int hp = 0;
     public int rotSpeed = 90;
     [Range(0,5)]
@@ -14,6 +15,8 @@ public class PlayerHP : MonoBehaviour
     void Awake()
     {
         cubes = new Stack<GameObject>();
+        mat = HPCubePrefab.GetComponentInChildren<Renderer>().sharedMaterial;
+        //mat.color = GameState.V2Color(Player.self.rgb);
     }
 
     void LateUpdate()
@@ -26,6 +29,7 @@ public class PlayerHP : MonoBehaviour
 
     public void SetHP(int hp)
     {
+        hp = Mathf.Max(0, hp);
         if (hp > this.hp) addHP(hp - this.hp);
         else if (hp < this.hp) subHP(this.hp - hp);
     }

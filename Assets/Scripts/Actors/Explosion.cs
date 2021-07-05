@@ -32,6 +32,20 @@ public class Explosion : MonoBehaviour
         damage = p.damage;
     }
 
+    public void SetProperties(string owner, float radius, float damage)
+    {
+        gameObject.layer = owner == "Player" ? 16 : 15;
+        tag = owner + "Bullet";
+        sc.radius = radius;
+
+        ps.vel.scale = 3 * sc.radius * ps.vel.scale.normalized;
+        ps.properties.lifetime = sc.radius / ps.vel.scale.x;
+        ps.size.val.z = -ps.size.val.y / ps.properties.lifetime;
+
+        // light.range = p.explosionRadius*2;
+        this.damage = damage;
+    }
+
     private void OnTriggerEnter(Collider c)
     {
         //Debug.Log("BTrigger: " + c.name + " " + tag + " " + c.tag);
