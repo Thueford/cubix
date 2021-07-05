@@ -25,10 +25,6 @@ public class Collectable : MonoBehaviour
     void Start()
     {
         setType(type);
-    }
-
-    private void Awake()
-    {
         hs = Player.self.GetComponent<HaloShooter>();
         if (!hs) Debug.LogError("HaloShooter not found");
     }

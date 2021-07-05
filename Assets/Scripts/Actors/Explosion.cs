@@ -6,6 +6,7 @@ public class Explosion : MonoBehaviour
 {
     [NotNull] public SphereCollider sc;
     [NotNull] public Particles ps;
+    [NotNull] public GameObject hitPrefab;
     private float lifespan = 0.1f, age = 0, damage = 0;
 
     // Start is called before the first frame update
@@ -46,6 +47,11 @@ public class Explosion : MonoBehaviour
         this.damage = damage;
     }
 
+    private void hit(Vector3 pos)
+    {
+        Instantiate(hitPrefab, pos, Quaternion.identity);
+    }
+
     private void OnTriggerEnter(Collider c)
     {
         //Debug.Log("BTrigger: " + c.name + " " + tag + " " + c.tag);
@@ -55,7 +61,6 @@ public class Explosion : MonoBehaviour
             return;
         }
 
-        // TODO: knockback, damageMult
         if (c.CompareTag("Enemy") && CompareTag("PlayerBullet"))
         {
             Vector3 distance = c.transform.position - transform.position;
@@ -64,12 +69,14 @@ public class Explosion : MonoBehaviour
             Debug.Log("explosion hit Enemy" + damage);
             b.Hit(damage);
             b.KnockBack(distance.normalized * distanceMultiplier * 3f);
+            hit(c.transform.position);
         }
         else if (c.CompareTag("Player") && CompareTag("EnemyBullet"))
         {
             float damageMult = Mathf.SmoothStep(sc.radius, 0, (c.transform.position - transform.position).magnitude);
             Debug.Log("explosion hit Player: " + "*" + damageMult);
             b.Hit(damage);
+            hit(c.transform.position);
         }
     }
 }
