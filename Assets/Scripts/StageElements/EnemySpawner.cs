@@ -25,7 +25,7 @@ public class EnemySpawner : MonoBehaviour
 
     private int spawned = 0;
     private MeshRenderer r;
-    private static int enemyCount = 0;
+    private static float enemyCount = 0;
 
     void Awake()
     {
@@ -40,8 +40,8 @@ public class EnemySpawner : MonoBehaviour
     public void StartSpawning() { SpawnWave(); }
     public void StopSpawning() { CancelInvoke(); }
     public void ResetSpawner() { spawned = 0; }
-    public static void EnemyDied() { enemyCount--; }
-    public static void EnemySpawned() { enemyCount++; }
+    public static void EnemyDied(bool isBlue) { enemyCount -= isBlue ? 1/3 : 1; }
+    public static void EnemySpawned(bool isBlue) { enemyCount += isBlue ? 1 / 3 : 1; }
 
     public void InitiateSpawn()
     {
@@ -56,7 +56,7 @@ public class EnemySpawner : MonoBehaviour
     private void Spawn()
     {
         Color col = getWeightedColor();
-        for (int j = 0; j < wavesize && spawned < amount; j++)
+        for (int j = 0; j < wavesize && spawned < amount && enemyCount < GameState.curStage.maxEnemies; j++)
         {
             for (int i = col.b == 1 ? 3 : 1; i > 0; i--)
             {
@@ -96,7 +96,7 @@ public class EnemySpawner : MonoBehaviour
         {
             int x = Random.Range(0, l.Count);
             c += GameState.colorOrder[l[x]];
-            Debug.Log("WC: " + x + " " + l[x] + " -> " + c);
+            //Debug.Log("WC: " + x + " " + l[x] + " -> " + c);
             l.RemoveAt(x);
         }
 

@@ -23,7 +23,7 @@ public abstract class EnemyBase : CtxSteer
     {
         base.OnSpawn(ev);
         transform.forward = Player.self.transform.position - transform.position;
-        EnemySpawner.EnemySpawned();
+        EnemySpawner.EnemySpawned(rgb.z == 1);
     }
 
     public void setColor(Color c)
@@ -81,7 +81,7 @@ public abstract class EnemyBase : CtxSteer
     public override void Die()
     {
         base.Die();
-        EnemySpawner.EnemyDied();
+        EnemySpawner.EnemyDied(rgb.z == 1);
         float res = rgb.z == 1 ? resDrop / 2 : resDrop;
         if (rgb.x == 1) Ressource.self.addRes(Ressource.col.Red, res);
         if (rgb.y == 1) Ressource.self.addRes(Ressource.col.Green, res);
