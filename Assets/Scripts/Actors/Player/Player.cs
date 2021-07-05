@@ -134,7 +134,6 @@ public class Player : EntityBase
     public void setHP(float value)
     {
         HP = Mathf.Max(value, 0);
-        Debug.Log("SetHp: " + HP);
         hpDisplay.SetHP((int)HP);
         if (HP <= 0) Die();
     }
@@ -150,7 +149,7 @@ public class Player : EntityBase
 
     public void OnCollisionEnter(Collision c)
     {
-        if (invulnurable == 0 && c.collider.CompareTag("Enemy"))
+        if (invulnurable <= 0 && c.collider.CompareTag("Enemy"))
         {
             c.collider.GetComponent<EntityBase>().Die();
             c.collider.GetComponent<SphereCollider>().isTrigger = true;
@@ -222,7 +221,7 @@ public class Player : EntityBase
 
         GameState.curStage = stage;
         stage.OnStageEnter();
-        GameState.SaveCurState();
+        if (GameState.stateCurStage.stage != stage) GameState.SaveCurState();
     }
 
     override public void OnSpawn(AnimationEvent ev)

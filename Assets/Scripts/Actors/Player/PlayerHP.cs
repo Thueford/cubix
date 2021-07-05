@@ -24,6 +24,11 @@ public class PlayerHP : MonoBehaviour
         // revert player rotation
         transform.rotation = Quaternion.Euler(0, -transform.rotation.y, 0);
         transform.Rotate(new Vector3(0, rotSpeed * Time.time, 0));
+        foreach (GameObject c in cubes) 
+        {
+            if (c.transform.localPosition.magnitude != dist)
+                c.transform.localPosition = c.transform.localPosition.normalized * dist;
+        }
         // updateHP();
     }
 
@@ -61,7 +66,6 @@ public class PlayerHP : MonoBehaviour
             c.transform.position = transform.position;
             c.transform.Rotate(new Vector3(0, ang - c.transform.localEulerAngles.y, 0));
             c.transform.Translate(dist * Vector3.back);
-
             i++;
         }
     }
