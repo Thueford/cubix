@@ -13,12 +13,11 @@
 - [ ] Game Over after some amount of deaths?        J
 - - (Resets Endless mode progression so you need te restart at stage 10)
 - [ ] Collectables/Progression in Endless Mode      J
-- - [ ] Powerups (Shot Halo, Shield, Health, Ressources)
-- - [ ] Shot Aura (Yellow, 10%)
-- - [ ] Invis/invuln (Static in Context Steering) (Magenta 3.333%)
-- - [ ] (+1 hp/max) Kill all Existence (White, 1%)
+- - [x] Shot Aura (Yellow, 10%)
+- - [x] Invis/invuln (Static in Context Steering) (Magenta 3.333%)
+- - [x] (+1 hp/max) Kill all Existence (White, 1%)
 - - [ ] (Atk Spd) Shot Split (Cyan 3.333%)
-- - [ ] Colors
+- - [x] Colors
 - - [ ] Progressively harder Spawners/Enemies, Boss Stages?
 - [x] Storing of High-Score and whether Endless Mode is unlocked or not     A
 - [x] Multiple Portals in Stage 0 to select Tutorial or Endless Mode (or Settings Room?)    A
