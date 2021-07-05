@@ -120,7 +120,7 @@ Shader "Hidden/Blurr"
                 // Scanlines are more prominent at the corners
                 float scanLineIntensity = smoothstep(.8, 1.41422, length(texcoord));
                 if (scanLineIntensity > 0)
-                    col.rgb *= 1-(sin(texcoord.y * 6.28*100) / 2 + .5) * scanLineIntensity;
+                    col.rgb *= (1-(sin(texcoord.y * 6.28*100) / 2 + .5) * scanLineIntensity) * 0.8 + 0.2;
 
                 texcoord = abs(texcoord);
 

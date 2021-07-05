@@ -47,6 +47,10 @@ public class Collectable : MonoBehaviour
             case cType.RED: setColor(GameState.red); break;
             case cType.GREEN: setColor(GameState.green); break;
             case cType.BLUE: setColor(GameState.blue); break;
+            case cType.HALO: setColor(Color.yellow); break;
+            case cType.INVIS: setColor(Color.magenta); break;
+            case cType.ATKSPD: setColor(Color.cyan); break;
+            case cType.ENDALLEXISTENCE: setColor(Color.white); break;
             default: setColor(GameState.black); break;
         }
     }
@@ -58,12 +62,24 @@ public class Collectable : MonoBehaviour
 
     private void setColor(Color color)
     {
-        gameObject.GetComponentInChildren<Renderer>().material.color = color;
-        gameObject.GetComponentInChildren<Light>().color = GameState.getLightColor(color);
-
         Particles ps = gameObject.GetComponent<Particles>();
+        Light l = gameObject.GetComponentInChildren<Light>();
+        Renderer r = gameObject.GetComponentInChildren<Renderer>();
         ps.color.color = GameState.getLightColor(color);
-        ps.color.color2 = (Color.white + 0.3f * GameState.getLightColor(color)) / 1.3f;
+
+        if (color != Color.white)
+        {
+            r.material.color = color;
+            l.color = GameState.getLightColor(color);
+            ps.color.color2 = (Color.white + 0.3f * GameState.getLightColor(color)) / 1.3f;
+        }
+        else
+        {
+            r.material.color = Color.Lerp(GameState.gold, color, .5f);
+            l.color = Color.Lerp(GameState.gold, color, .5f);
+            l.intensity = 5;
+            ps.color.color2 = GameState.gold;
+        }
     }
 
     private void OnTriggerEnter(Collider other)

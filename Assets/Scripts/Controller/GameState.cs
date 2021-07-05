@@ -18,7 +18,8 @@ public class GameState : MonoBehaviour
         red = new Color(1f, 0f, 0f, 1f),
         green = new Color(0f, .7f, 0f, 1f),
         blue = new Color(0f, .3f, 1f, 1f),
-        glow = new Color(.7f, .7f, .7f, 1f);
+        glow = new Color(.7f, .7f, .7f, 1f),
+        gold = new Color(1, 0.84314f, 0, 1);
 
     public static Vector3Int unlockedColors = Vector3Int.zero;
     public static Color[] colorOrder = { Color.black, Color.black, Color.black };
