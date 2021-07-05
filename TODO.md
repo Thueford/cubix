@@ -11,6 +11,11 @@ Game Features:
 - - (Resets Endless mode progression so you need te restart at stage 10)
 - [ ] Collectables/Progression in Endless Mode      J
 - - [ ] Powerups (Shot Halo, Shield, Health, Ressources)
+- - [ ] Shot Aura
+- - [ ] Invis/invuln (Static in Context Steering)
+- - [ ] +1 hp/max
+- - [ ] Atk Spd
+- - [ ] Colors
 - - [ ] Progressively harder Spawners/Enemies, Boss Stages?
 - [x] Storing of High-Score and whether Endless Mode is unlocked or not     A
 - [x] Multiple Portals in Stage 0 to select Tutorial or Endless Mode (or Settings Room?)    A
