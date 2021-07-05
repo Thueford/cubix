@@ -55,7 +55,7 @@ public class Stage0 : StageController
         {
             case State.START:
                 InputHandler.enableSpace = false;
-                if (InputHandler.ReadDirInput() == Vector3.zero) return;
+                if (!Player.self.movable || InputHandler.ReadDirInput() == Vector3.zero) return;
                 state++;
                 break;
             case State.WASD:

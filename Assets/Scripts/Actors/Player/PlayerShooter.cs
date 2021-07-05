@@ -23,7 +23,7 @@ public class PlayerShooter : ShooterBase
         p.hits = 0;
         p.speed = 40f;
         p.damage = 1f;
-        p.explosionRadius = 7.5f;
+        p.explosionRadius = 6f;
         p.color = GameState.V2Color(Vector3Int.zero);
     }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Stage1 : StageController
 {
-    enum State { START, CHARGING, DONE }
+    enum State { START, MOVING, CHARGING, DONE }
     private State state;
 
     override public void ResetHints()
@@ -21,9 +21,15 @@ public class Stage1 : StageController
                 texts[0].SetActive(true);
                 break;
 
+            case State.MOVING:
+                if (!Player.self.movable || InputHandler.ReadDirInput() == Vector3.zero) return;
+                texts[1].SetActive(true);
+                ++state;
+                break;
+
             case State.CHARGING:
                 if (!GameState.curStage.charger.charging) return;
-                texts[1].SetActive(true);
+                texts[2].SetActive(true);
                 ++state;
                 break;
         }
