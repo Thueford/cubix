@@ -240,6 +240,6 @@ public class Player : EntityBase
     public override void OnDie(AnimationEvent ev)
     {
         base.OnDie(ev);
-        GameState.load(GameState.stateCurStage);
+        GameState.RestartStage();
     }
 }

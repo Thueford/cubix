@@ -26,6 +26,7 @@ public class EnemySpawner : MonoBehaviour
     private int spawned = 0;
     private MeshRenderer r;
     private static float enemyCount = 0;
+    public bool isSpawning = false;
 
     void Awake()
     {
@@ -37,9 +38,10 @@ public class EnemySpawner : MonoBehaviour
         r.enabled = !Application.isPlaying;
     }
 
-    public void StartSpawning() { SpawnWave(); }
-    public void StopSpawning() { CancelInvoke(); }
+    public void StartSpawning() { SpawnWave(); isSpawning = true; }
+    public void StopSpawning() { CancelInvoke(); isSpawning = false; }
     public void ResetSpawner() { spawned = 0; }
+    public static void ResetEnemyCount() { enemyCount = 0; }
     public static void EnemyDied(bool isBlue) { enemyCount -= isBlue ? 1/3 : 1; }
     public static void EnemySpawned(bool isBlue) { enemyCount += isBlue ? 1 / 3 : 1; }
 

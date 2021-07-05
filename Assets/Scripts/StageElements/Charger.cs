@@ -47,7 +47,11 @@ public class Charger : MonoBehaviour
     private void OnTriggerEnter(Collider c)
     {
         if (c.CompareTag("Player") && !GameState.curStage.portal.Enabled())
+        {
+            //foreach (EnemySpawner es in GameState.curStage.GetActorComponents<EnemySpawner>())
+            //    if (!es.isSpawning) es.StartSpawning();
             anim.SetEnabled(true);
+        }
     }
 
     private void OnTriggerExit(Collider c)
@@ -56,11 +60,13 @@ public class Charger : MonoBehaviour
             anim.SetEnabled(false);
     }
 
-    internal void Reset(float duration)
+    internal void Reset(float duration = 0)
     {
         charging = false;
         charged = false;
-        anim.ResetAnim(duration);
-        ps.SetEnabled(false);
+        if (anim)
+            anim.ResetAnim(duration);
+        if (ps)
+            ps.SetEnabled(false);
     }
 }

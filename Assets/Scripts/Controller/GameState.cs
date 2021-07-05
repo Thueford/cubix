@@ -126,8 +126,8 @@ public class GameState : MonoBehaviour
             
         s.stage.Load();
 
-        Player.self.Teleport(s.stage);
         Player.self.setHP(s.hp);
+        Player.self.Teleport(s.stage);
     }
 
     public static void RestartStage()
