@@ -22,7 +22,7 @@ Game Features:
 - [ ] _ (Settings Room?)
 - [x] Entity Speed not hard capped      A
 - [x] Bullet Knockback                  J
-- [ ] Player flicker while invulnurable J
+- [x] Player flicker while invulnurable A
 
 GUI:
 
