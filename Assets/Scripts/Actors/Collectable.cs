@@ -13,14 +13,14 @@ public class Collectable : MonoBehaviour
 
     public enum cType
     {
-        BLACK,
         RED,
         GREEN,
         BLUE,
         HALO, 
         INVIS,
         ATKSPD,
-        ENDALLEXISTENCE
+        ENDALLEXISTENCE,
+        BLACK
     }
 
     public cType type;

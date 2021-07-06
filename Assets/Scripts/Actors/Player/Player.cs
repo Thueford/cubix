@@ -13,7 +13,6 @@ public class Player : EntityBase
     [Header("Other Settings")]
     [WarnNull] public Text txtDbg;
     [NotNull] public PlayerHP hpDisplay;
-    [NotNull] public Light playerLight;
     [NotNull] public PlayerShooter bs;
     [NotNull] public Particles psTrail, psColorSwitch;
     [NotNull] public Animator animFlicker;
@@ -56,7 +55,7 @@ public class Player : EntityBase
         psColorSwitch.ResetPS();
         psColorSwitch.SetEnabled(true);
 
-        playerLight.color = psTrail.color.color;
+        vlight.color = psTrail.color.color;
         hpDisplay.mat.color = col;
     }
 
@@ -166,9 +165,9 @@ public class Player : EntityBase
     {
         if (target == null) target = GameState.curStage.next;
 
-        if (GameState.curStage.number > GameState.settings.stageHighscore)
+        if (GameState.curStage.number+1 > GameState.settings.stageHighscore)
         {
-            GameState.settings.stageHighscore = GameState.curStage.number;
+            GameState.settings.stageHighscore = GameState.curStage.number+1;
             GameState.settings.Save();
         }
 
@@ -218,6 +217,7 @@ public class Player : EntityBase
 
         animGeneral.enabled = true;
         animGeneral.Play("Spawn");
+        vlight.enabled = true;
 
         Vector3 spawnPos = stage.spawn.transform.position;
         spawnPos.y = floatHeight;

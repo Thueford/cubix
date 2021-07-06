@@ -27,6 +27,7 @@ public class GameState : MonoBehaviour
     public static bool paused { get; private set; } = false;
 
     [ReadOnly] public Color[] colorOrderNonStatic;
+    [ReadOnly] public Vector3Int unlockedColorsNonStatic;
 
     public struct State
     {
@@ -61,6 +62,7 @@ public class GameState : MonoBehaviour
     private void Update()
     {
         colorOrderNonStatic = colorOrder;
+        unlockedColorsNonStatic = unlockedColors;
         if (InputHandler.ReadPauseInput()) TogglePause();
     }
 
@@ -118,7 +120,7 @@ public class GameState : MonoBehaviour
         Ressource.self.addRes(Ressource.col.Blue, s.resBlue - Ressource.valueBlue);
 
         unlockedColors = s.unlockedColors;
-        colorOrder = s.colorOrder;
+        colorOrder = (Color[])s.colorOrder.Clone();
         colorCount = s.colorCount;
 
         if (s.stage == curStage)
@@ -154,7 +156,7 @@ public class GameState : MonoBehaviour
         s.resGreen = Ressource.valueGreen;
         s.resBlue = Ressource.valueBlue;
         s.colorCount = colorCount;
-        s.colorOrder = colorOrder;
+        s.colorOrder = (Color[])colorOrder.Clone();
         s.unlockedColors = unlockedColors;
         return s;
     }
