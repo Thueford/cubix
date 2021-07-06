@@ -129,6 +129,10 @@ public class Player : EntityBase
 
             PostProcessing.self.PlayerHitEffect(0.2f);
         }
+        else if (damage < 0)
+        {
+            setHP(HP - damage);
+        }
     }
 
     public void setHP(float value)
