@@ -3240,6 +3240,7 @@ MonoBehaviour:
     stageHighscore: 0
     reachedEndless: 0
   colorOrderNonStatic: []
+  unlockedColorsNonStatic: {x: 0, y: 0, z: 0}
 --- !u!1001 &890301833
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -33,10 +33,6 @@ public class PlayerShooter : ShooterBase
         base.Update();
     }
 
-    private void updateColor(Vector3Int rgb)
-    {
-    }
-
     public void updateProperties(Vector3Int rgbNew)
     {
         if (rgbNew.x != rgb.x) toggleRed(rgbNew.x == 1);
@@ -67,6 +63,22 @@ public class PlayerShooter : ShooterBase
         rateOfFire *= cndinv(2/3f, b);
         p.damage *= cndinv(1/3f, b);
         singleFire = !b;
+    }
+
+    public void atkSpeedBoost(float duration, float mult)
+    {
+        StartCoroutine(E_AtkSpeedBoost(duration, mult));
+    }
+
+    private IEnumerator E_AtkSpeedBoost(float duration, float mult)
+    {
+        rateOfFire /= mult;
+        while (duration > 0)
+        {
+            if (!GameState.paused) duration -= 0.1f;
+            yield return new WaitForSeconds(0.1f);
+        }
+        rateOfFire *= mult;
     }
 
     override protected void shoot(Vector3 dir)

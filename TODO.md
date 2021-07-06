@@ -16,7 +16,7 @@
 - - [x] Shot Aura (Yellow, 10%)
 - - [x] Invis/invuln (Static in Context Steering) (Magenta 3.333%)
 - - [x] (+1 hp/max) Kill all Existence (White, 1%)
-- - [ ] (Atk Spd) Shot Split (Cyan 3.333%)
+- - [x] (Atk Spd) Shot Split (Cyan 3.333%)
 - - [x] Colors
 - - [ ] Progressively harder Spawners/Enemies, Boss Stages?
 - [x] Storing of High-Score and whether Endless Mode is unlocked or not     A

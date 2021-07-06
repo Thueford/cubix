@@ -91,6 +91,7 @@ public abstract class EnemyBase : CtxSteer
     public override void OnDie(AnimationEvent ev)
     {
         base.OnDie(ev);
+        Collectable.drop(rgb, transform.position);
         Destroy(gameObject);
     }
 }

@@ -7,6 +7,9 @@ public class Collectable : MonoBehaviour
 {
     private static HaloShooter hs;
     [NotNull] public Explosion explosion;
+    private static GameObject CollPrefab;
+    private static float chance = 0.1f;
+    private static float chanceWhite = 0.01f;
 
     public enum cType
     {
@@ -16,10 +19,28 @@ public class Collectable : MonoBehaviour
         HALO, 
         INVIS,
         ATKSPD,
-        ENDALLEXISTENCE
+        ENDALLEXISTENCE,
+        BLACK
     }
 
     public cType type;
+
+    private static Dictionary<Vector3Int, cType> v2Type = new Dictionary<Vector3Int, cType>()
+    {
+        { Vector3Int.one, cType.ENDALLEXISTENCE },
+        { new Vector3Int(1, 1, 0), cType.HALO },
+        { new Vector3Int(1, 0, 1), cType.INVIS },
+        { new Vector3Int(0, 1, 1), cType.ATKSPD },
+        { Vector3Int.right, cType.RED },
+        { Vector3Int.up, cType.GREEN },
+        { Vector3Int.forward, cType.BLUE },
+        { Vector3Int.zero, cType.BLACK }
+    };
+
+    private void Awake()
+    {
+        if (!CollPrefab) CollPrefab = gameObject;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -101,6 +122,9 @@ public class Collectable : MonoBehaviour
     {
         switch (type)
         {
+            case cType.BLACK:
+                Player.self.Hit(-1);
+                break;
             case cType.RED:
                 GameState.addRed();
                 Ressource.self.addRes(Ressource.col.Red, 50);
@@ -120,7 +144,7 @@ public class Collectable : MonoBehaviour
                 Player.self.MakeInvulnurable(5f);
                 break;
             case cType.ATKSPD:
-                //Player.self.bs.atkSpd;
+                Player.self.bs.atkSpeedBoost(5f, 2f);
                 break;
             case cType.ENDALLEXISTENCE:
                 Instantiate(explosion, transform.position, Quaternion.identity)
@@ -129,5 +153,17 @@ public class Collectable : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public static void drop(Vector3Int col, Vector3 pos)
+    {
+        float dropChance = col.z != 1 ? chance : chance / 3;
+        dropChance = col == Vector3Int.one || col == Vector3Int.zero ? 
+            chanceWhite : dropChance;
+
+        if (Random.value > dropChance) return;
+
+        Instantiate(CollPrefab, pos, Quaternion.identity, GameState.curStage.actors.transform).
+            GetComponent<Collectable>().setType(v2Type[col]);
     }
 }
