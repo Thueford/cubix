@@ -78,6 +78,8 @@ public class Player : EntityBase
 
             float pvel = Mathf.Clamp(rb.velocity.magnitude / maxSpeed, 1e-2f, 0.96f);
             psTrail.properties.emissionRate = psTrail.properties.maxParts * Mathf.Pow(pvel, 3);
+
+            if (InputHandler.ReadShootInput()) bs.tryShot();
         }
     }
 
@@ -102,9 +104,6 @@ public class Player : EntityBase
             // intersect mouse ray with floor plane
             float f = (transform.position.y - r.origin.y) / r.direction.y;
             transform.forward = r.GetPoint(f) - transform.position;
-
-            if (InputHandler.ReadShootInput()) bs.tryShot();
-
         }
 
         if (invulnurable > 0)

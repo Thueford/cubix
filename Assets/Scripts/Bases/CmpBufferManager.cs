@@ -7,11 +7,13 @@ public class CmpBufferManager
     private static Dictionary<int, CmpBufferManager> managers = 
         new Dictionary<int, CmpBufferManager>();
 
-    private int count, stride, size;
-    ComputeBufferType type;
-
+    private int size;
     private Queue<ComputeBuffer> buffers;
     private Queue<int> times;
+
+    // Buffer props
+    private int count, stride;
+    ComputeBufferType type;
 
     private CmpBufferManager() { }
 
@@ -27,8 +29,7 @@ public class CmpBufferManager
 
     private void CheckBuffers()
     {
-        if (buffers.Count == 0) return;
-        while (Time.time - times.Peek() > MAXAGE)
+        while (buffers.Count > 0 && Time.time - times.Peek() > MAXAGE)
         {
             buffers.Dequeue().Release();
             times.Dequeue();
@@ -37,12 +38,16 @@ public class CmpBufferManager
 
     ~CmpBufferManager()
     {
-        // foreach (ComputeBuffer b in buffers) b.Release();
         while (buffers.Count > 0)
         {
             buffers.Dequeue().Release();
             times.Dequeue();
         }
+    }
+
+    public static void ReleaseManagers()
+    {
+        managers.Clear();
     }
 
     public static CmpBufferManager getManager(int count, int stride, ComputeBufferType type = 0, int size = 10)
@@ -55,7 +60,6 @@ public class CmpBufferManager
 
     public ComputeBuffer getBuffer()
     {
-        // Debug.Log((buffers.Count == 0 ? "Get" : "Pop") + "Buffer " + (type) + " " + count + " " + stride);
         if (buffers.Count == 0) return new ComputeBuffer(count, stride, type);
         else {
             times.Dequeue();
@@ -65,8 +69,6 @@ public class CmpBufferManager
 
     public void releaseBuffer(ComputeBuffer b)
     {
-        // Debug.Log((buffers.Count < size ? "Push" : "Release") + "Buffer " + (type) + " " + count + " " + stride);
-        if (buffers.Count >= size) Debug.Log("ReleaseBuffer " + (type) + " " + count + " " + stride);
         if (buffers.Count < size)
         {
             times.Enqueue((int)Time.time);
@@ -75,5 +77,4 @@ public class CmpBufferManager
         else b.Release();
         CheckBuffers();
     }
-
 }

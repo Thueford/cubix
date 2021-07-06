@@ -6,6 +6,7 @@ namespace ParticleProps
 {
     public enum Shape { DOT, CIRCLE, RECT, SPHERE, CUBE };
     public enum EditorDrawMode { OFF, SLOW, FAST };
+    public enum PerformanceMode { LOW, MEDIUM, HIGH };
 
     public struct Particle
     {
@@ -23,6 +24,8 @@ namespace ParticleProps
         public bool initialized, prewarmed;
         [ReadOnly]
         public int alive, dead, emitted, ppf, pps;
+        [ReadOnly]
+        public float medAlive;
         [HideInInspector] 
         public int bufferSize, groupCount;
     }
@@ -34,6 +37,11 @@ namespace ParticleProps
         public bool repeat;
         public bool prewarm;
         public bool destroyOnFinished;
+        [Tooltip("controls GetAliveCount calls:\n" +
+            "    HIGH: simulative, or when maxParts reached\n" +
+            "    MEDIUM: at least every second\n" +
+            "    LOW: every frame")]
+        public PerformanceMode performance;
 
         public int maxParts;
         public float lifetime;
@@ -52,6 +60,7 @@ namespace ParticleProps
             repeat = true;
             prewarm = false;
             destroyOnFinished = false;
+            performance = PerformanceMode.HIGH;
 
             this.maxParts = maxParts;
             this.lifetime = lifetime;

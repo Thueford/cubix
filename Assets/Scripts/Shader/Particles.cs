@@ -44,7 +44,9 @@ public class Particles : MonoBehaviour
 
     #region Privates
     private static bool enableParticles = true;
+    private static float deadUpdDelay = 1;
 
+    private float _alive;
     private float partTimer = 0; // for spawning new particles
     private Vector3 lastPos;
 
@@ -115,7 +117,11 @@ public class Particles : MonoBehaviour
         #endif
         if (isAnimPaused()) return;
 
+        if (stats.reset) { stats.reset = false; ResetPS(); }
         DispatchUpdate();
+        _alive -= Time.deltaTime * Mathf.Ceil(stats.alive) / properties.lifetime;
+        stats.alive = Mathf.CeilToInt(_alive);
+        stats.dead = curMaxParts - stats.alive;
 
         if (Application.isPlaying && !properties.repeat && stats.emitted >= curMaxParts && stats.alive == 0)
         {
@@ -182,15 +188,16 @@ public class Particles : MonoBehaviour
         if (!enableParticles) return;
         if (deadBuf == null) return;
         deadBuf.SetCounterValue((uint)curMaxParts);
-        ReadDeadCount();
-        stats.alive = 0;
+        //ReadDeadCount(true);
+        _alive = stats.alive = 0;
         stats.dead = curMaxParts;
         stats.emitted = 0;
+        tLastCount = -1;
 
         if (properties.prewarm)
         {
             int count = (int)(properties.emissionRate * properties.lifetime);
-            count = Mathf.Min(properties.maxParts, count);
+            count = Mathf.Min(curMaxParts, count);
             DispatchEmit(count);
             DispatchUpdate();
         }
@@ -269,7 +276,7 @@ public class Particles : MonoBehaviour
         compute.SetBuffer(kernelInit, "_Particles", particlesBuf);
         compute.SetBuffer(kernelInit, "_Dead", deadBuf);
         compute.Dispatch(kernelInit, stats.groupCount, 1, 1);
-        ReadDeadCount();
+        // ReadDeadCount(true);
     }
 
     private void ReleaseBuffers()
@@ -316,16 +323,25 @@ public class Particles : MonoBehaviour
 
     public int DispatchEmit(int count)
     {
+        if (!properties.repeat && stats.emitted > curMaxParts) return 0;
+
+        if (stats.medAlive >= curMaxParts && properties.repeat && stats.alive + count > curMaxParts) 
+            ReadDeadCount(true);
+        
         count = Mathf.Min(count, 1<<15, curMaxParts - stats.alive);
-        if (!properties.repeat && stats.emitted + count > properties.maxParts)
-            count = properties.maxParts - stats.emitted;
+        if (!properties.repeat && stats.emitted + count > curMaxParts)
+            count = curMaxParts - stats.emitted;
 
         if (count <= 0) count = 0;
         stats.ppf = count;
         stats.pps = Mathf.RoundToInt(count / Time.deltaTime);
         if (count <= 0) return 0;
 
+        stats.medAlive = properties.lifetime * properties.emissionRate;
         stats.emitted += count;
+        stats.alive += count;
+        _alive += count;
+        stats.dead = curMaxParts - count;
 
         UniformEmit(kernelEmit);
         compute.Dispatch(kernelEmit, count, 1, 1);
@@ -348,15 +364,24 @@ public class Particles : MonoBehaviour
         if (!stats.initialized || particlesBuf == null) Initialize();
         UniformUpdate(kernelUpdate);
         compute.Dispatch(kernelUpdate, stats.groupCount, 1, 1);
-        ReadDeadCount();
+        if (properties.performance <= PerformanceMode.MEDIUM)
+            ReadDeadCount();
     }
 
-    private void ReadDeadCount()
+    private float tLastCount = -1;
+    private int n = 0;
+    private void ReadDeadCount(bool force = false)
     {
+        if (properties.performance > PerformanceMode.LOW && 
+            !force && Time.time - tLastCount < deadUpdDelay) return;
+        tLastCount = Time.time;
+        Debug.Log(gameObject.name + ": ReadDeadCount " + (Time.time - tLastCount));
+        
         ComputeBuffer.CopyCount(deadBuf, counterBuf, 0);
         counterBuf.GetData(counterArray);
         stats.dead = counterArray[0];
         stats.alive = curMaxParts - stats.dead;
+        _alive = stats.alive;
     }
 
 #endregion

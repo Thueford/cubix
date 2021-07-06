@@ -206,5 +206,13 @@ public class GameState : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        CmpBufferManager.ReleaseManagers();
+    }
 
+    private void OnDestroy()
+    {
+        CmpBufferManager.ReleaseManagers();
+    }
 }
