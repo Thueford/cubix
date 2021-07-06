@@ -64,9 +64,7 @@ public class Charger : MonoBehaviour
     {
         charging = false;
         charged = false;
-        if (anim)
-            anim.ResetAnim(duration);
-        if (ps)
-            ps.SetEnabled(false);
+        anim.ResetAnim(duration);
+        ps.SetEnabled(false);
     }
 }

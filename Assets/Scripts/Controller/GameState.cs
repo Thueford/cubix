@@ -11,7 +11,6 @@ public class GameState : MonoBehaviour
     [NotNull] public GameObject PauseOverlay;
     public static GameStage curStage;
     public static PlayerSettings settings;
-    public PlayerSettings sets;
 
     public static Color
         black = new Color(.3f, .3f, .3f, 1f),
@@ -44,7 +43,7 @@ public class GameState : MonoBehaviour
     void Awake()
     {
         self = this;
-        sets = settings = PlayerSettings.LoadProfile(1);
+        settings = PlayerSettings.LoadProfile(1);
         settings.startNo++;
         settings.Save();
     }

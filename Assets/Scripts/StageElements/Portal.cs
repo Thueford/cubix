@@ -6,13 +6,15 @@ using UnityEngine;
 [RequireComponent(typeof(SphereCollider))]
 public class Portal : MonoBehaviour
 {
-    [NotNull] public SphereCollider sc;
-    [NotNull] public Particles ps;
+    private SphereCollider sc;
+    private Particles ps;
     public GameStage target;
 
     
     private void Awake()
     {
+        sc = GetComponent<SphereCollider>();
+        ps = GetComponent<Particles>();
     }
 
     private void OnTriggerEnter(Collider c)

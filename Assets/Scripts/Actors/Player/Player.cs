@@ -12,11 +12,11 @@ public class Player : EntityBase
 
     [Header("Other Settings")]
     [WarnNull] public Text txtDbg;
-    [NotNull] public PlayerHP hpDisplay;
-    [NotNull] public Light playerLight;
-    [NotNull] public PlayerShooter bs;
-    [NotNull] public Particles psTrail, psColorSwitch;
-    [NotNull] public Animator animFlicker;
+    [NotNull, HideInInspector] public PlayerHP hpDisplay;
+    [NotNull, HideInInspector] public Light playerLight;
+    [NotNull, HideInInspector] public PlayerShooter bs;
+    [NotNull, HideInInspector] public Particles psTrail, psColorSwitch;
+    [NotNull, HideInInspector] public Animator animFlicker;
 
     private float invulnurable = 0;
 

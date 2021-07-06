@@ -41,15 +41,13 @@ public class GameStage : MonoBehaviour
             eb.ResetSpawner();
         */
         Debug.Log("resetting: " + number);
-        if (actors) Destroy(actors);
-        if (portal) portal.SetEnabled(false);
-        if (hints) hints.ResetHints();
-        if (charger)
-        {
-            charger.Reset();
-            charger.gameObject.SetActive(false);
-            charger.gameObject.SetActive(true);
-        }
+        Destroy(actors);
+        portal.SetEnabled(false);
+        hints.ResetHints();
+        
+        charger.Reset();
+        charger.gameObject.SetActive(false);
+        charger.gameObject.SetActive(true);
         EnemySpawner.ResetEnemyCount();
     }
 
@@ -58,9 +56,8 @@ public class GameStage : MonoBehaviour
     {
         gameObject.SetActive(true);
         actors = Instantiate(actorsBase, transform.position, Quaternion.identity, transform);
-        if (portal) portal.SetEnabled(false);
-        if (hints) hints.ResetHints();
-        
+        portal.SetEnabled(false);
+        hints.ResetHints();
     }
 
     // Called when player is spawning
@@ -106,5 +103,5 @@ public class GameStage : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public T[] GetActorComponents<T>() { if (actors) return actors.GetComponentsInChildren<T>(); return null; }
+    public T[] GetActorComponents<T>() => actors.GetComponentsInChildren<T>();
 }
