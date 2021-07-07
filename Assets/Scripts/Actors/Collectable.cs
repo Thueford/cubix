@@ -6,19 +6,20 @@ using UnityEngine;
 public class Collectable : MonoBehaviour
 {
     private static HaloShooter hs;
-    [NotNull] public Explosion explosion;
     private static GameObject CollPrefab;
     private static float chance = 0.1f;
     private static float chanceWhite = 0.01f;
 
+    private Particles ps;
+    private Light l;
+    private Renderer r;
+
+    [NotNull] public Explosion explosion;
+
     public enum cType
     {
-        RED,
-        GREEN,
-        BLUE,
-        HALO, 
-        INVIS,
-        ATKSPD,
+        RED, GREEN, BLUE,
+        HALO, INVIS, ATKSPD,
         ENDALLEXISTENCE,
         BLACK
     }
@@ -39,21 +40,19 @@ public class Collectable : MonoBehaviour
 
     private void Awake()
     {
+        ps = gameObject.GetComponent<Particles>();
+        l = gameObject.GetComponentInChildren<Light>();
+        r = gameObject.GetComponentInChildren<Renderer>();
         if (!CollPrefab) CollPrefab = gameObject;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        setType(type);
-        hs = Player.self.GetComponent<HaloShooter>();
+        if (!hs) hs = Player.self.GetComponent<HaloShooter>();
         if (!hs) Debug.LogError("HaloShooter not found");
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-
+        setType(type);
     }
 
     public void setType(cType t)
@@ -79,9 +78,6 @@ public class Collectable : MonoBehaviour
 
     private void setColor(Color color)
     {
-        Particles ps = gameObject.GetComponent<Particles>();
-        Light l = gameObject.GetComponentInChildren<Light>();
-        Renderer r = gameObject.GetComponentInChildren<Renderer>();
         ps.color.color = GameState.getLightColor(color);
 
         if (color != Color.white)
@@ -125,18 +121,23 @@ public class Collectable : MonoBehaviour
             case cType.BLACK:
                 Player.self.Hit(-1);
                 break;
+
             case cType.RED:
                 GameState.addRed();
                 Ressource.self.addRes(Ressource.col.Red, 50);
+                ResParts.Spawn(transform.position, 50, ps.color.color);
                 break;
             case cType.GREEN:
                 GameState.addGreen();
                 Ressource.self.addRes(Ressource.col.Green, 50);
+                ResParts.Spawn(transform.position, 50, ps.color.color);
                 break;
             case cType.BLUE:
                 GameState.addBlue();
                 Ressource.self.addRes(Ressource.col.Blue, 50);
+                ResParts.Spawn(transform.position, 50, ps.color.color);
                 break;
+
             case cType.HALO:
                 hs.activate(5);
                 break;
@@ -146,6 +147,7 @@ public class Collectable : MonoBehaviour
             case cType.ATKSPD:
                 Player.self.bs.atkSpeedBoost(5f, 2f);
                 break;
+
             case cType.ENDALLEXISTENCE:
                 Instantiate(explosion, GameState.curStage.transform.position, Quaternion.identity)
                     .SetProperties("Player", 30, 10, 0.8f);
@@ -155,7 +157,7 @@ public class Collectable : MonoBehaviour
         }
     }
 
-    public static void drop(Vector3Int col, Vector3 pos)
+    public static void Drop(Vector3Int col, Vector3 pos)
     {
         float dropChance = col.z != 1 ? chance : chance / 3;
         dropChance = col == Vector3Int.one || col == Vector3Int.zero ? 

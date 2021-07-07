@@ -26,6 +26,8 @@ public class Particles : MonoBehaviour
 
     [Header("Other")]
     public Colors color = Colors.dflt;
+    [Tooltip("Vector3 + w: factor")]
+    public Vector4 attractor;
 
     #region Flags
     private static int F(bool v, int p) => v ? 1 << p : 0;
@@ -360,6 +362,7 @@ public class Particles : MonoBehaviour
         compute.SetInt("_Flags", GetFlags());
         compute.SetVector("_PosParent", transform.position);
         compute.SetVector("_SpdParent", _velocity * velocityFactor);
+        compute.SetVector("_Attractor", attractor);
         compute.SetFloat("_SizeVel", size.val.z);
         compute.SetFloat("_DeltaTime", stats.initialized ? Time.deltaTime : Time.fixedDeltaTime);
     }

@@ -81,7 +81,11 @@ public abstract class EnemyBase : CtxSteer
     {
         base.Die();
         EnemySpawner.EnemyDied(rgb.z == 1);
+
         float res = rgb.z == 1 ? resDrop / 2 : resDrop;
+        if (rgb.sqrMagnitude > 0)
+            ResParts.Spawn(transform.position, (int)res, GameState.V2Color(rgb));
+
         if (rgb.x == 1) Ressource.self.addRes(Ressource.col.Red, res);
         if (rgb.y == 1) Ressource.self.addRes(Ressource.col.Green, res);
         if (rgb.z == 1) Ressource.self.addRes(Ressource.col.Blue, res);
@@ -91,7 +95,7 @@ public abstract class EnemyBase : CtxSteer
     {
         base.OnDie(ev);
         GameState.playerStats.totalKills++;
-        Collectable.drop(rgb, transform.position);
+        Collectable.Drop(rgb, transform.position);
         Destroy(gameObject);
     }
 }

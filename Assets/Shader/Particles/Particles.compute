@@ -23,8 +23,11 @@ ConsumeStructuredBuffer<uint> _Alive;
 
 
 int _Flags;
+
 float3 _PosParent;
 float3 _SpdParent;
+float4 _Attractor;
+
 float _SizeVel;
 float _DeltaTime;
 Texture2D<float4> _ColorGrad;
@@ -59,10 +62,12 @@ void DoUpdate(uint3 id)
     //p.vel += p.radial * f * _DeltaTime;
     //p.vel += p.radial * r * _DeltaTime;
     
+    float3 magnet = _Attractor.w * normalize(_Attractor.xyz - p.pos);
+    
     p.size.z -= _DeltaTime;
     p.size.xy += _SizeVel * _DeltaTime;
     p.vel += p.force * _DeltaTime;
-    p.pos += p.vel * _DeltaTime;
+    p.pos += (p.vel + magnet) * _DeltaTime;
     if (F(P_CLRGRAD)) p.color = getLifeColor(p.size.zw, p.rand);
 
     _Particles[id.x] = p;

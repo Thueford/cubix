@@ -1928,6 +1928,8 @@ MonoBehaviour:
   TextGreen: {fileID: 7437277004894707524}
   TextBlue: {fileID: 7437277005762958534}
   Space: {fileID: 4611654488423008623}
+  resPartsPrefab: {fileID: 8477365892602983752, guid: cdf17d6b99c08c64996b7909b9b4f3ca,
+    type: 3}
 --- !u!1 &7437277004634799003
 GameObject:
   m_ObjectHideFlags: 0
