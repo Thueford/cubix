@@ -43,8 +43,7 @@ public class GameStage : MonoBehaviour
         foreach (EnemySpawner eb in GetActorComponents<EnemySpawner>())
             eb.ResetSpawner();
         */
-        Debug.Log("ResetStage: " + number);
-        if(actors) Destroy(actors);
+        if (actors) Destroy(actors);
         actors = Instantiate(actorsBase, transform.position, Quaternion.identity, transform);
         portal.SetEnabled(false);
         if (hints) hints.ResetHints();

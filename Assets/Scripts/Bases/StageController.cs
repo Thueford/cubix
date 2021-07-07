@@ -16,7 +16,7 @@ public abstract class StageController : MonoBehaviour
     private void Update()
     {
         if (!isCurStage()) return;
-        if (GameState.settings.reachedEndless) Experienced(); 
+        if (GameState.playerStats.reachedEndless) Experienced(); 
         else Newbie();
         General();
     }

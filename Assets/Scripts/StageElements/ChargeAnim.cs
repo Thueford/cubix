@@ -20,6 +20,7 @@ public class ChargeAnim : MonoBehaviour
 
     private void Update()
     {
+        if (level < 0) transform.localScale = new Vector3(0, 1, 0);
         level = transform.localScale.x / maxScale;
         if(level < 0.98) SetPsSize(level);
     }
@@ -36,12 +37,12 @@ public class ChargeAnim : MonoBehaviour
 
     public void SetEnabled(bool b) { anim.enabled = b; }
 
-    public void ResetAnim(float duration = -1)
+    public void ResetAnim(float duration = 0)
     {
         if (duration > 0) anim.speed = 1 / duration;
-        transform.localScale = new Vector3(0, 1, 0);
         anim.Play("Charging", 0, 0);
         SetEnabled(false);
+        level = -1;
     }
 
     void OnCharged(AnimationEvent ev) {

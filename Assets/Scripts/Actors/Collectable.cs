@@ -64,10 +64,10 @@ public class Collectable : MonoBehaviour
             case cType.RED: setColor(GameState.red); break;
             case cType.GREEN: setColor(GameState.green); break;
             case cType.BLUE: setColor(GameState.blue); break;
-            case cType.HALO: setColor(Color.yellow); break;
-            case cType.INVIS: setColor(Color.magenta); break;
-            case cType.ATKSPD: setColor(Color.cyan); break;
-            case cType.ENDALLEXISTENCE: setColor(Color.white); break;
+            case cType.HALO: setColor(Color.yellow); GameState.playerStats.colHalo++; break;
+            case cType.INVIS: setColor(Color.magenta); GameState.playerStats.colInvis++; break;
+            case cType.ATKSPD: setColor(Color.cyan); GameState.playerStats.colAtk++; break;
+            case cType.ENDALLEXISTENCE: setColor(Color.white); GameState.playerStats.colEnd++; break;
             default: setColor(GameState.black); break;
         }
     }
