@@ -18,6 +18,7 @@ public class Player : EntityBase
     [NotNull, HideInInspector] public Animator animFlicker;
 
     private float invulnurable = 0;
+    private GameStage tpTarget;
 
     override public void Awake()
     {
@@ -159,7 +160,6 @@ public class Player : EntityBase
         }
     }
 
-    private GameStage tpTarget;
     public void TeleportNext(GameStage target = null)
     {
         if (target == null) target = GameState.curStage.next;
@@ -182,49 +182,65 @@ public class Player : EntityBase
             target = StageBuilder.self.Generate(GameState.curStage.transform);
         }
 
+        setHP(Mathf.Min(maxHP, HP + 1));
+        Teleport(target);
+    }
+
+    public void Teleport(GameStage target)
+    {
         GameState.curStage.FreezeActors();
 
         tpTarget = target;
         animGeneral.enabled = true;
         animGeneral.Play("Teleport");
         target.Load();
-
-        setHP(Mathf.Min(maxHP, HP+1));
     }
 
 
     void OnTeleport(AnimationEvent ev)
     {
-        if (tpTarget == null) Debug.LogWarning("Tp Target is null");
-        Teleport(tpTarget ? tpTarget : GameState.curStage.next);
+        if (tpTarget == null)
+        {
+            Debug.LogWarning("Tp Target is null");
+            tpTarget = GameState.curStage.next;
+        }
+        Spawn(tpTarget);
     }
 
-    public void Teleport(GameStage stage)
+    public void Spawn(GameStage stage)
     {
         if (stage == null) return;
-        if (GameState.curStage != null && GameState.curStage != stage)
+        if (GameState.curStage != null)
         {
-            GameState.curStage.Unload();
-            if (GameState.curStage.isProcedural)
+            if (GameState.curStage != stage)
             {
-                Destroy(GameState.curStage.gameObject);
-                Vector3 camPos = Camera.main.transform.position;
-                camPos.z -= 40;
-                Camera.main.transform.position = camPos;
+                if (GameState.curStage.isProcedural)
+                {
+                    Destroy(GameState.curStage.gameObject);
+                    Camera.main.transform.Translate(new Vector3(0, -40, 0));
+                }
+                else GameState.curStage.Unload();
             }
+            else stage.ResetStage();
         }
 
+        Freeze();
+        stage.Load();
+
         animGeneral.enabled = true;
-        animGeneral.Play("Spawn");
+        animGeneral.Play("Spawn", 0, 0);
         vlight.enabled = true;
 
         Vector3 spawnPos = stage.spawn.transform.position;
         spawnPos.y = floatHeight;
         self.transform.position = spawnPos;
 
-        GameState.curStage = stage;
         stage.OnStageEnter();
-        if (GameState.stateCurStage.stage != stage) GameState.SaveCurState();
+        if (GameState.stateCurStage.stage != stage)
+        {
+            Debug.Log("SaveState");
+            GameState.SaveCurState();
+        }
     }
 
     override public void OnSpawn(AnimationEvent ev)

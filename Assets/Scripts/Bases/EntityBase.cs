@@ -19,7 +19,7 @@ public abstract class EntityBase : MonoBehaviour
 
     // [Header("Other Settings")]
 
-    public Animator animGeneral;
+    protected Animator animGeneral;
     protected Rigidbody rb;
     protected Renderer rend;
     protected Light vlight;
@@ -34,7 +34,7 @@ public abstract class EntityBase : MonoBehaviour
     {
         _color = Color.white;
         rb = GetComponent<Rigidbody>();
-        if (!animGeneral) animGeneral = GetComponent<Animator>();
+        animGeneral = GetComponent<Animator>();
         rend = GetComponentInChildren<Renderer>();
         vlight = GetComponentInChildren<Light>();
     }

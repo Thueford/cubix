@@ -55,7 +55,7 @@ public class GameState : MonoBehaviour
         if (unlockedColors.x > 0) colorOrder[colorCount++].r = 1;
         if (unlockedColors.y > 0) colorOrder[colorCount++].g = 1;
         if (unlockedColors.z > 0) colorOrder[colorCount++].b = 1;
-        StartCoroutine(StartGame());
+        Invoke(nameof(StartGame), 0);
     }
 
     private void Update()
@@ -65,9 +65,8 @@ public class GameState : MonoBehaviour
         if (InputHandler.ReadPauseInput()) TogglePause();
     }
 
-    IEnumerator StartGame()
+    void StartGame()
     {
-        yield return new WaitForSeconds(0);
         // spawn in stage0
         if (startStage == null)
         {
@@ -76,9 +75,7 @@ public class GameState : MonoBehaviour
             startStage = stages[0];
         }
 
-        startStage.Load();
-        yield return new WaitForSeconds(0);
-        Player.self.Teleport(startStage);
+        Player.self.Spawn(startStage);
         stateBegin = SaveState();
     }
 
@@ -122,13 +119,8 @@ public class GameState : MonoBehaviour
         colorOrder = (Color[])s.colorOrder.Clone();
         colorCount = s.colorCount;
 
-        if (s.stage == curStage)
-            s.stage.ResetStage();
-            
-        s.stage.Load();
-
         Player.self.setHP(s.hp);
-        Player.self.Teleport(s.stage);
+        Player.self.Spawn(s.stage);
     }
 
     public static void RestartStage()
