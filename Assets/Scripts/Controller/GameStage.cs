@@ -22,6 +22,8 @@ public class GameStage : MonoBehaviour
     public int number;
     public bool isProcedural = false;
 
+    public static implicit operator int(GameStage s) => s.number;
+
     public void Awake()
     {
         gameObject.SetActive(false);
