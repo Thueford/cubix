@@ -91,8 +91,8 @@ public class Player : EntityBase
             // look in movement direction
             Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
             // intersect mouse ray with floor plane
-            float f = (transform.position.y - r.origin.y) / r.direction.y;
-            transform.forward = r.GetPoint(f) - transform.position;
+            float f = (pos.y - r.origin.y) / r.direction.y;
+            transform.forward = r.GetPoint(f) - pos;
         }
 
         if (invulnurable > 0)
@@ -193,7 +193,7 @@ public class Player : EntityBase
 
         Vector3 spawnPos = stage.spawn.transform.position;
         spawnPos.y = floatHeight;
-        self.transform.position = spawnPos;
+        transform.position = spawnPos;
     }
 
     override public void OnSpawn(AnimationEvent ev)

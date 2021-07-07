@@ -22,7 +22,7 @@ public abstract class EnemyBase : CtxSteer
     override public void OnSpawn(AnimationEvent ev)
     {
         base.OnSpawn(ev);
-        transform.forward = Player.self.transform.position - transform.position;
+        transform.forward = Player.self.pos - pos;
     }
 
     public void setColor(Color c)
@@ -40,8 +40,8 @@ public abstract class EnemyBase : CtxSteer
 
     public bool isFocused()
     {
-        Vector3 dp = Player.self.transform.position - transform.position;
-        if (Physics.Raycast(transform.position, dp, out RaycastHit hit, eplayer.dist, LayerMask.GetMask("PlayerPhysics", "Wall")))
+        Vector3 dp = Player.self.pos - pos;
+        if (Physics.Raycast(pos, dp, out RaycastHit hit, eplayer.dist, LayerMask.GetMask("PlayerPhysics", "Wall")))
         {
             // dbgLine(dp, eplayer.dist, hit.collider.CompareTag("Player") ? Color.magenta : Color.gray);
             return hit.collider.CompareTag("Player");
@@ -53,8 +53,8 @@ public abstract class EnemyBase : CtxSteer
     {
         bool focused = isFocused();
         if (focused) effectors.Add(eplayer.getEff(this, Player.self));
-        // eplayer.factor * (Player.self.transform.position - transform.position).normalized);
-        
+        // eplayer.factor * (Player.self.pos - pos).normalized);
+
         return (focused ? 1 : 0.4f) * contextSteerIDLE(effectors);
     }
 
@@ -84,7 +84,7 @@ public abstract class EnemyBase : CtxSteer
 
         float res = rgb.z == 1 ? resDrop / 2 : resDrop;
         if (rgb.sqrMagnitude > 0)
-            ResParts.Spawn(transform.position, (int)res, GameState.V2Color(rgb));
+            ResParts.Spawn(pos, (int)res, GameState.V2Color(rgb));
 
         if (rgb.x == 1) Ressource.self.addRes(Ressource.col.Red, res);
         if (rgb.y == 1) Ressource.self.addRes(Ressource.col.Green, res);
@@ -95,7 +95,7 @@ public abstract class EnemyBase : CtxSteer
     {
         base.OnDie(ev);
         GameState.playerStats.totalKills++;
-        Collectable.Drop(rgb, transform.position);
+        Collectable.Drop(rgb, pos);
         Destroy(gameObject);
     }
 }

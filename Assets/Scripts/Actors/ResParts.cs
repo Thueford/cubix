@@ -11,15 +11,14 @@ public class ResParts : MonoBehaviour
     {
         ps = GetComponent<Particles>();
         ps.properties.maxParts = count;
-        Debug.Log("RP: " + count);
     }
 
     private void Update()
     {
         if (ps.properties.enabled)
         {
-            ps.attractor = Player.self.transform.position;
-            ps.attractor.w = Vector3.Distance(Player.self.transform.position, transform.position);
+            ps.attractor = Player.self.pos;
+            ps.attractor.w = Vector3.Distance(Player.self.pos, transform.position);
         }
     }
 

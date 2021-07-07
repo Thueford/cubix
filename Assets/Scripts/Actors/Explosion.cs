@@ -53,18 +53,18 @@ public class Explosion : MonoBehaviour
 
         if (c.CompareTag("Enemy") && CompareTag("PlayerBullet"))
         {
-            Vector3 distance = c.transform.position - transform.position;
+            Vector3 distance = b.pos - transform.position;
             float distanceMultiplier = distance.magnitude > sc.radius/2 ? 3 : 6;
-            //float damageMult = Mathf.SmoothStep(sc.radius, 0, (c.transform.position - transform.position).magnitude);
+            //float damageMult = Mathf.SmoothStep(sc.radius, 0, (b.pos - transform.position).magnitude);
             b.Hit(damage);
             b.KnockBack(distance.normalized * distanceMultiplier * 3f);
-            hit(c.transform.position);
+            hit(b.pos);
         }
         else if (c.CompareTag("Player") && CompareTag("EnemyBullet"))
         {
-            float damageMult = Mathf.SmoothStep(sc.radius, 0, (c.transform.position - transform.position).magnitude);
+            float damageMult = Mathf.SmoothStep(sc.radius, 0, (b.pos - transform.position).magnitude);
             b.Hit(damage);
-            hit(c.transform.position);
+            hit(b.pos);
         }
     }
 }
