@@ -15,6 +15,7 @@ public abstract class EnemyBase : CtxSteer
     {
         base.Awake();
         animGeneral.Play("Spawn");
+        EnemySpawner.EnemySpawned(rgb.z == 1);
         pnOff = (int)Random.Range(-1e5f, 1e5f);
     }
 
@@ -22,7 +23,6 @@ public abstract class EnemyBase : CtxSteer
     {
         base.OnSpawn(ev);
         transform.forward = Player.self.transform.position - transform.position;
-        EnemySpawner.EnemySpawned(rgb.z == 1);
     }
 
     public void setColor(Color c)

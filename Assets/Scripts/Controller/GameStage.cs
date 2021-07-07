@@ -102,6 +102,7 @@ public class GameStage : MonoBehaviour
     {
         if (!loaded) return;
         Destroy(actors);
+        hints.ResetHints();
         gameObject.SetActive(false);
         loaded = false;
     }

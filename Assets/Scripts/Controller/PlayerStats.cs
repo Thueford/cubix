@@ -43,7 +43,6 @@ public class PlayerStats
     {
         object[] stats = { 
             System.TimeSpan.FromSeconds(totalTime),
-            System.TimeSpan.FromSeconds(tutorialTime),
             stageHighscore,
             totalKills, 
             totalDeaths };

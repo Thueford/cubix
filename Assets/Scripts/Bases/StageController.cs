@@ -9,6 +9,7 @@ public abstract class StageController : MonoBehaviour
 
     virtual public void ResetHints()
     {
+        CancelInvoke();
         foreach (GameObject o in texts)
             if(o != null) o.SetActive(false);
     }
