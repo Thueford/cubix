@@ -168,7 +168,6 @@ public class Player : EntityBase
         tpTarget = target;
         animGeneral.enabled = true;
         animGeneral.Play("Teleport");
-        target.Load();
     }
 
 

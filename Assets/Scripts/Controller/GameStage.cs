@@ -56,6 +56,7 @@ public class GameStage : MonoBehaviour
     public void Load()
     {
         if (loaded) return;
+        GameState.curStage = this;
         gameObject.SetActive(true);
         ResetStage();
         loaded = true;
@@ -65,7 +66,6 @@ public class GameStage : MonoBehaviour
     public void OnStageEnter()
     {
         Debug.Log("Stage: " + name);
-        GameState.curStage = this;
 
         // copy camera
         Camera.main.GetComponent<GameCamera>().target = cam.transform.position;
