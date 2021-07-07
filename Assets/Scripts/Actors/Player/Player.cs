@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(PlayerShooter))]
 public class Player : EntityBase
@@ -11,7 +10,6 @@ public class Player : EntityBase
     public static Player self;
 
     [Header("Other Settings")]
-    [WarnNull] public Text txtDbg;
     [NotNull, HideInInspector] public PlayerHP hpDisplay;
     [NotNull, HideInInspector] public PlayerShooter bs;
     [NotNull, HideInInspector] public Particles psTrail, psColorSwitch;
@@ -31,16 +29,7 @@ public class Player : EntityBase
     {
         base.Start();
         setHP(HP);
-        if (txtDbg == null) Debug.LogWarning("player.txtDbg not assigned");
         SetShooterColor(rgb);
-        //animFlicker.enabled = false;
-    }
-
-    public static void dbgSet(string msg) {
-        if (self && self.txtDbg) self.txtDbg.text = msg;
-    }
-    public static void dbgLog(string msg) {
-        if (self && self.txtDbg) self.txtDbg.text += "\n" + msg;
     }
 
     public void SwitchColor()

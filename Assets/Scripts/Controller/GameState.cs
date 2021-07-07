@@ -1,7 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [DisallowMultipleComponent]
 public class GameState : MonoBehaviour
@@ -10,6 +10,7 @@ public class GameState : MonoBehaviour
     [NotNull] public GameStage startStage;
     [NotNull] public GameStage endlessStartStage;
     [NotNull] public GameObject PauseOverlay;
+    [NotNull] public Text txtDbg, txtFPS;
     public static GameStage curStage;
     public static PlayerStats playerStats;
 
@@ -45,6 +46,8 @@ public class GameState : MonoBehaviour
     void Awake()
     {
         self = this;
+        if (txtDbg == null) Debug.LogWarning("player.txtDbg not assigned");
+
         playerStats = PlayerStats.LoadProfile(1);
         playerStats.startNo++;
         playerStats.Save();
@@ -57,6 +60,11 @@ public class GameState : MonoBehaviour
         if (unlockedColors.y > 0) colorOrder[colorCount++].g = 1;
         if (unlockedColors.z > 0) colorOrder[colorCount++].b = 1;
         Invoke(nameof(StartGame), 0);
+        InvokeRepeating(nameof(UpdateFPS), 0, 0.5f);
+    }
+
+    private void UpdateFPS() {
+        txtFPS.text = (1 / Time.deltaTime).ToString("N0");
     }
 
     private void Update()
@@ -66,6 +74,13 @@ public class GameState : MonoBehaviour
         colorOrderNonStatic = colorOrder;
         unlockedColorsNonStatic = unlockedColors;
         if (InputHandler.ReadPauseInput()) TogglePause();
+    }
+
+    public static void dbgSet(string msg) {
+        if (self && self.txtDbg) self.txtDbg.text = msg;
+    }
+    public static void dbgLog(string msg) {
+        if (self && self.txtDbg) self.txtDbg.text += "\n" + msg;
     }
 
     void StartGame()

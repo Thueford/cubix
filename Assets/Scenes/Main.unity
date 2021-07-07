@@ -3307,10 +3307,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80f6418a9a800ca40b6dc19bbafe8e26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testMode: 0
   startStage: {fileID: 218137898}
   endlessStartStage: {fileID: 1164636989}
   PauseOverlay: {fileID: 1405544324}
+  txtDbg: {fileID: 336807975}
+  txtFPS: {fileID: 1932165153}
   colorOrderNonStatic: []
   unlockedColorsNonStatic: {x: 0, y: 0, z: 0}
 --- !u!1001 &890301833
@@ -7255,6 +7256,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af1c05db94dd5cb448ff1201673f069e, type: 3}
+--- !u!114 &1932165153 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7459722876151275703, guid: af1c05db94dd5cb448ff1201673f069e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1932165152}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1955044818
 PrefabInstance:
   m_ObjectHideFlags: 0
