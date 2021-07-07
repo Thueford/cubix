@@ -58,8 +58,8 @@ MeshRenderer:
   m_ReceiveShadows: 0
   m_DynamicOccludee: 0
   m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
@@ -218,6 +218,7 @@ MonoBehaviour:
     emitted: 0
     ppf: 0
     pps: 0
+    medAlive: 0
     bufferSize: 0
     groupCount: 0
   properties:
@@ -225,6 +226,7 @@ MonoBehaviour:
     repeat: 1
     prewarm: 0
     destroyOnFinished: 0
+    performance: 2
     maxParts: 10000
     lifetime: 0.2
     emissionRate: 100
