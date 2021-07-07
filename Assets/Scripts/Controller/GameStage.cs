@@ -45,8 +45,8 @@ public class GameStage : MonoBehaviour
         if(actors) Destroy(actors);
         actors = Instantiate(actorsBase, transform.position, Quaternion.identity, transform);
         portal.SetEnabled(false);
-        hints.ResetHints();
-        
+        if (hints) hints.ResetHints();
+
         charger.Reset(chargeTime);
         EnemySpawner.ResetEnemyCount();
     }
