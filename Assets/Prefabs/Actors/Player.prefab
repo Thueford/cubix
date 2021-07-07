@@ -60,7 +60,6 @@ MonoBehaviour:
   animGeneral: {fileID: 1432198949064338186}
   txtDbg: {fileID: 0}
   hpDisplay: {fileID: 8826235761362021055}
-  playerLight: {fileID: 2252280536063330856}
   bs: {fileID: 8303882289749333062}
   psTrail: {fileID: 264834383789653468}
   psColorSwitch: {fileID: 5082109809681214106}
@@ -150,6 +149,7 @@ MonoBehaviour:
     emitted: 20
     ppf: 0
     pps: 0
+    medAlive: 0
     bufferSize: 50
     groupCount: 50
   properties:
@@ -157,6 +157,7 @@ MonoBehaviour:
     repeat: 0
     prewarm: 0
     destroyOnFinished: 0
+    performance: 2
     maxParts: 20
     lifetime: 0.3
     emissionRate: 500
@@ -357,10 +358,10 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
@@ -480,6 +481,7 @@ MonoBehaviour:
     emitted: 0
     ppf: 0
     pps: 0
+    medAlive: 0
     bufferSize: 0
     groupCount: 0
   properties:
@@ -487,6 +489,7 @@ MonoBehaviour:
     repeat: 1
     prewarm: 0
     destroyOnFinished: 0
+    performance: 2
     maxParts: 20
     lifetime: 1
     emissionRate: 0

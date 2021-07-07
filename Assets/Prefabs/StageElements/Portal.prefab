@@ -22,6 +22,7 @@ MonoBehaviour:
     emitted: 30486
     ppf: 1
     pps: 45
+    medAlive: 0
     bufferSize: 1000
     groupCount: 1000
   properties:
@@ -29,6 +30,7 @@ MonoBehaviour:
     repeat: 1
     prewarm: 0
     destroyOnFinished: 0
+    performance: 2
     maxParts: 1000
     lifetime: 2
     emissionRate: 30
