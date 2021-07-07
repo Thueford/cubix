@@ -35,7 +35,8 @@ public class ChargeAnim : MonoBehaviour
         ps.properties.emissionRate = v*v * ps.properties.maxParts;
     }
 
-    public void SetEnabled(bool b) { anim.enabled = b; }
+    public void SetEnabled(bool b) => anim.enabled = b;
+    public bool IsEnabled() => anim.enabled;
 
     public void ResetAnim(float duration = 0)
     {
@@ -49,9 +50,5 @@ public class ChargeAnim : MonoBehaviour
         transform.localScale = new Vector3(maxScale, 1, maxScale);
         SetPsSize(0);
         charger.OnCharged();
-    }
-
-    void OnChargeStart(AnimationEvent ev) {
-        charger.OnChargeStart();
     }
 }
