@@ -43,7 +43,7 @@ public class GameStage : MonoBehaviour
         Debug.Log("resetting: " + number);
         Destroy(actors);
         portal.SetEnabled(false);
-        hints.ResetHints();
+        if (hints) hints.ResetHints();
         
         charger.Reset();
         charger.gameObject.SetActive(false);
@@ -57,7 +57,7 @@ public class GameStage : MonoBehaviour
         gameObject.SetActive(true);
         actors = Instantiate(actorsBase, transform.position, Quaternion.identity, transform);
         portal.SetEnabled(false);
-        hints.ResetHints();
+        if (hints) hints.ResetHints();
     }
 
     // Called when player is spawning
