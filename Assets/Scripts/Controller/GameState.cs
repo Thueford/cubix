@@ -275,14 +275,4 @@ public class GameState : MonoBehaviour
     public static bool IsEndless() => IsEndless(curStage);
     public static bool IsTutorial(GameStage s) => !IsEndless(s) && s > 0;
     public static bool IsTutorial() => IsTutorial(curStage);
-
-    private void OnDisable()
-    {
-        CmpBufferManager.ReleaseManagers();
-    }
-
-    private void OnDestroy()
-    {
-        CmpBufferManager.ReleaseManagers();
-    }
 }

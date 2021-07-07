@@ -146,7 +146,7 @@ MonoBehaviour:
     prewarm: 0
     destroyOnFinished: 0
     performance: 2
-    maxParts: 10
+    maxParts: 5
     lifetime: 1
     emissionRate: 10
     startDelay: 0
@@ -160,7 +160,7 @@ MonoBehaviour:
   pos:
     offset: {x: 6, y: 0, z: 6}
     scale: {x: -3, y: 0, z: -3}
-    shape: 3
+    shape: 1
   vel:
     offset: {x: 0, y: 1, z: 0}
     scale: {x: 0, y: 0, z: 0}

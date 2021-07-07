@@ -27,12 +27,12 @@ public class ChargeAnim : MonoBehaviour
 
     private void SetPsSize(float v)
     {
-        const float f = 1.2f;
+        const float f = 1.5f;
         ps.pos.offset.x = v * f;
         ps.pos.offset.z = v * f;
         ps.pos.scale.x = -v * f / 2;
         ps.pos.scale.z = -v * f / 2;
-        ps.properties.emissionRate = v * ps.properties.maxParts;
+        ps.properties.emissionRate = v*v * ps.properties.maxParts;
     }
 
     public void SetEnabled(bool b) { anim.enabled = b; }
