@@ -11,10 +11,9 @@ public abstract class EnemyBase : CtxSteer
     public static bool ctxIDLE = true;
     public const float resDrop = 10;
 
-    // Start is called before the first frame update
-    override public void Start()
+    override public void Awake()
     {
-        base.Start();
+        base.Awake();
         animGeneral.Play("Spawn");
         pnOff = (int)Random.Range(-1e5f, 1e5f);
     }

@@ -20,6 +20,7 @@ public class GameStage : MonoBehaviour
     [Range(1,100)] public int maxEnemies = 10;
 
     public int number;
+    public bool loaded { get; private set; } = false;
     public bool isProcedural = false;
 
     public static implicit operator int(GameStage s) => s.number;
@@ -42,36 +43,35 @@ public class GameStage : MonoBehaviour
         foreach (EnemySpawner eb in GetActorComponents<EnemySpawner>())
             eb.ResetSpawner();
         */
-        Debug.Log("resetting: " + number);
-        Destroy(actors);
+        Debug.Log("ResetStage: " + number);
+        if(actors) Destroy(actors);
+        actors = Instantiate(actorsBase, transform.position, Quaternion.identity, transform);
         portal.SetEnabled(false);
         if (hints) hints.ResetHints();
-        
-        charger.Reset();
-        charger.gameObject.SetActive(false);
-        charger.gameObject.SetActive(true);
+
+        charger.Reset(chargeTime);
         EnemySpawner.ResetEnemyCount();
     }
 
     // Called when player steps on portal
     public void Load()
     {
+        if (loaded) return;
         gameObject.SetActive(true);
-        actors = Instantiate(actorsBase, transform.position, Quaternion.identity, transform);
-        portal.SetEnabled(false);
-        if (hints) hints.ResetHints();
+        ResetStage();
+        loaded = true;
     }
 
     // Called when player is spawning
     public void OnStageEnter()
     {
         Debug.Log("Stage: " + name);
+        GameState.curStage = this;
 
         // copy camera
         Camera.main.GetComponent<GameCamera>().target = cam.transform.position;
         Camera.main.transform.rotation = cam.transform.rotation;
 
-        charger.Reset(chargeTime);
         actors.SetActive(true);
         spawn.Disable();
 
@@ -101,8 +101,10 @@ public class GameStage : MonoBehaviour
     // Called when player left the stage
     public void Unload()
     {
-        ResetStage();
+        if (!loaded) return;
+        Destroy(actors);
         gameObject.SetActive(false);
+        loaded = false;
     }
 
     public T[] GetActorComponents<T>() => actors.GetComponentsInChildren<T>();

@@ -6,6 +6,7 @@ public class ChargeAnim : MonoBehaviour
 {
     private Animator anim;
     private Particles ps;
+    private Charger charger;
     private float level;
     private const float maxScale = 0.24f;
 
@@ -13,6 +14,7 @@ public class ChargeAnim : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         ps = GetComponent<Particles>();
+        charger = transform.parent.GetComponent<Charger>();
         ResetAnim();
     }
 
@@ -20,12 +22,6 @@ public class ChargeAnim : MonoBehaviour
     {
         level = transform.localScale.x / maxScale;
         if(level < 0.98) SetPsSize(level);
-    }
-
-    public void ResetAnim()
-    {
-        transform.localScale = new Vector3(0, 1, 0);
-        SetEnabled(false);
     }
 
     private void SetPsSize(float v)
@@ -40,19 +36,21 @@ public class ChargeAnim : MonoBehaviour
 
     public void SetEnabled(bool b) { anim.enabled = b; }
 
-    public void ResetAnim(float duration)
+    public void ResetAnim(float duration = -1)
     {
-        ResetAnim();
-        anim.speed = 1 / duration;
+        if (duration > 0) anim.speed = 1 / duration;
+        transform.localScale = new Vector3(0, 1, 0);
+        anim.Play("Charging", 0, 0);
+        SetEnabled(false);
     }
 
     void OnCharged(AnimationEvent ev) {
         transform.localScale = new Vector3(maxScale, 1, maxScale);
         SetPsSize(0);
-        GetComponentInParent<Charger>().OnCharged();
+        charger.OnCharged();
     }
 
     void OnChargeStart(AnimationEvent ev) {
-        GetComponentInParent<Charger>().OnChargeStart();
+        charger.OnChargeStart();
     }
 }
