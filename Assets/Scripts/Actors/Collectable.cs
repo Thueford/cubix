@@ -147,8 +147,8 @@ public class Collectable : MonoBehaviour
                 Player.self.bs.atkSpeedBoost(5f, 2f);
                 break;
             case cType.ENDALLEXISTENCE:
-                Instantiate(explosion, transform.position, Quaternion.identity)
-                    .SetProperties("Player", 20, 10);
+                Instantiate(explosion, GameState.curStage.transform.position, Quaternion.identity)
+                    .SetProperties("Player", 30, 10, 0.8f);
                 break;
             default:
                 break;

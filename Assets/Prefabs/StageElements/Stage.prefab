@@ -59,8 +59,7 @@ MonoBehaviour:
   actors: {fileID: 0}
   next: {fileID: 0}
   hints: {fileID: 0}
-  colorSlots: 3
-  chargeTime: 10
+  chargeTime: 20
   maxEnemies: 10
   number: 0
   isProcedural: 0

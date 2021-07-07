@@ -15,7 +15,6 @@ public class GameStage : MonoBehaviour
     [WarnNull] public GameStage next;
     [WarnNull] public StageController hints;
 
-    [Range(0,  3)] public int colorSlots = 3;
     [Range(1,100)] public float chargeTime = 10;
     [Range(1,100)] public int maxEnemies = 10;
 

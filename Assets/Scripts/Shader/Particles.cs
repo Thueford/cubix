@@ -22,7 +22,7 @@ public class Particles : MonoBehaviour
     public DynamicEffect vel = new DynamicEffect(Vector3.zero, Vector3.zero, Shape.SPHERE);
     public DynamicEffect force = new DynamicEffect(Vector3.zero, Vector3.zero, Shape.SPHERE);
     public DynamicEffect posFac = new DynamicEffect(Vector3.one, Vector3.zero, Shape.SPHERE);
-    // public DynamicEffect radial = new DynamicEffect(Vector3.one, Vector3.zero, Shape.SPHERE);
+    //public DynamicEffect radial = new DynamicEffect(Vector3.zero, Vector3.zero, Shape.SPHERE);
 
     [Header("Other")]
     public Colors color = Colors.dflt;
@@ -77,7 +77,7 @@ public class Particles : MonoBehaviour
 
     void Start()
     {
-        if(!enableParticles) return;
+        if (!enableParticles) return;
         if (tex == null && mat.mainTexture != null) tex = mat.mainTexture;
         stats = new Stats();
         stats.editorDrawMode = EditorDrawMode.OFF;
@@ -231,6 +231,7 @@ public class Particles : MonoBehaviour
     private ComputeBuffer particlesBuf, deadBuf;
     private ComputeBuffer counterBuf, quadVertBuf;
     private static int[] counterArray = new int[1];
+    private Vector3 _velocity;
 
     private int kernelInit, kernelEmit, kernelUpdate;
 
@@ -298,16 +299,13 @@ public class Particles : MonoBehaviour
 
     private void UniformEmit(int kernel)
     {
-        Vector3 velocity = (transform.position - lastPos); // / Time.deltaTime;
-        lastPos = transform.position;
-
         compute.SetBuffer(kernel, "_Particles", particlesBuf);
         compute.SetBuffer(kernel, "_Alive", deadBuf);
 
         compute.SetInt("_Flags", GetFlags());
         compute.SetVector("_PosParent", transform.position); // + posOffset
         // compute.SetMatrix("_Rotation", Matrix4x4.Rotate(rotation));
-        compute.SetVector("_SpdParent", velocityFactor * velocity);
+        compute.SetVector("_SpdParent", velocityFactor * _velocity);
         compute.SetVector("_Seeds", new Vector4(Random.value, Random.value, Random.value, Random.value));
         compute.SetFloat("_Lifetime", properties.lifetime);
 
@@ -315,6 +313,7 @@ public class Particles : MonoBehaviour
         vel.Uniform(compute, "_Spd");
         force.Uniform(compute, "_Force");
         posFac.Uniform(compute, "_PosFac");
+        //radial.Uniform(compute, "_Radial");
 
         compute.SetVector("_Size", size.val);
         color.UniformEmit(compute, "_Color");
@@ -351,11 +350,16 @@ public class Particles : MonoBehaviour
 
     private void UniformUpdate(int kernel)
     {
+        _velocity = (transform.position - lastPos); // / Time.deltaTime;
+        lastPos = transform.position;
+
         compute.SetBuffer(kernel, "_Particles", particlesBuf);
         compute.SetBuffer(kernel, "_Dead", deadBuf);
         color.Uniform(compute, kernel, "_Color");
 
         compute.SetInt("_Flags", GetFlags());
+        compute.SetVector("_PosParent", transform.position);
+        compute.SetVector("_SpdParent", _velocity * velocityFactor);
         compute.SetFloat("_SizeVel", size.val.z);
         compute.SetFloat("_DeltaTime", stats.initialized ? Time.deltaTime : Time.fixedDeltaTime);
     }

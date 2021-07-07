@@ -21,25 +21,16 @@ public class Explosion : MonoBehaviour
 
     public void SetProperties(Bullet.Properties p)
     {
-        gameObject.layer = p.owner == "Player" ? 16 : 15;
-        tag = p.owner + "Bullet";
-        sc.radius = p.explosionRadius;
-
-        ps.vel.scale = 3 * sc.radius * ps.vel.scale.normalized;
-        ps.properties.lifetime = sc.radius / ps.vel.scale.x;
-        ps.size.val.z = -ps.size.val.y / ps.properties.lifetime;
-
-        // light.range = p.explosionRadius*2;
-        damage = p.damage;
+        SetProperties(p.owner, p.explosionRadius, p.damage);
     }
 
-    public void SetProperties(string owner, float radius, float damage)
+    public void SetProperties(string owner, float radius, float damage, float velScale = 3)
     {
         gameObject.layer = owner == "Player" ? 16 : 15;
         tag = owner + "Bullet";
         sc.radius = radius;
 
-        ps.vel.scale = 3 * sc.radius * ps.vel.scale.normalized;
+        ps.vel.scale = velScale * sc.radius * ps.vel.scale.normalized;
         ps.properties.lifetime = sc.radius / ps.vel.scale.x;
         ps.size.val.z = -ps.size.val.y / ps.properties.lifetime;
 
@@ -54,10 +45,9 @@ public class Explosion : MonoBehaviour
 
     private void OnTriggerEnter(Collider c)
     {
-        //Debug.Log("BTrigger: " + c.name + " " + tag + " " + c.tag);
         EntityBase b = c.GetComponentInParent<EntityBase>();
         if (!b) {
-            //Debug.LogWarning("Explosion hit non-Entity");
+            Debug.LogWarning("Explosion hit non-Entity");
             return;
         }
 
@@ -66,7 +56,6 @@ public class Explosion : MonoBehaviour
             Vector3 distance = c.transform.position - transform.position;
             float distanceMultiplier = distance.magnitude > sc.radius/2 ? 3 : 6;
             //float damageMult = Mathf.SmoothStep(sc.radius, 0, (c.transform.position - transform.position).magnitude);
-            Debug.Log("explosion hit Enemy" + damage);
             b.Hit(damage);
             b.KnockBack(distance.normalized * distanceMultiplier * 3f);
             hit(c.transform.position);
@@ -74,7 +63,6 @@ public class Explosion : MonoBehaviour
         else if (c.CompareTag("Player") && CompareTag("EnemyBullet"))
         {
             float damageMult = Mathf.SmoothStep(sc.radius, 0, (c.transform.position - transform.position).magnitude);
-            Debug.Log("explosion hit Player: " + "*" + damageMult);
             b.Hit(damage);
             hit(c.transform.position);
         }

@@ -20,7 +20,7 @@
 
 struct Particle
 {
-    float3 pos, vel, force;
+    float3 pos, vel, force; //, radial;
     float4 color, size;
     float rand;
 };
