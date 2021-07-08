@@ -47,7 +47,7 @@ public class EnemySpawner : MonoBehaviour
 
     public void InitiateSpawn()
     {
-        Invoke(nameof(SpawnWave), delay + Random.Range(-variation, variation));
+        Invoke(nameof(SpawnWave), delay); // + Random.Range(-variation, variation));
     }
 
     private void SpawnWave()

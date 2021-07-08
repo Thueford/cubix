@@ -56,9 +56,10 @@ public class Charger : MonoBehaviour
     {
         if (c.CompareTag("Player") && !GameState.curStage.portal.Enabled())
         {
+            if (!charging)
+                foreach (EnemySpawner es in GameState.curStage.GetActorComponents<EnemySpawner>())
+                    es.StartSpawning();
             charging = true;
-            foreach (EnemySpawner es in GameState.curStage.GetActorComponents<EnemySpawner>())
-                es.StartSpawning();
             anim.SetEnabled(true);
         }
     }
