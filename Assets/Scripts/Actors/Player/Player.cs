@@ -178,10 +178,10 @@ public class Player : EntityBase
             Debug.LogWarning("Tp Target is null");
             tpTarget = GameState.curStage.next;
         }
-        Spawn(tpTarget);
+        SpawnAt(tpTarget);
     }
 
-    public void Spawn(GameStage stage)
+    public void SpawnAt(GameStage stage)
     {
         if (stage == null) return;
         Freeze();

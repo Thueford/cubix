@@ -93,7 +93,7 @@ public class GameState : MonoBehaviour
             startStage = stages[0];
         }
 
-        Player.self.Spawn(startStage);
+        Player.self.SpawnAt(startStage);
         stateBegin = SaveState();
     }
 
@@ -138,7 +138,7 @@ public class GameState : MonoBehaviour
         colorCount = s.colorCount;
 
         Player.self.setHP(s.hp);
-        Player.self.Spawn(s.stage);
+        Player.self.SpawnAt(s.stage);
     }
 
     public static void RestartStage()
@@ -189,7 +189,6 @@ public class GameState : MonoBehaviour
                 }
                 else curStage.Unload();
             }
-            else next.ResetStage();
         }
 
         if (!playerStats.reachedEndless && next == 1)
