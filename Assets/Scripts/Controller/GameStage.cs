@@ -72,8 +72,6 @@ public class GameStage : MonoBehaviour
 
         actors.SetActive(true);
         spawn.Disable();
-
-        //if(next != null) next.spawn.Enable();
     }
 
     // Called after player finished spawning

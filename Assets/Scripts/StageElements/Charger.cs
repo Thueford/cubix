@@ -10,6 +10,7 @@ public class Charger : MonoBehaviour
     private Particles ps;
     private Renderer rend;
     private Color baseCol;
+    private float dimLight = 1;
     public bool charging { get; private set; } = false;
     public bool charged { get; private set; } = false;
 
@@ -26,7 +27,6 @@ public class Charger : MonoBehaviour
         anim.ResetAnim();
     }
 
-    public float dimLight = 1;
     private void Update()
     {
         dimLight += 3*(charged || anim.IsEnabled() ? Time.deltaTime : -Time.deltaTime);

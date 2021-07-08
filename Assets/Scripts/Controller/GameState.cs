@@ -10,6 +10,7 @@ public class GameState : MonoBehaviour
     [NotNull] public GameStage startStage;
     [NotNull] public GameStage endlessStartStage;
     [NotNull] public GameObject PauseOverlay;
+    [NotNull] public Portal endPortalPrefab;
     [NotNull] public Text txtDbg, txtFPS;
     public static GameStage curStage;
     public static PlayerStats playerStats;
