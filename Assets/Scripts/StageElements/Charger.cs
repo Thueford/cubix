@@ -8,12 +8,16 @@ public class Charger : MonoBehaviour
 {
     private ChargeAnim anim;
     private Particles ps;
+    private Renderer rend;
+    private Color baseCol;
     public bool charging { get; private set; } = false;
     public bool charged { get; private set; } = false;
 
     private void Awake() {
         anim = GetComponentInChildren<ChargeAnim>();
         ps = GetComponent<Particles>();
+        rend = GetComponent<Renderer>();
+        baseCol = rend.material.color;
     }
 
     // Start is called before the first frame update
@@ -22,15 +26,19 @@ public class Charger : MonoBehaviour
         anim.ResetAnim();
     }
 
-    public void SetEnabled(bool e) {
-        anim.SetEnabled(false);
+    public float dimLight = 1;
+    private void Update()
+    {
+        dimLight += 3*(charged || anim.IsEnabled() ? Time.deltaTime : -Time.deltaTime);
+        dimLight = Mathf.Clamp01(dimLight);
+
+        Color c = baseCol;
+        c.r = baseCol.r * 3*dimLight;
+        rend.material.color = c;
     }
 
-    public void OnChargeStart()
-    {
-        charging = true;
-        foreach (EnemySpawner es in GameState.curStage.GetActorComponents<EnemySpawner>())
-            es.StartSpawning();
+    public void SetEnabled(bool e) {
+        anim.SetEnabled(false);
     }
 
     public void OnCharged()
@@ -48,8 +56,9 @@ public class Charger : MonoBehaviour
     {
         if (c.CompareTag("Player") && !GameState.curStage.portal.Enabled())
         {
-            //foreach (EnemySpawner es in GameState.curStage.GetActorComponents<EnemySpawner>())
-            //    if (!es.isSpawning) es.StartSpawning();
+            charging = true;
+            foreach (EnemySpawner es in GameState.curStage.GetActorComponents<EnemySpawner>())
+                es.StartSpawning();
             anim.SetEnabled(true);
         }
     }

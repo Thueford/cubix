@@ -22,9 +22,12 @@ public class Particles : MonoBehaviour
     public DynamicEffect vel = new DynamicEffect(Vector3.zero, Vector3.zero, Shape.SPHERE);
     public DynamicEffect force = new DynamicEffect(Vector3.zero, Vector3.zero, Shape.SPHERE);
     public DynamicEffect posFac = new DynamicEffect(Vector3.one, Vector3.zero, Shape.SPHERE);
+    //public DynamicEffect radial = new DynamicEffect(Vector3.zero, Vector3.zero, Shape.SPHERE);
 
     [Header("Other")]
     public Colors color = Colors.dflt;
+    [Tooltip("Vector3 + w: factor")]
+    public Vector4 attractor;
 
     #region Flags
     private static int F(bool v, int p) => v ? 1 << p : 0;
@@ -76,7 +79,7 @@ public class Particles : MonoBehaviour
 
     void Start()
     {
-        if(!enableParticles) return;
+        if (!enableParticles) return;
         if (tex == null && mat.mainTexture != null) tex = mat.mainTexture;
         stats = new Stats();
         stats.editorDrawMode = EditorDrawMode.OFF;
@@ -119,9 +122,13 @@ public class Particles : MonoBehaviour
 
         if (stats.reset) { stats.reset = false; ResetPS(); }
         DispatchUpdate();
-        _alive -= Time.deltaTime * Mathf.Ceil(stats.alive) / properties.lifetime;
-        stats.alive = Mathf.CeilToInt(_alive);
-        stats.dead = curMaxParts - stats.alive;
+
+        if (properties.performance > PerformanceMode.LOW)
+        {
+            _alive -= Time.deltaTime * Mathf.Ceil(stats.alive) / properties.lifetime;
+            stats.alive = Mathf.CeilToInt(_alive);
+            stats.dead = curMaxParts - stats.alive;
+        }
 
         if (Application.isPlaying && !properties.repeat && stats.emitted >= curMaxParts && stats.alive == 0)
         {
@@ -188,7 +195,8 @@ public class Particles : MonoBehaviour
         if (!enableParticles) return;
         if (deadBuf == null) return;
         deadBuf.SetCounterValue((uint)curMaxParts);
-        //ReadDeadCount(true);
+        if (properties.performance > PerformanceMode.LOW) 
+            ReadDeadCount();
         _alive = stats.alive = 0;
         stats.dead = curMaxParts;
         stats.emitted = 0;
@@ -224,9 +232,8 @@ public class Particles : MonoBehaviour
     [NotNull] public ComputeShader compute;
     private ComputeBuffer particlesBuf, deadBuf;
     private ComputeBuffer counterBuf, quadVertBuf;
-    private CmpBufferManager particlesMgr, deadMgr;
-    private CmpBufferManager counterMgr, quadVertMgr;
     private static int[] counterArray = new int[1];
+    private Vector3 _velocity;
 
     private int kernelInit, kernelEmit, kernelUpdate;
 
@@ -250,24 +257,19 @@ public class Particles : MonoBehaviour
             kernelInit = compute.FindKernel("InitOne");
             kernelUpdate = compute.FindKernel("UpdateOne");
         }
-
-        particlesMgr = CmpBufferManager.getManager(stats.bufferSize, Marshal.SizeOf<Particle>(), 0, 50);
-        deadMgr = CmpBufferManager.getManager(stats.bufferSize, sizeof(int), ComputeBufferType.Append, 50);
-        counterMgr = CmpBufferManager.getManager(counterArray.Length, sizeof(int), ComputeBufferType.IndirectArguments, 100);
-        quadVertMgr = CmpBufferManager.getManager(meshVerts.Length, Marshal.SizeOf<Vector2>(), 0, 100);
     }
 
     private void InitializePartBuffer()
     {
-        particlesBuf = particlesMgr.getBuffer();
+        particlesBuf = new ComputeBuffer(stats.bufferSize, Marshal.SizeOf<Particle>());
 
-        deadBuf = deadMgr.getBuffer();
+        deadBuf = new ComputeBuffer(stats.bufferSize, sizeof(int), ComputeBufferType.Append);
         deadBuf.SetCounterValue(0);
 
-        counterBuf = counterMgr.getBuffer();
+        counterBuf = new ComputeBuffer(counterArray.Length, sizeof(int), ComputeBufferType.IndirectArguments);
         counterBuf.SetData(counterArray);
 
-        quadVertBuf = quadVertMgr.getBuffer();
+        quadVertBuf = new ComputeBuffer(meshVerts.Length, Marshal.SizeOf<Vector2>());
         quadVertBuf.SetData(meshVerts);
     }
 
@@ -276,7 +278,7 @@ public class Particles : MonoBehaviour
         compute.SetBuffer(kernelInit, "_Particles", particlesBuf);
         compute.SetBuffer(kernelInit, "_Dead", deadBuf);
         compute.Dispatch(kernelInit, stats.groupCount, 1, 1);
-        // ReadDeadCount(true);
+        if (properties.performance == PerformanceMode.LOW) ReadDeadCount();
     }
 
     private void ReleaseBuffers()
@@ -286,10 +288,10 @@ public class Particles : MonoBehaviour
         stats = new Stats();
         stats.editorDrawMode = edm;
 
-        if (particlesBuf != null) particlesMgr.releaseBuffer(particlesBuf);
-        if (quadVertBuf != null) quadVertMgr.releaseBuffer(quadVertBuf);
-        if (counterBuf != null) counterMgr.releaseBuffer(counterBuf);
-        if (deadBuf != null) deadMgr.releaseBuffer(deadBuf);
+        if (particlesBuf != null) particlesBuf.Release();
+        if (quadVertBuf != null) quadVertBuf.Release();
+        if (counterBuf != null) counterBuf.Release();
+        if (deadBuf != null) deadBuf.Release();
         particlesBuf = quadVertBuf = counterBuf = deadBuf = null;
     }
 
@@ -299,16 +301,13 @@ public class Particles : MonoBehaviour
 
     private void UniformEmit(int kernel)
     {
-        Vector3 velocity = (transform.position - lastPos); // / Time.deltaTime;
-        lastPos = transform.position;
-
         compute.SetBuffer(kernel, "_Particles", particlesBuf);
         compute.SetBuffer(kernel, "_Alive", deadBuf);
 
         compute.SetInt("_Flags", GetFlags());
         compute.SetVector("_PosParent", transform.position); // + posOffset
         // compute.SetMatrix("_Rotation", Matrix4x4.Rotate(rotation));
-        compute.SetVector("_SpdParent", velocityFactor * velocity);
+        compute.SetVector("_SpdParent", velocityFactor * _velocity);
         compute.SetVector("_Seeds", new Vector4(Random.value, Random.value, Random.value, Random.value));
         compute.SetFloat("_Lifetime", properties.lifetime);
 
@@ -316,6 +315,7 @@ public class Particles : MonoBehaviour
         vel.Uniform(compute, "_Spd");
         force.Uniform(compute, "_Force");
         posFac.Uniform(compute, "_PosFac");
+        //radial.Uniform(compute, "_Radial");
 
         compute.SetVector("_Size", size.val);
         color.UniformEmit(compute, "_Color");
@@ -339,9 +339,11 @@ public class Particles : MonoBehaviour
 
         stats.medAlive = properties.lifetime * properties.emissionRate;
         stats.emitted += count;
-        stats.alive += count;
-        _alive += count;
-        stats.dead = curMaxParts - count;
+        if (properties.performance > PerformanceMode.LOW) {
+            stats.alive += count;
+            _alive += count;
+            stats.dead = curMaxParts - count;
+        }
 
         UniformEmit(kernelEmit);
         compute.Dispatch(kernelEmit, count, 1, 1);
@@ -350,11 +352,17 @@ public class Particles : MonoBehaviour
 
     private void UniformUpdate(int kernel)
     {
+        _velocity = (transform.position - lastPos); // / Time.deltaTime;
+        lastPos = transform.position;
+
         compute.SetBuffer(kernel, "_Particles", particlesBuf);
         compute.SetBuffer(kernel, "_Dead", deadBuf);
         color.Uniform(compute, kernel, "_Color");
 
         compute.SetInt("_Flags", GetFlags());
+        compute.SetVector("_PosParent", transform.position);
+        compute.SetVector("_SpdParent", _velocity * velocityFactor);
+        compute.SetVector("_Attractor", attractor);
         compute.SetFloat("_SizeVel", size.val.z);
         compute.SetFloat("_DeltaTime", stats.initialized ? Time.deltaTime : Time.fixedDeltaTime);
     }
@@ -369,14 +377,12 @@ public class Particles : MonoBehaviour
     }
 
     private float tLastCount = -1;
-    private int n = 0;
     private void ReadDeadCount(bool force = false)
     {
-        if (properties.performance > PerformanceMode.LOW && 
-            !force && Time.time - tLastCount < deadUpdDelay) return;
+        if (!(properties.performance == PerformanceMode.LOW ||
+            force || Time.time - tLastCount >= deadUpdDelay)) return;
         tLastCount = Time.time;
-        Debug.Log(gameObject.name + ": ReadDeadCount " + (Time.time - tLastCount));
-        
+
         ComputeBuffer.CopyCount(deadBuf, counterBuf, 0);
         counterBuf.GetData(counterArray);
         stats.dead = counterArray[0];

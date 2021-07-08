@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(PlayerShooter))]
 public class Player : EntityBase
@@ -11,7 +10,6 @@ public class Player : EntityBase
     public static Player self;
 
     [Header("Other Settings")]
-    [WarnNull] public Text txtDbg;
     [NotNull, HideInInspector] public PlayerHP hpDisplay;
     [NotNull, HideInInspector] public PlayerShooter bs;
     [NotNull, HideInInspector] public Particles psTrail, psColorSwitch;
@@ -31,16 +29,7 @@ public class Player : EntityBase
     {
         base.Start();
         setHP(HP);
-        if (txtDbg == null) Debug.LogWarning("player.txtDbg not assigned");
         SetShooterColor(rgb);
-        //animFlicker.enabled = false;
-    }
-
-    public static void dbgSet(string msg) {
-        if (self && self.txtDbg) self.txtDbg.text = msg;
-    }
-    public static void dbgLog(string msg) {
-        if (self && self.txtDbg) self.txtDbg.text += "\n" + msg;
     }
 
     public void SwitchColor()
@@ -102,8 +91,8 @@ public class Player : EntityBase
             // look in movement direction
             Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
             // intersect mouse ray with floor plane
-            float f = (transform.position.y - r.origin.y) / r.direction.y;
-            transform.forward = r.GetPoint(f) - transform.position;
+            float f = (pos.y - r.origin.y) / r.direction.y;
+            transform.forward = r.GetPoint(f) - pos;
         }
 
         if (invulnurable > 0)
@@ -154,6 +143,7 @@ public class Player : EntityBase
     {
         if (invulnurable <= 0 && c.collider.CompareTag("Enemy"))
         {
+            GameState.playerStats.sacrifices++;
             c.collider.GetComponent<EntityBase>().Die();
             c.collider.GetComponent<SphereCollider>().isTrigger = true;
             Hit(1);
@@ -162,27 +152,12 @@ public class Player : EntityBase
 
     public void TeleportNext(GameStage target = null)
     {
-        if (target == null) target = GameState.curStage.next;
-
-        if (GameState.curStage.number+1 > GameState.settings.stageHighscore)
-        {
-            GameState.settings.stageHighscore = GameState.curStage.number+1;
-            GameState.settings.Save();
-        }
-
-        if (target == GameState.self.endlessStartStage)
-        {
-            GameState.settings.reachedEndless = true;
-            GameState.settings.Save();
-        }
-
         if (GameState.curStage == null) return;
-        else if (target == null)
-        {
-            target = StageBuilder.self.Generate(GameState.curStage.transform);
-        }
+        if (target == null) target = GameState.curStage.next;
+        if (target == null) target = StageBuilder.self.Generate(GameState.curStage.transform);
 
-        setHP(Mathf.Min(maxHP, HP + 1));
+        GameState.updateClearStats(target);
+        if (GameState.curStage > 0) setHP(Mathf.Min(maxHP, HP + 1));
         Teleport(target);
     }
 
@@ -193,7 +168,6 @@ public class Player : EntityBase
         tpTarget = target;
         animGeneral.enabled = true;
         animGeneral.Play("Teleport");
-        target.Load();
     }
 
 
@@ -210,22 +184,8 @@ public class Player : EntityBase
     public void Spawn(GameStage stage)
     {
         if (stage == null) return;
-        if (GameState.curStage != null)
-        {
-            if (GameState.curStage != stage)
-            {
-                if (GameState.curStage.isProcedural)
-                {
-                    Destroy(GameState.curStage.gameObject);
-                    Camera.main.transform.Translate(new Vector3(0, -40, 0));
-                }
-                else GameState.curStage.Unload();
-            }
-            else stage.ResetStage();
-        }
-
         Freeze();
-        stage.Load();
+        GameState.SwitchStage(stage);
 
         animGeneral.enabled = true;
         animGeneral.Play("Spawn", 0, 0);
@@ -233,20 +193,12 @@ public class Player : EntityBase
 
         Vector3 spawnPos = stage.spawn.transform.position;
         spawnPos.y = floatHeight;
-        self.transform.position = spawnPos;
-
-        stage.OnStageEnter();
-        if (GameState.stateCurStage.stage != stage)
-        {
-            Debug.Log("SaveState");
-            GameState.SaveCurState();
-        }
+        transform.position = spawnPos;
     }
 
     override public void OnSpawn(AnimationEvent ev)
     {
         base.OnSpawn(ev);
-        Debug.Log("Player Spawn");
         GameState.curStage.MeltActors();
     }
 
@@ -254,6 +206,7 @@ public class Player : EntityBase
     {
         base.Die();
         GameState.curStage.FreezeActors();
+        GameState.updateDeadStats();
     }
 
     public override void OnDie(AnimationEvent ev)

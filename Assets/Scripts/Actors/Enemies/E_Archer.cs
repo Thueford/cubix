@@ -29,6 +29,6 @@ public class E_Archer : EnemyBase
 
         // look at player
         //if(effectors[0].magnitude > 0) transform.forward = effectors[0];
-        transform.forward = Player.self.transform.position - transform.position;
+        transform.forward = Player.self.pos - pos;
     }
 }

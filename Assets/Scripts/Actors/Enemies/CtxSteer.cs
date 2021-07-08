@@ -88,7 +88,7 @@ public abstract class CtxSteer : EntityBase
     public void dbgLine(Vector3 dir, float length, Color color)
     {
         dir.Normalize();
-        Debug.DrawLine(transform.position + dir, transform.position + dir * (1 + length), color);
+        Debug.DrawLine(pos + dir, pos + dir * (1 + length), color);
     }
 
     abstract public Vector3 steer();

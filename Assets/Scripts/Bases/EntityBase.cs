@@ -25,6 +25,8 @@ public abstract class EntityBase : MonoBehaviour
     protected Light vlight;
     protected Color _color;
 
+    public Vector3 pos => transform.position;
+
     public static float forceByDrag(float vmax, float d)
     {
         return vmax * (0.05f * Mathf.Pow(d, 2) + 0.65f*d + 1);

@@ -10,7 +10,7 @@ namespace ParticleProps
 
     public struct Particle
     {
-        public Vector3 pos, vel, force;
+        public Vector3 pos, vel, force; //, radial;
         public Vector4 col, size; // xy: size, zw: life
         public float rand;
     }

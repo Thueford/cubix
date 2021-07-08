@@ -23,7 +23,11 @@ ConsumeStructuredBuffer<uint> _Alive;
 
 
 int _Flags;
-float3 _ParentPosition;
+
+float3 _PosParent;
+float3 _SpdParent;
+float4 _Attractor;
+
 float _SizeVel;
 float _DeltaTime;
 Texture2D<float4> _ColorGrad;
@@ -53,10 +57,17 @@ void DoUpdate(uint3 id)
         return;
     }
     
+    //float3 r = normalize(_PosParent - p.pos);
+    //float f = pow(length(p.vel), 2) * r;
+    //p.vel += p.radial * f * _DeltaTime;
+    //p.vel += p.radial * r * _DeltaTime;
+    
+    float3 magnet = _Attractor.w * normalize(_Attractor.xyz - p.pos);
+    
     p.size.z -= _DeltaTime;
     p.size.xy += _SizeVel * _DeltaTime;
     p.vel += p.force * _DeltaTime;
-    p.pos += p.vel * _DeltaTime;
+    p.pos += (p.vel + magnet) * _DeltaTime;
     if (F(P_CLRGRAD)) p.color = getLifeColor(p.size.zw, p.rand);
 
     _Particles[id.x] = p;
@@ -89,9 +100,6 @@ float _Lifetime;
 
 float2 _Size;
 
-float3 _PosParent;
-float3 _SpdParent;
-
 float3 _PosOffset;
 float3 _PosScale;
 int _PosShape;
@@ -107,6 +115,10 @@ int _ForceShape;
 float3 _PosFacOffset;
 float3 _PosFacScale;
 int _PosFacShape;
+
+float3 _RadialOffset;
+float3 _RadialScale;
+int _RadialShape; 
 
 float4 _Color, _Color2;
 
@@ -167,6 +179,11 @@ void EmitOne()
     d = getShaped(d, _ForceShape);
     p.force = _ForceOffset.xyz + _PosFacScale * p.pos + d * _ForceScale.xyz;
     //p.force = mul(_Rotation, float4(p.force, 1)).xyz;
+    
+    // radial force
+    //d = float3(ran(_Seeds.xyw), ran(_Seeds.yzw), ran(_Seeds.zxw));
+    // d = getShaped(d, _RadialShape);
+    //p.radial = _RadialOffset.xyz + d * _RadialScale.xyz;
     
     p.pos += _PosParent;
     p.vel += _SpdParent;

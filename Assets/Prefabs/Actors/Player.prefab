@@ -57,8 +57,6 @@ MonoBehaviour:
   maxHP: 5
   HP: 0
   rgb: {x: 0, y: 0, z: 0}
-  animGeneral: {fileID: 1432198949064338186}
-  txtDbg: {fileID: 0}
   hpDisplay: {fileID: 8826235761362021055}
   bs: {fileID: 8303882289749333062}
   psTrail: {fileID: 264834383789653468}
@@ -249,6 +247,7 @@ MonoBehaviour:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
+  attractor: {x: 0, y: 0, z: 0, w: 0}
   velocityFactor: 0
   tex: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
   mat: {fileID: 2100000, guid: 2b107359638558a449200c6c4ee07e3a, type: 2}
@@ -581,6 +580,7 @@ MonoBehaviour:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
+  attractor: {x: 0, y: 0, z: 0, w: 0}
   velocityFactor: -2
   tex: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
   mat: {fileID: 2100000, guid: 2b107359638558a449200c6c4ee07e3a, type: 2}

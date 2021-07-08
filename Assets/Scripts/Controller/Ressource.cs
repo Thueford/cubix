@@ -11,6 +11,7 @@ public class Ressource : MonoBehaviour
     [NotNull] public Text TextGreen;
     [NotNull] public Text TextBlue;
     [NotNull] public GameObject Space;
+    [NotNull] public ResParts resPartsPrefab;
 
     [Range(0, 100)]
     public static float valueRed = 0;
@@ -164,5 +165,4 @@ public class Ressource : MonoBehaviour
                 break;
         }
     }
-
 }

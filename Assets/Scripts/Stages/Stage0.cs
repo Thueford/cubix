@@ -1,32 +1,50 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 public class Stage0 : StageController
 {
-    enum State { START, WASD, CHARGE, PORTAL }
+    enum State { INIT, START, WASD, CHARGE, PORTAL }
     private State state;
 
-    [Multiline] public string txtHighScore = "HighScore:\nStage: {0}";
+    [Multiline] private string txtHighScore, txtStatistics;
     [NotNull] public Portal endPortal;
+
+    private TMPro.TextMeshPro tmHIScore, tmStats;
+
+    public void Awake()
+    {
+        tmHIScore = texts[3].GetComponent<TMPro.TextMeshPro>();
+        tmStats = texts[5].GetComponent<TMPro.TextMeshPro>();
+        txtHighScore = tmHIScore.text;
+        txtStatistics = tmStats.text;
+    }
 
     override public void ResetHints()
     {
         base.ResetHints();
-        state = State.START;
+        state = State.INIT;
+    }
+
+    private void updateStats()
+    {
+        Debug.Log("updateStats");
+        tmHIScore.text = string.Format(txtHighScore, GameState.playerStats.getStartStats());
+        tmStats.text = string.Format(txtStatistics, GameState.playerStats.getMoreStats());
     }
 
     override public void Experienced()
     {
         switch (state)
         {
-            case State.START:
+            case State.INIT:
                 endPortal.gameObject.SetActive(true);
-                texts[3].GetComponent<TMPro.TextMeshPro>().text =
-                    string.Format(txtHighScore, GameState.settings.stageHighscore);
-                texts[3].SetActive(true);
+                InvokeRepeating(nameof(updateStats), 0, 1);
                 texts[2].SetActive(true);
+                texts[3].SetActive(true);
                 texts[4].SetActive(true);
+                texts[5].SetActive(true);
                 break;
         }
     }
@@ -35,7 +53,7 @@ public class Stage0 : StageController
     {
         switch (state)
         {
-            case State.START:
+            case State.INIT:
                 endPortal.gameObject.SetActive(false);
                 texts[0].SetActive(true);
                 break;
@@ -50,11 +68,13 @@ public class Stage0 : StageController
 
     public override void General()
     {
-        base.General();
         switch (state)
         {
-            case State.START:
+            case State.INIT:
                 InputHandler.enableSpace = false;
+                state++;
+                break;
+            case State.START:
                 if (!Player.self.movable || InputHandler.ReadDirInput() == Vector3.zero) return;
                 state++;
                 break;

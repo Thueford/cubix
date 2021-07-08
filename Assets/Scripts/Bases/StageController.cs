@@ -9,6 +9,7 @@ public abstract class StageController : MonoBehaviour
 
     virtual public void ResetHints()
     {
+        CancelInvoke();
         foreach (GameObject o in texts)
             if(o != null) o.SetActive(false);
     }
@@ -16,8 +17,8 @@ public abstract class StageController : MonoBehaviour
     private void Update()
     {
         if (!isCurStage()) return;
-        if (GameState.settings.reachedEndless) Experienced(); 
-        if (!GameState.settings.reachedEndless || GameState.IsTutorial()) Newbie();
+        if (GameState.playerStats.reachedEndless) Experienced(); 
+        if (!GameState.playerStats.reachedEndless || GameState.IsTutorial()) Newbie();
         General();
     }
 

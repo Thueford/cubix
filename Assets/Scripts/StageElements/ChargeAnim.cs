@@ -20,37 +20,35 @@ public class ChargeAnim : MonoBehaviour
 
     private void Update()
     {
+        if (level < 0) transform.localScale = new Vector3(0, 1, 0);
         level = transform.localScale.x / maxScale;
         if(level < 0.98) SetPsSize(level);
     }
 
     private void SetPsSize(float v)
     {
-        const float f = 1.2f;
+        const float f = 1.5f;
         ps.pos.offset.x = v * f;
         ps.pos.offset.z = v * f;
         ps.pos.scale.x = -v * f / 2;
         ps.pos.scale.z = -v * f / 2;
-        ps.properties.emissionRate = v * ps.properties.maxParts;
+        ps.properties.emissionRate = v*v * ps.properties.maxParts;
     }
 
-    public void SetEnabled(bool b) { anim.enabled = b; }
+    public void SetEnabled(bool b) => anim.enabled = b;
+    public bool IsEnabled() => anim.enabled;
 
-    public void ResetAnim(float duration = -1)
+    public void ResetAnim(float duration = 0)
     {
         if (duration > 0) anim.speed = 1 / duration;
-        transform.localScale = new Vector3(0, 1, 0);
         anim.Play("Charging", 0, 0);
         SetEnabled(false);
+        level = -1;
     }
 
     void OnCharged(AnimationEvent ev) {
         transform.localScale = new Vector3(maxScale, 1, maxScale);
         SetPsSize(0);
         charger.OnCharged();
-    }
-
-    void OnChargeStart(AnimationEvent ev) {
-        charger.OnChargeStart();
     }
 }

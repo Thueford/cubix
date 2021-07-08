@@ -15,7 +15,6 @@ public class GameStage : MonoBehaviour
     [WarnNull] public GameStage next;
     [WarnNull] public StageController hints;
 
-    [Range(0,  3)] public int colorSlots = 3;
     [Range(1,100)] public float chargeTime = 10;
     [Range(1,100)] public int maxEnemies = 10;
 
@@ -43,8 +42,7 @@ public class GameStage : MonoBehaviour
         foreach (EnemySpawner eb in GetActorComponents<EnemySpawner>())
             eb.ResetSpawner();
         */
-        Debug.Log("ResetStage: " + number);
-        if(actors) Destroy(actors);
+        if (actors) Destroy(actors);
         actors = Instantiate(actorsBase, transform.position, Quaternion.identity, transform);
         portal.SetEnabled(false);
         if (hints) hints.ResetHints();
@@ -57,6 +55,7 @@ public class GameStage : MonoBehaviour
     public void Load()
     {
         if (loaded) return;
+        GameState.curStage = this;
         gameObject.SetActive(true);
         ResetStage();
         loaded = true;
@@ -66,7 +65,6 @@ public class GameStage : MonoBehaviour
     public void OnStageEnter()
     {
         Debug.Log("Stage: " + name);
-        GameState.curStage = this;
 
         // copy camera
         Camera.main.GetComponent<GameCamera>().target = cam.transform.position;
@@ -103,6 +101,7 @@ public class GameStage : MonoBehaviour
     {
         if (!loaded) return;
         Destroy(actors);
+        hints.ResetHints();
         gameObject.SetActive(false);
         loaded = false;
     }
