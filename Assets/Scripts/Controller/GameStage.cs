@@ -74,7 +74,6 @@ public class GameStage : MonoBehaviour
         spawn.Disable();
 
         GameState.curStage = this;
-        //if(next != null) next.spawn.Enable();
     }
 
     // Called after player finished spawning
