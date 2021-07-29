@@ -60,8 +60,8 @@ public class GameState : MonoBehaviour
         if (unlockedColors.x > 0) colorOrder[colorCount++].r = 1;
         if (unlockedColors.y > 0) colorOrder[colorCount++].g = 1;
         if (unlockedColors.z > 0) colorOrder[colorCount++].b = 1;
-        Invoke(nameof(StartGame), 0);
         InvokeRepeating(nameof(UpdateFPS), 0, 0.5f);
+        StartGame();
     }
 
     private void UpdateFPS() {
@@ -104,25 +104,17 @@ public class GameState : MonoBehaviour
         paused = !paused;
         if (paused)
         {
-            self.PauseOverlay.SetActive(true);
-
             Player.self.Freeze();
             curStage.actors.SetActive(false);
             curStage.charger.SetEnabled(false);
-            foreach (EnemySpawner es in curStage.GetActorComponents<EnemySpawner>())
-                es.StopSpawning();
+            self.PauseOverlay.SetActive(true);
         }
         else
         {
-            Player.self.Melt();
-            curStage.actors.SetActive(true);
-            curStage.charger.SetEnabled(true);
-
-            if (curStage.charger.charging)
-            foreach (EnemySpawner es in curStage.GetActorComponents<EnemySpawner>())
-                es.StartSpawning();
-
             self.PauseOverlay.SetActive(false);
+            curStage.charger.SetEnabled(true);
+            curStage.actors.SetActive(true);
+            Player.self.Melt();
         }
     }
 

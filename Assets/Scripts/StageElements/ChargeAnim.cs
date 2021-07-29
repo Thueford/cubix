@@ -15,7 +15,6 @@ public class ChargeAnim : MonoBehaviour
         anim = GetComponent<Animator>();
         ps = GetComponent<Particles>();
         charger = transform.parent.GetComponent<Charger>();
-        ResetAnim();
     }
 
     private void Update()
@@ -35,18 +34,25 @@ public class ChargeAnim : MonoBehaviour
         ps.properties.emissionRate = v*v * ps.properties.maxParts;
     }
 
-    public void SetEnabled(bool b) => anim.enabled = b;
+    public void SetEnabled(bool b)
+    {
+        Debug.Log("ChargeAnim.SetEnabled " + b);
+        anim.enabled = b;
+    }
+
+    public void SetAnimSpeed(float duration) => anim.speed = 1 / duration;
     public bool IsEnabled() => anim.enabled;
 
     public void ResetAnim(float duration = 0)
     {
-        if (duration > 0) anim.speed = 1 / duration;
+        SetAnimSpeed(duration);
         anim.Play("Charging", 0, 0);
         SetEnabled(false);
         level = -1;
     }
 
-    void OnCharged(AnimationEvent ev) {
+    void OnCharged(AnimationEvent ev)
+    {
         transform.localScale = new Vector3(maxScale, 1, maxScale);
         SetPsSize(0);
         charger.OnCharged();

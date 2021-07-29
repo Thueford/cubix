@@ -42,22 +42,21 @@ public class GameStage : MonoBehaviour
         foreach (EnemySpawner eb in GetActorComponents<EnemySpawner>())
             eb.ResetSpawner();
         */
-        Debug.Log("Reset: " + number);
+        Debug.Log("Stage" + number + ".Reset");
         if (actors) Destroy(actors);
         actors = Instantiate(actorsBase, transform.position, Quaternion.identity, transform);
         portal.SetEnabled(false);
         if (hints) hints.ResetHints();
 
         charger.Reset(chargeTime);
-        EnemySpawner.ResetEnemyCount();
+        EnemySpawner.Reset(this);
     }
 
     // Called when player steps on portal
     public void Load()
     {
+        if (!loaded) gameObject.SetActive(true);
         ResetStage();
-        if (loaded) return;
-        gameObject.SetActive(true);
         loaded = true;
     }
 
@@ -74,6 +73,11 @@ public class GameStage : MonoBehaviour
         spawn.Disable();
 
         GameState.curStage = this;
+    }
+
+    public void OnCharged()
+    {
+        portal.SetEnabled(true);
     }
 
     // Called after player finished spawning

@@ -14,10 +14,17 @@ public abstract class EnemyBase : CtxSteer
     override public void Awake()
     {
         base.Awake();
-        animGeneral.Play("Spawn");
-        EnemySpawner.EnemySpawned(rgb.z == 1);
         pnOff = (int)Random.Range(-1e5f, 1e5f);
     }
+
+    public override void Start()
+    {
+        base.Start();
+        EnemySpawner.EnemySpawned(this);
+        animGeneral.Play("Spawn");
+    }
+    public static int getColorCount(Color c) => c.b == 1 || c == Color.white ? 2 : 1;
+    public float countWeight => 1 / getColorCount(_color);
 
     override public void OnSpawn(AnimationEvent ev)
     {
@@ -32,9 +39,17 @@ public abstract class EnemyBase : CtxSteer
         rend.material.color = c;
         vlight.color = GameState.getLightColor(c);
 
-        if (c.r == 1) { maxSpeed -= 1; HP = startHP *= 2f; }
-        if (c.g == 1) maxSpeed += 2;
-        if (c.b == 1) HP = startHP *= 0.5f;
+        if (c == Color.white)
+        {
+            maxSpeed += 2;
+            HP = startHP *= 5 / 3f;
+        }
+        else
+        {
+            if (c.r == 1) { maxSpeed -= 1; HP = startHP *= 2f; }
+            if (c.g == 1) maxSpeed += 2;
+            if (c.b == 1) HP = startHP *= 0.5f;
+        }
     }
 
 
@@ -66,7 +81,8 @@ public abstract class EnemyBase : CtxSteer
         if (rb.velocity.magnitude > 0.01) fnoise += 2 / rb.velocity.magnitude;
         noiseTime += 0.4f * steerdt * fnoise;
 
-        if(ctxIDLE) {
+        if(ctxIDLE)
+        {
             Vector3 d = new Vector3(perlinNoise(noiseTime, pnOff), 0, perlinNoise(noiseTime, -pnD));
             effectors.Add(F_PERLIN * d.normalized);
         }
@@ -80,7 +96,8 @@ public abstract class EnemyBase : CtxSteer
     public override void Die()
     {
         base.Die();
-        EnemySpawner.EnemyDied(rgb.z == 1);
+        tag = "Untagged";
+        EnemySpawner.EnemyDied(this);
 
         float res = rgb.z == 1 ? resDrop / 2 : resDrop;
         if (rgb.sqrMagnitude > 0)
@@ -97,5 +114,17 @@ public abstract class EnemyBase : CtxSteer
         GameState.playerStats.totalKills++;
         Collectable.Drop(rgb, pos);
         Destroy(gameObject);
+    }
+
+    override public void Freeze()
+    {
+        base.Freeze();
+        foreach (Collider c in GetComponentsInChildren<Collider>()) c.enabled = false;
+    }
+
+    override public void Melt()
+    {
+        base.Melt();
+        foreach (Collider c in GetComponentsInChildren<Collider>()) c.enabled = true;
     }
 }

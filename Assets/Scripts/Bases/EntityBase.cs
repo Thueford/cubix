@@ -62,14 +62,12 @@ public abstract class EntityBase : MonoBehaviour
     {
         movable = false;
         foreach (ShooterBase sb in GetComponents<ShooterBase>()) sb.active = false;
-        foreach (Collider c in GetComponentsInChildren<Collider>()) c.enabled = false;
     }
 
     virtual public void Melt()
     {
         movable = true;
         foreach (ShooterBase sb in GetComponents<ShooterBase>()) sb.active = true;
-        foreach (Collider c in GetComponentsInChildren<Collider>()) c.enabled = true;
     }
 
     virtual public void Die()

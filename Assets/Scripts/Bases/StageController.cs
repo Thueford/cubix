@@ -6,6 +6,12 @@ using UnityEngine;
 public abstract class StageController : MonoBehaviour
 {
     [NotNull] public GameObject[] texts;
+    private GameStage parentStage;
+
+    private void Start()
+    {
+        parentStage = GetComponentInParent<GameStage>();
+    }
 
     virtual public void ResetHints()
     {
@@ -22,9 +28,7 @@ public abstract class StageController : MonoBehaviour
         General();
     }
 
-    public bool isCurStage() {
-        return GameState.curStage == GetComponentInParent<GameStage>();
-    }
+    public bool isCurStage() => GameState.curStage == parentStage;
 
     public virtual void Newbie() { }
 

@@ -11,20 +11,18 @@ public class Charger : MonoBehaviour
     private Renderer rend;
     private Color baseCol;
     private float dimLight = 1;
-    public bool charging { get; private set; } = false;
-    public bool charged { get; private set; } = false;
+    public bool charging { get; private set; }
+    public bool charged { get; private set; }
 
-    private void Awake() {
+    public void EnableParticles(bool b = true) => ps.SetEnabled(b);
+    public void SetChargeSpeed(float duration) => anim.SetAnimSpeed(duration);
+
+    private void Awake()
+    {
         anim = GetComponentInChildren<ChargeAnim>();
         ps = GetComponent<Particles>();
         rend = GetComponent<Renderer>();
         baseCol = rend.material.color;
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        anim.ResetAnim();
     }
 
     private void Update()
@@ -37,41 +35,45 @@ public class Charger : MonoBehaviour
         rend.material.color = c;
     }
 
-    public void SetEnabled(bool e) {
-        anim.SetEnabled(false);
+    public void SetEnabled(bool b)
+    {
+        if (!charging) return;
+        Debug.Log("Charger.SetEnabled " + b);
+        anim.SetEnabled(b);
+        EnemySpawner.EnableSpawning(GameState.curStage, b);
     }
 
     public void OnCharged()
     {
+        Debug.Log("Charger.OnCharged");
         charged = true;
-        anim.SetEnabled(false);
         ps.SetEnabled(true);
-
-        foreach (EnemySpawner es in GameState.curStage.GetActorComponents<EnemySpawner>())
-            es.StopSpawning();
-        GameState.curStage.portal.SetEnabled(true);
+        SetEnabled(false);
+        GameState.curStage.OnCharged();
     }
 
     private void OnTriggerEnter(Collider c)
     {
-        if (c.CompareTag("Player") && !GameState.curStage.portal.Enabled())
+        if (!charged && c.CompareTag("Player"))
         {
             if (!charging)
-                foreach (EnemySpawner es in GameState.curStage.GetActorComponents<EnemySpawner>())
-                    es.StartSpawning();
-            charging = true;
-            anim.SetEnabled(true);
+            {
+                charging = true;
+                SetEnabled(true);
+            }
+            else anim.SetEnabled(true);
         }
     }
 
     private void OnTriggerExit(Collider c)
     {
-        if (c.CompareTag("Player"))
+        if (!charged && c.CompareTag("Player"))
             anim.SetEnabled(false);
     }
 
     internal void Reset(float duration = 0)
     {
+        Debug.Log("Charger.Reset " + duration);
         charging = false;
         charged = false;
         anim.ResetAnim(duration);
