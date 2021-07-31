@@ -10,7 +10,7 @@ public class Charger : MonoBehaviour
     private Particles ps;
     private Renderer rend;
     private Color baseCol;
-    private float dimLight = 1;
+    private Dimmer dimLight = new Dimmer(3, 1, 0, 3);
     public bool charging { get; private set; }
     public bool charged { get; private set; }
 
@@ -27,12 +27,8 @@ public class Charger : MonoBehaviour
 
     private void Update()
     {
-        dimLight += 3*(charged || anim.IsEnabled() ? Time.deltaTime : -Time.deltaTime);
-        dimLight = Mathf.Clamp01(dimLight);
-
-        Color c = baseCol;
-        c.r = baseCol.r * 3*dimLight;
-        rend.material.color = c;
+        dimLight.Update(charged || anim.IsEnabled());
+        rend.material.color = baseCol * dimLight.fRed;
     }
 
     public void SetEnabled(bool b)

@@ -38,14 +38,13 @@ public class GameStage : MonoBehaviour
     // Reset entities
     public void ResetStage()
     {
-        /*
-        foreach (EnemySpawner eb in GetActorComponents<EnemySpawner>())
-            eb.ResetSpawner();
-        */
         Debug.Log("Stage" + number + ".Reset");
+        
         if (actors) Destroy(actors);
         actors = Instantiate(actorsBase, transform.position, Quaternion.identity, transform);
+        
         portal.SetEnabled(false);
+        spawn.SetEnabled(true);
         if (hints) hints.ResetHints();
 
         charger.Reset(chargeTime);
@@ -70,9 +69,7 @@ public class GameStage : MonoBehaviour
         Camera.main.transform.rotation = cam.transform.rotation;
 
         actors.SetActive(true);
-        spawn.Disable();
-
-        GameState.curStage = this;
+        spawn.SetEnabled(false);
     }
 
     public void OnCharged()

@@ -215,6 +215,7 @@ public class GameState : MonoBehaviour
             save.stats.stageDeaths = new int[11];
 
         next.Load();
+        curStage = next;
         next.OnStageEnter();
 
         if (stateCurStage.stage != next)

@@ -2494,7 +2494,6 @@ MonoBehaviour:
   startStage: {fileID: 218137898}
   endlessStartStage: {fileID: 1164636989}
   PauseOverlay: {fileID: 1405544324}
-  endPortalPrefab: {fileID: 1594128157}
   txtDbg: {fileID: 336807975}
   txtFPS: {fileID: 1932165153}
   colorOrderNonStatic: []
@@ -2937,6 +2936,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_RootOrder
       value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5954152347684863349, guid: c757194044ae0bd40bbc234134156d13,
+        type: 3}
+      propertyPath: color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5954152347684863349, guid: c757194044ae0bd40bbc234134156d13,
+        type: 3}
+      propertyPath: color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5954152347684863349, guid: c757194044ae0bd40bbc234134156d13,
+        type: 3}
+      propertyPath: color.g
+      value: 0.6715336
+      objectReference: {fileID: 0}
+    - target: {fileID: 5954152347684863349, guid: c757194044ae0bd40bbc234134156d13,
+        type: 3}
+      propertyPath: color.r
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5954152347684863349, guid: c757194044ae0bd40bbc234134156d13,
         type: 3}

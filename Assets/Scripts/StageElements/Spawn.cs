@@ -5,16 +5,16 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class Spawn : MonoBehaviour
 {
-    public void Enable()
+    private Particles ps;
+
+    private void Awake()
     {
-        // GetComponentInChildren<ParticleSystem>().Play();
-        GetComponent<Particles>().SetEnabled(true);
+        ps = GetComponent<Particles>();
     }
 
-    public void Disable()
+    public void SetEnabled(bool b)
     {
-        // GetComponentInChildren<ParticleSystem>().Stop();
-        GetComponent<Particles>().SetEnabled(false);
-        GetComponent<Particles>().ResetPS();
+        if (b) ps.ResetPS();
+        ps.SetEnabled(b);
     }
 }

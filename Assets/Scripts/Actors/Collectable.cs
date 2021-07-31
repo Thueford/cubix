@@ -13,6 +13,7 @@ public class Collectable : MonoBehaviour
     private Particles ps;
     private Light l;
     private Renderer r;
+    private Animator anim;
 
     [NotNull] public Explosion explosion;
 
@@ -43,6 +44,8 @@ public class Collectable : MonoBehaviour
         ps = gameObject.GetComponent<Particles>();
         l = gameObject.GetComponentInChildren<Light>();
         r = gameObject.GetComponentInChildren<Renderer>();
+        anim = GetComponent<Animator>();
+        anim.keepAnimatorControllerStateOnDisable = true;
         if (!CollPrefab) CollPrefab = gameObject;
     }
 
