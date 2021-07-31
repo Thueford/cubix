@@ -172,7 +172,7 @@ public class Particles : MonoBehaviour
 
 #endregion
 
-#region User
+    #region User
     [Range(-10, 10)]
     public float velocityFactor = 0;
     //public Vector3 posOffset;
@@ -223,9 +223,9 @@ public class Particles : MonoBehaviour
         _onFinished = p;
     }
 
-#endregion
+    #endregion
 
-#region Shader
+    #region Shader
     // public Assets assets; // not visible in script inspector :(
     [NotNull] public Texture tex;
     [NotNull] public Material mat;
@@ -238,7 +238,7 @@ public class Particles : MonoBehaviour
     private int kernelInit, kernelEmit, kernelUpdate;
 
 
-#region Shader Setup
+    #region Shader Setup
 
     private void ShaderSetup()
     {
@@ -295,9 +295,9 @@ public class Particles : MonoBehaviour
         particlesBuf = quadVertBuf = counterBuf = deadBuf = null;
     }
 
-#endregion
+    #endregion
 
-#region Shader Loop
+    #region Shader Loop
 
     private void UniformEmit(int kernel)
     {
@@ -390,7 +390,7 @@ public class Particles : MonoBehaviour
         _alive = stats.alive;
     }
 
-#endregion
+    #endregion
 
-#endregion
+    #endregion
 }

@@ -23,7 +23,7 @@ public class TipOfTheStage : MonoBehaviour
         do tip = Random.Range(0, tips.Length);
         while (tip == lastTip && maxTries-- > 0);
 
-        tots.gameObject.SetActive(parentStage >= GameState.self.endlessStartStage);
+        tots.gameObject.SetActive(parentStage >= GameState.endlessNo);
         tots.text = tips[tip].Trim();
     }
 }

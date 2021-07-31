@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Stage5 : StageController
 {
-    enum State { START, DONE }
+    enum State { START, SPACE, DONE }
     private State state;
 
     override public void ResetHints()
@@ -18,17 +18,13 @@ public class Stage5 : StageController
         switch (state)
         {
             case State.START:
-                texts[0].SetActive(true);
-                break;
-        }
-    }
-
-    override public void General()
-    {
-        switch (state)
-        {
-            case State.START:
                 InputHandler.enableSpace = true;
+                texts[0].SetActive(true);
+                state++;
+                break;
+            case State.SPACE:
+                if (!InputHandler.ReadSpaceInput()) return;
+                texts[1].SetActive(true);
                 state++;
                 break;
         }

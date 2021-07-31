@@ -28,6 +28,7 @@ public class GameState : MonoBehaviour
     public static int colorCount = 0;
     public static bool paused { get; private set; } = false;
     public static bool showMenu = false;
+    public static int endlessNo => self && self.endlessStartStage ? self.endlessStartStage : 1000;
 
     [NotNull] public GameStage startStage;
     [NotNull] public GameStage endlessStartStage;
@@ -227,7 +228,7 @@ public class GameState : MonoBehaviour
         if (curStage + 1 > save.stats.stageHighscore)
             save.stats.stageHighscore = curStage + 1;
 
-        if (!save.stats.reachedEndless && nextStage == self.endlessStartStage)
+        if (!save.stats.reachedEndless && nextStage == endlessNo)
         {
             save.stats.colorOrder = colToStr(colorOrder[0]) + colToStr(colorOrder[1]) + colToStr(colorOrder[2]);
             save.stats.reachedEndless = true;
@@ -306,7 +307,7 @@ public class GameState : MonoBehaviour
         }
     }
 
-    public static bool IsEndless(GameStage s) => s >= self.endlessStartStage;
+    public static bool IsEndless(GameStage s) => s >= endlessNo;
     public static bool IsEndless() => IsEndless(curStage);
     public static bool IsTutorial(GameStage s) => !IsEndless(s) && s > 0;
     public static bool IsTutorial() => IsTutorial(curStage);
