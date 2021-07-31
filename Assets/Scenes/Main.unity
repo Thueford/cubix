@@ -707,8 +707,8 @@ PrefabInstance:
     - target: {fileID: 1618364806311752024, guid: 891daa6c8c6ecf9429fe901f3e341964,
         type: 3}
       propertyPath: m_text
-      value: "        Statistics\n\nPlaytime:    \t{0:hh\\:mm\\:ss}\r\nMax Stage:\t{1}\r\nKills:         
-        \t{2}\r\nDeaths:    \t{3}"
+      value: "        Statistics\n\nPlaytime:\t{0:hh\\:mm\\:ss}\r\nStart No.:\t{1}\r\nMax
+        Stage:\t{2}\r\nShots Fired:\t{3}"
       objectReference: {fileID: 0}
     - target: {fileID: 1618364806311752024, guid: 891daa6c8c6ecf9429fe901f3e341964,
         type: 3}
@@ -1017,8 +1017,8 @@ PrefabInstance:
     - target: {fileID: 1618364806311752024, guid: 891daa6c8c6ecf9429fe901f3e341964,
         type: 3}
       propertyPath: m_text
-      value: "     Statistics\n\nStart No.:\t{0}\r\nClears:    \t{1}\r\nTut. Deaths:\t{2}\r\nphys.
-        Kills:\t{3}"
+      value: "     Statistics\n\nClears:   \t{0}\r\nKills:       \t{1}\r\nDeaths:
+        \t{2}\nSacrifices:\t{3}"
       objectReference: {fileID: 0}
     - target: {fileID: 1618364806311752024, guid: 891daa6c8c6ecf9429fe901f3e341964,
         type: 3}
@@ -1840,7 +1840,7 @@ PrefabInstance:
     - target: {fileID: 3952618277718233167, guid: c2ba19eb6645c744d8d16e6b06a9d4f2,
         type: 3}
       propertyPath: delay
-      value: 3.2
+      value: 2.7
       objectReference: {fileID: 0}
     - target: {fileID: 3952618277718233167, guid: c2ba19eb6645c744d8d16e6b06a9d4f2,
         type: 3}
@@ -5185,7 +5185,7 @@ PrefabInstance:
     - target: {fileID: 3952618277718233167, guid: c2ba19eb6645c744d8d16e6b06a9d4f2,
         type: 3}
       propertyPath: delay
-      value: 5.9
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3952618277718233167, guid: c2ba19eb6645c744d8d16e6b06a9d4f2,
         type: 3}
@@ -5376,6 +5376,41 @@ PrefabInstance:
       value: GameState, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 3061175434963094991, guid: af1c05db94dd5cb448ff1201673f069e,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 3231398296820253577, guid: af1c05db94dd5cb448ff1201673f069e,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3231398296820253577, guid: af1c05db94dd5cb448ff1201673f069e,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3231398296820253577, guid: af1c05db94dd5cb448ff1201673f069e,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 869483834}
+    - target: {fileID: 3231398296820253577, guid: af1c05db94dd5cb448ff1201673f069e,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3231398296820253577, guid: af1c05db94dd5cb448ff1201673f069e,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ToggleSettings
+      objectReference: {fileID: 0}
+    - target: {fileID: 3231398296820253577, guid: af1c05db94dd5cb448ff1201673f069e,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameState, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3231398296820253577, guid: af1c05db94dd5cb448ff1201673f069e,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine

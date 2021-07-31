@@ -29,9 +29,8 @@ public class Stage0 : StageController
 
     private void updateStats()
     {
-        Debug.Log("updateStats");
-        tmHIScore.text = string.Format(txtHighScore, GameState.playerStats.getStartStats());
-        tmStats.text = string.Format(txtStatistics, GameState.playerStats.getMoreStats());
+        tmHIScore.text = string.Format(txtHighScore, GameState.save.stats.getStartStats());
+        tmStats.text = string.Format(txtStatistics, GameState.save.stats.getMoreStats());
     }
 
     override public void Experienced()
@@ -40,7 +39,7 @@ public class Stage0 : StageController
         {
             case State.INIT:
                 endPortal.gameObject.SetActive(true);
-                InvokeRepeating(nameof(updateStats), 0, 1);
+                InvokeRepeating(nameof(updateStats), 0, .2f);
                 texts[2].SetActive(true);
                 texts[3].SetActive(true);
                 texts[4].SetActive(true);
@@ -79,7 +78,7 @@ public class Stage0 : StageController
                 state++;
                 break;
             case State.WASD:
-                if (!GameState.curStage.portal.Enabled()) return;
+                if (!GameState.curStage.charger.charged) return;
                 state++;
                 break;
             case State.CHARGE:

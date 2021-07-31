@@ -46,7 +46,7 @@ public class Particles : MonoBehaviour
     #endregion
 
     #region Privates
-    private static bool enableParticles = true;
+    public static bool enableParticles = true;
     private static float deadUpdDelay = 1;
 
     private float _alive;

@@ -143,7 +143,7 @@ public class Player : EntityBase
     {
         if (invulnurable <= 0 && c.collider.CompareTag("Enemy"))
         {
-            GameState.playerStats.sacrifices++;
+            GameState.save.stats.sacrifices++;
             c.collider.GetComponent<EntityBase>().Die();
             c.collider.GetComponent<SphereCollider>().isTrigger = true;
             Hit(1);

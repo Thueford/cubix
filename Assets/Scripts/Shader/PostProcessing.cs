@@ -58,11 +58,11 @@ public class PostProcessing : MonoBehaviour
     private int lastWidth = Screen.width;
     private int lastHeight = Screen.height;
 
+    private void Awake() => self = this;
+
     // Start is called before the first frame update
     void Start()
     {
-        if (!self) self = this;
-
         dirLight = GameObject.Find("Directional Light").GetComponent<Light>();
         if (!dirLight) Debug.LogError("No Directional Light found");
 

@@ -46,6 +46,7 @@ public abstract class EntityBase : MonoBehaviour
     {
         HP = startHP;
         animGeneral.keepAnimatorControllerStateOnDisable = true;
+        GameState.save.config.setLight(vlight);
         Freeze();
     }
 

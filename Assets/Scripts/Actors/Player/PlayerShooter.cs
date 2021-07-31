@@ -84,6 +84,10 @@ public class PlayerShooter : ShooterBase
     override protected void shoot(Vector3 dir)
     {
         base.shoot(dir);
+        GameState.save.stats.firedBullets += singleFire ? 1 : amount;
+        if (rgb.x == 1) GameState.save.stats.firedRedShots++;
+        if (rgb.y == 1) GameState.save.stats.firedGreenShots++;
+        if (rgb.z == 1) GameState.save.stats.firedBlueShots++;
         //Player.self.KnockBack(-dir.normalized * p.speed * 3);
     }
 }

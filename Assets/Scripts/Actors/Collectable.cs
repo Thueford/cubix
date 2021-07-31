@@ -51,7 +51,7 @@ public class Collectable : MonoBehaviour
     {
         if (!hs) hs = Player.self.GetComponent<HaloShooter>();
         if (!hs) Debug.LogError("HaloShooter not found");
-
+        GameState.save.config.setLight(l);
         setType(type);
     }
 
@@ -63,10 +63,10 @@ public class Collectable : MonoBehaviour
             case cType.RED: setColor(GameState.red); break;
             case cType.GREEN: setColor(GameState.green); break;
             case cType.BLUE: setColor(GameState.blue); break;
-            case cType.HALO: setColor(Color.yellow); GameState.playerStats.colHalo++; break;
-            case cType.INVIS: setColor(Color.magenta); GameState.playerStats.colInvis++; break;
-            case cType.ATKSPD: setColor(Color.cyan); GameState.playerStats.colAtk++; break;
-            case cType.ENDALLEXISTENCE: setColor(Color.white); GameState.playerStats.colEnd++; break;
+            case cType.HALO: setColor(Color.yellow); GameState.save.stats.colHalo++; break;
+            case cType.INVIS: setColor(Color.magenta); GameState.save.stats.colInvis++; break;
+            case cType.ATKSPD: setColor(Color.cyan); GameState.save.stats.colAtk++; break;
+            case cType.ENDALLEXISTENCE: setColor(Color.white); GameState.save.stats.colEnd++; break;
             default: setColor(GameState.black); break;
         }
     }
