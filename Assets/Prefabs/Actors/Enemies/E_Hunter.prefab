@@ -18,7 +18,6 @@ MonoBehaviour:
   maxHP: 5
   HP: 0
   rgb: {x: 0, y: 0, z: 0}
-  color: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &6246409336685122847
 MonoBehaviour:
   m_ObjectHideFlags: 0

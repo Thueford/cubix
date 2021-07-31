@@ -507,7 +507,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 869483829}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.01, z: 0}
   m_LocalScale: {x: 20, y: 1, z: 50}
   m_Children: []
   m_Father: {fileID: 0}
@@ -526,12 +526,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startStage: {fileID: 1653965245}
+  endlessStartStage: {fileID: 0}
   PauseOverlay: {fileID: 1168084249}
-  sets:
-    startNo: 0
-    stageHighscore: 0
-    reachedEndless: 0
+  postProc: {fileID: 1990724503}
+  txtDbg: {fileID: 1241600102}
+  txtFPS: {fileID: 1168084250}
   colorOrderNonStatic: []
+  unlockedColorsNonStatic: {x: 0, y: 0, z: 0}
 --- !u!84 &1092632210
 RenderTexture:
   m_ObjectHideFlags: 0
@@ -1106,6 +1107,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1168084248}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1168084250 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7459722876151275703, guid: af1c05db94dd5cb448ff1201673f069e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1168084248}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1191389327 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 757038173234545941, guid: c757194044ae0bd40bbc234134156d13,

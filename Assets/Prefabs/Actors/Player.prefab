@@ -61,7 +61,7 @@ MonoBehaviour:
   bs: {fileID: 8303882289749333062}
   psTrail: {fileID: 264834383789653468}
   psColorSwitch: {fileID: 5082109809681214106}
-  animFlicker: {fileID: 2329878742511588198}
+  animFlicker: {fileID: 0}
 --- !u!114 &8303882289749333062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,7 +88,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: e5f1dc54f9a77bd49828015af7221df9, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 2
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -324,7 +324,6 @@ GameObject:
   - component: {fileID: 2252280536063330856}
   - component: {fileID: 574134559818325371}
   - component: {fileID: 264834383789653468}
-  - component: {fileID: 2329878742511588198}
   m_Layer: 7
   m_Name: vPlayer
   m_TagString: Untagged
@@ -439,7 +438,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 1
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -585,25 +584,6 @@ MonoBehaviour:
   tex: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
   mat: {fileID: 2100000, guid: 2b107359638558a449200c6c4ee07e3a, type: 2}
   compute: {fileID: 7200000, guid: 9c8f180a7d9416542955f198a3544f54, type: 3}
---- !u!95 &2329878742511588198
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6269518455535589890}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: c41b373ff05cce440aa692bac2aeedd2, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &9186481488205223290
 GameObject:
   m_ObjectHideFlags: 0

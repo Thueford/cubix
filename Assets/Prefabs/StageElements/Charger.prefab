@@ -92,10 +92,10 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3819382640310170504}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 6a032ad0b901f04429be5a9a42a015f7, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 2
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -352,7 +352,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cac98392af0f63240a998cd16d52c196, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dimLight: 1
 --- !u!114 &8886487526393408279
 MonoBehaviour:
   m_ObjectHideFlags: 0

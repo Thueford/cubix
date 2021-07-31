@@ -90,11 +90,7 @@ public class GameState : MonoBehaviour
 
     private void OnGUI()
     {
-        if (showMenu)
-        {
-            if (!paused) TogglePause();
-            save.config.ConfigMenu();
-        }
+        if (showMenu) save.config.ConfigMenu();
     }
 
     public static void dbgSet(string msg) {
@@ -141,6 +137,7 @@ public class GameState : MonoBehaviour
     public static void ToggleSettings()
     {
         showMenu = !showMenu;
+        if (showMenu && !paused) TogglePause();
     }
 
     public static void load(State s)

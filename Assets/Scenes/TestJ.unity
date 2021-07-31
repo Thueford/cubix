@@ -3734,7 +3734,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 869483829}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.01, z: 0}
   m_LocalScale: {x: 10, y: 1, z: 10}
   m_Children: []
   m_Father: {fileID: 0}
@@ -3753,8 +3753,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startStage: {fileID: 1516782582}
-  PauseOverlay: {fileID: 0}
+  endlessStartStage: {fileID: 0}
+  PauseOverlay: {fileID: 7437277004763525065}
+  postProc: {fileID: 1990724504}
+  txtDbg: {fileID: 141317214}
+  txtFPS: {fileID: 7437277004763525064}
   colorOrderNonStatic: []
+  unlockedColorsNonStatic: {x: 0, y: 0, z: 0}
 --- !u!43 &897225488
 Mesh:
   m_ObjectHideFlags: 0
@@ -8865,13 +8870,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bloom: {fileID: 7200000, guid: 47862c77207702b4b811ee8ab5a54fea, type: 3}
   lensFlare: {fileID: 7200000, guid: 65efdfcf4ae3e8d4183f89140b4ccf50, type: 3}
-  blurrMat: {fileID: 2100000, guid: 274b1b0192379f441995496a3b24ed5c, type: 2}
-  sourceTex: {fileID: 0}
-  brightTex: {fileID: 0}
-  blurrBuff: {fileID: 0}
-  caResult: {fileID: 0}
-  lfResult: {fileID: 0}
-  lensDirt: {fileID: 0}
+  postProcMat: {fileID: 0}
   lensDirtTex: {fileID: 2800000, guid: 145b2f0760f8c9642bcdc4459df91931, type: 3}
   starburstTex: {fileID: 2800000, guid: 283a61b575bfb8a49955039e0bfa4a74, type: 3}
   skipAll: 0
@@ -8886,9 +8885,15 @@ MonoBehaviour:
   lfThreshold: 0.722
   lfGhostSpacing: 0.69
   lfCAStrength: 0.2
-  useVignette: 1
+  useCTREffect: 1
   vignetteAmount: 0.8
   vignetteWidth: 0.1
+  sourceTex: {fileID: 0}
+  brightTex: {fileID: 0}
+  blurrBuff: {fileID: 0}
+  caResult: {fileID: 0}
+  lfResult: {fileID: 0}
+  lensDirt: {fileID: 0}
 --- !u!43 &2031758944
 Mesh:
   m_ObjectHideFlags: 0
@@ -10111,3 +10116,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af1c05db94dd5cb448ff1201673f069e, type: 3}
+--- !u!114 &7437277004763525064 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7459722876151275703, guid: af1c05db94dd5cb448ff1201673f069e,
+    type: 3}
+  m_PrefabInstance: {fileID: 7437277004763525063}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &7437277004763525065 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8787512798767361302, guid: af1c05db94dd5cb448ff1201673f069e,
+    type: 3}
+  m_PrefabInstance: {fileID: 7437277004763525063}
+  m_PrefabAsset: {fileID: 0}
