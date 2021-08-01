@@ -144,9 +144,8 @@ float3 getShaped(float3 d, int shape)
         
         case S_SPHERE: return normalize(d);
         case S_CUBE: return sqrNormalize(d);
+        default: return d;
     }
-    
-    return d;
 }
 
 [numthreads(1, 1, 1)]

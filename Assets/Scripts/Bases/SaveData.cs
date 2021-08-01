@@ -26,7 +26,6 @@ public abstract class SaveData
 
         public void Save(byte profile = 0)
         {
-            Debug.Log("Saving");
             if (profile != 0) this.profile = profile;
             config.Save();
             stats.Save();

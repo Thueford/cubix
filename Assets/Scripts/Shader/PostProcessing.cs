@@ -77,6 +77,12 @@ public class PostProcessing : MonoBehaviour
 
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
+        if (skipAll)
+        {
+            Graphics.Blit(source, destination);
+            return;
+        }
+            
         //Recreate Textures if Window was resized
         if (Screen.width != lastWidth ||Screen.height != lastHeight)
         {
@@ -87,13 +93,6 @@ public class PostProcessing : MonoBehaviour
 
             createTextures();
             setTextures();
-        }
-
-        //Skip Post Porcessing
-        if (skipAll)
-        {
-            Graphics.Blit(source, destination);
-            return;
         }
 
         Graphics.Blit(source, sourceTex);
@@ -221,7 +220,8 @@ public class PostProcessing : MonoBehaviour
 
     public void PlayerHitEffect(float duration)
     {
-        StartCoroutine(EndPlayerHitEffect(duration));
+        if (GameState.save.config.computes)
+        	StartCoroutine(EndPlayerHitEffect(duration));
     }
 
     private IEnumerator EndPlayerHitEffect(float duration)

@@ -116,9 +116,9 @@ public class GameState : MonoBehaviour
 
     public static void TogglePause()
     {
-        paused = !paused;
-        if (paused)
+        if (paused = !paused)
         {
+            Debug.Log("Pause");
             Player.self.Freeze();
             curStage.actors.SetActive(false);
             curStage.charger.SetEnabled(false);
@@ -126,6 +126,7 @@ public class GameState : MonoBehaviour
         }
         else
         {
+            Debug.Log("Unpause");
             showMenu = false;
             self.PauseOverlay.SetActive(false);
             curStage.charger.SetEnabled(true);

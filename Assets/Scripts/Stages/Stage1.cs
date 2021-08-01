@@ -28,7 +28,7 @@ public class Stage1 : StageController
                 break;
 
             case State.CHARGING:
-                if (!GameState.curStage.charger.charging) return;
+                if (!GameState.curStage.charger.active) return;
                 texts[2].SetActive(true);
                 ++state;
                 break;

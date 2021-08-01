@@ -24,13 +24,15 @@ public class Portal : MonoBehaviour
         ps = GetComponent<Particles>();
         r = GetComponent<Renderer>();
         l = GetComponent<Light>();
+        if (color.a == 0) color = r.material.color;
     }
 
     private void Start()
     {
+        SetColor(color);
         if (isEndless)
         {
-            SetColor(color = Color.red);
+            SetEnabled(true);
             ps.color.color2 = 0.2f * Color.red + 0.8f * Color.black;
             r.material.SetColor("_EmissionColor", ps.color.color2);
         }
@@ -39,7 +41,6 @@ public class Portal : MonoBehaviour
     {
         dimCol.Update(active);
         l.color = color * dimCol.fCol;
-        ps.properties.emissionRate = 30 * dimCol;
         r.material.SetColor("_EmissionColor", color * dimCol.fCol);
     }
 

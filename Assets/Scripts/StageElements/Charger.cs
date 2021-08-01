@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [DisallowMultipleComponent]
@@ -9,8 +6,12 @@ public class Charger : MonoBehaviour
     private ChargeAnim anim;
     private Particles ps;
     private Renderer rend;
+    private SphereCollider sc;
+
     private Color baseCol;
     private Dimmer dimLight = new Dimmer(3, 1, 0, 3);
+
+    public bool active { get; private set; }
     public bool charging { get; private set; }
     public bool charged { get; private set; }
 
@@ -22,6 +23,7 @@ public class Charger : MonoBehaviour
         anim = GetComponentInChildren<ChargeAnim>();
         ps = GetComponent<Particles>();
         rend = GetComponent<Renderer>();
+        sc = GetComponent<SphereCollider>();
         baseCol = rend.material.color;
     }
 
@@ -33,10 +35,10 @@ public class Charger : MonoBehaviour
 
     public void SetEnabled(bool b)
     {
-        if (!charging) return;
         Debug.Log("Charger.SetEnabled " + b);
-        anim.SetEnabled(b);
-        EnemySpawner.EnableSpawning(GameState.curStage, b);
+        sc.enabled = b;
+        anim.SetEnabled(false);
+        EnemySpawner.EnableSpawning(GameState.curStage, b && active);
     }
 
     public void OnCharged()
@@ -52,24 +54,21 @@ public class Charger : MonoBehaviour
     {
         if (!charged && c.CompareTag("Player"))
         {
-            if (!charging)
-            {
-                charging = true;
-                SetEnabled(true);
-            }
-            else anim.SetEnabled(true);
+            if (!active) EnemySpawner.EnableSpawning(GameState.curStage, active = true);
+            anim.SetEnabled(charging = true);
         }
     }
 
     private void OnTriggerExit(Collider c)
     {
         if (!charged && c.CompareTag("Player"))
-            anim.SetEnabled(false);
+            anim.SetEnabled(charging = false);
     }
 
     internal void Reset(float duration = 0)
     {
         Debug.Log("Charger.Reset " + duration);
+        active = false;
         charging = false;
         charged = false;
         anim.ResetAnim(duration);

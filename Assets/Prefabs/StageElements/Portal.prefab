@@ -26,14 +26,14 @@ MonoBehaviour:
     bufferSize: 1000
     groupCount: 1000
   properties:
-    enabled: 1
+    enabled: 0
     repeat: 1
     prewarm: 0
     destroyOnFinished: 0
     performance: 2
     maxParts: 1000
     lifetime: 2
-    emissionRate: 30
+    emissionRate: 20
     startDelay: 0.6
   renderSettings:
     preset: 1
@@ -139,6 +139,11 @@ PrefabInstance:
       propertyPath: ps
       value: 
       objectReference: {fileID: 248732427440797475}
+    - target: {fileID: 2357441042035398600, guid: 7b9742f5e847d8146b617b37c2982cfa,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3302461335702217835, guid: 7b9742f5e847d8146b617b37c2982cfa,
         type: 3}
       propertyPath: m_RootOrder

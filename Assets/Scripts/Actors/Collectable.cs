@@ -41,9 +41,9 @@ public class Collectable : MonoBehaviour
 
     private void Awake()
     {
-        ps = gameObject.GetComponent<Particles>();
-        l = gameObject.GetComponentInChildren<Light>();
-        r = gameObject.GetComponentInChildren<Renderer>();
+        ps = GetComponentInChildren<Particles>();
+        l = GetComponentInChildren<Light>();
+        r = GetComponentInChildren<Renderer>();
         anim = GetComponent<Animator>();
         anim.keepAnimatorControllerStateOnDisable = true;
         if (!CollPrefab) CollPrefab = gameObject;
@@ -110,8 +110,8 @@ public class Collectable : MonoBehaviour
     public void Kill()
     {
         GetComponent<SphereCollider>().enabled = false;
-        gameObject.GetComponentInChildren<Light>().enabled = false;
-        gameObject.GetComponent<Particles>().SetEnabled(false);
+        l.enabled = false;
+        ps.SetEnabled(false);
         GetComponent<Animator>().Play("Die");
     }
 
