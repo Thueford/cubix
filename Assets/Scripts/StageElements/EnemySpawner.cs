@@ -29,12 +29,12 @@ public class EnemySpawner : MonoBehaviour
 
     private int spawned = 0;
     private MeshRenderer r;
-    private float initTimer;
+    private float spawnTimer;
     private bool isSpawning = false;
 
     void Awake()
     {
-        initTimer = initDelay;
+        spawnTimer = initDelay;
         r = GetComponent<MeshRenderer>();
     }
 
@@ -45,13 +45,13 @@ public class EnemySpawner : MonoBehaviour
 
     private void Update()
     {
-        if (isSpawning && initTimer != 0)
+        if (isSpawning)
         {
-            initTimer -= Time.deltaTime;
-            if (initTimer <= 0)
+            spawnTimer -= Time.deltaTime;
+            if (spawnTimer <= 0)
             {
-                initTimer = 0;
-                SetSpawning(true);
+                SpawnWave();
+                spawnTimer = delay;
             }
         }
     }
@@ -62,15 +62,7 @@ public class EnemySpawner : MonoBehaviour
             es.SetSpawning(b);
     }
 
-    public void SetSpawning(bool b)
-    {
-        isSpawning = b;
-        if (initTimer <= 0)
-        {
-            if (b) InvokeRepeating(nameof(SpawnWave), 0, delay);
-            else CancelInvoke();
-        }
-    }
+    public void SetSpawning(bool b) => isSpawning = b;
 
 
     private static float round(float f, float d = 1e3f) => Mathf.RoundToInt(f * d) / d;
@@ -87,7 +79,7 @@ public class EnemySpawner : MonoBehaviour
     {
         spawned = 0;
         maxSpawning += amount;
-        initTimer = initDelay;
+        spawnTimer = initDelay;
     }
 
     public static void EnemyDied(EnemyBase e)
@@ -109,15 +101,14 @@ public class EnemySpawner : MonoBehaviour
     // spawns a wave of enemies with variation
     private void SpawnWave()
     {
-        for (int i = 0; i < wavesize; i++)
-            Invoke(nameof(Spawn), Random.value * variation);
+        if (spawned < amount && enemyCount < GameState.curStage.maxEnemies)
+            for (int i = 0; i < wavesize; i++)
+                Invoke(nameof(Spawn), Random.value * variation);
     }
 
     // spawns an enemy with effects
     private void Spawn()
     {
-        if (spawned >= amount || enemyCount >= GameState.curStage.maxEnemies) return;
-
         Color col = getWeightedColor();
         int n = EnemyBase.getColorCount(col);
 

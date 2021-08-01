@@ -8,7 +8,7 @@ public class E_Archer : EnemyBase
         AP_FAC_NOISE = 1.5f;
 
     public static Effector_T aplayer =
-        new Effector_T("Player", -3.5f, 40, true);
+        new Effector_T("Player", -3.5f, 40);
 
     override public Vector3 steer()
     {

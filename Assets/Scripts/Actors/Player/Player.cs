@@ -95,7 +95,7 @@ public class Player : EntityBase
             transform.forward = r.GetPoint(f) - pos;
         }
 
-        if (invulnurable > 0)
+        if (invulnurable > 0 && !GameState.paused)
         {
             invulnurable -= Time.deltaTime;
             if (invulnurable <= 0)
@@ -111,16 +111,11 @@ public class Player : EntityBase
     {
         if (invulnurable <= 0 && damage > 0)
         {
-            MakeInvulnurable(1.25f);
-
             setHP(HP - damage);
-
+            if (HP > 0) MakeInvulnurable(1.25f);
             PostProcessing.self.PlayerHitEffect(0.2f);
         }
-        else if (damage < 0)
-        {
-            setHP(HP - damage);
-        }
+        else if (damage < 0) setHP(HP - damage);
     }
 
     public void setHP(float value)
@@ -133,9 +128,7 @@ public class Player : EntityBase
     public void MakeInvulnurable(float duration)
     {
         if (invulnurable <= 0)
-        {
             animFlicker.Play("E_Invuln", 0, 0f);
-        }
         invulnurable += duration;
     }
 
@@ -187,6 +180,7 @@ public class Player : EntityBase
         Freeze();
         GameState.SwitchStage(stage);
 
+        animFlicker.Play("Empty");
         animGeneral.enabled = true;
         animGeneral.Play("Spawn", 0, 0);
         vlight.enabled = true;

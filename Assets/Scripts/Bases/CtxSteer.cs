@@ -11,9 +11,9 @@ public abstract class CtxSteer : EntityBase
     public static bool ctxAglNoise = true;
 
     public static Effector_T
-        eplayer = new Effector_T("Player", 2, 40, false),
+        eplayer = new Effector_T("Player", 2, 40, EffectorType.BOOL),
         eenemy = new Effector_T("Enemy", -1, 10),
-        ewall = new Effector_T("Wall", -2, 10);
+        ewall = new Effector_T("Wall", -2, 10, EffectorType.QUADRATIC);
 
     private static int steersPerSec = 20;
     protected int pnD;

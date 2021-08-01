@@ -1,25 +1,38 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+public enum EffectorType { BOOL, LINEAR, QUADRATIC };
+
 [System.Serializable]
 public struct Effector_T
 {
     public string tag;
     public float factor, dist;
-    public bool linear;
+    EffectorType type;
 
-    public Effector_T(string tagName, float POIfactor, float maxdist, bool linear = true)
+    public Effector_T(string tagName, float POIfactor, float maxdist, EffectorType type = EffectorType.LINEAR)
     {
-        tag = tagName; this.linear = linear;
+        tag = tagName; this.type = type;
         dist = maxdist; factor = POIfactor;
+    }
+
+    private float getTyped(float f)
+    {
+        switch (type)
+        {
+            case EffectorType.BOOL: return f < 1 ? 1 : 0;
+            case EffectorType.LINEAR: f = 1 - f; break;
+            case EffectorType.QUADRATIC: f = 1 - Mathf.Pow(f, 2); break;
+            default: return 0;
+        }
+        return Mathf.Clamp(f, 0, 1);
     }
 
     private Vector3 attract(Vector3 src, Vector3 dst)
     {
         Vector3 d = dst - src;
         d.y = 0;
-        if (d.sqrMagnitude >= dist * dist) return Vector3.zero;
-        else return linear ? (1 - d.magnitude / dist) * d.normalized : d.normalized;
+        return getTyped(d.magnitude / dist) * d.normalized;
     }
 
     public Vector3 getEff(GameObject src, GameObject dst)
@@ -40,16 +53,13 @@ public struct Effector_T
         return effs;
     }
 
-    public List<Vector3> getEffs(Component src)
-    {
-        return getEffs(src.gameObject);
-    }
+    public List<Vector3> getEffs(Component src) => getEffs(src.gameObject);
 
     public float getRaycast(GameObject src, Vector3 dir)
     {
         if (Physics.Raycast(src.transform.position, dir, out RaycastHit hitInfo, dist, LayerMask.GetMask(tag)))
             if (hitInfo.collider.CompareTag(tag))
-                return linear ? factor * (1 - hitInfo.distance / dist) : factor;
+                return factor * getTyped(hitInfo.distance / dist);
         return 0;
     }
 

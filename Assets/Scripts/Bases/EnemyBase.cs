@@ -14,6 +14,7 @@ public abstract class EnemyBase : CtxSteer
     override public void Awake()
     {
         base.Awake();
+        animGeneral.Play("Spawn", 0, 0);
         pnOff = (int)Random.Range(-1e5f, 1e5f);
     }
 
@@ -21,7 +22,6 @@ public abstract class EnemyBase : CtxSteer
     {
         base.Start();
         EnemySpawner.EnemySpawned(this);
-        animGeneral.Play("Spawn");
     }
     public static int getColorCount(Color c) => c.b == 1 || c == Color.white ? 2 : 1;
     public float countWeight => 1 / getColorCount(_color);

@@ -21,7 +21,7 @@ public class ChargeAnim : MonoBehaviour
     {
         if (level < 0) transform.localScale = new Vector3(0, 1, 0);
         level = transform.localScale.x / maxScale;
-        if(level < 0.98) SetPsSize(level);
+        if (level < 0.98) SetPsSize(level);
     }
 
     private void SetPsSize(float v)
