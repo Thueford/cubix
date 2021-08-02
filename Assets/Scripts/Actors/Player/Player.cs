@@ -81,7 +81,7 @@ public class Player : EntityBase
         {
             if (InputHandler.ReadSpaceInput())
             {
-                Vector3Int col = Ressource.activateColors();
+                Vector3Int col = Ressource.self.activateColors();
                 if (col != Vector3.zero) SetShooterColor(col);
             }
 

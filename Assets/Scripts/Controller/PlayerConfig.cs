@@ -117,6 +117,12 @@ public class PlayerConfig : SaveData
         CTREffect = GUILayout.Toggle(CTREffect, " CTR   [X + R]");
         lights = GUILayout.Toggle(lights, " Lights   [X + L]");
 
+        GUILayout.Space(20);
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Logs")) System.Diagnostics.Process.Start(dataDir);
+        if (GUILayout.Button("Config")) System.Diagnostics.Process.Start(SAVEDATA_DIR);
+        GUILayout.EndHorizontal();
+
         GUILayout.EndVertical();
         GUILayout.EndHorizontal();
 

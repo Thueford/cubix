@@ -35,9 +35,9 @@ public abstract class SaveData
     #region statics
 
     public static bool saveZipped = false;
-    private static string dataDir = null;
-    private static System.Text.Encoding enc = System.Text.Encoding.UTF8;
-    private static string SAVEDATA_DIR => dataDir + "/saves/";
+    protected static string dataDir = null;
+    protected static System.Text.Encoding enc = System.Text.Encoding.UTF8;
+    protected static string SAVEDATA_DIR => dataDir + "/saves/";
     private const string SAVEDATA_BASE = "player";
 
     public static void SaveProfile<T>(T save, byte profile, string ext) where T : SaveData

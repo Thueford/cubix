@@ -7,6 +7,7 @@ public class PlayerShooter : ShooterBase
 {
 
     private Vector3Int rgb = Vector3Int.zero;
+    public Vector3Int lastColor { get; private set; }
 
     // Start is called before the first frame update
     override protected void Start()
@@ -45,12 +46,14 @@ public class PlayerShooter : ShooterBase
     private float cndinv(float f, bool b) => b ? f : 1/f;
 
     public void toggleRed(bool b) {
+        lastColor = Vector3Int.right;
         p.explodes = b;
         p.speed *= cndinv(2/3f, b);
     }
 
     public void toggleGreen(bool b)
     {
+        lastColor = Vector3Int.up;
         p.speed *= cndinv(3, b);
         rateOfFire *= cndinv(1.5f, b);
         p.damage *= cndinv(2, b);
@@ -60,6 +63,7 @@ public class PlayerShooter : ShooterBase
 
     public void toggleBlue(bool b)
     {
+        lastColor = Vector3Int.forward;
         rateOfFire *= cndinv(2/3f, b);
         p.damage *= cndinv(1/3f, b);
         singleFire = !b;

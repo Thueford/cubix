@@ -90,7 +90,11 @@ public class GameState : MonoBehaviour
 
     private void OnGUI()
     {
-        if (showMenu) save.config.ConfigMenu();
+        if (showMenu)
+        {
+            if (!paused) TogglePause();
+            save.config.ConfigMenu();
+        }
     }
 
     public static void dbgSet(string msg) {
@@ -144,14 +148,15 @@ public class GameState : MonoBehaviour
     public static void load(State s)
     {
         Player.self.SetShooterColor(Vector3Int.zero);
-        Ressource.setModes(false);
-        Ressource.self.addRes(Ressource.col.Red, s.resRed - Ressource.valueRed);
-        Ressource.self.addRes(Ressource.col.Green, s.resGreen - Ressource.valueGreen);
-        Ressource.self.addRes(Ressource.col.Blue, s.resBlue - Ressource.valueBlue);
-
+        
         unlockedColors = s.unlockedColors;
         colorOrder = (Color[])s.colorOrder.Clone();
         colorCount = s.colorCount;
+
+        Ressource.self.setModes(false);
+        Ressource.self.addRes(Ressource.col.Red, s.resRed - Ressource.self.valueRed);
+        Ressource.self.addRes(Ressource.col.Green, s.resGreen - Ressource.self.valueGreen);
+        Ressource.self.addRes(Ressource.col.Blue, s.resBlue - Ressource.self.valueBlue);
 
         Player.self.setHP(s.hp);
         Player.self.SpawnAt(s.stage);
@@ -180,9 +185,9 @@ public class GameState : MonoBehaviour
         State s = new State();
         s.stage = curStage;
         s.hp = Player.self.HP;
-        s.resRed = Ressource.valueRed;
-        s.resGreen = Ressource.valueGreen;
-        s.resBlue = Ressource.valueBlue;
+        s.resRed = Ressource.self.valueRed;
+        s.resGreen = Ressource.self.valueGreen;
+        s.resBlue = Ressource.self.valueBlue;
         s.colorCount = colorCount;
         s.colorOrder = (Color[])colorOrder.Clone();
         s.unlockedColors = unlockedColors;

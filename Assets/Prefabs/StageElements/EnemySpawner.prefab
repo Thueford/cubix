@@ -107,9 +107,8 @@ MonoBehaviour:
   p_secd: 0
   p_tert: 0
   maxColors: 3
-  amount: 40
+  amount: 15
   wavesize: 2
   initDelay: 0
   delay: 5
   variation: 1
-  isSpawning: 0
