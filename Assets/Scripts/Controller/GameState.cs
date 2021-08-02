@@ -197,18 +197,8 @@ public class GameState : MonoBehaviour
 
     public static void SwitchStage(GameStage next)
     {
-        if (curStage != null)
-        {
-            if (curStage != next)
-            {
-                if (curStage.isProcedural)
-                {
-                    Destroy(curStage.gameObject);
-                    Camera.main.transform.Translate(new Vector3(0, -40, 0));
-                }
-                else curStage.Unload();
-            }
-        }
+        if (curStage != null && curStage != next) 
+            curStage.Unload();
 
         if (!save.stats.reachedEndless && next == 1)
             save.stats.stageDeaths = new int[11];

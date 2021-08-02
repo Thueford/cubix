@@ -40,21 +40,20 @@ public class StageBuilder : MonoBehaviour
     {
         Vector3 pos = t.position;
         if (!GameState.curStage.isProcedural) pos.z += 40;
+
         GameObject Stage = Instantiate(StagePrefab, pos, Quaternion.identity);
         GameStage StageScript = Stage.GetComponent<GameStage>();
         StageScript.isProcedural = true;
         StageScript.number = GameState.curStage.number + 1;
         StageScript.actorsBase = ActorContainer.transform.GetChild(Random.Range(0, ActorContainer.transform.childCount)).gameObject;
-        /* StageScript.actorsBase = Instantiate(
-            ActorContainer.transform.GetChild(Random.Range(0, ActorContainer.transform.childCount)).gameObject, 
-            StageScript.actorsBase.transform.position, 
-            Quaternion.identity, 
-            Stage.transform); */
-        /* StageScript.wallBase = Instantiate(
-            WallBases[Random.Range(0, WallBases.Count)],
-            StageScript.wallBase.transform.position,
-            Quaternion.identity,
-            Stage.transform); */
+        
+        if (WallContainer.transform.childCount > 0)
+            StageScript.walls = Instantiate(
+                WallContainer.transform.GetChild(Random.Range(0, WallContainer.transform.childCount)).gameObject,
+                pos,
+                Quaternion.identity,
+                Stage.transform);
+
         return StageScript;
     }
 }

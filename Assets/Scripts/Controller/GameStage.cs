@@ -10,6 +10,7 @@ public class GameStage : MonoBehaviour
     [NotNull, HideInInspector] public Charger charger;
     [NotNull, HideInInspector] public Portal portal;
     [NotNull, HideInInspector] public GameObject actorsBase;
+    [HideInInspector] public GameObject walls;
     [NotNull, HideInInspector] public TMPro.TextMeshPro stageText;
     public GameObject actors;
     [WarnNull] public GameStage next;
@@ -101,6 +102,13 @@ public class GameStage : MonoBehaviour
     public void Unload()
     {
         if (!loaded) return;
+        if (isProcedural)
+        {
+            Camera.main.transform.Translate(new Vector3(0, -40, 0));
+            Destroy(gameObject);
+            return;
+        }
+
         Destroy(actors);
         if (hints) hints.ResetHints();
         gameObject.SetActive(false);

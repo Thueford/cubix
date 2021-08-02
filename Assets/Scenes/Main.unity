@@ -1223,7 +1223,7 @@ PrefabInstance:
     - target: {fileID: 1618364806311752024, guid: 891daa6c8c6ecf9429fe901f3e341964,
         type: 3}
       propertyPath: m_text
-      value: left click to shoot
+      value: Left click to shoot
       objectReference: {fileID: 0}
     - target: {fileID: 1618364806311752024, guid: 891daa6c8c6ecf9429fe901f3e341964,
         type: 3}

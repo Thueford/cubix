@@ -127,7 +127,7 @@ public class PostProcessing : MonoBehaviour
             lensFlare.Dispatch(1, xThreadGroups, yThreadGroups, 1);
         }
 
-        //Perform CTR Effect, Result is 'destination'
+        //Perform CTR Effect, Result: 'destination'
         if (useCTREffect)
         {
             setCTRUniforms();
@@ -218,7 +218,7 @@ public class PostProcessing : MonoBehaviour
         postProcMat.SetFloat("_vignetteWidth", vignetteWidth);
     }
 
-    public void PlayerHitEffect(float duration)
+    public void StartPlayerHitEffect(float duration)
     {
         if (GameState.save.config.computes)
         	StartCoroutine(EndPlayerHitEffect(duration));

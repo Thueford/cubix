@@ -113,7 +113,7 @@ public class Player : EntityBase
         {
             setHP(HP - damage);
             if (HP > 0) MakeInvulnurable(1.25f);
-            PostProcessing.self.PlayerHitEffect(0.2f);
+            PostProcessing.self.StartPlayerHitEffect(0.2f);
         }
         else if (damage < 0) setHP(HP - damage);
     }
