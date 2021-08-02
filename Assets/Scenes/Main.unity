@@ -1354,7 +1354,7 @@ PrefabInstance:
     - target: {fileID: 757038173234545941, guid: c757194044ae0bd40bbc234134156d13,
         type: 3}
       propertyPath: chargeTime
-      value: 20
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 757038173234545941, guid: c757194044ae0bd40bbc234134156d13,
         type: 3}
@@ -2691,12 +2691,12 @@ PrefabInstance:
     - target: {fileID: 3952618277718233167, guid: c2ba19eb6645c744d8d16e6b06a9d4f2,
         type: 3}
       propertyPath: delay
-      value: 4
+      value: 3.5
       objectReference: {fileID: 0}
     - target: {fileID: 3952618277718233167, guid: c2ba19eb6645c744d8d16e6b06a9d4f2,
         type: 3}
       propertyPath: amount
-      value: 20
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 3952618277718233167, guid: c2ba19eb6645c744d8d16e6b06a9d4f2,
         type: 3}
@@ -3405,7 +3405,7 @@ PrefabInstance:
     - target: {fileID: 3952618277718233167, guid: c2ba19eb6645c744d8d16e6b06a9d4f2,
         type: 3}
       propertyPath: amount
-      value: 25
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 3952618277718233167, guid: c2ba19eb6645c744d8d16e6b06a9d4f2,
         type: 3}
@@ -4430,11 +4430,6 @@ PrefabInstance:
         type: 3}
       propertyPath: delay
       value: 2.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 3952618277718233167, guid: c2ba19eb6645c744d8d16e6b06a9d4f2,
-        type: 3}
-      propertyPath: amount
-      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 3952618277718233167, guid: c2ba19eb6645c744d8d16e6b06a9d4f2,
         type: 3}
@@ -6047,11 +6042,6 @@ PrefabInstance:
         type: 3}
       propertyPath: delay
       value: 2.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3952618277718233167, guid: c2ba19eb6645c744d8d16e6b06a9d4f2,
-        type: 3}
-      propertyPath: amount
-      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 3952618277718233167, guid: c2ba19eb6645c744d8d16e6b06a9d4f2,
         type: 3}

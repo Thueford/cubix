@@ -14,17 +14,17 @@ public class Ressource : MonoBehaviour
     [NotNull] public ResParts resPartsPrefab;
 
     [Range(0, 100)]
-    public static float valueRed = 0;
+    public float valueRed = 0;
     [Range(0, 100)]
-    public static float valueGreen = 0;
+    public float valueGreen = 0;
     [Range(0, 100)]
-    public static float valueBlue = 0;
+    public float valueBlue = 0;
 
-    public static float cooldown = 10;
+    public float cooldown = 10;
 
-    private static bool redMode = false;
-    private static bool greenMode = false;
-    private static bool blueMode = false;
+    private bool redMode = false;
+    private bool greenMode = false;
+    private bool blueMode = false;
 
     private const float alpha = 0.6862745098f;
 
@@ -85,13 +85,14 @@ public class Ressource : MonoBehaviour
         if (value == 0) setModes(false);
     }
 
-    public static void setModes(bool b)
+    public void setModes(bool b)
     {
         redMode = greenMode = blueMode = b;
         if (!b)
         {
             InputHandler.enableNumbers = true;
-            Player.self.SetShooterColor(Vector3Int.zero);
+            if ((GameState.unlockedColors * Player.self.bs.lastColor).sqrMagnitude > 0)
+                Player.self.SetShooterColor(Player.self.bs.lastColor);
         }
     }
 
@@ -117,7 +118,7 @@ public class Ressource : MonoBehaviour
         textObject.text = tmp;
     }
 
-    public static Vector3Int activateColors()
+    public Vector3Int activateColors()
     {
         Vector3Int rgb = Vector3Int.zero;
         bool red = valueRed >= 100;

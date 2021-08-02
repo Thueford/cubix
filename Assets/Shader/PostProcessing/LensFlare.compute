@@ -6,7 +6,7 @@
 // with cs.SetTexture
 RWTexture2D<float4> Source;
 RWTexture2D<float4> Result;
-RWTexture2D<float4> lensDirt;
+Texture2D<float4> lensDirt;
 
 static const int numThreads = 24;
 

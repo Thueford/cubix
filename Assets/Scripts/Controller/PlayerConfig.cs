@@ -40,6 +40,8 @@ public class PlayerConfig : SaveData
 
     public void UpdateSettings()
     {
+        if (!SystemInfo.supportsComputeShaders) computes = false;
+
         bool _cmps = shader && computes;
         Particles.enableParticles = _cmps && particles;
         PostProcessing.self.skipAll = !shader || !postProc;
@@ -80,8 +82,8 @@ public class PlayerConfig : SaveData
 
         if (InputHandler.GetLast() != -1)
         {
-            Save();
             UpdateSettings();
+            Save();
         }
     }
 
@@ -116,6 +118,12 @@ public class PlayerConfig : SaveData
         CAEffect = GUILayout.Toggle(CAEffect, " Chromatic Abberation   [X + A]");
         CTREffect = GUILayout.Toggle(CTREffect, " CTR   [X + R]");
         lights = GUILayout.Toggle(lights, " Lights   [X + L]");
+
+        GUILayout.Space(20);
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Logs")) System.Diagnostics.Process.Start(dataDir);
+        if (GUILayout.Button("Config")) System.Diagnostics.Process.Start(SAVEDATA_DIR);
+        GUILayout.EndHorizontal();
 
         GUILayout.EndVertical();
         GUILayout.EndHorizontal();
