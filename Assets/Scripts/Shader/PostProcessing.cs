@@ -101,11 +101,8 @@ public class PostProcessing : MonoBehaviour
         if (useBloom)
         {
             setBloomUniforms();
-
             bloom.Dispatch(0, xThreadGroups, yThreadGroups, 1);
-
             blurr(brightTex, bloomBlurrAmount);
-
             bloom.Dispatch(1, xThreadGroups, yThreadGroups, 1);
         }
 
@@ -121,7 +118,6 @@ public class PostProcessing : MonoBehaviour
         if (useLensFlare)
         {
             setLensFlareUniforms();
-
             lensFlare.Dispatch(0, xThreadGroups, yThreadGroups, 1);
             blurr(lfResult, lfBlurrCount);
             lensFlare.Dispatch(1, xThreadGroups, yThreadGroups, 1);
@@ -152,7 +148,7 @@ public class PostProcessing : MonoBehaviour
     private RenderTexture createTexture()
     {
         RenderTexture tex = new RenderTexture(Screen.width, Screen.height, 24);
-        tex.enableRandomWrite = true;
+        tex.enableRandomWrite = SystemInfo.supportsComputeShaders;
         tex.Create();
         return tex;
     }
@@ -170,8 +166,8 @@ public class PostProcessing : MonoBehaviour
 
     private void setTextures()
     {
-        setBloomTextures();
-        setLensFlareTextures();
+        if (useBloom) setBloomTextures();
+        if (useLensFlare) setLensFlareTextures();
     }
 
     private void setBloomUniforms()
@@ -220,8 +216,7 @@ public class PostProcessing : MonoBehaviour
 
     public void PlayerHitEffect(float duration)
     {
-        if (GameState.save.config.computes)
-        	StartCoroutine(EndPlayerHitEffect(duration));
+        StartCoroutine(EndPlayerHitEffect(duration));
     }
 
     private IEnumerator EndPlayerHitEffect(float duration)

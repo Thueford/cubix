@@ -40,6 +40,8 @@ public class PlayerConfig : SaveData
 
     public void UpdateSettings()
     {
+        if (!SystemInfo.supportsComputeShaders) computes = false;
+
         bool _cmps = shader && computes;
         Particles.enableParticles = _cmps && particles;
         PostProcessing.self.skipAll = !shader || !postProc;
@@ -80,8 +82,8 @@ public class PlayerConfig : SaveData
 
         if (InputHandler.GetLast() != -1)
         {
-            Save();
             UpdateSettings();
+            Save();
         }
     }
 
