@@ -1,0 +1,40 @@
+
+% Benutzerdefinierte Farben
+\definecolor{clgreen}{rgb}{0,0.6,0}
+\definecolor{clgrey}{gray}{0.5}
+\definecolor{clmauve}{rgb}{0.58,0,0.82}
+\definecolor{clorange}{rgb}{1.0, 0.49, 0.0}
+\definecolor{clgray}{gray}{0.95}
+\definecolor{cllgrey}{gray}{0.75}
+
+\lstset{
+    basicstyle=\selectfont\sffamily,
+    % postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+    captionpos=b, keepspaces=true, numberfirstline=false,
+    numbers=left, numbersep=9pt, showspaces=false, showstringspaces=false,
+    numberstyle=\tiny\color{clgrey},
+    showtabs=false, stepnumber=5, tabsize=4, title=\lstname, firstnumber=1
+    , literate={ß}{{\ss}}1 {€}{{\euro}}1 {£}{{\pounds}}1
+    {ä}{{\"a}}1 {ö}{{\"o}}1 {ü}{{\"u}}1 {Ä}{{\"A}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
+}
+
+\lstdefinestyle{codecolors}{
+    keywordstyle=\color{blue}, commentstyle=\color{clgreen}, stringstyle=\color{clmauve}, rulecolor=\color{black},
+    basicstyle=\fontsize{9.8}{11}\selectfont\ttfamily
+}
+
+\lstdefinestyle{codeblock}{
+    columns=fullflexible, frame=tlbr, framesep=0pt, framerule=0pt,
+    breaklines=true, aboveskip=10pt, belowskip=-5pt,
+    backgroundcolor=\color{clgray}
+}
+
+\lstdefinestyle{codeblock1}{
+    columns=fullflexible, frame=tlbr, framesep=0pt, framerule=0pt,
+    breaklines=true, aboveskip=5pt, belowskip=-30pt
+}
+
+\lstdefinestyle{codeblock2}{
+    columns=fullflexible, frame=tlbr, framesep=5pt, framerule=0pt,
+	breaklines=true, aboveskip=-10pt, belowskip=-15pt, backgroundcolor=\color{clgray}
+}

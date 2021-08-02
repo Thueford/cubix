@@ -1,0 +1,53 @@
+
+% Link- / Verweiseinstellungen
+\hypersetup{
+    colorlinks,breaklinks,
+    % urlcolor=[rgb]{0,0,1},
+    linkcolor=[rgb]{0,0.1,0.6}
+}
+
+%\renewcommand{\ttdefault}{pcr}
+%\renewcommand{\normalsize}{\fontsize{12}{0.231in}\selectfont}
+%\renewcommand*\familydefault{\sfdefault}
+%\setmainfont[Ligatures=TeX]{Times New Roman}     % Schriftart Times New Roman
+
+% \setkomafont{pageheadfoot}{\textrm}
+\cfoot{\thepage}                  % Fußzeile Zentriert = Seitennummer
+\def\UrlFont{\em}                 % italic URL
+
+\newcommand*{\fullref}[1]{\hyperref[{#1}]{\autoref*{#1} \nameref*{#1}}}
+\newcommand*{\bitem}[1]{ \setbox0\hbox{\bfseries{#1}} \item[\usebox0]}
+\newcommand*{\hitem}[1]{ \setbox0\hbox{#1} \item[\usebox0] \hfill \\}
+\newcommand*{\hbitem}[1]{ \setbox0\hbox{\bfseries{#1}} \item[\usebox0] \hfill \\}
+\newcommand\rurl[1]{%
+	\href{http://#1}{\nolinkurl{#1}}%
+}
+\newcommand{\savefootnote}[2]{\footnote{\label{#1}#2}}
+\newcommand{\repeatfootnote}[1]{\textsuperscript{\ref{#1}}}
+
+\newenvironment{mldescription}{
+    \begin{addmargin}[1em]{1em}
+    \setlength{\parindent}{-1em}
+    \newcommand*{\mlitem}[1]{\par{##1\hfill\\}\quad}\indent
+}{
+    \end{addmargin}
+    \medskip
+}
+
+
+\newcommand{\sq}[1]{`#1'}     % single quote
+\renewcommand{\dq}[1]{``#1''} % double quote
+\newcommand{\mono}[1]{\lstinline[breaklines=true]{#1}}
+\newcommand{\inlind}{\vspace{-.65cm}\hspace{.7cm}}
+\newcommand{\greyline}{
+	\arrayrulecolor{cllgrey}
+	%\setlength{\arrayrulewidth}{.3em}
+	\hline
+	%\setlength{\arrayrulewidth}{.1em}
+}
+\newcommand{\dgreyline}{
+	\arrayrulecolor{clgrey}
+	%\setlength{\arrayrulewidth}{.3em}
+	\hline
+	%\setlength{\arrayrulewidth}{.1em}
+}
