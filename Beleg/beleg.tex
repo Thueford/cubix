@@ -51,20 +51,55 @@
 
 
 
-\chapter{Installationsanleitung}
-\lipsum[3]
+
+\chapter{Spielbeschreibung}
+%Konzept, ~farben
+Cubix ist ein Top-Down Bullet-Hell Shooter angelehnt an den Hacking-Mode aus Nier:Automata\cite{qNierHM}.
+Man steuert dort eine Figur durch eine Welt von Gegnern und Hindernissen und muss möglichst schnell und Fehlerfrei sämtliche Gegner durch gekonntes Ausweichen und gezielte Schüsse eliminieren.
+
+Als Neuerung wird ein Farbkonzept verwendet, bei dem die Grundfarben Rot, Grün und Blau mit verschiedenen Eigenschaften assoziiert werden. Die Farben sowie deren Eigenschaften können vermischt bzw. kombiniert werden, um unterbewusst das additive Farbmischungssystem zu vermitteln.
 
 
 
 
-\chapter{Spielziel/-Struktur}
-\lipsum[3]
+\section{Spielziel}
+Das Spiel ist aus verschiedenen Stufen aufgebaut, die vom Spieler 'geschafft' werden müssen.
+Das geschieht dadurch, dass er sich in einen roten Ladebereich (Charger) in der Mitte des Spielfeldes aufhält und ihn damit auflädt.
+Wenn der Charger aktiviert wird, fangen an Gegner zu spawnen, die vom Spieler durch schießen besiegt werden können.
+Ist der Charger voll geladen, hören die Gegner auf zu spawnen und ein Portal zur nächsten Stufe aktiviert.
 
 
 
 
-\chapter{Spielanleitung}
-\lipsum[3]
+\section{Schussmodi}
+Dem Spieler stehen hierbei drei Schussmodi zur Verfügung, die er sich im Tutorial der Reihe nach aneignen und ausprobieren kann:
+\begin{description}
+\item[rote Kugeln] sind langsamer als Normal aber Explodieren beim Aufprall,
+\item[grüne Kugeln] sind schneller als Normal und fügen mehr Schaden zu, prallen von Wänden ab und durchdringen Gegner aber haben eine geringere Schussrate und
+\item[blaue Kugeln] werden in einem Fächer von fünf Kugeln in einer höheren Schussrate verschossen, fügen aber weniger Schaden zu.
+\end{description}
+
+
+
+
+\section{Gegner}
+Genauso können die Gegner in drei verschiedenen Farben vorkommen:
+\begin{description}
+\item[rote Gegner] sind langsamer als Normal, haben aber mehr Leben,
+\item[grüne Gegner] sind schneller als Normal,
+\item[blaue Gegner] Spawnen in einer Gruppe von 2 aber haben weniger Leben.
+\item[weiße Gegner] spawnen als Kombination aller drei Farben und haben eigene Buffs. Sie sind so schnell wie grüne Gegner, haben etwas weniger Leben als rote und spawnen ebenfalls in einer Gruppe von 2.
+\end{description}
+
+
+
+
+\section{Collectibles}
+
+
+
+
+\section{Ressource}
 
 
 
@@ -82,24 +117,9 @@
 
 
 \section{Stages}
+%loading, reset, tp
 \lipsum[3]
 
-
-
-\subsection{Stageloading}
-\lipsum[3]
-
-
-\subsection{Reset}
-\lipsum[3]
-
-
-\subsection{Aufbau}
-\lipsum[3]
-
-
-\subsection{tp}
-\lipsum[3]
 
 
 \subsection{Stagegenerator}
@@ -127,17 +147,11 @@
 \lipsum[3]
 
 
-\subsection{Collectables}
-\lipsum[3]
 
 
 \section{Gegner}
 \lipsum[3]
 
-
-
-\subsection{Gegnertypen}
-\lipsum[3]
 
 
 \subsection{Context-Steering}
@@ -148,16 +162,12 @@
 \lipsum[3]
 
 
-\subsection{Farben}
-\lipsum[3]
-
-
 \section{Physics}
 \lipsum[3]
 
 
 
-\section{Soundhandler}
+\section{Sound}
 \lipsum[3]
 
 
@@ -191,12 +201,12 @@
 \lipsum[3]
 
 
-\subsubsection{Vignette, warped Display, Scanlines}
+\subsubsection{Vignette, warped Display und Scanlines}
 \lipsum[3]
 
 
 
-\chapter{Assets/Hilfsmittel/Tools}
+\chapter{Assets und Tools}
 \lipsum[3]
 
 
@@ -208,27 +218,51 @@
 
 
 
-\chapter{Testdaten}
-\lipsum[3]
-
-
-
-
 
 \chapter{Glossar}
-\lipsum[3]
+\begin{description}
+\item[item1] itemdesc
+\item[item2] itemdesc
+\end{description}
 
 
 
 
 \chapter{Dateiverzeichnis}
-\lipsum[3]
+\dirtree{%
+.1 Assets/.
+.2 Animation/.
+.2 Materials/. .3 Shader/.
+.2 Prefabs/.
+.3 Actors/. .4 Enemies/.
+.3 StageElements/.
+.3 Bases/.
+.2 Resources/.
+.2 Scenes/.
+.2 Scripts/.
+.3 Shader/.
+.3 Stages/.
+.3 Test/.
+.3 Actors/. .4 Player/. .4 Enemies/.
+.3 StageElements/.
+.3 Bases/.
+.3 Controller/.
+.2 Shader/. .3 Particles/. .3 PostProcessing/.
+}
 
 
 
 
-\chapter{Literaturverzeichnis}
-\lipsum[3]
+\chapter{Quellenverzeichnis}
+\begin{thebibliography}{999}
+    \bibitem{qNierHM} Nier:Automata Hacking-Mode Demo am 23.04.2021,  Zugriff:  16.05.2021, \\ URL:
+    \url{https://www.youtube.com/watch?v=jT2jOeFo5HQ}
+    \bibitem{Quote002} TU Chemnitz, \textit{Dokumentation Python Bibliothek Raspibot}
+    \bibitem{Quote003} Lucas Engelmann, Expert Robo School Juni 2017, \textit{Bauanleitung Raspibot v2.7}
+    \bibitem{Quote004} cppreference am 02.10.2018, \\ URL:
+    \url{https://en.cppreference.com}
+\end{thebibliography}
+    
 
 
 
@@ -243,5 +277,31 @@ Mittweida, den 10.08.2021
 \vspace{2cm}
 
 Alexander Feilke \hspace{4cm} Jakob Massal{\ss}ky
+
+
+
+
+
+\newpage
+\newpage
+\chapter{Anhang}
+
+
+
+
+\section{Installationsanleitung}
+Laden Sie die Datei \href{https://www.dropbox.com/s/g82vexjznq1x9dd/Cubix.zip?dl=1}{Cubix.zip} herunter und entpacken Sie sie. Anschließend führen Sie die darin befindliche cubix.exe aus.
+Im Falle einer Warnung vom Windows-Defender klicken Sie auf Mehr und Trotzdem ausführen - Die Warnung besagt nur, dass das Spiel von keinem offiziellen Hersteller veröffentlicht wurde.
+Sie müssten nun einen Unity-Startbildschirm sehen und kurz darauf direkt im Spiel landen.
+
+
+
+
+\section{Spielanleitung}
+\lipsum[3]
+
+
+
+
 
 \end{document}
