@@ -34,13 +34,13 @@
 
 ### Particles/Visuals: A
 
-- [ ] Player Model (+ some way to indicate HP and Active Shot Color?)
+- [x] some way to indicate HP and Active Shot Color?
 - [x] Bullet Particle Trails
 - [x] Bullet Hit Particles
 - [x] Charger active Particles
 - [x] Explosion Animation/Particles
 - [x] Player Movement Particles
-- [ ] Particles on Entity Death
+- [x] Particles on Entity Death
 - [x] Animation/Particles on Collectable pickup
 - [x] Particles on Shot Mode Switch
 
