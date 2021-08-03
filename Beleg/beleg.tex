@@ -16,6 +16,17 @@
 \author{Alexander Feilke, Jakob Massal{\ss}ky \\ Sem.Gr.: IF19wS-B}
 %\date{}
 
+
+%help: https://de.wikibooks.org/wiki/LaTeX-Wörterbuch
+% \part \chapter \section \subsection \subsubsection \paragraph \subparagraph
+% ß: {\ss}
+% label{X} \nameref \pageref \fullref \vref {X}
+% href{URL}{text}
+% für Lit.Verz.: \cite[extra]{X,Y}
+
+
+
+% Glossaries:
 %\usepackage[chapter,toc]{glossaries}
 %\newcommand{\printmyglossary}{\printunsrtglossaries}
 %\newcommand{\printmyglossary}{\printglossaries}
@@ -23,6 +34,9 @@
 %\renewcommand{\glstextformat}[1]{\textit{#1}}
 %\newglossaryentry{Basisklasse}{name={Basisklasse},
 %description={Vererbt Eigenschaften an davon abgeleitete Klassen}}
+
+
+
 
 \begin{document}
 
@@ -34,7 +48,7 @@
 \newpage % Titelblatt
 
 \renewcommand{\contentsname}{Inhaltsverzeichnis}
-\tableofcontents  % Inhaltsverzeichnis
+\tableofcontents
 \newpage
 
 
@@ -53,6 +67,7 @@
 
 
 \chapter{Spielbeschreibung}
+
 %Konzept, ~farben
 Cubix ist ein Top-Down Bullet-Hell Shooter angelehnt an den Hacking-Mode aus Nier:Automata\cite{qNierHM}.
 Man steuert dort eine Figur durch eine Welt von Gegnern und Hindernissen und muss möglichst schnell und Fehlerfrei sämtliche Gegner durch gekonntes Ausweichen und gezielte Schüsse eliminieren.
@@ -63,7 +78,8 @@ Als Neuerung wird ein Farbkonzept verwendet, bei dem die Grundfarben Rot, Grün 
 
 
 \section{Spielziel}
-Das Spiel ist aus verschiedenen Stufen aufgebaut, die vom Spieler 'geschafft' werden müssen.
+
+Das Spiel ist aus verschiedenen Stufen (siehe \fullref{sect:stages}) aufgebaut, die vom Spieler 'geschafft' werden müssen.
 Das geschieht dadurch, dass er sich in einen roten Ladebereich (Charger) in der Mitte des Spielfeldes aufhält und ihn damit auflädt.
 Wenn der Charger aktiviert wird, fangen an Gegner zu spawnen, die vom Spieler durch schießen besiegt werden können.
 Ist der Charger voll geladen, hören die Gegner auf zu spawnen und ein Portal zur nächsten Stufe aktiviert.
@@ -72,29 +88,76 @@ Ist der Charger voll geladen, hören die Gegner auf zu spawnen und ein Portal zu
 
 
 \section{Schussmodi}
+
 Dem Spieler stehen hierbei drei Schussmodi zur Verfügung, die er sich im Tutorial der Reihe nach aneignen und ausprobieren kann:
-\begin{description}
-\item[rote Kugeln] sind langsamer als Normal aber Explodieren beim Aufprall,
-\item[grüne Kugeln] sind schneller als Normal und fügen mehr Schaden zu, prallen von Wänden ab und durchdringen Gegner aber haben eine geringere Schussrate und
-\item[blaue Kugeln] werden in einem Fächer von fünf Kugeln in einer höheren Schussrate verschossen, fügen aber weniger Schaden zu.
-\end{description}
+
+\renewcommand{\itmspace}{4.5em}
+\imgitmtxt{cross.png}{rote Kugeln}
+{sind langsamer als Normal aber Explodieren beim Aufprall,}
+
+\imgitmtxt{cross.png}{grüne Kugeln}
+{sind schneller als Normal und fügen mehr Schaden zu, prallen von Wänden ab und durchdringen Gegner aber haben eine geringere Schussrate und}
+
+\imgitmtxt{cross.png}{blaue Kugeln}
+{werden in einem Fächer von fünf Kugeln in einer höheren Schussrate verschossen, fügen aber weniger Schaden zu.}
 
 
 
 
 \section{Gegner}
-Genauso können die Gegner in drei verschiedenen Farben vorkommen:
-\begin{description}
-\item[rote Gegner] sind langsamer als Normal, haben aber mehr Leben,
-\item[grüne Gegner] sind schneller als Normal,
-\item[blaue Gegner] Spawnen in einer Gruppe von 2 aber haben weniger Leben.
-\item[weiße Gegner] spawnen als Kombination aller drei Farben und haben eigene Buffs. Sie sind so schnell wie grüne Gegner, haben etwas weniger Leben als rote und spawnen ebenfalls in einer Gruppe von 2.
-\end{description}
+
+Im Spiel gibt es drei verschiedene Gegnertypen, erkennbar an ihrer Form:
+
+\renewcommand{\itmspace}{7.5em}
+\imgitmtxt{cross.png}{Hunter}
+{Jagen den Spieler um ihm Kollisionsschaden zuzufügen}
+
+\imgitmtxt{cross.png}{Archer}
+{Verfolgen den Spieler aber bleiben auf Abstand und schießen aus der Ferne auf ihn}
+
+\imgitmtxt{cross.png}{Strays}
+{Irren langsam über das Spielfeld und feuern 4 Schüsse in alle Richtungen}
+
+Auch die die Gegner in drei verschiedenen Farben vorkommen:
+
+\renewcommand{\itmspace}{7.5em}
+\imgitmtxt{cross.png}{rote Gegner}
+{sind langsamer als Normal, haben aber mehr Leben,}
+
+\imgitmtxt{cross.png}{grüne Gegner}
+{sind schneller als Normal,}
+
+\imgitmtxt{cross.png}{blaue Gegner}
+{Spawnen in einer Gruppe von 2 aber haben weniger Leben.}
+
+\imgitmtxt{cross.png}{weiße Gegner}
+{spawnen als Kombination aller drei Farben und haben eigene Buffs. Sie sind so schnell wie grüne Gegner, haben etwas weniger Leben als rote und spawnen ebenfalls in einer Gruppe von 2.}
 
 
 
 
 \section{Collectibles}
+
+Wenn Gegner besiegt werden lassen sie mit einer gewissen Wahrscheinlichkeit Collectibles abhängig von ihrer eigenen Farbe fallen.
+
+\renewcommand{\itmspace}{5.5em}
+\imgitmtxt{cross.png}{schwarz}
+{verleiht ein zusätzliches Leben}
+
+\imgitmtxt{cross.png}{rot, grün,\\blau}
+{Lassen Ressourcen in der jeweiligen Farbe fallen}
+
+\imgitmtxt{cross.png}{gelb}
+{Aktiviert für eine kurze Zeit einen in alle Richtungen feuernden Effekt auf den Spieler}
+
+\imgitmtxt{cross.png}{türkis}
+{Erhöht für eine kurze Zeit die Schussrate}
+
+\imgitmtxt{cross.png}{magenta}
+{Verleiht für einen kurzen Zeitraum Unsichtbarkeit}
+
+\imgitmtxt{cross.png}{weiß}
+{lässt einen goldenen Container fallen der bei Kontakt eine große Explosion auslöst die sämtliche Gegner auf dem Spielfeld auslöscht}
 
 
 
@@ -104,70 +167,147 @@ Genauso können die Gegner in drei verschiedenen Farben vorkommen:
 
 
 
+\section{Tutorial}
+
+Das Tutorial besteht aus einer Folge von 10 Stufen, in der dem Spieler der Reihe nach die Spielemechaniken nähergebracht werden. Diese werden durch Ereignisgesteuerte Texte unterstützt, die bereits im Hauptmenü beginnen, welches ebenfalls als eine Stufe designt ist, nur ohne Gegnerspawner. Die Abfolge ist wie folgt:
+
+\begin{description}
+\item[Hauptmenü] Steuerung, Objective
+\item[Stufe 1] Gegner, Schießen
+\item[Stufe 2] erste Schussfarbe
+\item[Stufe 3] einfarbige Gegner
+\item[Stufe 4] zweite Schussfarbe
+\item[Stufe 5] Farbkombimodus (Space)
+\item[Stufe 6] mehrfarbige Gegner
+\item[Stufe 7] dritte Schussfarbe
+\item[Stufe 8] Probierstufe
+\item[Stufe 9] weiße Gegner (letzte Hürde)
+\item[Stufe 10+] Endlosmodus
+\end{description}
+
+
+
+
 
 \chapter{Dokumentation}
-\lipsum[3]
 
 
 
 
 \section{Software-Architektur}
-\lipsum[3]
+
+\lipsum[1]
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[height=170pt]{cross.png}
+\caption{Klassendiagramm}
+\label{fig:classdiag}
+\end{center}
+\end{figure}
+    
 
 
 
 \section{Stages}
-%loading, reset, tp
-\lipsum[3]
+\label{sect:stages}
+
+
+\subsection{Aufbau}
+
+Eine Stufe besteht wesentlich aus 2 Gruppen von Komponenten: den statischen, unveränderlichen und den dynamisch generierten.
+
+Zu den statischen gehören Wände, die den Spielbereich abgrenzen und ggf. Hindernisse auf dem Spielfeld darstellen, der Spawn auf dem der Spieler die Stufe betritt, das Portal durch dass der Spieler die Stufe verlässt um in die nächste Stufe zu kommen und der Charger den der Spieler aufladen muss, um das Portal zu aktivieren.
+
+Zu den dynamischen gehören die Gegner, abgefeuerte Bullets, Collectibles, ggf. dynamisch generierte Hindernisse sowie dazugehörige Partikeleffekte. Zudem kann es in einer Stufe ein oder mehrere für den Spieler unsichtbare Gegnerspawner (siehe \nameref{subsect:spawner}) geben.
+
+Alle dynamischen Objekte werden in einem dafür angelegten Containerobjekt in der Stage hinterlegt, damit er in seiner Gesamtheit bein Entladen einer Stufe gelöscht werden kann.
+
+
+
+\subsection{Tutorialstages}
+
+Dsa Tutorial besteht aus geskripteten Stages mit voreingestellten Spawnern, Farbcollectibles und Hinweistexten. Die Hinweistexte werden hierbei durch zu den Stages gehörigen Skripte gesteuert.
 
 
 
 \subsection{Stagegenerator}
+
 \lipsum[3]
 
 
+
 \section{Spieler}
+
 \lipsum[3]
 
 
 
 \subsection{Input}
+
 \lipsum[3]
 
 
 \subsection{Movement}
+
 \lipsum[3]
 
 
 \subsection{Shooting}
+
 \lipsum[3]
 
 
 \subsection{Ressource}
+
 \lipsum[3]
 
 
 
 
 \section{Gegner}
+
 \lipsum[3]
 
 
 
 \subsection{Context-Steering}
-\lipsum[3]
+
+Um das Gefecht interessanter zu machen wurde die Gegner-KI mit dem sog. Context-Steering Algorithmus\cite{qCtxSteer} (auch gen. Behavior-Driven Steering) ausgestattet.
+
+Grundlegend wird hierbei jedem Objekt ein Wert zugeordnet der angibt, wie anstrebenswert es von bestimmten Entitäten ist. Ein positiver Wert ist hierbei ein Ziel, welches verfolgt wird, während ein negativer Wert ein zu vermeidendes Objekt darstellt.
+
+In dieser Implementierung gibt es sog. Effektoren, die jeweils vier Werte speichern:
+
+\begin{description}
+\item[Zieltag] Zeichenkette, die die Gruppe an Objekten mit dieser Begehrlichkeit beschreibt
+\item[Begehrlichkeitswert] wie anstrebenswert ein Objekt ist. Ein positiver Wert ist hierbei ein Ziel, welches verfolgt wird, während ein negativer Wert ein zu vermeidendes Objekt darstellt.
+\item[Mindestabstand] Wie nah eine Entität sein muss, um von diesem Effektor beeinflusst zu werden
+\item[Typ] Wie stark der Effektor abhängig vom Abstand wirkt. Das kann hier entweder logisch, linear oder quadratisch sein. 
+\end{description}
+
+Jede Entität bestimmt dann anhand der Formel $ clamp(1 - typed(dist / dist_{min}), 0, 1) * v_{dir} $ einen Vektor der die die Richtung und die Kraft zu diesem Objekt angibt.
+
+Für die Erkennung von Wänden schaut jede Entität in in 30° Schritten um sich herum und schickt in jede dieser Richtungen einen Physik-Raycast. Von den Effektor-Vektoren wird dann  mittels Punktprodukt ein anteiliger Faktor in diese Richtung ermittelt und die resultierende Richtung durch die Summe dieser Richtungsvektoren ermittelt.
+
+Für etwas mehr Abwechslung wird diese noch durch Perlin-Noise ein wenig abgeändert.
+
 
 
 \subsection{Spawner}
+\label{subsect:spawner}
+
 \lipsum[3]
 
 
 \section{Physics}
+
 \lipsum[3]
 
 
 
 \section{Sound}
+
 \lipsum[3]
 
 
@@ -254,13 +394,16 @@ Genauso können die Gegner in drei verschiedenen Farben vorkommen:
 
 
 \chapter{Quellenverzeichnis}
+
 \begin{thebibliography}{999}
-    \bibitem{qNierHM} Nier:Automata Hacking-Mode Demo am 23.04.2021,  Zugriff:  16.05.2021, \\ URL:
-    \url{https://www.youtube.com/watch?v=jT2jOeFo5HQ}
-    \bibitem{Quote002} TU Chemnitz, \textit{Dokumentation Python Bibliothek Raspibot}
-    \bibitem{Quote003} Lucas Engelmann, Expert Robo School Juni 2017, \textit{Bauanleitung Raspibot v2.7}
-    \bibitem{Quote004} cppreference am 02.10.2018, \\ URL:
-    \url{https://en.cppreference.com}
+
+\bibitem{qNierHM} Nier:Automata Hacking-Mode Demo vom 23.04.2021,  Zugriff:  16.05.2021, \\ URL:
+\url{https://www.youtube.com/watch?v=jT2jOeFo5HQ}
+
+\bibitem{qCtxSteer} Context-Steering Demo vom 10.10.2020,  Zugriff:  19.05.2021, \\ URL:
+\url{https://www.youtube.com/watch?v=6BrZryMz-ac}
+\url{http://www.gameaipro.com/GameAIPro2/GameAIPro2_Chapter18_Context_Steering_Behavior-Driven_Steering_at_the_Macro_Scale.pdf}
+
 \end{thebibliography}
     
 
@@ -268,6 +411,7 @@ Genauso können die Gegner in drei verschiedenen Farben vorkommen:
 
 
 \chapter{Eigenständigkeitserklärung}
+
 Hiermit erklären wir Alexander Feilke und Jakom Massal{\ss}ky, dass wir die vorliegende Arbeit selbstständig verfasst und keine anderen als die angegebenen Quellen und Hilfsmittel benutzt haben.
 
 Alle sinngemä{\ss} und wörtlich übernommenen Textstellen aus fremden Quellen wurden kenntlich gemacht.
@@ -290,6 +434,7 @@ Alexander Feilke \hspace{4cm} Jakob Massal{\ss}ky
 
 
 \section{Installationsanleitung}
+
 Laden Sie die Datei \href{https://www.dropbox.com/s/g82vexjznq1x9dd/Cubix.zip?dl=1}{Cubix.zip} herunter und entpacken Sie sie. Anschließend führen Sie die darin befindliche cubix.exe aus.
 Im Falle einer Warnung vom Windows-Defender klicken Sie auf Mehr und Trotzdem ausführen - Die Warnung besagt nur, dass das Spiel von keinem offiziellen Hersteller veröffentlicht wurde.
 Sie müssten nun einen Unity-Startbildschirm sehen und kurz darauf direkt im Spiel landen.
@@ -298,7 +443,19 @@ Sie müssten nun einen Unity-Startbildschirm sehen und kurz darauf direkt im Spi
 
 
 \section{Spielanleitung}
-\lipsum[3]
+
+Du bist ein kleiner Würfel in einer Welt von Kugeln, Gegnern und Portalen. Versuche so viele Stufen wie möglich zu schaffen und dabei so wenige Fehler wie möglich zu machen. Wähle zwischen 3 Schussmodi aus, und wenn du in der Klemme steckst und genügend Ressourcen hast aktiviere den Farbkombinationsmodus und Rette damit deine Haut.
+
+
+
+\subsection{Steuerung}
+%TODO: Screenshots Spielfeld, Stageelemente, Farbschema, Pausemenü
+
+Gesteuert wird mit WASD. Linksklick drücken und halten zum kontinuierlichen Abfeuern von Schüssen. Schussfarbe wechseln mit 1, 2 und 3 auf der Tastatur oder Numpad.
+
+Wenn genügend Ressourcen vorhanden sind (mindestens 2 voll aufgeladene Balken) Drücke Space, um für eine Zeit lang kombinierte Farbschüsse abzugeben.
+
+Pausiert wird das Spiel mit Escape.
 
 
 
