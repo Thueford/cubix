@@ -55,19 +55,20 @@
 \newcommand{\crosss}[1]{\includegraphics[height=#1]{cross.png}\hspace{2mm}}
 
 
+\newcommand{\itmspace}{5em}
+\newcommand{\imgspace}{3em}
+
 \newcommand\imgtxt[2]{%
 \begin{flushleft}%
-\parbox{3em}{\includegraphics[width=\linewidth]{#1}}%
+\parbox{\imgspace}{\includegraphics[width=\linewidth]{#1}}%
 \hfil
-\parbox{\dimexpr\textwidth-3.5em}{#2}%
+\parbox{\dimexpr\textwidth-\imgspace-1em}{#2}%
 \end{flushleft}}
-
-\newcommand{\itmspace}{5em}
 
 \newcommand\imgitmtxt[3]{%
 \begin{flushleft}%
-\parbox{2em}{\includegraphics[width=\linewidth]{#1}}%
+\parbox{\imgspace}{\includegraphics[width=\linewidth]{#1}}%
 \hspace{2mm}
 \parbox{\itmspace}{\textbf{#2}}%
-\parbox{\dimexpr\textwidth-3em-\itmspace}{#3}%
+\parbox{\dimexpr\textwidth-\imgspace-\itmspace-1em}{#3}%
 \end{flushleft}}

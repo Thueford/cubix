@@ -11,6 +11,8 @@
 \include{code}
 \include{code_cs}
 
+\graphicspath{{img/}{img/coll/}{img/enem/}{img/shot/}}
+
 % Daten für Titelseite
 \title{Kombinierte Belegarbeit \\ GameProgramming und \\ GPU Programmierung}
 \author{Alexander Feilke, Jakob Massal{\ss}ky \\ Sem.Gr.: IF19wS-B}
@@ -81,7 +83,7 @@ Als Neuerung wird ein Farbkonzept verwendet, bei dem die Grundfarben Rot, Grün 
 
 Das Spiel ist aus verschiedenen Stufen (siehe \fullref{sect:stages}) aufgebaut, die vom Spieler 'geschafft' werden müssen.
 Das geschieht dadurch, dass er sich in einen roten Ladebereich (Charger) in der Mitte des Spielfeldes aufhält und ihn damit auflädt.
-Wenn der Charger aktiviert wird, fangen an Gegner zu spawnen, die vom Spieler durch schießen besiegt werden können.
+Wenn der Charger aktiviert wird, fangen an Gegner zu spawnen, die vom Spieler durch schie{\ss}en besiegt werden können.
 Ist der Charger voll geladen, hören die Gegner auf zu spawnen und ein Portal zur nächsten Stufe aktiviert.
 
 
@@ -92,13 +94,13 @@ Ist der Charger voll geladen, hören die Gegner auf zu spawnen und ein Portal zu
 Dem Spieler stehen hierbei drei Schussmodi zur Verfügung, die er sich im Tutorial der Reihe nach aneignen und ausprobieren kann:
 
 \renewcommand{\itmspace}{4.5em}
-\imgitmtxt{cross.png}{rote Kugeln}
+\imgitmtxt{s_red.png}{rote Kugeln}
 {sind langsamer als Normal aber Explodieren beim Aufprall,}
 
-\imgitmtxt{cross.png}{grüne Kugeln}
+\imgitmtxt{s_green.png}{grüne Kugeln}
 {sind schneller als Normal und fügen mehr Schaden zu, prallen von Wänden ab und durchdringen Gegner aber haben eine geringere Schussrate und}
 
-\imgitmtxt{cross.png}{blaue Kugeln}
+\imgitmtxt{s_blue.png}{blaue Kugeln}
 {werden in einem Fächer von fünf Kugeln in einer höheren Schussrate verschossen, fügen aber weniger Schaden zu.}
 
 
@@ -108,29 +110,29 @@ Dem Spieler stehen hierbei drei Schussmodi zur Verfügung, die er sich im Tutori
 
 Im Spiel gibt es drei verschiedene Gegnertypen, erkennbar an ihrer Form:
 
-\renewcommand{\itmspace}{7.5em}
-\imgitmtxt{cross.png}{Hunter}
+\renewcommand{\itmspace}{4.5em}
+\imgitmtxt{e_hunter.png}{Hunter}
 {Jagen den Spieler um ihm Kollisionsschaden zuzufügen}
 
-\imgitmtxt{cross.png}{Archer}
-{Verfolgen den Spieler aber bleiben auf Abstand und schießen aus der Ferne auf ihn}
+\imgitmtxt{e_archer.png}{Archer}
+{Verfolgen den Spieler aber bleiben auf Abstand und schie{\ss}en aus der Ferne auf ihn}
 
-\imgitmtxt{cross.png}{Strays}
+\imgitmtxt{e_stray.png}{Strays}
 {Irren langsam über das Spielfeld und feuern 4 Schüsse in alle Richtungen}
 
 Auch die die Gegner in drei verschiedenen Farben vorkommen:
 
 \renewcommand{\itmspace}{7.5em}
-\imgitmtxt{cross.png}{rote Gegner}
+\imgitmtxt{e_red.png}{rote Gegner}
 {sind langsamer als Normal, haben aber mehr Leben,}
 
-\imgitmtxt{cross.png}{grüne Gegner}
+\imgitmtxt{e_green.png}{grüne Gegner}
 {sind schneller als Normal,}
 
-\imgitmtxt{cross.png}{blaue Gegner}
+\imgitmtxt{e_blue.png}{blaue Gegner}
 {Spawnen in einer Gruppe von 2 aber haben weniger Leben.}
 
-\imgitmtxt{cross.png}{weiße Gegner}
+\imgitmtxt{e_white.png}{wei{\ss}e Gegner}
 {spawnen als Kombination aller drei Farben und haben eigene Buffs. Sie sind so schnell wie grüne Gegner, haben etwas weniger Leben als rote und spawnen ebenfalls in einer Gruppe von 2.}
 
 
@@ -141,23 +143,23 @@ Auch die die Gegner in drei verschiedenen Farben vorkommen:
 Wenn Gegner besiegt werden lassen sie mit einer gewissen Wahrscheinlichkeit Collectibles abhängig von ihrer eigenen Farbe fallen.
 
 \renewcommand{\itmspace}{5.5em}
-\imgitmtxt{cross.png}{schwarz}
+\imgitmtxt{c_black.png}{schwarz}
 {verleiht ein zusätzliches Leben}
 
-\imgitmtxt{cross.png}{rot, grün,\\blau}
+\imgitmtxt{c_blue.png}{rot, grün,\\blau}
 {Lassen Ressourcen in der jeweiligen Farbe fallen}
 
-\imgitmtxt{cross.png}{gelb}
+\imgitmtxt{c_yellow.png}{gelb}
 {Aktiviert für eine kurze Zeit einen in alle Richtungen feuernden Effekt auf den Spieler}
 
-\imgitmtxt{cross.png}{türkis}
+\imgitmtxt{c_cyan.png}{türkis}
 {Erhöht für eine kurze Zeit die Schussrate}
 
-\imgitmtxt{cross.png}{magenta}
+\imgitmtxt{c_magenta.png}{magenta}
 {Verleiht für einen kurzen Zeitraum Unsichtbarkeit}
 
-\imgitmtxt{cross.png}{weiß}
-{lässt einen goldenen Container fallen der bei Kontakt eine große Explosion auslöst die sämtliche Gegner auf dem Spielfeld auslöscht}
+\imgitmtxt{c_gold.png}{gold}
+{lässt einen goldenen Container fallen der bei Kontakt eine gro{\ss}e Explosion auslöst die sämtliche Gegner auf dem Spielfeld auslöscht}
 
 
 
@@ -173,7 +175,7 @@ Das Tutorial besteht aus einer Folge von 10 Stufen, in der dem Spieler der Reihe
 
 \begin{description}
 \item[Hauptmenü] Steuerung, Objective
-\item[Stufe 1] Gegner, Schießen
+\item[Stufe 1] Gegner, Schie{\ss}en
 \item[Stufe 2] erste Schussfarbe
 \item[Stufe 3] einfarbige Gegner
 \item[Stufe 4] zweite Schussfarbe
@@ -181,7 +183,7 @@ Das Tutorial besteht aus einer Folge von 10 Stufen, in der dem Spieler der Reihe
 \item[Stufe 6] mehrfarbige Gegner
 \item[Stufe 7] dritte Schussfarbe
 \item[Stufe 8] Probierstufe
-\item[Stufe 9] weiße Gegner (letzte Hürde)
+\item[Stufe 9] wei{\ss}e Gegner (letzte Hürde)
 \item[Stufe 10+] Endlosmodus
 \end{description}
 
@@ -482,7 +484,7 @@ Alexander Feilke \hspace{4cm} Jakob Massal{\ss}ky
 
 \section{Installationsanleitung}
 
-Laden Sie die Datei \href{https://www.dropbox.com/s/g82vexjznq1x9dd/Cubix.zip?dl=1}{Cubix.zip} herunter und entpacken Sie sie. Anschließend führen Sie die darin befindliche cubix.exe aus.
+Laden Sie die Datei \href{https://www.dropbox.com/s/g82vexjznq1x9dd/Cubix.zip?dl=1}{Cubix.zip} herunter und entpacken Sie sie. Anschlie{\ss}end führen Sie die darin befindliche cubix.exe aus.
 Im Falle einer Warnung vom Windows-Defender klicken Sie auf Mehr und Trotzdem ausführen - Die Warnung besagt nur, dass das Spiel von keinem offiziellen Hersteller veröffentlicht wurde.
 Sie müssten nun einen Unity-Startbildschirm sehen und kurz darauf direkt im Spiel landen.
 
