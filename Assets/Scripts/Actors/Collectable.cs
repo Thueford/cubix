@@ -161,13 +161,13 @@ public class Collectable : MonoBehaviour
     public static void Drop(Vector3Int col, Vector3 pos)
     {
         if (!GameState.IsEndless()) return;
-        float dropChance = chance;
 
+        float dropChance = chance;
         if (col == Vector3Int.one || col == Vector3Int.zero)
             dropChance = chanceWhite;
         else
         {
-            dropChance *= col.x + col.y + col.z;
+            dropChance *= col.sqrMagnitude;
             if (col.z == 1) dropChance /= 3;
         }
 
