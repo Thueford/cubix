@@ -18,11 +18,12 @@ public struct Effector_T
 
     private float getTyped(float f)
     {
+        f = 1 - f;
         switch (type)
         {
-            case EffectorType.BOOL: return f < 1 ? 1 : 0;
-            case EffectorType.LINEAR: f = 1 - f; break;
-            case EffectorType.QUADRATIC: f = 1 - Mathf.Pow(f, 2); break;
+            case EffectorType.BOOL: f = f > 1 ? 0 : 1; break;
+            case EffectorType.LINEAR: break;
+            case EffectorType.QUADRATIC: f = Mathf.Pow(f, 2); break;
             default: return 0;
         }
         return Mathf.Clamp(f, 0, 1);

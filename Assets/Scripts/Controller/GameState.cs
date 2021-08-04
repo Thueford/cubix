@@ -60,7 +60,7 @@ public class GameState : MonoBehaviour
         save.config.UpdateSettings();
         //_save = save;
         save.config.setLights();
-        StartGame();
+        Invoke(nameof(StartGame), 0);
     }
 
 
