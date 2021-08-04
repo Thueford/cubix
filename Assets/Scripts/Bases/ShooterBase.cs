@@ -7,9 +7,9 @@ public abstract class ShooterBase : MonoBehaviour
     public bool active;
     [NotNull] public Bullet bulletPrefab;
 
-    public bool singleFire;
-    public int amount;
-    public float timeCounter, rateOfFire, spread, shooterRadius;
+    protected bool singleFire;
+    protected int amount;
+    protected float timeCounter, rateOfFire, spread, shooterRadius;
     protected Bullet.Properties p;
 
     virtual protected void Awake()
