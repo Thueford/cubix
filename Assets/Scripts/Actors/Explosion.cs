@@ -18,8 +18,8 @@ public class Explosion : MonoBehaviour
 
     void Update()
     {
-        if (damage >= 10 && Time.timeScale < 1)
-            Time.timeScale = Mathf.Clamp01(Time.timeScale + Time.deltaTime / 6);
+        //if (damage >= 10 && Time.timeScale < 1)
+        //    Time.timeScale = Mathf.Clamp01(Time.timeScale + Time.deltaTime / 6);
     }
 
     // destroyed by ParticleSystem

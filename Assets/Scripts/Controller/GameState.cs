@@ -115,6 +115,7 @@ public class GameState : MonoBehaviour
         }
 
         Player.self.SpawnAt(startStage);
+        Player.self.SetShooterColor(Vector3Int.zero);
         stateBegin = SaveState();
     }
 

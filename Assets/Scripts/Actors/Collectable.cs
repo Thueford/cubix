@@ -149,7 +149,7 @@ public class Collectable : MonoBehaviour
                 Player.self.bs.atkSpeedBoost(5f, 2f);
                 break;
             case cType.ENDALLEXISTENCE:
-                Time.timeScale = 0.5f;
+                //Time.timeScale = 0.5f;
                 Instantiate(explosion, GameState.curStage.transform.position, Quaternion.identity)
                     .SetProperties("Player", 30, 10, 0.8f);
                 break;
