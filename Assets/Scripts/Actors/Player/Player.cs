@@ -51,6 +51,7 @@ public class Player : EntityBase
 
     public void SetShooterColor(Vector3Int c)
     {
+        SoundHandler.PlayClip("switch");
         bs.updateProperties(rgb = c);
         SwitchColor();
     }

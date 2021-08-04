@@ -63,6 +63,8 @@ public class Ressource : MonoBehaviour
 
     void CoolDown()
     {
+        if (GameState.paused) return;
+
         if (redMode)
         {
             addRes(col.Red, -cooldown);
