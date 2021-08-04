@@ -47,13 +47,13 @@
 ### Sounds:     J
 
 - [ ] Soudtrack
-- [ ] Shoot
-- [ ] Entity Hit
-- [ ] UI Click
+- [x] Shoot
+- [x] Entity Hit
+- [x] UI Click
 - [ ] Explosion
-- [ ] Bullet Reflect
+- [x] Bullet Reflect
 - [ ] Enemy Spawn
 - [ ] Charger charging
 - [ ] Entity Death
 - [ ] Collectable pickup
-- [ ] Shot Mode Switch
+- [x] Shot Mode Switch
