@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a47d5a2faf3456c4dbe03c7806f634c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StagePrefab: {fileID: 331514180023121776, guid: c757194044ae0bd40bbc234134156d13,
+  StagePrefab: {fileID: 757038173234545941, guid: c757194044ae0bd40bbc234134156d13,
     type: 3}
   ActorContainer: {fileID: 822300351745354751, guid: 83ab6cd1159f5264e8f4ce52e638400b,
     type: 3}

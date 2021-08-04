@@ -5,55 +5,30 @@ using UnityEngine;
 public class StageBuilder : MonoBehaviour
 {
     public static StageBuilder self;
-    [NotNull] public GameObject StagePrefab;
+    [NotNull] public GameStage StagePrefab;
     [WarnNull] public GameObject ActorContainer;
     [WarnNull] public GameObject WallContainer;
-    private List<GameObject> WallBases;
 
 
     // Start is called before the first frame update
-    void Start()
-    {
-        if (!self) self = this;
-        //ActorBases = GetAllChildren(ActorContainer);
-        WallBases = GetAllChildren(WallContainer);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    //Source: https://answers.unity.com/questions/594210/get-all-children-gameobjects.html
-    public static List<GameObject> GetAllChildren(GameObject Go)
-    {
-        List<GameObject> list = new List<GameObject>();
-        for (int i = 0; i < Go.transform.childCount; i++)
-        {
-            list.Add(Go.transform.GetChild(i).gameObject);
-        }
-        return list;
-    }
+    void Awake() => self = this;
+    GameObject getRandomChild(GameObject obj) => obj.transform.childCount > 1 ? obj.transform.GetChild(Random.Range(1, obj.transform.childCount)).gameObject : null;
 
     public GameStage Generate(Transform t)
     {
         Vector3 pos = t.position;
         if (!GameState.curStage.isProcedural) pos.z += 40;
 
-        GameObject Stage = Instantiate(StagePrefab, pos, Quaternion.identity);
-        GameStage StageScript = Stage.GetComponent<GameStage>();
-        StageScript.isProcedural = true;
-        StageScript.number = GameState.curStage.number + 1;
-        StageScript.actorsBase = ActorContainer.transform.GetChild(Random.Range(0, ActorContainer.transform.childCount)).gameObject;
+        GameStage stage = Instantiate(StagePrefab, pos, Quaternion.identity);
+        stage.isProcedural = true;
+        stage.number = GameState.curStage.number + 1;
         
-        if (WallContainer.transform.childCount > 0)
-            StageScript.walls = Instantiate(
-                WallContainer.transform.GetChild(Random.Range(0, WallContainer.transform.childCount)).gameObject,
-                pos,
-                Quaternion.identity,
-                Stage.transform);
+        GameObject spawner = Instantiate(getRandomChild(ActorContainer), stage.actorsBase.transform);
+        spawner.SetActive(true);
 
-        return StageScript;
+        GameObject walls = Instantiate(getRandomChild(WallContainer), stage.actorsBase.transform);
+        walls.SetActive(true);
+
+        return stage;
     }
 }
