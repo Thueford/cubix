@@ -149,6 +149,7 @@ public class Collectable : MonoBehaviour
                 Player.self.bs.atkSpeedBoost(5f, 2f);
                 break;
             case cType.ENDALLEXISTENCE:
+                Time.timeScale = 0.5f;
                 Instantiate(explosion, GameState.curStage.transform.position, Quaternion.identity)
                     .SetProperties("Player", 30, 10, 0.8f);
                 break;
@@ -171,9 +172,11 @@ public class Collectable : MonoBehaviour
             if (col.z == 1) dropChance /= 3;
         }
 
-        if (Random.value > dropChance) return;
+        //float dropChance = chance / EnemyBase.getColorCount((Vector4)(Vector3)col);
+        //if (col == Vector3Int.one) dropChance = chanceWhite;
 
-        Instantiate(CollPrefab, pos, Quaternion.identity, GameState.curStage.actors.transform).
-            GetComponent<Collectable>().setType(v2Type[col]);
+        if (Random.value <= dropChance)
+            Instantiate(CollPrefab, pos, Quaternion.identity, GameState.curStage.actors.transform).
+                GetComponent<Collectable>().setType(v2Type[col]);
     }
 }

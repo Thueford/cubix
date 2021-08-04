@@ -41,6 +41,8 @@ public class PlayerShooter : ShooterBase
         if (rgbNew.z != rgb.z) toggleBlue(rgbNew.z == 1);
         p.color = GameState.V2Color(rgbNew);
         rgb = rgbNew;
+
+        amount = (rgb - Vector3Int.forward).sqrMagnitude == 0 ? 5 : 3;
     }
 
     private float cndinv(float f, bool b) => b ? f : 1/f;
