@@ -11,7 +11,6 @@ public class HaloShooter : ShooterBase
     {
         base.Start();
 
-        singleFire = false;
         amount = 8;
         rateOfFire = .3f;
         spread = 315f;

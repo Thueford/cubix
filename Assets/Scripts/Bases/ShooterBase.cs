@@ -7,7 +7,6 @@ public abstract class ShooterBase : MonoBehaviour
     public bool active;
     [NotNull] public Bullet bulletPrefab;
 
-    public bool singleFire;
     public int amount;
     public float timeCounter, rateOfFire, spread, shooterRadius;
     protected Bullet.Properties p;
@@ -41,7 +40,7 @@ public abstract class ShooterBase : MonoBehaviour
 
     virtual protected void shoot(Vector3 dir)
     {
-        if (singleFire) CreateAndLaunch(dir);
+        if (amount <= 1) CreateAndLaunch(dir);
         else
         {
             float ang = spread / (amount - 1);

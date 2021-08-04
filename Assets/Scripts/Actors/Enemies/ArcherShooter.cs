@@ -10,7 +10,6 @@ public class ArcherShooter : ShooterBase
     {
         base.Start();
 
-        singleFire = true;
         amount = 1;
         rateOfFire = 1.5f;
         spread = 30f;

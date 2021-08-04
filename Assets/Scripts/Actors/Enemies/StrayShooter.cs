@@ -9,7 +9,6 @@ public class StrayShooter : ShooterBase
     {
         base.Start();
 
-        singleFire = false;
         amount = 4;
         rateOfFire = 2f;
         spread = 270f;

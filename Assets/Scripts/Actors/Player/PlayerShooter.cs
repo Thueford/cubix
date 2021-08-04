@@ -14,11 +14,10 @@ public class PlayerShooter : ShooterBase
     {
         base.Start();
 
-        singleFire = true;
-        amount = 5;
+        amount = 1;
         rateOfFire = .3f;
         spread = 30f;
-
+        
         p.explodes = false;
         p.reflects = 0;
         p.hits = 0;
@@ -42,12 +41,13 @@ public class PlayerShooter : ShooterBase
         p.color = GameState.V2Color(rgbNew);
         rgb = rgbNew;
 
-        amount = (rgb - Vector3Int.forward).sqrMagnitude == 0 ? 5 : 3;
+        amount = rgb.z == 1 ? ((rgb - Vector3Int.forward).sqrMagnitude == 0 ? 5 : 3) : 1;
     }
 
     private float cndinv(float f, bool b) => b ? f : 1/f;
 
-    public void toggleRed(bool b) {
+    public void toggleRed(bool b)
+    {
         lastColor = Vector3Int.right;
         p.explodes = b;
         p.speed *= cndinv(2/3f, b);
@@ -68,7 +68,6 @@ public class PlayerShooter : ShooterBase
         lastColor = Vector3Int.forward;
         rateOfFire *= cndinv(2/3f, b);
         p.damage *= cndinv(1/3f, b);
-        singleFire = !b;
     }
 
     public void atkSpeedBoost(float duration, float mult)
@@ -90,7 +89,7 @@ public class PlayerShooter : ShooterBase
     override protected void shoot(Vector3 dir)
     {
         base.shoot(dir);
-        GameState.save.stats.firedBullets += singleFire ? 1 : amount;
+        GameState.save.stats.firedBullets += amount;
         if (rgb.x == 1) GameState.save.stats.firedRedShots++;
         if (rgb.y == 1) GameState.save.stats.firedGreenShots++;
         if (rgb.z == 1) GameState.save.stats.firedBlueShots++;
