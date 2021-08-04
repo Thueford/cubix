@@ -286,18 +286,37 @@ In dieser Implementierung gibt es sog. Effektoren, die jeweils vier Werte speich
 \item[Typ] Wie stark der Effektor abhängig vom Abstand wirkt. Das kann hier entweder logisch, linear oder quadratisch sein. 
 \end{description}
 
-Jede Entität bestimmt dann anhand der Formel $ clamp(1 - typed(dist / dist_{min}), 0, 1) * v_{dir} $ einen Vektor der die die Richtung und die Kraft zu diesem Objekt angibt.
+Jede Entität bestimmt dann anhand der Formel $ clamp(typed(1 - dist / dist_{min}), 0, 1) * v_{dir} $ einen Vektor der die die Richtung und die Kraft zu diesem Objekt angibt.
 
 Für die Erkennung von Wänden schaut jede Entität in in 30° Schritten um sich herum und schickt in jede dieser Richtungen einen Physik-Raycast. Von den Effektor-Vektoren wird dann  mittels Punktprodukt ein anteiliger Faktor in diese Richtung ermittelt und die resultierende Richtung durch die Summe dieser Richtungsvektoren ermittelt.
 
 Für etwas mehr Abwechslung wird diese noch durch Perlin-Noise ein wenig abgeändert.
 
+Da jede Gegnerart ein eigenes Verhalten hat, haben diese auch unterschiedliche Effektorenlisten. Strays besitzen nur das Standardverhalten und bewegen sich rein durch noise und vermeiden Wände und andere Gegner. Hunter haben zusätzlich eine Kraft zum Spieler hin und Archer wiederum noch einen Effektor mit kleinerem Radius vom Spieler weg, ebenfalls mit etwas Noise damit der Archer scheinbar vom SPieler strategisch vor- und zurückweicht.
 
 
-\subsection{Spawner}
+
+\subsection{Gegnerspawner}
 \label{subsect:spawner}
 
-\lipsum[3]
+Die Gegnerspawner sind standardisierte Rechteck-Objekte, die unsichtbar für den Spieler einen Bereich markieren in dem Gegner mit einstellbaren Wahrscheinlichkeiten und Eigenschaften erscheinen:
+
+\begin{description}
+\item[Typverteilung] Wahrscheinlichkeitsverteilung der Gegnertypen.
+\item[Farbverteilung] Wahrscheinlichkeitsverteilung der Farbmodifikatoren, abhängig von der Reihenfolge, in der die Schussfarben eingesammelt wurden.
+\item[maxColors] maximale Anzahl an Farben die die Gegner haben können
+\item[amount] maximale Anzahl an Gegner die dieser Spawner spawnt
+\item[wavesize] Anzahl an Gegnern die der Spawner auf einmal spawnt (typischerweise 1-3)
+\item[initDelay] Zeitspanne die der Spawner nach Aktivierung des Chargers wartet bis er anfängt Gegner zu spawnen
+\item[delay] Zeitspanne zwischen Gegnerwellen
+\item[variation] Zeitspanne, nach der einzelne Gegnerspawns verzögert werden
+\end{description}
+
+Zudem hat jede Stage eine Maximale Anzahl an Gegnern, die sich Zeitgleich in der Stage aufhalten können, damit der Spieler nicht von Gegnern überrant wird.
+
+In jeder Stage können beliebig viele Spawner platziert werden, jedoch ist durch die verfügbaren Einstellungsmöglichkeiten schon mit einem einzelnen Spawner meist ausreichend Variabilität möglich. Mehrere Spawner werden erst vonnöten, wenn man in einer Stage zeitlich verteilt verschiedene Wellen spawnen möchte.
+
+
 
 
 \section{Physics}
@@ -312,47 +331,74 @@ Für etwas mehr Abwechslung wird diese noch durch Perlin-Noise ein wenig abgeän
 
 
 
-\section{Visuals}
+
+\chapter{Grafikeffekte}
+
+
+
+
+\section{Shader in Unity}
+
 \lipsum[3]
 
 
 
-\subsection{Shader in Unity}
+\section{Partikelsystem}
+
 \lipsum[3]
 
 
-\subsection{Partikelsystem}
+
+\section{Postprocessing}
+
 \lipsum[3]
 
 
-\subsection{Postprocessing}
+
+\subsection{Bloom}
 \lipsum[3]
 
 
-\subsubsection{Bloom}
+
+\subsection{Chromatic Aberration}
+
 \lipsum[3]
 
 
-\subsubsection{Chromatic Aberration}
+
+\subsection{Lens Flare}
+
 \lipsum[3]
 
 
-\subsubsection{Lens Flare}
+
+\subsection{Vignette, warped Display und Scanlines}
+
 \lipsum[3]
 
 
-\subsubsection{Vignette, warped Display und Scanlines}
-\lipsum[3]
 
 
 
 \chapter{Assets und Tools}
+
 \lipsum[3]
 
 
 
 
-\chapter{Ausblick/Fazit}
+
+\chapter{Ausblick}
+
+%Bossstages, Generischere Gegner, Generischere Stages, mehr testdaten
+\lipsum[3]
+
+
+
+
+
+\chapter{Fazit}
+
 \lipsum[3]
 
 
@@ -360,6 +406,7 @@ Für etwas mehr Abwechslung wird diese noch durch Perlin-Noise ein wenig abgeän
 
 
 \chapter{Glossar}
+
 \begin{description}
 \item[item1] itemdesc
 \item[item2] itemdesc
