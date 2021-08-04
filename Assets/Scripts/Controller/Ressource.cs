@@ -63,21 +63,9 @@ public class Ressource : MonoBehaviour
 
     void CoolDown()
     {
-        if (redMode)
-        {
-            addRes(col.Red, -cooldown);
-            check(valueRed);
-        }
-        if (greenMode)
-        {
-            addRes(col.Green, -cooldown);
-            check(valueGreen);
-        }
-        if (blueMode)
-        {
-            addRes(col.Blue, -cooldown);
-            check(valueBlue);
-        }
+        if (redMode) check(addRes(col.Red, -cooldown));
+        if (greenMode) check(addRes(col.Green, -cooldown));
+        if (blueMode) check(addRes(col.Blue, -cooldown));
     }
 
     private void check(float value)
@@ -146,24 +134,24 @@ public class Ressource : MonoBehaviour
     }
 
 
-    public void addRes(col c, float value)
+    public float addRes(col c, float value)
     {
         switch (c)
         {
             case col.Red:
                 valueRed = Mathf.Clamp(valueRed + value, 0, 100);
                 SetRessourceText(valueRed, TextRed);
-                break;
+                return valueRed;
             case col.Green:
                 valueGreen = Mathf.Clamp(valueGreen + value, 0, 100);
                 SetRessourceText(valueGreen, TextGreen);
-                break;
+                return valueGreen;
             case col.Blue:
                 valueBlue = Mathf.Clamp(valueBlue + value, 0, 100);
                 SetRessourceText(valueBlue, TextBlue);
-                break;
+                return valueBlue;
             default:
-                break;
+                return 0;
         }
     }
 }

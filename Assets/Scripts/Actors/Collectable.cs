@@ -152,6 +152,7 @@ public class Collectable : MonoBehaviour
                 break;
 
             case cType.ENDALLEXISTENCE:
+                Time.timeScale = 0.5f;
                 Instantiate(explosion, GameState.curStage.transform.position, Quaternion.identity)
                     .SetProperties("Player", 30, 10, 0.8f);
                 break;
@@ -163,13 +164,12 @@ public class Collectable : MonoBehaviour
     public static void Drop(Vector3Int col, Vector3 pos)
     {
         if (!GameState.IsEndless()) return;
-        float dropChance = col.z != 1 ? chance : chance / 3;
-        dropChance = col == Vector3Int.one || col == Vector3Int.zero ? 
-            chanceWhite : dropChance;
 
-        if (Random.value > dropChance) return;
+        float dropChance = chance / EnemyBase.getColorCount((Vector4)(Vector3)col);
+        if (col == Vector3Int.one) dropChance = chanceWhite;
 
-        Instantiate(CollPrefab, pos, Quaternion.identity, GameState.curStage.actors.transform).
-            GetComponent<Collectable>().setType(v2Type[col]);
+        if (Random.value <= dropChance)
+            Instantiate(CollPrefab, pos, Quaternion.identity, GameState.curStage.actors.transform).
+                GetComponent<Collectable>().setType(v2Type[col]);
     }
 }

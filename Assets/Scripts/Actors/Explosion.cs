@@ -7,12 +7,18 @@ public class Explosion : MonoBehaviour
     [NotNull] public SphereCollider sc;
     [NotNull] public Particles ps;
     [NotNull] public GameObject hitPrefab;
-    private float lifespan = 0.1f, age = 0, damage = 0;
+    private float lifespan = 0.1f, damage = 0;
 
     // Start is called before the first frame update
     void Start()
     {
         Invoke("StopCollision", lifespan);
+    }
+
+    void Update()
+    {
+        if (damage >= 10 && Time.timeScale < 1)
+            Time.timeScale = Mathf.Clamp01(Time.timeScale + Time.deltaTime / 6);
     }
 
     // destroyed by ParticleSystem
@@ -47,7 +53,7 @@ public class Explosion : MonoBehaviour
     {
         EntityBase b = c.GetComponentInParent<EntityBase>();
         if (!b) {
-            Debug.LogWarning("Explosion hit non-Entity");
+            Debug.LogWarning($"Explosion hit non-Entity ({c.name})");
             return;
         }
 
