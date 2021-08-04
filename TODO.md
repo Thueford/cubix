@@ -34,26 +34,26 @@
 
 ### Particles/Visuals: A
 
-- [ ] Player Model (+ some way to indicate HP and Active Shot Color?)
+- [x] some way to indicate HP and Active Shot Color?
 - [x] Bullet Particle Trails
 - [x] Bullet Hit Particles
 - [x] Charger active Particles
 - [x] Explosion Animation/Particles
 - [x] Player Movement Particles
-- [ ] Particles on Entity Death
+- [x] Particles on Entity Death
 - [x] Animation/Particles on Collectable pickup
 - [x] Particles on Shot Mode Switch
 
 ### Sounds:     J
 
 - [ ] Soudtrack
-- [ ] Shoot
-- [ ] Entity Hit
-- [ ] UI Click
+- [x] Shoot
+- [x] Entity Hit
+- [x] UI Click
 - [ ] Explosion
-- [ ] Bullet Reflect
+- [x] Bullet Reflect
 - [ ] Enemy Spawn
 - [ ] Charger charging
 - [ ] Entity Death
 - [ ] Collectable pickup
-- [ ] Shot Mode Switch
+- [x] Shot Mode Switch

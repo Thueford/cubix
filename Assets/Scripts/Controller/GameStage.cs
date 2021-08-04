@@ -106,13 +106,14 @@ public class GameStage : MonoBehaviour
         {
             Camera.main.transform.Translate(new Vector3(0, -40, 0));
             Destroy(gameObject);
-            return;
         }
-
-        Destroy(actors);
-        if (hints) hints.ResetHints();
-        gameObject.SetActive(false);
-        loaded = false;
+        else
+        {
+            Destroy(actors);
+            if (hints) hints.ResetHints();
+            gameObject.SetActive(false);
+            loaded = false;
+        }
     }
 
     public T[] GetActorComponents<T>() => actors.GetComponentsInChildren<T>();
