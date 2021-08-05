@@ -72,18 +72,18 @@
 
 %Konzept, ~farben
 Cubix ist ein Top-Down Bullet-Hell Shooter angelehnt an den Hacking-Mode aus Nier:Automata\cite{qNierHM}.
-Man steuert dort eine Figur durch eine Welt von Gegnern und Hindernissen und muss möglichst schnell und Fehlerfrei sämtliche Gegner durch gekonntes Ausweichen und gezielte Schüsse eliminieren.
+Dort steuert man eine Figur in einer Welt von Gegnern und Hindernissen und muss möglichst schnell und Fehlerfrei sämtliche Gegner durch gekonntes Ausweichen und gezielte Schüsse eliminieren.
 
-Als Neuerung wird ein Farbkonzept verwendet, bei dem die Grundfarben Rot, Grün und Blau mit verschiedenen Eigenschaften assoziiert werden. Die Farben sowie deren Eigenschaften können vermischt bzw. kombiniert werden, um unterbewusst das additive Farbmischungssystem zu vermitteln.
+Als Neuerung wird ein Farbkonzept verwendet, bei dem die Grundfarben Rot, Grün und Blau mit verschiedenen Eigenschaften assoziiert werden. Alle Akteure des Spiels (sowohl der Spieler selbst als auch die Gegner und aufsammelbare Objekte) können in Beliebiger Kombination dieser Farben auftreten. Ist mehr als eine Farbe aktiv, so addieren sich deren Eigenschaften. Dieses System ist für den Spieler leicht verständlich, denn das Wissen über die Eigenschaften der drei Grundfarben reicht aus, um die Ergebnisse jeder möglichen Kombination schon im Voraus zu erschlie{\ss}en. Diese Kombinationsmöglichkeiten sorgen aber trotz des simplen Systems für genug Abwechslung und Tiefe. Die einzige Ausnahme beim Kombinieren bilden die sammelbaren Objekte, dazu später mehr (siehe \fullref{sect:Collectables}).
 
 
 
 
 \section{Spielziel}
 
-Das Spiel ist aus verschiedenen Stufen (siehe \fullref{sect:stages}) aufgebaut, die vom Spieler 'geschafft' werden müssen.
-Das geschieht dadurch, dass er sich in einen roten Ladebereich (Charger) in der Mitte des Spielfeldes aufhält und ihn damit auflädt.
-Wenn der Charger aktiviert wird, fangen an Gegner zu spawnen, die vom Spieler durch schie{\ss}en besiegt werden können.
+Das Spiel ist aus verschiedenen Stufen (siehe \fullref{sect:stages}) aufgebaut, die vom Spieler abgeschlossen werden müssen.
+Solange sich der Spieler im roten Ladebereich (Charger) in der Mitte des Spielfeldes aufhält, wird dieser aufgeladen.
+Sobald der Charger aktiviert wird, fangen Gegner an zu erscheinen (spawnen). Diese können vom Spieler durch schie{\ss}en besiegt werden, sie selbst schie{\ss}en aber ebenfalls auf den Spieler und können ihm so schaden.
 Ist der Charger voll geladen, hören die Gegner auf zu spawnen und ein Portal zur nächsten Stufe aktiviert.
 
 
@@ -91,16 +91,16 @@ Ist der Charger voll geladen, hören die Gegner auf zu spawnen und ein Portal zu
 
 \section{Schussmodi}
 
-Dem Spieler stehen hierbei drei Schussmodi zur Verfügung, die er sich im Tutorial der Reihe nach aneignen und ausprobieren kann:
+Der Spieler kann seinen Schüssen jeweils eine der Eigenschaften der drei Grundfarben verleihen, welche er im Tutorial der Reihe nach freischalten und ausprobieren kann:
 
 \renewcommand{\itmspace}{4.5em}
-\imgitmtxt{s_red.png}{rote Kugeln}
-{sind langsamer als Normal aber Explodieren beim Aufprall,}
+\imgitmtxt{s_red.png}{Rote Kugeln}
+{sind langsamer aber Explodieren beim Aufprall.}
 
-\imgitmtxt{s_green.png}{grüne Kugeln}
-{sind schneller als Normal und fügen mehr Schaden zu, prallen von Wänden ab und durchdringen Gegner aber haben eine geringere Schussrate und}
+\imgitmtxt{s_green.png}{Grüne Kugeln}
+{sind schneller und fügen mehr Schaden zu, prallen von Wänden ab und durchdringen Gegner, haben aber eine geringere Schussrate.}
 
-\imgitmtxt{s_blue.png}{blaue Kugeln}
+\imgitmtxt{s_blue.png}{Blaue Kugeln}
 {werden in einem Fächer von fünf Kugeln in einer höheren Schussrate verschossen, fügen aber weniger Schaden zu.}
 
 
@@ -112,59 +112,59 @@ Im Spiel gibt es drei verschiedene Gegnertypen, erkennbar an ihrer Form:
 
 \renewcommand{\itmspace}{4.5em}
 \imgitmtxt{e_hunter.png}{Hunter}
-{Jagen den Spieler um ihm Kollisionsschaden zuzufügen}
+{jagen den Spieler um ihm Kollisionsschaden zuzufügen.}
 
 \imgitmtxt{e_archer.png}{Archer}
-{Verfolgen den Spieler aber bleiben auf Abstand und schie{\ss}en aus der Ferne auf ihn}
+{verfolgen den Spieler aber bleiben auf Abstand und schie{\ss}en aus der Ferne auf ihn.}
 
 \imgitmtxt{e_stray.png}{Strays}
-{Irren langsam über das Spielfeld und feuern 4 Schüsse in alle Richtungen}
+{irren langsam über das Spielfeld und feuern 4 Schüsse in alle Richtungen.}
 
-Auch die die Gegner in drei verschiedenen Farben vorkommen:
+Auch die Gegner können in drei verschiedenen Farben vorkommen:
 
 \renewcommand{\itmspace}{7.5em}
-\imgitmtxt{e_red.png}{rote Gegner}
-{sind langsamer als Normal, haben aber mehr Leben,}
+\imgitmtxt{e_red.png}{Rote Gegner}
+{sind langsam, haben aber mehr Leben.}
 
-\imgitmtxt{e_green.png}{grüne Gegner}
-{sind schneller als Normal,}
+\imgitmtxt{e_green.png}{Grüne Gegner}
+{bewegen sich schneller.}
 
-\imgitmtxt{e_blue.png}{blaue Gegner}
-{Spawnen in einer Gruppe von 2 aber haben weniger Leben.}
+\imgitmtxt{e_blue.png}{Blaue Gegner}
+{Spawnen in Zweiergruppen, haben aber weniger Leben.}
 
-\imgitmtxt{e_white.png}{wei{\ss}e Gegner}
-{spawnen als Kombination aller drei Farben und haben eigene Buffs. Sie sind so schnell wie grüne Gegner, haben etwas weniger Leben als rote und spawnen ebenfalls in einer Gruppe von 2.}
-
-
+\imgitmtxt{e_white.png}{Wei{\ss}e Gegner}
+{spawnen als Kombination aller drei Farben und haben mehrere Boni. Sie sind so schnell wie grüne Gegner, haben etwas weniger Leben als Rote und spawnen ebenfalls in Gruppen.}
 
 
-\section{Collectibles}
 
-Wenn Gegner besiegt werden lassen sie mit einer gewissen Wahrscheinlichkeit Collectibles abhängig von ihrer eigenen Farbe fallen.
+
+\section{Collectables}
+
+Wenn Gegner besiegt werden, lassen sie mit einer gewissen Wahrscheinlichkeit aufsammelbare Objekte (Collectables) abhängig von ihrer eigenen Farbe fallen.
 
 \renewcommand{\itmspace}{5.5em}
-\imgitmtxt{c_black.png}{schwarz}
-{verleiht ein zusätzliches Leben}
+\imgitmtxt{c_black.png}{Schwarz}
+{lässt den Spieler einen Lebenspunkt zurückerhalten.}
 
-\imgitmtxt{c_blue.png}{rot, grün,\\blau}
-{Lassen Ressourcen in der jeweiligen Farbe fallen}
+\imgitmtxt{c_blue.png}{Rot, Grün, Blau}
+{verleihen dem Spieler Ressourcen in der entsprechenden Farbe.}
 
-\imgitmtxt{c_yellow.png}{gelb}
-{Aktiviert für eine kurze Zeit einen in alle Richtungen feuernden Effekt auf den Spieler}
+\imgitmtxt{c_yellow.png}{Gelb}
+{lässt den Spieler für kurze Zeit in alle Richtungen feuern.}
 
-\imgitmtxt{c_cyan.png}{türkis}
-{Erhöht für eine kurze Zeit die Schussrate}
+\imgitmtxt{c_cyan.png}{Türkis}
+{Erhöht kurzzeitig die Schussrate stark.}
 
-\imgitmtxt{c_magenta.png}{magenta}
-{Verleiht für einen kurzen Zeitraum Unsichtbarkeit}
+\imgitmtxt{c_magenta.png}{Magenta}
+{verleiht für einen kurzen Zeitraum Unsichtbarkeit/Unverwundbarkeit.}
 
-\imgitmtxt{c_gold.png}{gold}
-{lässt einen goldenen Container fallen der bei Kontakt eine gro{\ss}e Explosion auslöst die sämtliche Gegner auf dem Spielfeld auslöscht}
-
-
+\imgitmtxt{c_gold.png}{Gold}
+{lässt einen goldenen Container fallen der bei Kontakt eine gro{\ss}e Explosion auslöst die sämtliche Gegner auf dem Spielfeld auslöscht. (Selten und nur von wei{\ss}en Gegnern erhältlich.)}
 
 
-\section{Ressource}
+
+
+\section{Ressourcen}
 
 
 
@@ -221,7 +221,7 @@ Eine Stufe besteht wesentlich aus 2 Gruppen von Komponenten: den statischen, unv
 
 Zu den statischen gehören Wände, die den Spielbereich abgrenzen und ggf. Hindernisse auf dem Spielfeld darstellen, der Spawn auf dem der Spieler die Stufe betritt, das Portal durch dass der Spieler die Stufe verlässt um in die nächste Stufe zu kommen und der Charger den der Spieler aufladen muss, um das Portal zu aktivieren.
 
-Zu den dynamischen gehören die Gegner, abgefeuerte Bullets, Collectibles, ggf. dynamisch generierte Hindernisse sowie dazugehörige Partikeleffekte. Zudem kann es in einer Stufe ein oder mehrere für den Spieler unsichtbare Gegnerspawner (siehe \nameref{subsect:spawner}) geben.
+Zu den dynamischen gehören die Gegner, abgefeuerte Bullets, Collectables, ggf. dynamisch generierte Hindernisse sowie dazugehörige Partikeleffekte. Zudem kann es in einer Stufe ein oder mehrere für den Spieler unsichtbare Gegnerspawner (siehe \nameref{subsect:spawner}) geben.
 
 Alle dynamischen Objekte werden in einem dafür angelegten Containerobjekt in der Stage hinterlegt, damit er in seiner Gesamtheit bein Entladen einer Stufe gelöscht werden kann.
 
@@ -229,7 +229,7 @@ Alle dynamischen Objekte werden in einem dafür angelegten Containerobjekt in de
 
 \subsection{Tutorialstages}
 
-Dsa Tutorial besteht aus geskripteten Stages mit voreingestellten Spawnern, Farbcollectibles und Hinweistexten. Die Hinweistexte werden hierbei durch zu den Stages gehörigen Skripte gesteuert.
+Dsa Tutorial besteht aus geskripteten Stages mit voreingestellten Spawnern, Farbcollectables und Hinweistexten. Die Hinweistexte werden hierbei durch zu den Stages gehörigen Skripte gesteuert.
 
 
 
@@ -384,7 +384,21 @@ In jeder Stage können beliebig viele Spawner platziert werden, jedoch ist durch
 
 \chapter{Assets und Tools}
 
-\lipsum[3]
+\begin{description}
+\item[Git] Versionsverwaltungstool
+\item[Unity Engine] Game engine
+\item[Unity Editor] Editor der Game Engine
+\item[Microsoft Visual Studio] Code Editor mit Unity Integration
+\item[Pro Builder] Simpler Mesh-Editor für Unity zum Erstellen der Entity-Modelle
+\item[Ableton Live 10] Digital Audio Workstation zur Erstellung der Soundeffekte
+\vspace{5mm}
+\item[Modelle] Selbst erstellt mit Pro Builder
+\item[Texturen] In Unity angelegt, ausschlie{\ss}lich einfarbig
+\item[Audioeffekte] Selbst erstellt mit Ableton Live
+\item[Soundtrack] Selbst erstellt mit Ableton Live
+
+\end{description}
+
 
 
 
