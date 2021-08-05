@@ -23,7 +23,7 @@ public abstract class EntityBase : MonoBehaviour
     protected Rigidbody rb;
     protected Renderer rend;
     protected Light vlight;
-    protected Color _color;
+    public Color _color;
 
     public Vector3 pos => transform.position;
 
@@ -34,7 +34,6 @@ public abstract class EntityBase : MonoBehaviour
 
     virtual public void Awake()
     {
-        _color = Color.white;
         rb = GetComponent<Rigidbody>();
         animGeneral = GetComponent<Animator>();
         rend = GetComponentInChildren<Renderer>();

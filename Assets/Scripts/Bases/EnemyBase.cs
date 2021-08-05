@@ -5,7 +5,6 @@ using UnityEngine;
 public abstract class EnemyBase : CtxSteer
 {
     [Header("Other Settings")]
-    public Color color;
     protected int pnOff;
 
     public static bool ctxIDLE = true;
@@ -14,6 +13,7 @@ public abstract class EnemyBase : CtxSteer
     override public void Awake()
     {
         base.Awake();
+        setColor(_color);
         animGeneral.Play("Spawn", 0, 0);
         pnOff = (int)Random.Range(-1e5f, 1e5f);
     }
@@ -34,7 +34,7 @@ public abstract class EnemyBase : CtxSteer
 
     public void setColor(Color c)
     {
-        _color = c;
+        _color = c.a == 0 ? GameState.black : c;
         rgb = Vector3Int.FloorToInt((Vector4)c);
         rend.material.color = c;
         vlight.color = GameState.getLightColor(c);
