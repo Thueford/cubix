@@ -9,6 +9,7 @@ public abstract class EnemyBase : CtxSteer
 
     public static bool ctxIDLE = true;
     public const float resDrop = 10;
+    public bool isBoss = false;
 
     override public void Awake()
     {
@@ -42,14 +43,16 @@ public abstract class EnemyBase : CtxSteer
         if (c == Color.white)
         {
             maxSpeed += 2;
-            HP = startHP *= 5 / 3f;
+            startHP *= 5 / 3f;
         }
         else
         {
-            if (c.r == 1) { maxSpeed -= 1; HP = startHP *= 2f; }
+            if (c.r == 1) { maxSpeed -= 1; startHP *= 2f; }
             if (c.g == 1) maxSpeed += 2;
-            if (c.b == 1) HP = startHP *= 0.5f;
+            if (c.b == 1) startHP *= 0.5f;
         }
+
+        startHP *= GameState.HPfactor;
     }
 
 

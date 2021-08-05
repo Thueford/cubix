@@ -22,6 +22,7 @@ public class GameStage : MonoBehaviour
     public int number;
     public bool loaded { get; private set; } = false;
     public bool isProcedural = false;
+    public bool isBoss = false;
 
     public static implicit operator int(GameStage s) => s.number;
     public bool hasBoss() => isBoss && EnemySpawner.remaining > 0;
@@ -64,7 +65,7 @@ public class GameStage : MonoBehaviour
     // Called when player is spawning
     public void OnStageEnter()
     {
-        Debug.Log("Stage: " + name);
+        Debug.Log("Stage: " + name + " HP x " + GameState.HPfactor);
 
         // copy camera
         Camera.main.GetComponent<GameCamera>().target = cam.transform.position;

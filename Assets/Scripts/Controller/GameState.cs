@@ -42,6 +42,12 @@ public class GameState : MonoBehaviour
 
 
     public static int endlessNo => self && self.endlessStartStage ? self.endlessStartStage : 1000;
+
+    // difficulty slope for factor f at stage s: (f - 1) / s
+    private const float HPslope = (2 - 1) / 20;
+    public static float HPfactor => curStage > endlessNo ? 1 + HPslope * (curStage - 10) : 1;
+
+
     void Awake()
     {
         self = this;
