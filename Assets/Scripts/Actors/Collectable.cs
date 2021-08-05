@@ -119,6 +119,8 @@ public class Collectable : MonoBehaviour
 
     private void OnCollect()
     {
+        Debug.Log("collected " + nameof(type));
+
         switch (type)
         {
             case cType.BLACK:
@@ -153,7 +155,7 @@ public class Collectable : MonoBehaviour
 
             case cType.ENDALLEXISTENCE:
                 Time.timeScale = 0.5f;
-                Instantiate(explosion, GameState.curStage.transform.position, Quaternion.identity)
+                Instantiate(explosion, GameState.curStage.transform.position, Quaternion.identity, GameState.self.effectContainer)
                     .SetProperties("Player", 30, 10, 0.8f);
                 break;
             default:
@@ -169,7 +171,10 @@ public class Collectable : MonoBehaviour
         if (col == Vector3Int.one) dropChance = chanceWhite;
 
         if (Random.value <= dropChance)
+        {
+            Debug.Log("dropped " + nameof(type));
             Instantiate(CollPrefab, pos, Quaternion.identity, GameState.curStage.actors.transform).
                 GetComponent<Collectable>().setType(v2Type[col]);
+        }
     }
 }

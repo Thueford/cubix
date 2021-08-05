@@ -18,7 +18,8 @@ MonoBehaviour:
   maxHP: 5
   HP: 0
   rgb: {x: 0, y: 0, z: 0}
-  color: {r: 0, g: 0, b: 0, a: 0}
+  _color: {r: 0, g: 0, b: 0, a: 0}
+  isBoss: 0
 --- !u!114 &9047991911036538869
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34,6 +35,18 @@ MonoBehaviour:
   active: 1
   bulletPrefab: {fileID: 484546216173710262, guid: da2792a8ce1e4d54388cd8c5a606e116,
     type: 3}
+  amount: 1
+  rateOfFire: 1.5
+  spread: 30
+  bulletProps:
+    explodes: 0
+    reflects: 0
+    hits: 0
+    speed: 10
+    damage: 1
+    explosionRadius: 0
+    owner: 
+    color: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &2803653462950124550
 MonoBehaviour:
   m_ObjectHideFlags: 0
