@@ -83,8 +83,8 @@ Als Neuerung wird ein Farbkonzept verwendet, bei dem die Grundfarben Rot, Grün 
 
 Das Spiel ist aus verschiedenen Stufen (siehe \fullref{sect:stages}) aufgebaut, die vom Spieler abgeschlossen werden müssen.
 Solange sich der Spieler im roten Ladebereich (Charger) in der Mitte des Spielfeldes aufhält, wird dieser aufgeladen.
-Sobald der Charger aktiviert wird, fangen Gegner an zu erscheinen (spawnen). Diese können vom Spieler durch schie{\ss}en besiegt werden, sie selbst schie{\ss}en aber ebenfalls auf den Spieler und können ihm so schaden.
-Ist der Charger voll geladen, hören die Gegner auf zu spawnen und ein Portal zur nächsten Stufe aktiviert.
+Sobald der Charger aktiviert wird, fangen Gegner an zu erscheinen (spawnen). Diese können vom Spieler durch Schie{\ss}en besiegt werden, sie selbst schie{\ss}en aber ebenfalls auf den Spieler und können ihm so schaden.
+Ist der Charger vollständig geladen, hören die Gegner auf zu spawnen und ein Portal zur nächsten Stufe wird aktiviert.
 
 
 
@@ -127,13 +127,15 @@ Auch die Gegner können in drei verschiedenen Farben vorkommen:
 
 \renewcommand{\itmspace}{7.5em}
 \imgitmtxt{e_red.png}{Rote Gegner}
-{sind langsam, haben aber mehr Leben.}
+{sind langsam, haben dafür aber mehr Leben.}
 
 \imgitmtxt{e_green.png}{Grüne Gegner}
 {bewegen sich schneller.}
 
 \imgitmtxt{e_blue.png}{Blaue Gegner}
-{Spawnen in Zweiergruppen, haben aber weniger Leben.}
+{spawnen in Zweiergruppen, haben aber weniger Leben.}
+
+Bei der Kombination der Gegnerfarben ist ebenfalls wie bei den Schussfarben vorzugehen. Beispiel:
 
 \imgitmtxt{e_white.png}{Wei{\ss}e Gegner}
 {spawnen als Kombination aller drei Farben und haben mehrere Boni. Sie sind so schnell wie grüne Gegner, haben etwas weniger Leben als Rote und spawnen ebenfalls in Gruppen.}
@@ -162,7 +164,7 @@ Wenn Gegner besiegt werden, lassen sie zu einer gewissen Wahrscheinlichkeit aufs
 {verleiht für einen kurzen Zeitraum Unsichtbarkeit/Unverwundbarkeit.}
 
 \imgitmtxt{c_gold.png}{Gold}
-{lässt einen goldenen Container fallen der bei Kontakt eine gro{\ss}e Explosion auslöst die sämtliche Gegner auf dem Spielfeld auslöscht. (Selten und nur von wei{\ss}en Gegnern erhältlich.)}
+{lässt einen goldenen Container fallen der bei Kontakt eine gro{\ss}e Explosion auslöst, die sämtliche Gegner auf dem Spielfeld auslöscht. (Selten und nur von wei{\ss}en Gegnern erhältlich.)}
 
 
 
@@ -170,9 +172,13 @@ Wenn Gegner besiegt werden, lassen sie zu einer gewissen Wahrscheinlichkeit aufs
 \section{Ressourcen}
 
 Für jede der drei Grundfarben existiert eine entsprechende Ressource, deren Stand in der Ressourcenanzeige oben rechts im Fenster angezeigt wird:
+
 \includegraphics[height=100pt]{ressources.png}
-Ressourcen erhält man über das Aufsammeln von entsprechend gefärbten Collectables und über das Besiegen von farbigen Gegnern. Die erhaltenen Ressourcen werden für mehrfarbige Gegner auf die entsprechenden Grundfarben aufgeteilt, so gibt zum Beispiel ein Cyanfarbiger Gegner blaue und grüne Ressourcen.
+
+Ressourcen erhält man durch das Aufsammeln von entsprechend gefärbten Collectables und das Besiegen von farbigen Gegnern. Die erhaltenen Ressourcen werden für mehrfarbige Gegner auf die entsprechenden Grundfarben aufgeteilt, so gibt zum Beispiel ein Cyanfarbiger Gegner blaue und grüne Ressourcen.
+
 Benutzen kann man Ressourcen, sobald die Balken von mindesten zwei Farben vollständig gefüllt sind. Drückt man nun die Taste zum Aktivieren der Farbkombination (Leertaste), so werden den Schüssen die Eigenschaften der aufgefüllten Farben verliehen und die entsprechenden Ressourcen leeren sich über ungefähr 10 Sekunden. Die Farbkombination bleibt so lange aufrecht erhalten, bis eine der benutzten Ressourcen leer ist. Während dieser Zeit kann die Schussfarbe nicht mehr manuell gewechselt werden, dafür ist eine Kombination aus mehreren Farben deutlich stärker als jede einzelne Farbe.
+
 Diese stärkere Phase wird also durch die Ressourcen zeitlich begrenzt, wodurch sie sich für den Spieler besonders anfühlt und dieser darauf hinarbeiten kann, sie erneut zu erleben. Zusätzlich lassen sich die Ressourcen auch während sie aktiv sind weiter aufladen (zum Beispiel durch das Töten von Gegnern), wodurch ein agressiver, spannender Spielstil gefördert wird.
 
 
@@ -181,7 +187,9 @@ Diese stärkere Phase wird also durch die Ressourcen zeitlich begrenzt, wodurch 
 
 Um die Immersion zu steigern, ist das Interface auf das Nötigste beschränkt. Allein ein Knopf zum Pausieren und die Ressourcenanzeige bilden gemeinsam das GUI. Ist das Spiel pausiert, können über insgesamt 5 Knöpfe die grundlegensten Funktionen wie 'Fortfahren', 'Spiel beenden' oder 'zurück ins Hauptmenü'  aufgerufen werden. 
 Das Hauptmenü selbst ist dabei kein wirkliches Menü, sondern bereits die erste Stufe. Anstatt wie üblich per Knopfdruck einen bestimmten Spielmodus auszuwählen (hier Tutorial oder Endlos), muss der Spieler erst den Charger aufladen und dann zum entsprechenden Portal navigieren. Gegner erscheinen hier noch keine. Hinweise für den Spieler, wie zum Beispiel die grundlegende Steuerung oder Informationen über Schussfarben und Gegner, erscheinen ebenfalls nicht im GUI, sondern als Text auf dem Boden. 
+
 So ist das Hauptmenü schon stark mit dem Gameplay verbunden, es gibt einen nahtlosen Übergang zum eigentlichen Spiel und der Fokus wird auf das Wesentliche gesetzt.
+
 Auf eine herkömmliche Lebensanzeige des Spielers wurde auch verzichtet, stattdessen zeigen kleine um die Spielfigur kreisende Würfel die aktuellen Lebenspunkte an.
 
 
