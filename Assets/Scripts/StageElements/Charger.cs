@@ -55,7 +55,7 @@ public class Charger : MonoBehaviour
         if (!charged && c.CompareTag("Player"))
         {
             if (!active) EnemySpawner.EnableSpawning(GameState.curStage, active = true);
-            anim.SetEnabled(charging = true);
+            if (!GameState.curStage.hasBoss()) anim.SetEnabled(charging = true);
         }
     }
 
@@ -74,6 +74,6 @@ public class Charger : MonoBehaviour
 
         if (duration > 0) anim.ResetAnim(duration);
         ps.SetEnabled(false);
-        sc.enabled = true;
+        SetEnabled(true);
     }
 }

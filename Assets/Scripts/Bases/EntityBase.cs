@@ -72,7 +72,6 @@ public abstract class EntityBase : MonoBehaviour
 
     virtual public void Die()
     {
-        Debug.Log("killing " + name);
         vlight.enabled = false;
         animGeneral.enabled = true;
         animGeneral.Play("Die");

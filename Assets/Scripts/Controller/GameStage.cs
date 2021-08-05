@@ -24,6 +24,7 @@ public class GameStage : MonoBehaviour
     public bool isProcedural = false;
 
     public static implicit operator int(GameStage s) => s.number;
+    public bool hasBoss() => isBoss && EnemySpawner.remaining > 0;
 
     public void Awake()
     {
@@ -71,6 +72,14 @@ public class GameStage : MonoBehaviour
 
         actors.SetActive(true);
         spawn.SetEnabled(false);
+    }
+
+    public void FinishedEnemies()
+    {
+        Debug.Log("GameStage.FinishedEnemies");
+        if (isBoss) charger.SetEnabled(true);
+        charger.EnableParticles(true);
+        charger.SetChargeSpeed(1.5f);
     }
 
     public void OnCharged()

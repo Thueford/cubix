@@ -47,7 +47,7 @@ public class ChargeAnim : MonoBehaviour
     {
         SetAnimSpeed(duration);
         anim.Play("Charging", 0, 0);
-        SetEnabled(false);
+        // SetEnabled(false);
         level = -1;
     }
 

@@ -97,6 +97,7 @@ public abstract class EnemyBase : CtxSteer
     {
         base.Die();
         tag = "Untagged";
+        Debug.Log("killing " + name + "; Remaining: " + (EnemySpawner.remaining - 1));
         EnemySpawner.EnemyDied(this);
 
         float res = rgb.z == 1 ? resDrop / 2 : resDrop;
