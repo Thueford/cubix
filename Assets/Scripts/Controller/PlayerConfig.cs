@@ -4,7 +4,10 @@
 public class PlayerConfig : SaveData
 {
     public string version;
-    
+
+    public float volMusic = 1;
+    public float volSoundEff = 1;
+
     public int quality = 0;
     public bool shader = true;
     public bool computes = true;
@@ -89,14 +92,22 @@ public class PlayerConfig : SaveData
 
     public void ConfigMenu()
     {
+        GUIStyle style = new GUIStyle();
+        style.normal.background = GameState.self.menuBackground;
+
         GUILayout.BeginHorizontal();
         GUILayout.Space(100);
 
         GUILayout.BeginVertical();
         GUILayout.Space(100);
 
-        GUILayout.Label("Quality: ");
+        GUILayout.BeginHorizontal(style);
+        GUILayout.Space(20);
+        GUILayout.BeginVertical();
+        GUILayout.Space(20);
+
         GUILayout.BeginHorizontal();
+        GUILayout.Label("Quality: ");
         string[] names = QualitySettings.names;
         for (int i = 0; i < QualitySettings.names.Length; i++)
             if (GUILayout.Button(names[i]))
@@ -104,20 +115,48 @@ public class PlayerConfig : SaveData
         GUILayout.EndHorizontal();
 
         GUILayout.Space(20);
+        GUILayout.Label("Sounds: ");
+        GUILayout.BeginHorizontal();
+        GUILayout.Space(30);
+        GUILayout.BeginVertical();
+
+        GUILayout.Label("Music Volume");
+        volMusic = GUILayout.HorizontalSlider(volMusic, 0, 1);
+
+        GUILayout.Label("SoundEffect Volume");
+        volSoundEff = GUILayout.HorizontalSlider(volSoundEff, 0, 1);
+
+        GUILayout.EndVertical();
+        GUILayout.EndHorizontal();
+
+        GUILayout.Space(20);
         GUILayout.Label("Visuals: ");
+        GUILayout.BeginHorizontal();
+        GUILayout.Space(30);
+        GUILayout.BeginVertical();
 
         shader = GUILayout.Toggle(shader, " Shader   [X + S]");
         particles = GUILayout.Toggle(particles, " Particles   [X + P]");
         postProc = GUILayout.Toggle(postProc, " PostProcessing   [X + O]");
         computes = GUILayout.Toggle(computes, " Computes   [X + C]");
 
+        GUILayout.EndVertical();
+        GUILayout.EndHorizontal();
+
         GUILayout.Space(20);
-        GUILayout.Label("Effects: ");
+        GUILayout.Label("PostProcessing Effects: ");
+        GUILayout.BeginHorizontal();
+        GUILayout.Space(30);
+        GUILayout.BeginVertical();
+
         bloom = GUILayout.Toggle(bloom, " Bloom   [X + B]");
         lensFlare = GUILayout.Toggle(lensFlare, " LensFlare   [X + F]");
         CAEffect = GUILayout.Toggle(CAEffect, " Chromatic Abberation   [X + A]");
         CTREffect = GUILayout.Toggle(CTREffect, " CTR   [X + R]");
         lights = GUILayout.Toggle(lights, " Lights   [X + L]");
+
+        GUILayout.EndVertical();
+        GUILayout.EndHorizontal();
 
         GUILayout.Space(20);
         GUILayout.BeginHorizontal();
@@ -125,6 +164,8 @@ public class PlayerConfig : SaveData
         if (GUILayout.Button("Config")) System.Diagnostics.Process.Start(SAVEDATA_DIR);
         GUILayout.EndHorizontal();
 
+        GUILayout.EndVertical();
+        GUILayout.EndHorizontal();
         GUILayout.EndVertical();
         GUILayout.EndHorizontal();
 

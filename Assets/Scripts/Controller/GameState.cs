@@ -34,6 +34,7 @@ public class GameState : MonoBehaviour
     [NotNull] public GameObject PauseOverlay;
     [WarnNull] public Transform effectContainer;
     [NotNull] public Text txtDbg, txtFPS;
+    public Texture2D menuBackground;
 
     [ReadOnly] public Color[] colorOrderNonStatic;
     [ReadOnly] public Vector3Int unlockedColorsNonStatic;
