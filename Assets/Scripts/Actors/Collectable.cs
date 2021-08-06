@@ -8,7 +8,7 @@ public class Collectable : MonoBehaviour
     private static HaloShooter hs;
     private static GameObject CollPrefab;
     private static float chance = 0.1f;
-    private static float chanceWhite = 0.01f;
+    private static float chanceWhite = 0.075f;
 
     private Particles ps;
     private Light l;
@@ -126,7 +126,6 @@ public class Collectable : MonoBehaviour
             case cType.BLACK:
                 Player.self.Hit(-1);
                 break;
-
             case cType.RED:
                 GameState.addRed();
                 Ressource.self.addRes(Ressource.col.Red, 50);
@@ -142,7 +141,6 @@ public class Collectable : MonoBehaviour
                 Ressource.self.addRes(Ressource.col.Blue, 50);
                 ResParts.Spawn(transform.position, 50, ps.color.color);
                 break;
-
             case cType.HALO:
                 hs.activate(5);
                 break;
@@ -152,23 +150,32 @@ public class Collectable : MonoBehaviour
             case cType.ATKSPD:
                 Player.self.bs.atkSpeedBoost(5f, 2f);
                 break;
-
             case cType.ENDALLEXISTENCE:
-                Time.timeScale = 0.5f;
-                Instantiate(explosion, GameState.curStage.transform.position, Quaternion.identity, GameState.self.effectContainer)
+                //Time.timeScale = 0.5f;
+                Instantiate(explosion, GameState.curStage.transform.position, Quaternion.identity)
                     .SetProperties("Player", 30, 10, 0.8f);
                 break;
             default:
                 break;
         }
+        if (type != cType.ENDALLEXISTENCE) SoundHandler.PlayClip("collect");
     }
 
     public static void Drop(Vector3Int col, Vector3 pos)
     {
         if (!GameState.IsEndless()) return;
 
-        float dropChance = chance / EnemyBase.getColorCount((Vector4)(Vector3)col);
-        if (col == Vector3Int.one) dropChance = chanceWhite;
+        float dropChance = chance;
+        if (col == Vector3Int.one || col == Vector3Int.zero)
+            dropChance = chanceWhite;
+        else
+        {
+            dropChance *= col.sqrMagnitude;
+            if (col.z == 1) dropChance /= 3;
+        }
+
+        //float dropChance = chance / EnemyBase.getColorCount((Vector4)(Vector3)col);
+        //if (col == Vector3Int.one) dropChance = chanceWhite;
 
         if (Random.value <= dropChance)
         {

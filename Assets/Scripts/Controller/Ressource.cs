@@ -63,6 +63,7 @@ public class Ressource : MonoBehaviour
 
     void CoolDown()
     {
+        if (GameState.paused) return;
         if (redMode) check(addRes(col.Red, -cooldown));
         if (greenMode) check(addRes(col.Green, -cooldown));
         if (blueMode) check(addRes(col.Blue, -cooldown));
@@ -89,10 +90,10 @@ public class Ressource : MonoBehaviour
         Color color = textObject.color;
         string tmp = "";
 
-        if (value == 100) 
+        if (value == 100)
         {
             color.a = 1;
-            textObject.color = color; 
+            textObject.color = color;
         }
         else
         {

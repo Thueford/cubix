@@ -109,7 +109,7 @@ public class Bullet : MonoBehaviour
     void OnCollisionEnter(Collision c)
     {
         if (p.explodes) explode();
-        else hit();
+        else { hit(); SoundHandler.PlayClip("wallHit"); }
 
         if (--p.reflects < 0)
         {
@@ -143,6 +143,7 @@ public class Bullet : MonoBehaviour
             if (!b) Debug.LogWarning("bullet hit non-Entity");
             else if (!p.explodes)
             {
+                SoundHandler.PlayClip(SoundHandler.clips["enemyHit"]);
                 b.Hit(p.damage);
                 b.KnockBack(rb.velocity.normalized*(5+p.speed*0.15f));
             }
@@ -152,9 +153,13 @@ public class Bullet : MonoBehaviour
             if (!b) Debug.LogWarning("bullet hit non-Entity");
             else if (!p.explodes) b.Hit(p.damage);
         }
+        else if (c.CompareTag("EnemyBullet") && CompareTag("PlayerBullet"))
+        {
+            SoundHandler.PlayClip("wallHit");
+        }
 
         if (p.explodes) explode();
-        else hit();
+        else hit(); 
         if (--p.hits < 0) Destroy(gameObject);
     }
 }

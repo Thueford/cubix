@@ -27,12 +27,13 @@ public abstract class ShooterBase : MonoBehaviour
     // Update is called once per frame
     virtual protected void Update()
     {
-        timeCounter = Mathf.Min(timeCounter + Time.deltaTime, rateOfFire);
+        if (!GameState.paused)
+            timeCounter = Mathf.Min(timeCounter + Time.deltaTime, rateOfFire);
     }
 
     virtual public void tryShot()
     {
-        if (active && timeCounter >= rateOfFire)
+        if (active && timeCounter >= rateOfFire && !GameState.paused)
         {
             timeCounter = 0;
             shoot(transform.forward);
@@ -41,6 +42,7 @@ public abstract class ShooterBase : MonoBehaviour
 
     virtual protected void shoot(Vector3 dir)
     {
+        SoundHandler.PlayClip(SoundHandler.clips["shoot"]);
         if (amount <= 1) CreateAndLaunch(dir);
         else
         {
