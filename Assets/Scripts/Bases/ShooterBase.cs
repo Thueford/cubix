@@ -7,10 +7,10 @@ public abstract class ShooterBase : MonoBehaviour
     public bool active;
     [NotNull] public Bullet bulletPrefab;
 
-    protected bool singleFire;
-    protected int amount;
-    protected float timeCounter, rateOfFire, spread, shooterRadius;
-    protected Bullet.Properties p;
+    public int amount;
+    public float rateOfFire, spread;
+    public Bullet.Properties bulletProps;
+    protected float timeCounter, shooterRadius;
 
     virtual protected void Awake()
     {
@@ -20,7 +20,7 @@ public abstract class ShooterBase : MonoBehaviour
     // Start is called before the first frame update
     virtual protected void Start()
     {
-        p.owner = gameObject.tag;
+        bulletProps.owner = gameObject.tag;
         timeCounter = rateOfFire;
     }
 
@@ -43,7 +43,7 @@ public abstract class ShooterBase : MonoBehaviour
     virtual protected void shoot(Vector3 dir)
     {
         SoundHandler.PlayClip(SoundHandler.clips["shoot"]);
-        if (singleFire) CreateAndLaunch(dir);
+        if (amount <= 1) CreateAndLaunch(dir);
         else
         {
             float ang = spread / (amount - 1);
@@ -54,8 +54,10 @@ public abstract class ShooterBase : MonoBehaviour
 
     virtual protected void CreateAndLaunch(Vector3 dir)
     {
-        Bullet bullet = Instantiate(bulletPrefab, transform.position + dir * shooterRadius, Quaternion.identity, GameState.curStage.actors.transform);
-        bullet.setProperties(p);
+        Vector3 pos = transform.position + dir * shooterRadius;
+        pos.y = .5f;
+        Bullet bullet = Instantiate(bulletPrefab, pos, Quaternion.identity, GameState.curStage.actors.transform);
+        bullet.setProperties(bulletProps);
         bullet.launch(dir);
         //bullet.tag = tag + "Bullet";
     }

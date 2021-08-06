@@ -138,17 +138,20 @@ public class Player : EntityBase
         if (invulnurable <= 0 && c.collider.CompareTag("Enemy"))
         {
             GameState.save.stats.sacrifices++;
-            c.collider.GetComponent<EntityBase>().Die();
-            c.collider.GetComponent<SphereCollider>().isTrigger = true;
+            c.collider.GetComponent<EntityBase>().Hit(10);
             Hit(1);
         }
     }
 
-    public void TeleportNext(GameStage target = null)
+    public void TeleportNext(GameStage target = null, int endlessNo = 0)
     {
         if (GameState.curStage == null) return;
-        if (target == null) target = GameState.curStage.next;
-        if (target == null) target = StageBuilder.self.Generate(GameState.curStage.transform);
+        if (target == null && endlessNo == 0) target = GameState.curStage.next;
+        if (target == null)
+        {
+            if (endlessNo == 0) endlessNo = GameState.curStage + 1;
+            target = StageBuilder.self.Generate(GameState.self.endlessStartStage.transform, endlessNo);
+        }
 
         GameState.updateClearStats(target);
         if (GameState.curStage > 0) setHP(Mathf.Min(maxHP, HP + 1));
@@ -200,6 +203,7 @@ public class Player : EntityBase
     public override void Die()
     {
         base.Die();
+        Debug.Log("killing " + name);
         GameState.curStage.FreezeActors();
         GameState.updateDeadStats();
     }

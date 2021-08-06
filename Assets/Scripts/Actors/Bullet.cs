@@ -15,6 +15,7 @@ public class Bullet : MonoBehaviour
     private float radius, velocityMultiplier;
     private Properties p;
 
+    [System.Serializable]
     public struct Properties
     {
         public bool explodes;
@@ -94,12 +95,12 @@ public class Bullet : MonoBehaviour
 
     private void hit()
     {
-        Instantiate(hitPrefab, transform.position, Quaternion.identity);
+        Instantiate(hitPrefab, transform.position, Quaternion.identity, GameState.self.effectContainer);
     }
 
     private void explode()
     {
-        Instantiate(explosionPrefab, transform.position, Quaternion.identity)
+        Instantiate(explosionPrefab, transform.position, Quaternion.identity, GameState.self.effectContainer)
             .SetProperties(p);
     }
 

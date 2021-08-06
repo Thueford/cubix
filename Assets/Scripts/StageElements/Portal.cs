@@ -15,6 +15,7 @@ public class Portal : MonoBehaviour
     private Dimmer dimCol = new Dimmer(1f, 0, 0.1f, 1);
 
     public GameStage target;
+    public int targetNo;
     public bool isEndless = false;
     private bool active;
 
@@ -49,7 +50,15 @@ public class Portal : MonoBehaviour
         if(c.CompareTag("Player"))
         {
             Debug.Log("Teleporting");
-            Player.self.TeleportNext(target);
+            if (isEndless)
+            {
+                InputHandler.enableSpace = true;
+                InputHandler.enableNumbers = true;
+                GameState.addRed();
+                GameState.addGreen();
+                GameState.addBlue();
+            }
+            Player.self.TeleportNext(target, targetNo);
         }
     }
 

@@ -13,19 +13,7 @@ public class PlayerShooter : ShooterBase
     override protected void Start()
     {
         base.Start();
-
-        singleFire = true;
-        amount = 5;
-        rateOfFire = .3f;
-        spread = 30f;
-
-        p.explodes = false;
-        p.reflects = 0;
-        p.hits = 0;
-        p.speed = 40f;
-        p.damage = 1f;
-        p.explosionRadius = 6f;
-        p.color = GameState.V2Color(Vector3Int.zero);
+        bulletProps.color = GameState.V2Color(Vector3Int.zero);
     }
 
     // Update is called once per frame
@@ -39,36 +27,36 @@ public class PlayerShooter : ShooterBase
         if (rgbNew.x != rgb.x) toggleRed(rgbNew.x == 1);
         if (rgbNew.y != rgb.y) toggleGreen(rgbNew.y == 1);
         if (rgbNew.z != rgb.z) toggleBlue(rgbNew.z == 1);
-        p.color = GameState.V2Color(rgbNew);
+        bulletProps.color = GameState.V2Color(rgbNew);
         rgb = rgbNew;
 
-        amount = (rgb - Vector3Int.forward).sqrMagnitude == 0 ? 5 : 3;
+        amount = rgb.z == 1 ? ((rgb - Vector3Int.forward).sqrMagnitude == 0 ? 5 : 3) : 1;
     }
 
     private float cndinv(float f, bool b) => b ? f : 1/f;
 
-    public void toggleRed(bool b) {
+    public void toggleRed(bool b)
+    {
         lastColor = Vector3Int.right;
-        p.explodes = b;
-        p.speed *= cndinv(2/3f, b);
+        bulletProps.explodes = b;
+        bulletProps.speed *= cndinv(2/3f, b);
     }
 
     public void toggleGreen(bool b)
     {
         lastColor = Vector3Int.up;
-        p.speed *= cndinv(3, b);
+        bulletProps.speed *= cndinv(3, b);
         rateOfFire *= cndinv(1.5f, b);
-        p.damage *= cndinv(2, b);
-        p.reflects = b ? 2 : 0;
-        p.hits = b ? 4 : 0;
+        bulletProps.damage *= cndinv(2, b);
+        bulletProps.reflects = b ? 2 : 0;
+        bulletProps.hits = b ? 4 : 0;
     }
 
     public void toggleBlue(bool b)
     {
         lastColor = Vector3Int.forward;
         rateOfFire *= cndinv(2/3f, b);
-        p.damage *= cndinv(1/3f, b);
-        singleFire = !b;
+        bulletProps.damage *= cndinv(1/3f, b);
     }
 
     public void atkSpeedBoost(float duration, float mult)
@@ -90,7 +78,7 @@ public class PlayerShooter : ShooterBase
     override protected void shoot(Vector3 dir)
     {
         base.shoot(dir);
-        GameState.save.stats.firedBullets += singleFire ? 1 : amount;
+        GameState.save.stats.firedBullets += amount;
         if (rgb.x == 1) GameState.save.stats.firedRedShots++;
         if (rgb.y == 1) GameState.save.stats.firedGreenShots++;
         if (rgb.z == 1) GameState.save.stats.firedBlueShots++;

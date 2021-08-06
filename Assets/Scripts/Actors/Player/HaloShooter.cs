@@ -10,19 +10,7 @@ public class HaloShooter : ShooterBase
     override protected void Start()
     {
         base.Start();
-
-        singleFire = false;
-        amount = 8;
-        rateOfFire = .3f;
-        spread = 315f;
-
-        p.explodes = false;
-        p.reflects = 0;
-        p.hits = 0;
-        p.speed = 40f;
-        p.damage = 1f;
-        p.explosionRadius = 7.5f;
-        p.color = GameState.V2Color(Vector3Int.zero);
+        bulletProps.color = GameState.V2Color(Vector3Int.zero);
     }
 
     // Update is called once per frame

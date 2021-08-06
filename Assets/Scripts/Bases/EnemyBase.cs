@@ -5,15 +5,16 @@ using UnityEngine;
 public abstract class EnemyBase : CtxSteer
 {
     [Header("Other Settings")]
-    public Color color;
     protected int pnOff;
 
     public static bool ctxIDLE = true;
     public const float resDrop = 10;
+    public bool isBoss = false;
 
     override public void Awake()
     {
         base.Awake();
+        setColor(_color);
         animGeneral.Play("Spawn", 0, 0);
         pnOff = (int)Random.Range(-1e5f, 1e5f);
     }
@@ -34,7 +35,7 @@ public abstract class EnemyBase : CtxSteer
 
     public void setColor(Color c)
     {
-        _color = c;
+        _color = c.a == 0 ? GameState.black : c;
         rgb = Vector3Int.FloorToInt((Vector4)c);
         rend.material.color = c;
         vlight.color = GameState.getLightColor(c);
@@ -42,14 +43,16 @@ public abstract class EnemyBase : CtxSteer
         if (c == Color.white)
         {
             maxSpeed += 2;
-            HP = startHP *= 5 / 3f;
+            startHP *= 5 / 3f;
         }
         else
         {
-            if (c.r == 1) { maxSpeed -= 1; HP = startHP *= 2f; }
+            if (c.r == 1) { maxSpeed -= 1; startHP *= 2f; }
             if (c.g == 1) maxSpeed += 2;
-            if (c.b == 1) HP = startHP *= 0.5f;
+            if (c.b == 1) startHP *= 0.5f;
         }
+
+        startHP *= GameState.HPfactor;
     }
 
 
@@ -97,6 +100,7 @@ public abstract class EnemyBase : CtxSteer
     {
         base.Die();
         tag = "Untagged";
+        Debug.Log("killing " + name + "; Remaining: " + (EnemySpawner.remaining - 1));
         EnemySpawner.EnemyDied(this);
 
         float res = rgb.z == 1 ? resDrop / 2 : resDrop;

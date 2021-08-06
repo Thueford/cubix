@@ -28,11 +28,11 @@ public class GameState : MonoBehaviour
     public static int colorCount = 0;
     public static bool paused { get; private set; } = false;
     public static bool showMenu = false;
-    public static int endlessNo => self && self.endlessStartStage ? self.endlessStartStage : 1000;
 
     [NotNull] public GameStage startStage;
     [NotNull] public GameStage endlessStartStage;
     [NotNull] public GameObject PauseOverlay;
+    [WarnNull] public Transform effectContainer;
     [NotNull] public Text txtDbg, txtFPS;
 
     [ReadOnly] public Color[] colorOrderNonStatic;
@@ -40,9 +40,18 @@ public class GameState : MonoBehaviour
 
     private float lastFpsTime = 0;
 
+
+    public static int endlessNo => self && self.endlessStartStage ? self.endlessStartStage : 1000;
+
+    // difficulty slope for factor f at stage s: (f - 1) / s
+    private const float HPslope = (2 - 1) / 20;
+    public static float HPfactor => curStage > endlessNo ? 1 + HPslope * (curStage - 10) : 1;
+
+
     void Awake()
     {
         self = this;
+        if (effectContainer == null) effectContainer = gameObject.transform;
         if (txtDbg == null) Debug.LogWarning("player.txtDbg not assigned");
         else dbgSet("");
 
@@ -209,8 +218,8 @@ public class GameState : MonoBehaviour
         if (!save.stats.reachedEndless && next == 1)
             save.stats.stageDeaths = new int[11];
 
-        next.Load();
         curStage = next;
+        next.Load();
         next.OnStageEnter();
 
         if (stateCurStage.stage != next)
