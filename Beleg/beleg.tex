@@ -9,7 +9,8 @@
 \include{packages}
 \include{macros}
 \include{code}
-\include{code_cs}
+\include{code_csh}
+\include{code_hlsl}
 
 \graphicspath{{img/}{img/coll/}{img/enem/}{img/shot/}}
 
@@ -370,9 +371,14 @@ In jeder Stage können beliebig viele Spawner platziert werden, jedoch ist durch
 
 
 
+
 \section{Partikelsystem}
 
-\lipsum[3]
+Ursprünglich wurde das Partikelsystem basierend auf \href{https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstancedIndirect.html}{DrawMeshInstancedIndirect} entworfen. Das hatte den Nachteil, 
+Das Partikelsystem besteht aus einer Controller-Klasse in CSharp\#, einem Compute-Shader für die Berechnung und einem Unlit-Shader für die Darstellung.
+
+\include{partikel}
+
 
 
 
@@ -491,6 +497,12 @@ In jeder Stage können beliebig viele Spawner platziert werden, jedoch ist durch
 \bibitem{qCtxSteer} Context-Steering Demo vom 10.10.2020,  Zugriff:  19.05.2021, \\ URL:
 \url{https://www.youtube.com/watch?v=6BrZryMz-ac}
 \url{http://www.gameaipro.com/GameAIPro2/GameAIPro2_Chapter18_Context_Steering_Behavior-Driven_Steering_at_the_Macro_Scale.pdf}
+
+\bibitem{qPartS1} Drawing Thousands of Meshes in Unity vom 01.11.2019, Zugriff 17.06.2021
+\url{https://toqoz.fyi/thousands-of-meshes.html}
+
+\bibitem{qPartS2} GPUParticles vom 22.12. 2017, Zugriff 22.06.2021
+\url{https://github.com/Robert-K/gpu-particles/tree/master/Assets/GPUParticles}
 
 \end{thebibliography}
     

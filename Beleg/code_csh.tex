@@ -1,0 +1,51 @@
+\lstdefinestyle{style_csh}{
+    language=[sharp]c, style=codecolors,
+    morecomment=[l]{\#},
+    classoffset=1,
+    morekeywords={
+        % Custom enums
+        Shape,
+        % Custom classes
+        Particles,
+        % Custom structs
+        Stats, GeneralProps, RenderSettings, DynamicEffect, Colors,
+        % C# types
+        Serializable,
+        % Unity types
+        MonoBehaviour, ComputeShader, ComputeBuffer, Material, Texture, Texture2D, Gradient,
+        % Vector types
+        Vector2, Vector3, Vector3Int, Vector4, Color,
+        %  Attribute types
+        Header, Tooltip, NotNull, WarnNull, Range
+    },
+    keywordstyle=\color{clgreen},
+}
+
+\newcommand{\cshinline}[1]{\lstinline[style=style_csh]{#1}}
+
+\newcommand{\cshmlinline}[1]{
+    \lstinline[style=style_csh,style=codeblock]{#1}
+}
+
+\lstnewenvironment{csh}[1][]{\lstset{style=style_csh, style=codeblock1, #1}}{}
+\lstnewenvironment{csh2}[1][]{\lstset{style=style_csh, style=codeblock2, #1}}{}
+
+\newcommand*{\cshitem}[1]{
+  \setbox0\hbox{\cshinline{#1}}
+  \item[\usebox0] \hfill \\
+}
+
+\newcommand*{\cshmlitem}[1]{
+	\setbox0\hbox{\cshmlinline{#1}}
+	\item[\usebox0] \hfill \\
+}
+
+\surroundwithmdframed[
+    hidealllines=true,
+    skipabove=12pt,
+    skipbelow=16pt,
+    backgroundcolor=clgray,
+    innerleftmargin=5pt,
+    innertopmargin=10pt,
+    innerbottommargin=0pt
+]{csh}
