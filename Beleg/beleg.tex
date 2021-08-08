@@ -384,6 +384,48 @@ Das Partikelsystem besteht aus einer Controller-Klasse in CSharp\#, einem Comput
 
 \section{Postprocessing}
 
+Postprocessing bezeichnet im Kontext der Videospielgrafik die Nachbearbeitung eines bereits ganz oder teilweise gerenderten Bildes mit einem oder mehreren Bildeffekten. Das Ziel des Postprocessings bei Cubix ist es, alte Videoaufnahme- und -wiedergabegeräte nachzubilden. Um diesen Effekt zu erzielen, werden Bildartefakte, die durch diese Hardware entstehen, als Nachbearbeitungseffekte dem fertigen Bild hinzugefügt.
+
+Die verwendeten Effekte, die von alten Kameras verursacht werden, sind Bloom, Lens Flare, Chromatic Aberration und Vignette. 
+Ein alter Monitor kann Scanlines verursachen, gewölbt sein und ebenfalls für Vignette und Chromatic Aberration sorgen.
+
+Jeder der genannten Effekte wird in den späteren Abschnitten genauer erläutert. Man beachte, dass sowohl alte Displays als auch Linsen Vignette und Chromatic Aberration verursachen können, was dann zu kleinen Unterschieden im Auftreten dieser Effekte führen kann. Die Entscheidung, wie diese Effekte letztendlich darzustellen sind ist rein artistisch.
+
+
+
+\subsection{Postprocessing - Pipeline}
+
+Das Postprocessing wird über ein ebenso benanntes Skript gesteuert. Bloom und Lens Flare werden von einem jeweils eigenen Compute Shader durchgeführt, alle anderen Effekte werden in eigenen Passes eines Image Effect Shaders durchgeführt. Diese sind im Skript als Objekte angelegt:
+
+\begin{csh}
+    public ComputeShader bloom;
+    public ComputeShader lensFlare;
+    public Material postProcMat;
+\end{csh}
+
+Weiterhin werden für den Lens Flare eine Textur einer schmutzigen Linse und eine Starburst Textur benötigt:
+
+\begin{csh}
+    public Texture2D lensDirtTex;
+    public Texture2D starburstTex;
+\end{csh}
+
+Zur Sequenziellen Ausführung aller Effekte werden insgesamt 6 RenderTextures angelegt:
+
+\begin{csh}
+    public RenderTexture sourceTex;
+    public RenderTexture brightTex;
+    public RenderTexture blurrBuff;
+    public RenderTexture caResult;
+    public RenderTexture lfResult;
+    public RenderTexture lensDirt;
+\end{csh}
+
+Durchgeführt wird das Postprocessing in der Funktion \begin{csh} private void OnRenderImage(RenderTexture source, RenderTexture destination) \end{csh} . Diese Funktion wird von der Unity Engine zur Verfügung gestellt und in einem Skript, das an eine Kamera angehängt ist, immer dann aufgerufen, wenn ein neues Bild gerendert wurde. Source ist dabei das gelieferte Bild und Destination ist das Bild, welches zum Schluss abgebildet wird. Source kann also bevor es nach Destination geschrieben wird noch beliebig verändert werden. Der erste Effekt, welcher auf das Bild angewendet wird, ist Bloom. Bloom ist als Compute Shader verfasst, für den Texturen, in die geschrieben werden soll, das Flag 'enableRandomWrite' benötigen. Dieses lässt sich für einmal erstellte Texturen im Nachhinein nicht mehr ändern und ist in Source standardmäßig deaktiviert. Also ist der erste Schritt, mit der Funktion \begin{csh} Graphics.Blit(source, sourceTex); \end{csh} den Inhalt von Source in die zuvor angelegte Textur sourceTex zu schreiben, für welche das benötigte Flag gesetzt ist.
+
+
+
+\subsection{Blurr}
 \lipsum[3]
 
 
@@ -457,6 +499,16 @@ Das Partikelsystem besteht aus einer Controller-Klasse in CSharp\#, einem Comput
 \begin{description}
 \item[GUI] Graphical User Interface
 \item[Prefab] ??
+\item[Shader] Programm, das auf der Grafikkarte ausgeführt wird
+\item[Uniform] Variable, die aus dem Hauptprogramm aus für ein Shaderprogramm gesetz werden kann
+\item[Compute Shader] Shader, der Kernels in mehreren Arbeitsgruppen ausführt
+\item[Kernel] Bestandteil des Compute Shaders, enthält die Arbeitsanweisungen für die Arbeitsgruppen
+\item[Postprocessing] Nachbearbeitung (zum Beispiel eines Bildes)
+\item[Bloom] Überblendung, helle Bereiche eines Bildes überstrahlen naheliegende Bereiche
+\item[Lens Flare] Helle Bereiche eines Bildes erzeugen blasse Abbilder auf einer Linie in Richtung der Mitte das Bildes
+\item[Chromatic Aberration] Chromatische Abweichung, Licht unterschiedlicher Wellenlängen wird in einem Bild unterschiedlich stark verzerrt
+\item[Vignette] Abdunklung eines Bildes in der Nähe der Bildschirmränder
+\item[Scanlines] Dunkle, horizontale Linien. Artefakt alter CRT Monitore
 \end{description}
 
 
