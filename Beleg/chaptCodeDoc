@@ -1,0 +1,140 @@
+
+\chapter{Dokumentation}
+
+
+
+
+\section{Software-Architektur}
+
+\lipsum[1]
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[height=170pt]{cross.png}
+\caption{Klassendiagramm}
+\label{fig:classdiag}
+\end{center}
+\end{figure}
+    
+
+
+
+\section{Stages}
+\label{sect:stages}
+
+
+\subsection{Aufbau}
+
+Eine Stufe besteht im Wesentlichen aus 2 Gruppen von Komponenten: den statischen, unveränderlichen und den dynamisch generierten.
+
+Zu den statischen gehören Wände, die den Spielbereich abgrenzen und ggf. Hindernisse auf dem Spielfeld darstellen, der Spawn auf dem der Spieler die Stufe betritt, das Portal durch das der Spieler in die nächste Stufe gelangt und der Charger, den der Spieler aufladen muss, um das Portal zu aktivieren.
+
+Zu den dynamischen gehören die Gegner, abgefeuerte Bullets, Collectables, ggf. dynamisch generierte Hindernisse sowie dazugehörige Partikeleffekte. Zudem kann es in einer Stufe ein oder mehrere für den Spieler unsichtbare Gegnerspawner (siehe \nameref{subsect:spawner}) geben.
+
+Alle dynamischen Objekte werden in einem dafür angelegten Containerobjekt in der Stage hinterlegt, damit er in seiner Gesamtheit bein Entladen einer Stufe gelöscht werden kann.
+
+
+
+\subsection{Tutorialstages}
+
+Das Tutorial besteht aus geskripteten Stages mit voreingestellten Spawnern, Farbcollectables und Hinweistexten. Die Hinweistexte werden hierbei durch zu den Stages gehörigen Skripte gesteuert.
+
+
+
+\subsection{Stagegenerator}
+
+\lipsum[3]
+
+
+
+\section{Spieler}
+
+\lipsum[3]
+
+
+
+\subsection{Input}
+
+\lipsum[3]
+
+
+\subsection{Movement}
+
+\lipsum[3]
+
+
+\subsection{Shooting}
+
+\lipsum[3]
+
+
+\subsection{Ressource}
+
+\lipsum[3]
+
+
+
+
+\section{Gegner}
+
+\lipsum[3]
+
+
+
+\subsection{Context-Steering}
+
+Um das Gefecht interessanter zu machen wurde die Gegner-KI mit dem sog. Context-Steering Algorithmus\cite{qCtxSteer} (auch gen. Behavior-Driven Steering) ausgestattet.
+
+Grundlegend wird hierbei jedem Objekt ein Wert zugeordnet der angibt, wie anstrebenswert es von bestimmten Entitäten ist. Ein positiver Wert ist hierbei ein Ziel, welches verfolgt wird, während ein negativer Wert ein zu vermeidendes Objekt darstellt.
+
+In dieser Implementierung gibt es sog. Effektoren, die jeweils vier Werte speichern:
+
+\begin{description}
+\item[Zieltag] Zeichenkette, die die Gruppe an Objekten mit dieser Begehrlichkeit beschreibt
+\item[Begehrlichkeitswert] wie anstrebenswert ein Objekt ist. Ein positiver Wert ist hierbei ein Ziel, welches verfolgt wird, während ein negativer Wert ein zu vermeidendes Objekt darstellt.
+\item[Mindestabstand] Wie nah eine Entität sein muss, um von diesem Effektor beeinflusst zu werden
+\item[Typ] Wie stark der Effektor abhängig vom Abstand wirkt. Das kann hier entweder logisch, linear oder quadratisch sein. 
+\end{description}
+
+Jede Entität bestimmt dann anhand der Formel $ clamp(typed(1 - dist / dist_{min}), 0, 1) * v_{dir} $ einen Vektor der die die Richtung und die Kraft zu diesem Objekt angibt.
+
+Für die Erkennung von Wänden schaut jede Entität in in 30° Schritten um sich herum und schickt in jede dieser Richtungen einen Physik-Raycast. Von den Effektor-Vektoren wird dann  mittels Punktprodukt ein anteiliger Faktor in diese Richtung ermittelt und die resultierende Richtung durch die Summe dieser Richtungsvektoren ermittelt.
+
+Für etwas mehr Abwechslung wird diese noch durch Perlin-Noise ein wenig abgeändert.
+
+Da jede Gegnerart ein eigenes Verhalten hat, haben diese auch unterschiedliche Effektorenlisten. Strays besitzen nur das Standardverhalten und bewegen sich rein durch noise und vermeiden Wände und andere Gegner. Hunter haben zusätzlich eine Kraft zum Spieler hin und Archer wiederum noch einen Effektor mit kleinerem Radius vom Spieler weg, ebenfalls mit etwas Noise damit der Archer scheinbar vom SPieler strategisch vor- und zurückweicht.
+
+
+
+\subsection{Gegnerspawner}
+\label{subsect:spawner}
+
+Die Gegnerspawner sind standardisierte Rechteck-Objekte, die unsichtbar für den Spieler einen Bereich markieren in dem Gegner mit einstellbaren Wahrscheinlichkeiten und Eigenschaften erscheinen:
+
+\begin{description}
+\item[Typverteilung] Wahrscheinlichkeitsverteilung der Gegnertypen.
+\item[Farbverteilung] Wahrscheinlichkeitsverteilung der Farbmodifikatoren, abhängig von der Reihenfolge, in der die Schussfarben eingesammelt wurden.
+\item[maxColors] maximale Anzahl an Farben die die Gegner haben können
+\item[amount] maximale Anzahl an Gegner die dieser Spawner spawnt
+\item[wavesize] Anzahl an Gegnern die der Spawner auf einmal spawnt (typischerweise 1-3)
+\item[initDelay] Zeitspanne die der Spawner nach Aktivierung des Chargers wartet bis er anfängt Gegner zu spawnen
+\item[delay] Zeitspanne zwischen Gegnerwellen
+\item[variation] Zeitspanne, nach der einzelne Gegnerspawns verzögert werden
+\end{description}
+
+Zudem hat jede Stage eine Maximale Anzahl an Gegnern, die sich Zeitgleich in der Stage aufhalten können, damit der Spieler nicht von Gegnern überrant wird.
+
+In jeder Stage können beliebig viele Spawner platziert werden, jedoch ist durch die verfügbaren Einstellungsmöglichkeiten schon mit einem einzelnen Spawner meist ausreichend Variabilität möglich. Mehrere Spawner werden erst vonnöten, wenn man in einer Stage zeitlich verteilt verschiedene Wellen spawnen möchte.
+
+
+
+
+\section{Physics}
+
+\lipsum[3]
+
+
+
+\section{Sound}
+
+\lipsum[3]
