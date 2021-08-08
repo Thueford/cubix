@@ -1,10 +1,9 @@
 
 \subsection{Partikel-Struktur}
-\label{lst:particle}
 
-Um den aktuellen Status eines einzelnen Partikels zu repräsentieren sollten möglichst kompakt alle für die Bewegung und Darstellung notwendigen Daten gespeichert werden. Dazu gehören die aktuelle Position, Geschwindigkeit und einwirkende Kraft, die Farbe und größe des Partikels und ein Random-Seed wert, der ggf. für zufälliges Verhalten verwendet wird.
+Um den aktuellen Status eines einzelnen Partikels zu repräsentieren sollten möglichst kompakt alle für die Bewegung und Darstellung notwendigen Daten gespeichert werden. Dazu gehören die aktuelle Position, Geschwindigkeit und einwirkende Kraft, die Farbe und grö{\ss}e des Partikels und ein Random-Seed wert, der ggf. für zufälliges Verhalten verwendet wird.
 
-\begin{csh}
+\begin{csh}[caption=Partikelstruktur,label=lst:particle]
 public struct Particle
 {
     public Vector3 pos, vel, force;
@@ -16,7 +15,7 @@ public struct Particle
 
 \subsection{Partikel-Verhalten}
 
-Darüber hinaus gibt es Variablen, die für jedes Partikel im Partikelsystem gleich gelten. Diese bestimmen, wie genau sich Partikel verhalten. Dazu gehören Ausgangswerte aller Positionsbezogenen Daten (Spawnposition und Geschwindigkeit), Größe, Farbe und Lebensdauer und wie sie sich über letztere hinweg verändern.
+Darüber hinaus gibt es Variablen, die für jedes Partikel im Partikelsystem gleich gelten. Diese bestimmen, wie genau sich Partikel verhalten. Dazu gehören Ausgangswerte aller Positionsbezogenen Daten (Spawnposition und Geschwindigkeit), Grö{\ss}e, Farbe und Lebensdauer und wie sie sich über letztere hinweg verändern.
 
 % \begin{csh}
 % public class Particles : MonoBehaviour
@@ -35,14 +34,6 @@ Darüber hinaus gibt es Variablen, die für jedes Partikel im Partikelsystem gle
 %     [Tooltip("Vector3 + w: factor")]
 %     public Vector4 attractor;
 %     #endregion
-
-%     #region Flags
-%     private static int F(bool v, int p) => v ? 1 << p : 0;
-%     int GetFlags() =>
-%         F(!stats.prewarmed, 0) +
-%         F(color.useGradient, 1) +
-%         F(color.useVariation, 2);
-%     #endregion
 %     // ...
 %     #endregion
 % \end{csh}
@@ -53,7 +44,7 @@ Darüber hinaus gibt es Variablen, die für jedes Partikel im Partikelsystem gle
 
 Für Positionsdaten wird eine allgemeine Struktur mit standardisierter Uniform-Benennung verwendet, die einen Ausgangsvektor, einen Abweichungsvektor und eine Form in der diese Abweichung auftritt, definiert.
 
-\begin{csh}
+\begin{csh}[caption=DynamicEffect Struktur]
 public enum Shape { DOT, CIRCLE, RECT, SPHERE, CUBE };
 
 [System.Serializable]
@@ -104,7 +95,7 @@ public struct Colors
 
 Zu guter Letzt hat ein Partikelsystem noch einige globale Eigenschaften, die dessen Verhalten definieren. Dazu gehört die maximale Partikelzahl, die Emmitierrate, die Lebensdauer eines Partikels, sowie ob das PS aktiv ist, ob es sich wiederholt (d.h. ständig generiert wird oder nur bis insgesamt die maximale Partikelzahl erreicht wurde), ob es vorwärmen (d.h. einen Lebenszyklus beim Initialisieren emulieren soll) und einige weniger Relevante Eigenschaften auf die ich ggf. später zurückkomme.
 
-\begin{csh}
+\begin{csh}[caption=Partikel Struktur]
 [System.Serializable]
 public struct GeneralProps
 {
@@ -128,15 +119,19 @@ public struct GeneralProps
 
 Um die Partikel möglichst effizient berechnen zu können werden Compute Shader verwendet. Alle Daten die an den ComputeShader gegeben werden sollen werden in sog. ComputeBuffer geschrieben. Diese werden direkt auf der Grafikkarte abgelegt. Das sind zum einen sämtliche Partikeldaten als Standard StructuredBuffer und ein AppendBuffer von IDs toter Partikel.
 
-\begin{csh}
+\begin{csh}[caption=Controller Setup,label=lst:partSetup]
 #region Variables
-[NotNull] public Texture tex;  // particle texture
-[NotNull] public Material mat; // UnlitShader rendering material
+// Calculation
 [NotNull] public ComputeShader compute;
-
 private ComputeBuffer particlesBuf; // particle properties
 private ComputeBuffer deadBuf;      // dead particle indices
+private ComputeBuffer counterBuf;   // deadBuf count
+
+// Display
 private ComputeBuffer quadVertBuf;  // particle vertices
+public RenderSettings renderSettings = RenderSettings.Default;
+[NotNull] public Texture tex;  // particle texture
+[NotNull] public Material mat; // UnlitShader rendering material
 #endregion
 
 #region Setup
@@ -158,9 +153,9 @@ private void InitializePartBuffer()
 #endregion
 \end{csh}
 
-Der ComputeShader beinhaltet an dem Punkt nur die Kernel-Deklarationen, ein Include einiger Präprozessor-Makros und der obigen Partikel-Struktur (siehe \nameref{lst:particle}), sowie dem Partikel-Buffer. % Diese kommen manchmal doppelt vor, da Unity intern eine Restriktion von $2^16 = 65536$ Threadgruppen pro Kernel vorgibt. Dh. mit einem Aufruf mit mehr als $2^16$ Elementen würde er nicht alle Elemente abarbeiten können, und mit weniger würde die Grafikkarte unnötig ausgelastet.
+Der ComputeShader beinhaltet an dem Punkt nur die Kernel-Deklarationen, ein Include einiger Präprozessor-Makros und der obigen Partikel-Struktur (siehe \fullref{lst:particle}), sowie dem Partikel-Buffer. % Diese kommen manchmal doppelt vor, da Unity intern eine Restriktion von $2^16 = 65536$ Threadgruppen pro Kernel vorgibt. Dh. mit einem Aufruf mit mehr als $2^16$ Elementen würde er nicht alle Elemente abarbeiten können, und mit weniger würde die Grafikkarte unnötig ausgelastet.
 
-\begin{hlsl}
+\begin{hlsl}[caption=Compute Setup]
 #pragma kernel Init
 #pragma kernel Emit
 #pragma kernel Update
@@ -173,9 +168,9 @@ RWStructuredBuffer<Particle> _Particles;
 
 \subsubsection{Initialisierung}
 
-Bei der Initialisierung werden
+Bei der Initialisierung werden sämtliche Partikel IDs dem deadBuffer hinzugefügt und deren Lebenszeit auf 0 gesetzt. Das ist der Ausgangszustand bei dem es keine lebendingen Partikel gibt.
 
-\begin{csh}
+\begin{csh}[caption=Controller Init Dispatch]
 private void DispatchInit()
 {
     compute.SetBuffer(kernelInit, "_Particles", particlesBuf);
@@ -184,8 +179,8 @@ private void DispatchInit()
 }
 \end{csh}
 
-\begin{hlsl}
-ConsumeStructuredBuffer<uint> _Alive;
+\begin{hlsl}[caption=Compute Init Kernel]
+AppendStructuredBuffer<uint> _Dead;
 
 [numthreads(THREADS, 1, 1)]
 void Init(uint3 id : SV_DispatchThreadID)
@@ -197,9 +192,36 @@ void Init(uint3 id : SV_DispatchThreadID)
 
 
 
-\subsubsection{Emit}
-\begin{csh}
+\subsubsection{Emission}
+
+Um Partikel zu emmittieren wird in zu jedem Frame-Update geprüft, wie viele Partikel abhängig von der Spawn- und der Framerate gespawnt werden sollen. Um auch sehr niedrige Raten zu unterstützen wird eine Partikelzeit mitgezählt, die jedes Frame um die Frametime erhöht, und bei jedem Emit um die Emissiontime gesenkt wird. So kann bspw. auch bei einer Bildrate von 60fps ein einzelnes Partikel pro Sekunde emmittiert werden, da die Zeit zwischen zwei Frames bei dem kein Partikel emmittiert wird nicht verloren geht.
+
+\begin{csh}[caption=Controller Emission]
+void Update()
+{
+    /* ... */
+    if (properties.enabled && properties.emissionRate > 1e-2)
+    {   // spawn particles
+        if (partTimer == 0) partTimer = -10 * Time.deltaTime;
+        partTimer += Time.deltaTime;
+
+        DispatchEmit((int)(partTimer * properties.emissionRate));
+        partTimer -= (int)(partTimer * properties.emissionRate) / properties.emissionRate;
+    }
+}
+\end{csh}
+
+Bevor die Partikel tatsächlich gespawnt werden wird noch die Anzahl gegen verschiedene Grenzen getestet - ua. die maximal lebendige Partikelzahl und bei nichtwiederholendem PS die bisher insgesamt emmittierte Partikelzahl.
+
+Dann werden dem Compute-Shader sämtliche für den Spawn relevanten Informationen per Uniform überreicht. Ua. wie beim Init-Kernel die Partikeldaten und die IDs toter Partikel - diesmal aber als Comsume- statt AppendBuffer, da wiederbelebten Partikel nicht tot sind und somit aus dem deadBuffer entfernt werden müssen. Weiterhin werden einige Flags als Bitmaske in einem Integer übergeben, um ggf. den Datenverkehr gering zu halten, sowie eine Reihe an Zufallswerten für die Randomisierung einiger Werte.
+
+\begin{csh}[caption=Controller Emission Dispatch]
 #region Emit
+private static int F(bool v, int p) => v ? 1 << p : 0;
+int GetFlags() =>
+    F(!stats.prewarmed, 0) +
+    F(color.useGradient, 1) +
+    F(color.useVariation, 2);
 
 private void UniformEmit(int kernel)
 {
@@ -207,47 +229,29 @@ private void UniformEmit(int kernel)
     compute.SetBuffer(kernel, "_Alive", deadBuf);
 
     compute.SetInt("_Flags", GetFlags());
-    compute.SetVector("_PosParent", transform.position); // + posOffset
-    // compute.SetMatrix("_Rotation", Matrix4x4.Rotate(rotation));
-    compute.SetVector("_SpdParent", velocityFactor * _velocity);
     compute.SetVector("_Seeds", new Vector4(Random.value, Random.value, Random.value, Random.value));
     compute.SetFloat("_Lifetime", properties.lifetime);
 
-    pos.Uniform(compute, "_Pos");
-    vel.Uniform(compute, "_Spd");
-    force.Uniform(compute, "_Force");
-    posFac.Uniform(compute, "_PosFac");
-    //radial.Uniform(compute, "_Radial");
-
-    compute.SetVector("_Size", size.val);
-    color.UniformEmit(compute, "_Color");
+    /* color size pos vel force posfac and parent Uniforms ... */
 }
 
+// try to emit <count> particles
 public int DispatchEmit(int count)
 {
+    // skip if no repeat and all emmitted
     if (!properties.repeat && stats.emitted > curMaxParts) return 0;
 
-    if (stats.medAlive >= curMaxParts && properties.repeat && stats.alive + count > curMaxParts)
-        ReadDeadCount(true);
-    
+    // calculate actually possible emission count
     count = Mathf.Min(count, 1 << 15, curMaxParts - stats.alive);
+    if (count <= 0) return 0;
     if (!properties.repeat && stats.emitted + count > curMaxParts)
         count = curMaxParts - stats.emitted;
 
-    if (count <= 0) count = 0;
-    stats.ppf = count;
-    stats.pps = Mathf.RoundToInt(count / Time.deltaTime);
-    if (count <= 0) return 0;
+    // calculate alive count
+    stats.alive += count;
+    stats.dead = curMaxParts - count;
 
-    stats.medAlive = properties.lifetime * properties.emissionRate;
-    stats.emitted += count;
-    if (properties.performance > PerformanceMode.LOW)
-    {
-        stats.alive += count;
-        _alive += count;
-        stats.dead = curMaxParts - count;
-    }
-
+    // dispatch compute shader
     UniformEmit(kernelEmit);
     compute.Dispatch(kernelEmit, count, 1, 1);
     return count;
@@ -255,49 +259,279 @@ public int DispatchEmit(int count)
 #endregion
 \end{csh}
 
-\subsubsection{Update}
-\begin{csh}
-#region Update
-private void UniformUpdate(int kernel)
-{
-    compute.SetBuffer(kernel, "_Particles", particlesBuf);
-    compute.SetBuffer(kernel, "_Dead", deadBuf);
-    color.Uniform(compute, kernel, "_Color");
+Im Shader werden nun Partikel aus dem DeadBuffer entnommen und diese mit Eigenschaften eines Lebendingen Partikels initialisiert. Um eine zufällige Streuung von Vektoren ua. für die Positionsdaten zu erreichen, wurde eine Funktion definiert, die aus drei Eingabewerten mittels einer stark schwankenden Funktion einen neuen, möglichst zufälligen Wert generiert. Damit kann durch Umordnung der vier einmalig im Hauptprogramm berechneten Seedwerte, kombiniert mit der Partikel-ID eine Vielzahl an Pseudozufallswerten generiert und das Verhalten der Partikel individualisiert werden.
 
-    compute.SetInt("_Flags", GetFlags());
-    compute.SetVector("_PosParent", transform.position);
-    compute.SetVector("_SpdParent", _velocity * velocityFactor);
-    compute.SetVector("_Attractor", attractor);
-    compute.SetFloat("_SizeVel", size.val.z);
-    compute.SetFloat("_DeltaTime", stats.initialized ? Time.deltaTime : Time.fixedDeltaTime);
+Um die Partikel in einem bestimmten Bereich spawnen zu lassen werden Scales verwendet, zwischen dem die resultierenden Vektoren schwanken können. Um noch etwas mehr Variabilität zu sorgen kann man die Vektoren mittels einer Shape-ID 'formen'. Derzeit werden ausschlie{\ss}lich DOT (formlos) CIRCLE, RECT (2D), SPHERE und CUBE (3D) unterstützt. Die Dimensionsunterscheidung muss unternommen werden um die Vektoren nicht auf einer Achse zu verteilen, die garnicht verwendet wird und dann dort gehäuft auftreten.
+
+In folgendem Listing wurde noch beispielhaft die Berechnung der Spawnposition gezeigt, die von Geschwindigkeit und Beschleunigung erfolgt analog, wenn auch aus Intuitivitätsgründen nicht 100\% identisch.
+
+\begin{hlsl}[caption=Compute Emit Kernel]
+int _Flags;
+float _Lifetime;
+float2 _Size;
+float3 _PosParent, _SpdParent;
+float4 _Color, _Color2, _Seeds;
+
+float3 _PosOffset, _SpdOffset, _ForceOffset, _PosFacOffset;
+float3 _PosScale, _SpdScale, _ForceScale, _PosFacScale;
+int _PosShape, _SpdShape, _ForceShape, _PosFacShape;
+
+// random functions
+float c : SV_DispatchThreadID;
+float rand(float3 o) {
+    return frac(sin(dot(o*c, float3(12.9898, 78.233, 45.5432))) * 43758.5453);
 }
+float ran(float3 o) { return 2 * rand(o) - 1; }
+
+// shaped vector distribution
+float3 getShaped(float3 d, int shape) { /* ... */ };
+
+[numthreads(THREADS, 1, 1)]
+void Emit()
+{
+    uint id = _Alive.Consume(); // pop dead particle to alive
+    Particle p = _Particles[id];
+    c = id + 1; // randomize
+    
+    p.size.xy = float4(_Size, _Lifetime);
+    p.rand = rand(_Seeds.wzy);
+    p.color = F(P_CLRVARY) ? lerp(_Color, _Color2, p.rand) : _Color;
+    
+    // position
+    float3 d = float3(ran(_Seeds.xzy), ran(_Seeds.yxz), ran(_Seeds.zyx));
+    d = getShaped(d, _PosShape);
+    p.pos = d * (_PosOffset + _PosScale * rand(_Seeds.wxy));
+    
+    /* velocity, force, parent ... */
+    
+    _Particles[id] = p;
+}
+\end{hlsl}
+
+
+\subsubsection{Update}
+
+Bei jedem Frame-Update wird der Status jedes Partikels aktualisiert. Dazu werden nurnoch Daten benötigt, die das Partikel während seiner Lebensspanne von au{\ss}en verändern. Dazu gehört in jedem Fall die Zeitdifferenz zum letzten Update, die Statusflags, der Farbgradient falls verwendet, sowie die Grö{\ss}enänderung, da diese bisher für alle Partikel gleich ist. Des weiteren kann man ein Objekt definieren, zu dessem Position das Partikel konstant hingezogen werden soll. Das wurde ua. für den Ressourcenpartikeleffekt benötigt.
+
+\begin{csh}[caption=Controller Update]
+void Update()
+{
+    /* ... */
+    DispatchUpdate();
+
+    if (properties.performance > PerformanceMode.LOW)
+    {
+        _alive -= Time.deltaTime * Mathf.Ceil(stats.alive) / properties.lifetime;
+        stats.alive = Mathf.CeilToInt(_alive);
+        stats.dead = curMaxParts - stats.alive;
+    }
+
+    if (Application.isPlaying && !properties.repeat && stats.emitted >= curMaxParts && stats.alive == 0)
+    {
+        if (_onFinished != null) _onFinished();
+        if (properties.destroyOnFinished) Destroy(gameObject);
+        return;
+    }
+
+    /* Emit ... */
+}
+
+#region Update
+private void UniformUpdate(int kernel) { /* ... */ }
 
 private void DispatchUpdate()
 {
-    if (!stats.initialized || particlesBuf == null) Initialize();
     UniformUpdate(kernelUpdate);
     compute.Dispatch(kernelUpdate, stats.groupCount, 1, 1);
-    if (properties.performance <= PerformanceMode.MEDIUM)
-        ReadDeadCount();
+}
+#endregion
+\end{csh}
+
+Im Shader werden sämtliche Änderungen an einem Partikel abhängig von der Zeitdifferenz vorgenommen. Erreicht es hierbei ein Alter größer als die Lebensdauer, wird es wieder als tot markiert und dem DeadBuffer hinzugefügt. Bereits tote Partikel werden übersprungen, es wird aber dennoch für jedes Partikel die Update-Funktion aufgerufen da der Shader das nicht im vorhinein bestimmen kann. Die Farbe wird ggf. aus der Gradienttextur gesampled und interpoliert.
+
+\begin{hlsl}[caption=Compute Update]
+int _Flags;
+float4 _Attractor;
+
+float _SizeVel, _DeltaTime, _ColorSteps;
+Texture2D<float4> _ColorGrad;
+
+#define getAge(life) (1 - life.x / life.y)
+float4 getLifeColor(float2 life, float seed)
+{
+    float4 color, color2;
+    color = _ColorGrad.Load(int3(round(_ColorSteps * getAge(life)), 0, 0));
+    if (F(P_CLRVARY)) {
+        color2 = _ColorGrad.Load(int3(round(_ColorSteps * getAge(life)), 1, 0));
+        color = lerp(color, color2, seed);
+    }
+    return color;
 }
 
-private float tLastCount = -1;
-private void ReadDeadCount(bool force = false)
+void DoUpdate(uint3 id)
 {
-    if (!(properties.performance == PerformanceMode.LOW ||
-        force || Time.time - tLastCount >= deadUpdDelay)) return;
-    tLastCount = Time.time;
+    Particle p = _Particles[id.x];
+    if (p.size.w == 0) return;
+    
+    if (p.size.z < _DeltaTime) {
+        _Dead.Append(id.x);
+        _Particles[id.x].size.w = 0;
+        return;
+    }
+    
+    float3 magnet = _Attractor.w * normalize(_Attractor.xyz - p.pos);
+    
+    p.size.z -= _DeltaTime;
+    p.size.xy += _SizeVel * _DeltaTime;
+    p.vel += p.force * _DeltaTime;
+    p.pos += (p.vel + magnet) * _DeltaTime;
+    if (F(P_CLRGRAD)) p.color = getLifeColor(p.size.zw, p.rand);
 
+    _Particles[id.x] = p;
+}
+\end{hlsl}
+
+Der Update-Kernel hat hierbei eine zusätzliche Funktion zum Vorwärmen das Partikelsystems. Beim Vorwärmen eines Partikelsystems werden beim Zurücksetzen zunächst so viele Partikel emmittiert, wie in einem Lebenszyklus durchschnittlich leben würden. Dann berechnet der Shader für jedes lebendige Partikel ein zufälliges Alter und führt so oft die Update-Funktion mit der eingestellten Deltatime auf, bis dieses erreicht ist.
+
+\begin{csh}[caption=Controller Reset]
+public void ResetPS()
+{
+    /* reset PS stats ... */
+    if (properties.prewarm)
+    {
+        int count = (int)(properties.emissionRate * properties.lifetime);
+        DispatchEmit(Mathf.Min(curMaxParts, count));
+        DispatchUpdate();
+    }
+    stats.prewarmed = true;
+}
+\end{csh}
+
+\begin{hlsl}[caption=Compute Update Kernel]
+// update particle up to a random age
+void DoInitUpdate(uint3 id)
+{
+    Particle p = _Particles[id.x];
+    float age = p.size.w * p.rand - _DeltaTime;
+    for (float i = 0; i < age; i += _DeltaTime) DoUpdate(id);
+}
+
+[numthreads(THREADS, 1, 1)]
+void Update(uint3 id : SV_DispatchThreadID)
+{
+    if (F(P_PREWARM)) DoInitUpdate(id);
+    else DoUpdate(id);
+}
+\end{hlsl}
+
+Nach jedem Update wird anhand der durchschnittlichen Sterbenderate $r_{mort} = n_{alive} / t_{alive}$ berechnet, wie viele Partikel aktuell am leben sind. Das ist erheblich effizienter im Vergleich zu einer vorherigen Version, in der ein separater CounterBuffer dazu verwendet wurde, die genaue Grö{\ss}e des deadBuffers auszulesen. Da dieser physisch nur auf der Grafikkkarte existiert scheint Unity dazu eine Funktion namens Gfx.GetComputeBufferData\_Request zu benutzen, die zur Synchronisation eine Semaphore benutzt, was schon bei wenigen Partikelsystemen erhebliche Performanceeinbu{\ss}en mit sich brachte.
+
+\begin{minipage}{0.95\linewidth}
+\vspace{5mm}
+\captionsetup{type=figure}
+\includegraphics[width=\linewidth]{partBufCount.png}
+\includegraphics[width=\linewidth]{partDataReq.png}
+\captionof{figure}{ReadDeadCount im Unity Profiler}
+%\label{img:partBufCount}
+\end{minipage}
+
+\begin{csh}[caption=Controller DeadCount]
+private void ReadDeadCount()
+{
     ComputeBuffer.CopyCount(deadBuf, counterBuf, 0);
     counterBuf.GetData(counterArray);
     stats.dead = counterArray[0];
     stats.alive = curMaxParts - stats.dead;
-    _alive = stats.alive;
 }
-
-#endregion
 \end{csh}
 
 \subsection{Darstellung}
 
-% ein IndirectArguments-Buffer der Vertexkoordinaten eines Partikels - in diesem Falle die eines Quads.
+Das Rendern der Partikel erfolgt über einen Unlit-Shader. Das Grundgerüst dafür sieht wie in \fullref{lst:partShader} aus. Diesem wird als Argument die Rendertextur übergeben, sowie BlendModes, die für korrektes Alpha-Blending nach Bedarf eingestellt werden können. Diese werden in der Struktur RenderSettings hinterlegt, zusammen mit einigen voreingestellten Modi\footnote{nach Artikel \href{https://elringus.me/blend-modes-in-unity}{BlendModes in Unity} vom 12.05.2015, Zugriff 23.06.2021}. Da Partikel transparent sind, wird die Transparent queue zum Render verwendet. Es ist wichtig ZWrite auszuschalten, da die Partikel sonst nicht korrekt sortiert werden (siehe \fullref{img:zoff}).
+
+\begin{minipage}{\linewidth}
+\begin{center}
+\vspace{5mm}
+\captionsetup{type=figure}
+\includegraphics[width=0.2\linewidth]{zoff.png}
+\captionof{figure}{ZWrite Off}
+\label{img:zoff}
+\end{center}
+\end{minipage}
+
+\begin{csh}[caption=Unlit Partikel-Shader,label=lst:partShader]
+Shader "Custom/Particles"
+{
+    Properties
+    {
+        [MainTexture] _MainTex ("Main Texture", 2D) = "white" {}
+        [HideInInspector] _BlendSrc ("Source BlendMode", int) = 0
+        [HideInInspector] _BlendDst ("Dest BlendMode", int) = 0
+        [HideInInspector] _BlendOp ("BlendOp", int) = 0
+    }
+
+    SubShader
+    {
+        Pass
+        {
+            Tags { "Queue" = "Transparent"  "IgnoreProjector" = "True" }
+            BlendOp [_BlendOp]
+            Blend [_BlendSrc] [_BlendDst]
+            Lighting Off
+            ZWrite Off
+            
+            CGPROGRAM
+            #pragma target 4.5 % Compute Shaders
+            #include "Particles.cginc"
+            ENDCG
+        }
+    }
+}
+\end{csh}
+
+Die Variablen für das Rendering sind im \fullref{lst:partSetup} bereits enthalten. Erwähnenswert ist der IndirectArguments-Buffer für Vertexkoordinaten eines Partikels - in diesem Falle die eines Quads, der an den Unlit-Shader gegeben wird. Gerendert werden die Partikel letztendlich mit der Funktion \href{https://docs.unity3d.com/ScriptReference/Graphics.DrawProceduralNow.html}{DrawProceduralNow}. Dieser bezieht seine Daten aus dem aktuell eingestellten ShaderPass (0), an dem das Shader-Material gebunden wurde. Die Partikeldaten werden somit direkt vom ComputeShader an den UnlitShader weitergereicht.
+
+\begin{csh}[caption=Partikel Rendering]
+void OnRenderObject()
+{
+    if (!enableParticles || isAnimPaused()) return;
+    mat.mainTexture = tex;
+
+    mat.SetBuffer("_Particles", particlesBuf);
+    mat.SetBuffer("_QuadVert", quadVertBuf);
+    renderSettings.Uniform(mat);
+    mat.SetPass(0);
+
+    Graphics.DrawProceduralNow(MeshTopology.Triangles, meshVerts.Length, deadBuf.count);
+}
+\end{csh}
+
+Der Fragment Shader berechnet zunächst von lebendigen Partikeln das Billboard - dh. es dreht die Vertices richtung Kamera. Dafür werden die Partikel zunächst durch die Kamera-View Matrix transformiert, dann die Vertex-Positionen addiert und schließlich durch die Projektionsmatrix richtung Kamera gedreht. Die UV-Koordinaten sowie die Farbdaten werden dann an den Fragment-Shader weitergegeben, der die Farbdaten der Textur mit der Partikelfarbe multipliziert.
+
+\begin{hlsl}
+struct v2f
+{
+    float4 pos : SV_POSITION, color : COLOR;
+    float2 uv : TEXCOORD0;
+};
+
+v2f vert(uint vid : SV_VertexID, uint iid : SV_INSTANCEID)
+{
+    v2f o = { 0,0,0,0, 0,0, 0,0,0,0 };
+    Particle p = _Particles[iid];
+    if (p.size.w == 0 || p.size.x < 0 || p.size.y < 0) return o;
+    
+    // Billboard
+    float3 vpos = float3(p.size.xy * _QuadVert[vid], 0);
+    float4 ppos = float4(p.pos, 1);
+    o.pos = mul(UNITY_MATRIX_P, float4(vpos, 1) + mul(UNITY_MATRIX_V, ppos));
+    
+    o.uv = _QuadVert[vid] + 0.5;  // TRANSFORM_TEX((_QuadVert[vid] + 0.5), _MainTex);
+    o.color = p.color;
+    return o;
+}
+
+float4 frag(v2f i) : SV_Target { return i.color * tex2D(_MainTex, i.uv); }    
+\end{hlsl}
+
+% \\begin\{.*?\}[\s\S\n]*?\\end\{.*

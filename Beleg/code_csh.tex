@@ -1,6 +1,17 @@
+\lstdefinelanguage{csharp}{
+    language=[sharp]c,
+    morekeywords={
+        % Shader keywords
+        Shader,SubShader,Pass,Properties,
+        CGPROGRAM,ENDCG
+    },
+    moredelim=*[directive]\#,
+    moredirectives={region,endregion}%
+}[keywords,comments,strings,directives]%
+
 \lstdefinestyle{style_csh}{
-    language=[sharp]c, style=codecolors,
-    morecomment=[l]{\#},
+    language=csharp, style=codecolors,
+%    morecomment=[l]{\#},
     classoffset=1,
     morekeywords={
         % Custom enums
@@ -8,18 +19,24 @@
         % Custom classes
         Particles,
         % Custom structs
-        Stats, GeneralProps, RenderSettings, DynamicEffect, Colors,
+        Stats,GeneralProps,RenderSettings,DynamicEffect,Colors,
+%
         % C# types
         Serializable,
+%
+        % Unity namespaces
+        Application,Mathf,Graphics,UnityEditor,
         % Unity types
-        MonoBehaviour, ComputeShader, ComputeBuffer, Material, Texture, Texture2D, Gradient,
+        MonoBehaviour,ComputeShader,ComputeBuffer,Material,Texture,Texture2D,Gradient,
+        % Shader Settings
+        Tags,Blend,BlendOp,Lighting,ZWrite,2D,
         % Vector types
-        Vector2, Vector3, Vector3Int, Vector4, Color,
-        %  Attribute types
-        Header, Tooltip, NotNull, WarnNull, Range
+        Vector2,Vector3,Vector3Int,Vector4,Color,
+        % Attribute types
+        Header,Tooltip,NotNull,WarnNull,Range,HideInInspector,MainTexture
     },
     keywordstyle=\color{clgreen},
-}
+}[directives]
 
 \newcommand{\cshinline}[1]{\lstinline[style=style_csh]{#1}}
 
