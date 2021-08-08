@@ -1,6 +1,7 @@
 Shader "Custom/Particles"
 {
-    Properties {
+    Properties
+    {
         [MainTexture] 
         _MainTex ("Main Texture", 2D) = "white" {}
         [HideInInspector] _BlendSrc ("Source BlendMode", int) = 0
@@ -26,7 +27,7 @@ Shader "Custom/Particles"
             ZWrite Off // necessary major slowdown (1e6:7/20, 5e6:17/94) for transparency
             
             CGPROGRAM
-            #pragma target 5.0
+            #pragma target 4.5 % Compute Shaders
             #include "Particles.cginc"
             ENDCG
         }

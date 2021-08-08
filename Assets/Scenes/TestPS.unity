@@ -162,6 +162,7 @@ MonoBehaviour:
     emitted: 0
     ppf: 0
     pps: 0
+    medAlive: 0
     bufferSize: 1000448
     groupCount: 977
   properties:
@@ -169,6 +170,7 @@ MonoBehaviour:
     repeat: 1
     prewarm: 0
     destroyOnFinished: 0
+    performance: 2
     maxParts: 1000000
     lifetime: 5
     emissionRate: 100000
@@ -196,6 +198,7 @@ MonoBehaviour:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 0, y: 0, z: 0}
     shape: 3
+  attractor: {x: 0, y: 0, z: 0, w: 0}
   color:
     color: {r: 0, g: 0.5827389, b: 1, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
@@ -317,6 +320,7 @@ MonoBehaviour:
     emitted: 0
     ppf: 0
     pps: 0
+    medAlive: 0
     bufferSize: 0
     groupCount: 0
   properties:
@@ -324,9 +328,10 @@ MonoBehaviour:
     repeat: 1
     prewarm: 0
     destroyOnFinished: 0
+    performance: 2
     maxParts: 1000
     lifetime: 0.5
-    emissionRate: 10000
+    emissionRate: 900000
     startDelay: 0
   renderSettings:
     preset: 1
@@ -351,6 +356,7 @@ MonoBehaviour:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 0, y: 0, z: 0}
     shape: 3
+  attractor: {x: 0, y: 0, z: 0, w: 0}
   color:
     color: {r: 1, g: 0.0141509175, b: 0.0141509175, a: 1}
     color2: {r: 0.93372107, g: 1, b: 0, a: 1}
@@ -650,6 +656,7 @@ MonoBehaviour:
     emitted: 0
     ppf: 0
     pps: 0
+    medAlive: 0
     bufferSize: 100352
     groupCount: 98
   properties:
@@ -657,7 +664,8 @@ MonoBehaviour:
     repeat: 1
     prewarm: 0
     destroyOnFinished: 0
-    maxParts: 100000
+    performance: 2
+    maxParts: 110000
     lifetime: 1
     emissionRate: 90000
     startDelay: 0
@@ -684,6 +692,7 @@ MonoBehaviour:
     offset: {x: 1, y: -0.6, z: 0}
     scale: {x: 0, y: 0, z: 0}
     shape: 3
+  attractor: {x: 0, y: 0, z: 0, w: 0}
   color:
     color: {r: 0.8018868, g: 0, b: 0, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
@@ -806,6 +815,7 @@ MonoBehaviour:
     emitted: 0
     ppf: 0
     pps: 0
+    medAlive: 0
     bufferSize: 1000448
     groupCount: 977
   properties:
@@ -813,6 +823,7 @@ MonoBehaviour:
     repeat: 1
     prewarm: 0
     destroyOnFinished: 0
+    performance: 2
     maxParts: 1000000
     lifetime: 2.5
     emissionRate: 100000
@@ -840,6 +851,7 @@ MonoBehaviour:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 0, y: 0, z: 0}
     shape: 3
+  attractor: {x: 0, y: 0, z: 0, w: 0}
   color:
     color: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
@@ -975,6 +987,7 @@ MonoBehaviour:
     emitted: 56771
     ppf: 0
     pps: 0
+    medAlive: 0
     bufferSize: 1000
     groupCount: 1000
   properties:
@@ -982,6 +995,7 @@ MonoBehaviour:
     repeat: 1
     prewarm: 0
     destroyOnFinished: 0
+    performance: 2
     maxParts: 100000
     lifetime: 1
     emissionRate: 20000
@@ -1009,6 +1023,7 @@ MonoBehaviour:
     offset: {x: 0, y: 0, z: 0}
     scale: {x: 0, y: 0, z: 0}
     shape: 3
+  attractor: {x: 0, y: 0, z: 0, w: 0}
   color:
     color: {r: 1, g: 1, b: 1, a: 1}
     color2: {r: 1, g: 1, b: 1, a: 1}
@@ -1223,6 +1238,7 @@ MonoBehaviour:
     emitted: 9538
     ppf: 2
     pps: 98
+    medAlive: 0
     bufferSize: 300
     groupCount: 300
   properties:
@@ -1230,6 +1246,7 @@ MonoBehaviour:
     repeat: 1
     prewarm: 0
     destroyOnFinished: 0
+    performance: 2
     maxParts: 300
     lifetime: 2
     emissionRate: 100
@@ -1257,6 +1274,7 @@ MonoBehaviour:
     offset: {x: 0.2, y: 0, z: 0.2}
     scale: {x: 0, y: 0, z: 0}
     shape: 3
+  attractor: {x: 0, y: 0, z: 0, w: 0}
   color:
     color: {r: 0.2216981, g: 1, b: 0.2216981, a: 1}
     color2: {r: 0.8915094, g: 1, b: 0.8915094, a: 1}

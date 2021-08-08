@@ -17,7 +17,7 @@ public class Particles : MonoBehaviour
     public GeneralProps properties = GeneralProps.dflt;
     public RenderSettings renderSettings = RenderSettings.Default;
 
-    [Header("Emission")]
+    [Header("Particles")]
     [Tooltip("xy: offset, z: timefac")]
     public Capsule<Vector3> size = new Capsule<Vector3>(new Vector3(.2f, .2f, 0));
     public DynamicEffect pos = new DynamicEffect(Vector3.one, Vector3.zero, Shape.SPHERE);
@@ -26,24 +26,18 @@ public class Particles : MonoBehaviour
     public DynamicEffect posFac = new DynamicEffect(Vector3.one, Vector3.zero, Shape.SPHERE);
     //public DynamicEffect radial = new DynamicEffect(Vector3.zero, Vector3.zero, Shape.SPHERE);
 
-    [Header("Other")]
-    public Colors color = Colors.dflt;
     [Tooltip("Vector3 + w: factor")]
     public Vector4 attractor;
+    public Colors color = Colors.dflt;
     #endregion
 
     #region Flags
     private static int F(bool v, int p) => v ? 1 << p : 0;
-    private static int F(int v, int p) => v * 1 << p;
 
-    int GetFlags()
-    {
-        return
-            F(!stats.prewarmed, 0) +
-            F(color.useGradient, 1) +
-            F(color.useVariation, 2) +
-            0;
-    }
+    int GetFlags() =>
+        F(!stats.prewarmed, 0) +
+        F(color.useGradient, 1) +
+        F(color.useVariation, 2);
     #endregion
 
     #region Statics
@@ -61,7 +55,7 @@ public class Particles : MonoBehaviour
     #region Privates
     private float _alive;
     private float partTimer = 0; // for spawning new particles
-    private Vector3 lastPos;
+    private Vector3 lastPos, _velocity;
 
     private bool isEditorPlaying(EditorDrawMode edm) { return isAnimPlaying() && stats.editorDrawMode == edm; }
 
@@ -88,7 +82,7 @@ public class Particles : MonoBehaviour
         stats = new Stats();
         stats.editorDrawMode = EditorDrawMode.OFF;
         SetEnabled(properties.enabled);
-        if(isAnimPlaying()) Initialize();
+        if (isAnimPlaying()) Initialize();
     }
 
     private void OnDrawGizmosSelected()
@@ -120,9 +114,13 @@ public class Particles : MonoBehaviour
             if (editorDrawing && isEditorPlaying(EditorDrawMode.SLOW))
                 EditorApplication.delayCall += EditorApplication.QueuePlayerLoopUpdate;
         #endif
-        if (!enableParticles || isAnimPaused()) return;
 
+        if (!enableParticles || isAnimPaused()) return;
         if (stats.reset) { stats.reset = false; ResetPS(); }
+        
+        _velocity = (transform.position - lastPos); // / Time.deltaTime;
+        lastPos = transform.position;
+
         DispatchUpdate();
 
         if (properties.performance > PerformanceMode.LOW)
@@ -205,8 +203,7 @@ public class Particles : MonoBehaviour
         if (properties.prewarm)
         {
             int count = (int)(properties.emissionRate * properties.lifetime);
-            count = Mathf.Min(curMaxParts, count);
-            DispatchEmit(count);
+            DispatchEmit(Mathf.Min(curMaxParts, count));
             DispatchUpdate();
         }
 
@@ -231,13 +228,14 @@ public class Particles : MonoBehaviour
 
     #region Variables
     // public Assets assets; // not visible in script inspector :(
-    [NotNull] public Texture tex;
-    [NotNull] public Material mat;
+    [NotNull] public Texture tex;  // Particle Texture
+    [NotNull] public Material mat; // Unlit Shader
     [NotNull] public ComputeShader compute;
-    private ComputeBuffer particlesBuf, deadBuf;
-    private ComputeBuffer counterBuf, quadVertBuf;
+    private ComputeBuffer particlesBuf; // structured Particle buffer
+    private ComputeBuffer deadBuf;      // Append/Consume dead part id buffer
+    private ComputeBuffer counterBuf;   // CounterBuffer
+    private ComputeBuffer quadVertBuf;  // constant VertexData buffer
     private static int[] counterArray = new int[1];
-    private Vector3 _velocity;
 
     private int kernelInit, kernelEmit, kernelUpdate;
     #endregion
@@ -248,20 +246,13 @@ public class Particles : MonoBehaviour
     private void ShaderSetup()
     {
         kernelInit = compute.FindKernel("Init");
-        kernelEmit = compute.FindKernel("EmitOne");
+        kernelEmit = compute.FindKernel("Emit");
         kernelUpdate = compute.FindKernel("Update");
         compute.GetKernelThreadGroupSizes(kernelInit, out uint threads, out _, out _);
 
         curMaxParts = properties.maxParts;
         stats.groupCount = Mathf.CeilToInt((float)curMaxParts / threads);
         stats.bufferSize = stats.groupCount * (int)threads;
-
-        if (curMaxParts < (1 << 14))
-        {
-            stats.bufferSize = stats.groupCount = curMaxParts;
-            kernelInit = compute.FindKernel("InitOne");
-            kernelUpdate = compute.FindKernel("UpdateOne");
-        }
     }
 
     private void InitializePartBuffer()
@@ -334,7 +325,7 @@ public class Particles : MonoBehaviour
         {
             stats.alive += count;
             _alive += count;
-            stats.dead = curMaxParts - count;
+            stats.dead = curMaxParts - stats.alive;
         }
 
         UniformEmit(kernelEmit);
@@ -346,9 +337,6 @@ public class Particles : MonoBehaviour
     #region Update
     private void UniformUpdate(int kernel)
     {
-        _velocity = (transform.position - lastPos); // / Time.deltaTime;
-        lastPos = transform.position;
-
         compute.SetBuffer(kernel, "_Particles", particlesBuf);
         compute.SetBuffer(kernel, "_Dead", deadBuf);
         color.Uniform(compute, kernel, "_Color");
