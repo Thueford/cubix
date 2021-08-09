@@ -6,7 +6,7 @@ Postprocessing bezeichnet im Kontext der Videospielgrafik die Nachbearbeitung ei
 Die verwendeten Effekte, die von alten Kameras verursacht werden, sind Bloom, Lens Flare, Chromatic Aberration und Vignette. 
 Ein alter Monitor kann Scanlines verursachen, gewölbt sein und ebenfalls für Vignette und Chromatic Aberration sorgen.
 
-Jeder der genannten Effekte wird in den späteren Abschnitten genauer erläutert. Man beachte, dass sowohl alte Displays als auch Linsen Vignette und Chromatic Aberration verursachen können, was dann zu kleinen Unterschieden im Auftreten dieser Effekte führen kann. Die Entscheidung, wie diese Effekte letztendlich darzustellen sind ist rein artistisch.
+Jeder der genannten Effekte wird in den späteren Abschnitten genauer erläutert. Man beachte, dass sowohl alte Displays als auch Linsen Vignette und Chromatic Aberration verursachen können, was dann zu kleinen Unterschieden im Auftreten führen kann. Die Entscheidung, wie diese Effekte letztendlich darzustellen sind, ist rein artistisch.
 
 
 
@@ -73,6 +73,8 @@ Die Effekte Vignette, Scanlines und Displaykrümmung können zuletzt alle mit ei
 %image crt
 
 Somit hat das resultierende Bild alle gewünschten Effekte
+
+%complete pipeline
 
 
 
@@ -166,7 +168,33 @@ Anschlie{\ss}end wird der Blur-Effekt auf BrightSpots angewendet, wodurch die he
 
 \subsection{Chromatic Aberration}
 
-\lipsum[3]
+Chromatic Aberration ist ein von alten Kameralinsen und Röhrenmonitoren verursachtes Bildartefakt, das im Falle der Kameralinse dadurch auftritt, dass das eintreffende Licht von dieser nicht korrekt gebündelt wird. Licht unterschiedlicher Wellenlängen wird unterschiedlich stark von der Linse gebrochen, wodurch besonders kurz- oder langwellige Lichtfarben (zum Beispiel rot und blau) mit einiger Abweichung auf dem Sensor eintreffen. Normalerweise tritt Chromatic Aberration in Richtung der Ränder des Bildes stärker auf, jedoch erschwerte eine zu gro{\ss}e Effektstärke die Leserlichkeit des GUI. In der Mitte des Bildschirmes sollte der Effekt wiederum nicht zu schwach sein, da er bei der wei{\ss}en Spielfigur am besten zur Geltung kam. Deshalt fiel die Entscheidung, die Stärke der Chromatic Aberration für den gesamten Bildschirm auf einen einheitlichen Wert zu setzen.
+
+Als Shader kann der Effekt dadurch nachgebildet werden, dass vom ursprünglichen Bild der rote und blaue Farbkanal mit einer kleinen Abweichung zur eigentlichen Pixelposition abgefragt werden und dann gemeinsam mit dem Grünkanal an der richtigen Position das neue Pixel bilden. Die Abweichung der Position erfolgt für rot und blau in jeweils entgegengesetzte Richtung in einem Fragment Shader:
+
+Übergebene Variablen:
+\begin{description}
+\item[sampler2D MainTex] Die Eingabetextur
+\item[float CAAmount] Abweichung für Zugriffe auf den Rot- und Blaukanal
+\end{description}
+
+\begin{hlsl}
+    fixed4 col = fixed4(0, 0, 0, 1);
+    col.r = tex2D(_MainTex, i.uv + float2(_CAAmount, 0)).r;
+    col.g = tex2D(_MainTex, i.uv).g;
+    col.b = tex2D(_MainTex, i.uv - float2(_CAAmount, 0)).b;
+\end{hlsl}
+
+Wie zu sehen ist, wird der Rotkanal der resultierenden Farbe in MainTex an der entsprechenden Texturpixelposition (i.uv) plus einer Abweichung 'CAAmount' ermittelt. Für den Blaukanal wird i.uv minus CAAmount abgefragt, beim Grünkanal gibt es keine Abweichung. Damit CAAmount als Abweichung nur die x-Position des Pixels beeinflusst, wird ein float2 erstellt, der CAAmount als x-Wert und 0 als y-Wert besitzt, welcher dann zu i.uv (auch zweidimensional) dazuaddiert beziehungsweise davon abgezogen werden kann.
+CAAmount kann vom Hauptporgramm aus gesteuert werden, als Standard wurde der Wert 0.0005 gewählt. Das bedeutet, dass rot und blau um ein halbes Tausendstel der Displaybreite (ein paar Pixel) von ihrer ursprünglichen Position abweichen. So sehen verschiedene Werte für CAAmount im Vergleich aus:
+
+\captionsetup{type=figure}
+\includegraphics[height=75pt]{bloom_on.png}
+\includegraphics[height=75pt]{ca_0005.png}
+\includegraphics[height=75pt]{ca_005.png}
+\captionof{figure}{Links: kein Effekt, Mitte: CAAmount = 0.0005, Rechts: CAAmount = 0.005}
+
+Chromatic Aberration eignet sich sich bei gro{\ss}en Abweichungswerten auch gut, um das Gefühl von Fehlern beziehungsweise Glitches zu vermitteln. So wird zum Beispiel für kurze Zeit nachdem der Spieler getroffen wurde die Abweichung auf zufällig wechselnde, hohe Werte gesetzt, was den erlittenen Schaden gut verdeutlicht.
 
 
 
