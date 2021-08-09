@@ -32,10 +32,10 @@ Zur Sequenziellen Ausführung aller Effekte werden insgesamt 6 RenderTextures an
 \begin{csh}
     public RenderTexture sourceTex;
     public RenderTexture brightTex;
-    public RenderTexture blurrBuff;
+    public RenderTexture blurBuff;
     public RenderTexture caResult;
     public RenderTexture lfResult;
-    public RenderTexture lensDirt;
+    public RenderTexture lensTex;
 \end{csh}
 
 Zum Start des Programms oder falls die Fenstergrö{\ss}e geändert wird, müssen alle diese RenderTextures nmit der Funktion createTexture() neu angelegt werden.
@@ -52,7 +52,7 @@ Graphics.Blit(source, sourceTex);
 
 %image source to source tex
 
-Nun kann der Bloom-Effekt angewandt werden. Zuerst werden mithilfe des Bloomshaders alle hellen Stellen aus sourceTex nach brightTex geschrieben. Der Inhalt von brightTex wird nun verschwommen gemacht, wozu die Textur blurrBuff benötigt wird. Anschlie{\ss}end wird das verschwommene Resultat (brightTex) additiv zurück nach sourceTex geschrieben.
+Nun kann der Bloom-Effekt angewandt werden. Zuerst werden mithilfe des Bloomshaders alle hellen Stellen aus sourceTex nach brightTex geschrieben. Der Inhalt von brightTex wird nun verschwommen gemacht, wozu die Textur blurBuff benötigt wird. Anschlie{\ss}end wird das verschwommene Resultat (brightTex) additiv zurück nach sourceTex geschrieben.
 
 %image bloom
 
@@ -60,13 +60,13 @@ Als nächstes wird Chromatic Aberration auf das fertige Bild mit Bloom (sourceTe
 
 %image ca
 
-Nun ist Lens Flare an der Reihe. Als ausgangstextur dient ebenfalls sourceTex und ähnlich wie bei Bloom werden bestimmte Features des Ursprungsbildes in eine separate Textur (lfResult) geschrieben. Diese wird dann wiederum mithilfe von blurrBuff verschwommen gemacht und dieses mal additiv auf caResult zurückgeschrieben. 
+Nun ist Lens Flare an der Reihe. Als ausgangstextur dient ebenfalls sourceTex und ähnlich wie bei Bloom werden bestimmte Features des Ursprungsbildes in eine separate Textur (lfResult) geschrieben. Diese wird dann wiederum mithilfe von blurBuff verschwommen gemacht und dieses mal additiv auf caResult zurückgeschrieben. 
 
 %image lf
 
-Vorher jedoch wird das Ergebnis mit der Textur lensDirt kombiniert, die zum Start des Programms einmal aus den beiden Texturen lensDirtTex und starburstTex erstellt wird.
+Vorher jedoch wird das Ergebnis mit der Textur lensTex kombiniert, die zum Start des Programms einmal aus den beiden Texturen lensDirtTex und starburstTex erstellt wird.
 
-%image lensDirt
+%image lensTex
 
 Die Effekte Vignette, Scanlines und Displaykrümmung können zuletzt alle mit einmal auf caResult angewendet werden, wobei das Ergebnis direkt nach destination (Argument von OnRenderImage) geschrieben wird.
 
@@ -78,7 +78,59 @@ Somit hat das resultierende Bild alle gewünschten Effekte
 
 \subsection{Blur}
 
-Der Blur-Shader ist ein Fragment Shader und wendet einen einfachen Gau{\ss}-schen Weichzeichnungsalgorithmus auf eine Textur an. Benötigt wird ein Ursprungsbild und ein Puffer der selben Grö{\ss}e.
+Für die Effekte Bloom und Lens Flare wird eine Methode benötigt, Texturen verschwommen zu machen, was die Aufgabe der Blur-Shaders ist.
+Er ist ein Fragment Shader und wendet einen einfachen Gau{\ss}-schen Weichzeichnungsalgorithmus auf eine Textur an. Benötigt wird ein Ursprungsbild und ein Puffer der selben Grö{\ss}e.
+
+Übergebene Variablen sind:
+\begin{description}
+\item[sampler2D MainTex] Die Eingabetextur
+\item[float4 MainTexTexelSize] Die Pixelgröße der Textur in x- und y-Richtung
+\item[int horizontal] Angabe, ob horizontal oder vertikal verwaschen werden soll
+\end{description}
+
+Der Algorithmus funktioniert, indem er zu einem Pixel immer auch den Wert jedes Pixels in der näheren Umgebung abfragt. Alle Werte werden dann mit unterschiedlichen Gewichtungen zusammenaddiert (je weiter vom Ursprungspixel entfernt, desto weniger Einfluss) und ergeben ein verschwommenes Abbild des Originals. Mit einer Distanz von vier Pixeln in jede Richtung würden die abgefragten Pixel wie folgt gewichtet werden:
+
+\includegraphics[height=100pt]{gauss_normal.png}
+
+Diese Methode hat jedoch den Nachteil, dass 81 (9x9) Texturzugriffe für jedes Pixel notwendig sind, was nicht sehr effizient ist.
+Die Texturzugriffe lassen sich jedoch verringern, indem in zwei Durchläufen des Shaders die Pixeldaten zuerst nur in horizontale Richtung und dann nur in vertikale Richtung abgefragt wird:
+
+\includegraphics[height=100pt]{gauss_horizontal.png}
+\includegraphics[height=100pt]{gauss_vertical.png}
+
+Das Resultat ist dabei fast identisch: 
+
+\includegraphics[height=100pt]{gauss_twopass.png}
+
+Diese Methode nennt sich two-pass Gaussian blur und es sind hier nur 18 (2x9) Texturzugriffe notwendig. Die angelegte Variable 'horizontal' gibt bei jedem Aufruf des Shaders an, ob in die horizontale oder die vertikale Richtung verwaschen werden soll, und wird nach jedem Aufruf invertiert. Zusätzlich ist nun ein separater Puffer vonnöten (hier blurBuff), in dem das resultat des ersten Durchlaufes (horizontal) zwischengespeichert wird und dessen Inhalt im zweiten Durchlauf (vertikal) verschwommen wieder zurück in die ursprüngliche Textur geschrieben wird. Dieser Prozess ist im Postprocessing-Skript in eine eigene Methode blur ausgelagert worden:
+
+\begin{csh}
+    private void blur(RenderTexture tex, int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            postProcMat.SetInt("_horizontal", 1);
+            Graphics.Blit(tex, blurBuff, postProcMat, BlurPass);
+            postProcMat.SetInt("_horizontal", 0);
+            Graphics.Blit(blurBuff, tex, postProcMat, BlurPass);
+        }
+    }
+\end{csh}
+
+Zusätzlich zur zu bearbeitenden Textur wird der Methode eine Variable 'count' übergeben, über welche die Stärke der Verwaschung reguliert werden kann. Dazu wird die Shadersequenz so oft durchlaufen, wie count angibt. Nach jedem Shaderaufruf wird die Uniform Variable 'horizontal' auf den entsprechenden Wert neu gesetzt.
+
+Jedoch lässt sich die Anzahl der Texturzugriffe noch weiter senken. In einem Fragment Shader kann nicht nur auf diskrete Texturkoordinaten zugegriffen werden. Fragt man den Farbwert einer Textur an einer Stelle zwischen zwei Pixeln ab, so werden deren Farben linear interpoliert. In diesem Fall ermöglicht dies, das gleiche Resultat mit nur 10 (2x5) Texturzugriffen zu erzielen. Dazu werden zwei Wertelisten angelegt:
+\begin{hlsl}
+    static const float weight[3] = { 0.2270270270, 0.3162162162, 0.0702702703 };
+    static const float offset[3] = { 0.0, 1.3846153846, 3.2307692308 };
+\end{hlsl}
+'Offset' gibt an, wie viele Pixel entfernt vom Hauptpixel die Farbdaten bestimmt werden sollen. Zu beachten ist hier, dass keine ganzzaligen Pixelabstände gewählt wurden, um den gewünschten Effekt zu erzielen.
+'Weight' gibt zu jedem Offset an, wie stark dieser Wert in das Endergebnis einflie{\ss}t. Mit der richtigen Werteliste ist das Ergebnis identisch zu einem Algorithmus, der mit den 5 ganzzahligen Pixeloffsets 0, 1, 2, 3 und 4 arbeitet, benötigt jedoch nur reichlich die Hälfte der Texturzugriffe.
+
+%https://john-chapman.github.io/2017/11/05/pseudo-lens-flare.html
+%http://john-chapman-graphics.blogspot.com/2013/02/pseudo-lens-flare.html
+%rastergrid.com/blog/2010/09/efficient-gaussian-blur-with-linear-sampling/
+%https://learnopengl.com/Advanced-Lighting/Bloom
 
 
 
