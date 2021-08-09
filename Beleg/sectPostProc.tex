@@ -81,7 +81,7 @@ Somit hat das resultierende Bild alle gewünschten Effekte
 Für die Effekte Bloom und Lens Flare wird eine Methode benötigt, Texturen verschwommen zu machen, was die Aufgabe der Blur-Shaders ist.
 Er ist ein Fragment Shader und wendet einen einfachen Gau{\ss}-schen Weichzeichnungsalgorithmus auf eine Textur an. Benötigt wird ein Ursprungsbild und ein Puffer der selben Grö{\ss}e.
 
-Übergebene Variablen sind:
+Übergebene Variablen:
 \begin{description}
 \item[sampler2D MainTex] Die Eingabetextur
 \item[float4 MainTexTexelSize] Die Pixelgröße der Textur in x- und y-Richtung
@@ -136,7 +136,31 @@ Jedoch lässt sich die Anzahl der Texturzugriffe noch weiter senken. In einem Fr
 
 \subsection{Bloom}
 
-\lipsum[3]
+Bloom (Überstrahlung) bezeichnet das Phänomen, dass sehr helle Bereiche eines Bildes nahe Bereiche 'überstrahlen'. Dies resultierte bei alten Kameras daraus, dass sie nicht den gesamten Helligkeitsbereich richtig aufnehmen konnten. In Videospielen und der Filmindustrie wird dieser Effekt gern verwendet, um den Eindruck von gro{\ss}er Helligkeit zu vermitteln, jedoch sollte er auch nicht zu stark sein und ablenken.
+Der Algorithmus ist als Compute Shader verfasst und besteht aus zwei Schritten, die von einem jeweils eigenen Kernel ausgeführt werden. 
+
+Übergebene Variablen:
+\begin{description}
+\item[RWTexture2D<float4> Source] Bildquelle
+\item[RWTexture2D<float4> BrightSpots] Textur, in die Helle Stellen geschrieben werden
+\item[uniform float threshold] Schwellenwert für die Helligkeit eines Pixels
+\end{description}
+
+Den ersten Schritt übernimmt das Kernel 'CSExtractBright'. Hier werden alle Pixel von Source mit der Formel $dot(float3(0.2126, 0.7152, 0.0722), Source[id.xy].rgb) > threshold$ auf ihre Helligkeit geprüft. Da unterschiedliche Lichtfarben für die menschliche Wahrnehmung unterschiedlich zur Helligkeit eines Pixels beitragen, werden die Rot-, Grün- und Blaukanäle des ursprünglichen Bildes unterschiedlich gewichtet (mit den Werten 0.2126, 0.7152 und 0.0722). Ist der Schwellenwert erreicht, werden die Pixeldaten unverändert in BrightSpots geschrieben (BrightSpots[id.xy] = Source[id.xy]), anderenfalls wird in BrigthSpots an dieser Stelle schwarz eingefügt: BrightSpots[id.xy] = float4(0, 0, 0, 1).
+Somit erhält man in BrightSpots ein Abbild aller hellen Stellen eines Bildes:
+
+\captionsetup{type=figure}
+\includegraphics[height=100pt]{bloom_source.png}
+\includegraphics[height=100pt]{bloom_bright.png}
+\captionof{figure}{Links: Source, Rechts: BrightSpots}
+
+Anschlie{\ss}end wird der Blur-Effekt auf BrightSpots angewendet, wodurch die hellen Stellen an den Rändern mit den Dunklen verwaschen werden. Im zweiten Schritt wird dann das verschwommene Resultat in BrightSpots vom zweiten Kernel 'CSWriteBack' additiv zurück auf das Ursprungsbild geschrieben. Dadurch wird hellen Objekten ein leichter 'Schein' auf die nahe Umgebung verliehen:
+
+\captionsetup{type=figure}
+\includegraphics[height=75pt]{bloom_off.png}
+\includegraphics[height=75pt]{bloom_on.png}
+\captionof{figure}{Links: Bloom aus, Rechts: Bloom an}
+
 
 
 
