@@ -35,8 +35,8 @@ public class PostProcessing : MonoBehaviour
     [Range(0.1f, 2f)] public float lfGhostSpacing = .69f;
     [Range(0.0f, 0.3f)] public float lfCAStrength = 0.15f;
 
-    [Header("CTR Monitor Effect")]
-    public bool useCTREffect = true;
+    [Header("CRT Monitor Effect")]
+    public bool useCRTEffect = true;
     [Range(0.0f, 1f)] public float vignetteAmount = 0.8f;
     [Range(0.0f, 0.4f)] public float vignetteWidth = 0.1f;
 
@@ -114,7 +114,7 @@ public class PostProcessing : MonoBehaviour
         } 
         else Graphics.Blit(sourceTex, caResult);
 
-        //Perform Lens Flare, Result: 'lfResult'
+        //Perform Lens Flare, Result: 'caResult'
         if (useLensFlare)
         {
             setLensFlareUniforms();
@@ -123,8 +123,8 @@ public class PostProcessing : MonoBehaviour
             lensFlare.Dispatch(1, xThreadGroups, yThreadGroups, 1);
         }
 
-        //Perform CTR Effect, Result: 'destination'
-        if (useCTREffect)
+        //Perform CRT Effect, Result: 'destination'
+        if (useCRTEffect)
         {
             setCTRUniforms();
             Graphics.Blit(caResult, destination, postProcMat, 1);

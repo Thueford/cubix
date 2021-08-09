@@ -52,7 +52,7 @@ public class PlayerConfig : SaveData
         PostProcessing.self.useBloom = _cmps && bloom;
         PostProcessing.self.useLensFlare = _cmps && lensFlare;
         PostProcessing.self.useCA = CAEffect;
-        PostProcessing.self.useCTREffect = CTREffect;
+        PostProcessing.self.useCRTEffect = CTREffect;
 
         setLight(Player.self.GetComponentInChildren<Light>());
         foreach (GameObject o in GameObject.FindGameObjectsWithTag("Stage"))
