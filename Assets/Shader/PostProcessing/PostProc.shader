@@ -1,4 +1,4 @@
-Shader "Hidden/Blurr"
+Shader "Hidden/PostProc"
 {
     Properties
     {
@@ -16,12 +16,15 @@ Shader "Hidden/Blurr"
 
         Pass
         {
+            Name "Blur"
+
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
 
             #include "UnityCG.cginc"
 
+            // Weight of Pixels depending on their offset
             static const float weight[3] = { 0.2270270270, 0.3162162162, 0.0702702703 };
             static const float offset[3] = { 0.0, 1.3846153846, 3.2307692308 };
 
@@ -54,16 +57,16 @@ Shader "Hidden/Blurr"
                 fixed4 col = tex2D(_MainTex, i.uv) * weight[0];
                 float2 texcoord = i.uv;
 
-                if (_horizontal == 1)
+                if (_horizontal == 1)   // horizontal blur pass
                 {
                     for (int i = 1; i < 3; ++i)
                     {
-                        float xOffset = offset[i] * _MainTex_TexelSize.x;
+                        float xOffset = offset[i] * _MainTex_TexelSize.x;   // offset normalized to texel size
                         col += tex2D(_MainTex, texcoord + float2(xOffset, 0)) * weight[i];
                         col += tex2D(_MainTex, texcoord - float2(xOffset, 0)) * weight[i];
                     }
                 }
-                else
+                else    // vertical blur pass
                 {
                     for (int i = 1; i < 3; ++i)
                     {
@@ -79,6 +82,8 @@ Shader "Hidden/Blurr"
 
         Pass
         {
+            Name "CRTEffect"
+
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -109,45 +114,50 @@ Shader "Hidden/Blurr"
             float _vignetteAmount;
             float _vignetteWidth;
 
-            fixed4 getVignetteCol(float2 uv) 
+            fixed4 getCRTCol(float2 uv) 
             {
-                //store original color
+                // store original color
                 fixed4 col = tex2D(_MainTex, uv);
 
-                // uv from -1 to 1
+                // uv from [0, 1] to [-1, 1]
                 float2 texcoord = uv * 2 - 1;
 
                 // Scanlines are more prominent at the corners
                 float scanLineIntensity = smoothstep(.8, 1.41422, length(texcoord));
-                if (scanLineIntensity > 0)
-                    col.rgb *= (1-(sin(texcoord.y * 6.28*100) / 2 + .5) * scanLineIntensity) * 0.8 + 0.2;
 
+                // Apply Scanlines (unsing the sin of the y position of the pixel)
+                if (scanLineIntensity > 0)
+                    col.rgb *= (1 - (sin(texcoord.y * 6.28 * 100) / 2 + .5) * scanLineIntensity) * 0.8 + 0.2;
+
+                // Vignette needs absolute texcoords
                 texcoord = abs(texcoord);
 
+                // u stores the strength of the vignette effect
                 fixed2 u = texcoord * _vignetteWidth;
                 u = 1 - (pow(smoothstep(u, 0, 1 - texcoord), 4) * _vignetteAmount);
 
+                // u.x * u.y is a representation of how much color would remain
                 col.rgb *= u.x * u.y;
                 return col;
             }
 
             fixed4 frag(v2f i) : SV_Target
             {
-                // uv from -1 to 1
+                // uv from [0, 1] to [-1, 1]
                 float2 uv = i.uv * 2 - 1;
 
                 // Warp Coordinates at the corners
                 uv.x *= 1 + pow(abs(uv.y) / 8, 2);
                 uv.y *= 1 + pow(abs(uv.x) / 8, 2);
 
-                // uv from 0 to 1
+                // uv from [-1, 1] to [0, 1]
                 uv = uv / 2 + .5;
 
                 fixed4 col = fixed4(0, 0, 0, 1);
 
-                // pixels outside the main texture (at the corners) remain black
+                // only pixels inside the main texture get color (with vignette and scanlines applied)
                 if (uv.x <= 1 && uv.x >= 0 && uv.y <= 1 && uv.y >= 0)
-                    col = getVignetteCol(uv);
+                    col = getCRTCol(uv);
 
                 return col;
             }
@@ -156,6 +166,8 @@ Shader "Hidden/Blurr"
 
         Pass
         {
+            Name "GenLensTex"
+
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -187,8 +199,12 @@ Shader "Hidden/Blurr"
 
             fixed4 frag(v2f i) : SV_Target
             {
+                // MainTex is the LensDirt texture, StarburstTex represents a 1D barcode texture
                 fixed4 col = tex2D(_MainTex, i.uv);
+
+                // StarburstTex is accessed via the angle of the texcoord vector (uv)
                 float angle = acos(dot(normalize(i.uv-.5), float2(1, 0))) / 3.1416 / 2 + 1;
+                // Starburst is additively applied to Lens Dirt
                 col += max(0, tex2D(_StarburstTex, float2(angle, .5)-.2)) * .3;
 
                 return col;
@@ -198,6 +214,8 @@ Shader "Hidden/Blurr"
 
         Pass
         {
+            Name "ChromaticAberration"
+
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -230,6 +248,7 @@ Shader "Hidden/Blurr"
             fixed4 frag(v2f i) : SV_Target
             {
                 fixed4 col = fixed4(0, 0, 0, 1);
+                // r and b channels are accessed at an offset (CAAmount)
                 col.r = tex2D(_MainTex, i.uv + float2(_CAAmount, 0)).r;
                 col.g = tex2D(_MainTex, i.uv).g;
                 col.b = tex2D(_MainTex, i.uv - float2(_CAAmount, 0)).b;

@@ -43,10 +43,10 @@ public class PostProcessing : MonoBehaviour
     [Header("Textures")]
     public RenderTexture sourceTex;
     public RenderTexture brightTex;
-    public RenderTexture blurrBuff;
+    public RenderTexture blurBuff;
     public RenderTexture caResult;
     public RenderTexture lfResult;
-    public RenderTexture lensDirt;
+    public RenderTexture lensTex;
 
     private Light dirLight; 
 
@@ -58,6 +58,11 @@ public class PostProcessing : MonoBehaviour
     private int lastWidth = Screen.width;
     private int lastHeight = Screen.height;
 
+    private int BlurPass;
+    private int CAPass;
+    private int CRTPass;
+    private int LensTexPass;
+
     private void Awake() => self = this;
 
     // Start is called before the first frame update
@@ -68,11 +73,17 @@ public class PostProcessing : MonoBehaviour
 
         postProcMat.SetTexture("_StarburstTex", starburstTex);
 
+        BlurPass = postProcMat.FindPass("Blur");
+        CAPass = postProcMat.FindPass("ChromaticAberration");
+        CRTPass = postProcMat.FindPass("CRTEffect");
+        LensTexPass = postProcMat.FindPass("GenLensTex");
+
         createTextures();
         setTextures();
 
         setBloomUniforms();
         setLensFlareUniforms();
+
     }
 
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
@@ -102,7 +113,7 @@ public class PostProcessing : MonoBehaviour
         {
             setBloomUniforms();
             bloom.Dispatch(0, xThreadGroups, yThreadGroups, 1);
-            blurr(brightTex, bloomBlurrAmount);
+            blur(brightTex, bloomBlurrAmount);
             bloom.Dispatch(1, xThreadGroups, yThreadGroups, 1);
         }
 
@@ -110,7 +121,7 @@ public class PostProcessing : MonoBehaviour
         if (useCA)
         {
             setCAUniforms();
-            Graphics.Blit(sourceTex, caResult, postProcMat, 3);
+            Graphics.Blit(sourceTex, caResult, postProcMat, CAPass);
         } 
         else Graphics.Blit(sourceTex, caResult);
 
@@ -119,29 +130,29 @@ public class PostProcessing : MonoBehaviour
         {
             setLensFlareUniforms();
             lensFlare.Dispatch(0, xThreadGroups, yThreadGroups, 1);
-            blurr(lfResult, lfBlurrCount);
+            blur(lfResult, lfBlurrCount);
             lensFlare.Dispatch(1, xThreadGroups, yThreadGroups, 1);
         }
 
         //Perform CRT Effect, Result: 'destination'
         if (useCRTEffect)
         {
-            setCTRUniforms();
-            Graphics.Blit(caResult, destination, postProcMat, 1);
+            setCRTUniforms();
+            Graphics.Blit(caResult, destination, postProcMat, CRTPass);
         }
 
         else Graphics.Blit(caResult, destination);
 
     }
 
-    private void blurr(RenderTexture tex, int count)
+    private void blur(RenderTexture tex, int count)
     {
         for (int i = 0; i < count; i++)
         {
             postProcMat.SetInt("_horizontal", 1);
-            Graphics.Blit(tex, blurrBuff, postProcMat, 0);
+            Graphics.Blit(tex, blurBuff, postProcMat, BlurPass);
             postProcMat.SetInt("_horizontal", 0);
-            Graphics.Blit(blurrBuff, tex, postProcMat, 0);
+            Graphics.Blit(blurBuff, tex, postProcMat, BlurPass);
         }
     }
 
@@ -157,11 +168,11 @@ public class PostProcessing : MonoBehaviour
     {
         sourceTex = createTexture();
         brightTex = createTexture();
-        blurrBuff = createTexture();
+        blurBuff = createTexture();
         caResult = createTexture();
         lfResult = createTexture();
-        lensDirt = createTexture();
-        Graphics.Blit(lensDirtTex, lensDirt, postProcMat, 2);
+        lensTex = createTexture();
+        Graphics.Blit(lensDirtTex, lensTex, postProcMat, LensTexPass);
     }
 
     private void setTextures()
@@ -198,7 +209,7 @@ public class PostProcessing : MonoBehaviour
     {
         lensFlare.SetTexture(0, "Source", sourceTex);
         lensFlare.SetTexture(0, "Result", lfResult);
-        lensFlare.SetTexture(1, "lensDirt", lensDirt);
+        lensFlare.SetTexture(1, "lensDirt", lensTex);
         lensFlare.SetTexture(1, "Source", caResult);
         lensFlare.SetTexture(1, "Result", lfResult);
     }
@@ -208,7 +219,7 @@ public class PostProcessing : MonoBehaviour
         postProcMat.SetFloat("_CAAmount", caAmount);
     }
 
-    private void setCTRUniforms()
+    private void setCRTUniforms()
     {
         postProcMat.SetFloat("_vignetteAmount", vignetteAmount);
         postProcMat.SetFloat("_vignetteWidth", vignetteWidth);
