@@ -1,8 +1,6 @@
-﻿#pragma kernel InitOne
-#pragma kernel Init
-#pragma kernel UpdateOne
+﻿#pragma kernel Init
 #pragma kernel Update
-#pragma kernel EmitOne
+#pragma kernel Emit
 
 #define THREADS 1024
 
@@ -24,8 +22,6 @@ ConsumeStructuredBuffer<uint> _Alive;
 
 int _Flags;
 
-float3 _PosParent;
-float3 _SpdParent;
 float4 _Attractor;
 
 float _SizeVel;
@@ -38,6 +34,8 @@ float _ColorSteps;
 float4 getLifeColor(float2 life, float seed)
 {
     float4 color, color2;
+    //SamplerState sampler_MainTex;
+    //color = _ColorGrad.Sample(sampler_MainTex, float2(round(_ColorSteps * getAge(life)), 0));
     color = _ColorGrad.Load(int3(round(_ColorSteps * getAge(life)), 0, 0));
     if (F(P_CLRVARY)) {
         color2 = _ColorGrad.Load(int3(round(_ColorSteps * getAge(life)), 1, 0));
@@ -80,13 +78,6 @@ void DoInitUpdate(uint3 id)
     for (float i = 0; i < age; i += _DeltaTime) DoUpdate(id);
 }
 
-[numthreads(1, 1, 1)]
-void UpdateOne(uint3 id : SV_DispatchThreadID)
-{
-    if (F(P_PREWARM)) DoInitUpdate(id);
-    else DoUpdate(id);
-}
-
 [numthreads(THREADS, 1, 1)]
 void Update(uint3 id : SV_DispatchThreadID)
 {
@@ -95,32 +86,14 @@ void Update(uint3 id : SV_DispatchThreadID)
 }
 
 
-float4 _Seeds;
 float _Lifetime;
-
 float2 _Size;
+float3 _PosParent, _SpdParent;
+float4 _Color, _Color2, _Seeds;
 
-float3 _PosOffset;
-float3 _PosScale;
-int _PosShape;
-
-float3 _SpdOffset;
-float3 _SpdScale;
-int _SpdShape;
-
-float3 _ForceOffset;
-float3 _ForceScale;
-int _ForceShape;
-
-float3 _PosFacOffset;
-float3 _PosFacScale;
-int _PosFacShape;
-
-float3 _RadialOffset;
-float3 _RadialScale;
-int _RadialShape; 
-
-float4 _Color, _Color2;
+float3 _PosOffset, _SpdOffset, _ForceOffset, _PosFacOffset, _RadialOffset;
+float3 _PosScale, _SpdScale, _ForceScale, _PosFacScale, _RadialScale;
+int _PosShape, _SpdShape, _ForceShape, _PosFacShape, _RadialShape;
 
 float3 sqrNormalize(float3 v) {
     float3 av = abs(v);
@@ -149,7 +122,7 @@ float3 getShaped(float3 d, int shape)
 }
 
 [numthreads(1, 1, 1)]
-void EmitOne()
+void Emit()
 {
     uint id = _Alive.Consume();
     Particle p = _Particles[id];
@@ -189,14 +162,6 @@ void EmitOne()
     p.color = F(P_CLRVARY) ? lerp(_Color, _Color2, p.rand) : _Color;
     
     _Particles[id] = p;
-}
-
-// limited to 65536 threadgroups
-[numthreads(1, 1, 1)]
-void InitOne(uint3 id : SV_DispatchThreadID)
-{
-    _Particles[id.x].size.w = 0;
-    _Dead.Append(id.x);
 }
 
 [numthreads(THREADS, 1, 1)]

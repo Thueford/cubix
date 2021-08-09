@@ -83,12 +83,12 @@ namespace ParticleProps
             this.shape = shape;
         }
 
-        public void Uniform(ComputeShader sh, string name) //, Vector3 parent)
+        public void Uniform(ComputeShader cs, string name) //, Vector3 parent)
         {
-            sh.SetVector(name + "Offset", offset);
-            sh.SetVector(name + "Scale", scale);
-            // sh.SetVector(name + "Parent", parent);
-            sh.SetInt(name + "Shape", (int)shape);
+            cs.SetVector(name + "Offset", offset);
+            cs.SetVector(name + "Scale", scale);
+            // cs.SetVector(name + "Parent", parent);
+            cs.SetInt(name + "Shape", (int)shape);
         }
 
         public void Correct()

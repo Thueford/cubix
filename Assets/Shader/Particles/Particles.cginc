@@ -7,9 +7,8 @@
 
 struct v2f
 {
-    float4 pos : SV_POSITION;
+    float4 pos : SV_POSITION, color : COLOR;
     float2 uv : TEXCOORD0;
-    float4 color : COLOR;
 };
 
 
@@ -21,7 +20,7 @@ float4 _MainTex_ST;
 
 v2f vert(uint vid : SV_VertexID, uint iid : SV_INSTANCEID)
 {
-    v2f o = { 0,0,0,0,0,0,0,0,0,0 };
+    v2f o = { 0,0,0,0, 0,0, 0,0,0,0 };
     Particle p = _Particles[iid];
     if (p.size.w == 0 || p.size.x < 0 || p.size.y < 0) return o;
     
