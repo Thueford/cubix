@@ -3,10 +3,9 @@
 
 Postprocessing bezeichnet im Kontext der Videospielgrafik die Nachbearbeitung eines bereits ganz oder teilweise gerenderten Bildes mit einem oder mehreren Bildeffekten. Das Ziel des Postprocessings bei Cubix ist es, alte Videoaufnahme- und -wiedergabegeräte nachzubilden. Um diesen Effekt zu erzielen, werden Bildartefakte, die durch diese Hardware entstehen, als Nachbearbeitungseffekte dem fertigen Bild hinzugefügt.
 
-Die verwendeten Effekte, die von alten Kameras verursacht werden, sind Bloom, Lens Flare, Chromatic Aberration und Vignette. 
-Ein alter Monitor kann Scanlines verursachen, gewölbt sein und ebenfalls für Vignette und Chromatic Aberration sorgen.
-
-Jeder der genannten Effekte wird in den späteren Abschnitten genauer erläutert. Man beachte, dass sowohl alte Displays als auch Linsen Vignette und Chromatic Aberration verursachen können, was dann zu kleinen Unterschieden im Auftreten führen kann. Die Entscheidung, wie diese Effekte letztendlich darzustellen sind, ist rein artistisch.
+Die verwendeten Effekte sind Bloom, Lens Flare, Chromatic Aberration, Vignette, Scanlines und Displaykrümmung.
+Sie werden teils durch alte Kameralinsen und teils durch alte Monitore oder auch von beiden verursacht.
+Jeder der genannten Effekte wird später genauer erläutert. Einige davon wurden aus artistischen Gründen ein wenig anders gestaltet, als sie in der Realität auftreten würden, dazu ebenfalls mehr in den entsprechenden Abschnitten.
 
 
 
@@ -168,7 +167,7 @@ Anschlie{\ss}end wird der Blur-Effekt auf BrightSpots angewendet, wodurch die he
 
 \subsection{Chromatic Aberration}
 
-Chromatic Aberration ist ein von alten Kameralinsen und Röhrenmonitoren verursachtes Bildartefakt, das im Falle der Kameralinse dadurch auftritt, dass das eintreffende Licht von dieser nicht korrekt gebündelt wird. Licht unterschiedlicher Wellenlängen wird unterschiedlich stark von der Linse gebrochen, wodurch besonders kurz- oder langwellige Lichtfarben (zum Beispiel rot und blau) mit einiger Abweichung auf dem Sensor eintreffen. Normalerweise tritt Chromatic Aberration in Richtung der Ränder des Bildes stärker auf, jedoch erschwerte eine zu gro{\ss}e Effektstärke die Leserlichkeit des GUI. In der Mitte des Bildschirmes sollte der Effekt wiederum nicht zu schwach sein, da er bei der wei{\ss}en Spielfigur am besten zur Geltung kam. Deshalt fiel die Entscheidung, die Stärke der Chromatic Aberration für den gesamten Bildschirm auf einen einheitlichen Wert zu setzen.
+Chromatic Aberration ist ein von Kameralinsen und Röhrenmonitoren verursachtes Bildartefakt, das im Falle der Kameralinse dadurch auftritt, dass das eintreffende Licht von dieser nicht korrekt gebündelt wird. Licht unterschiedlicher Wellenlängen wird unterschiedlich stark von der Linse gebrochen, wodurch besonders kurz- oder langwellige Lichtfarben (zum Beispiel rot und blau) mit einiger Abweichung auf dem Sensor eintreffen. Normalerweise tritt Chromatic Aberration in Richtung der Ränder des Bildes stärker auf, jedoch erschwerte eine zu gro{\ss}e Effektstärke die Leserlichkeit des GUI. In der Mitte des Bildschirmes sollte der Effekt wiederum nicht zu schwach sein, da er bei der wei{\ss}en Spielfigur am besten zur Geltung kam. Deshalt fiel die Entscheidung, die Stärke der Chromatic Aberration für den gesamten Bildschirm auf einen einheitlichen Wert zu setzen.
 
 Als Shader kann der Effekt dadurch nachgebildet werden, dass vom ursprünglichen Bild der rote und blaue Farbkanal mit einer kleinen Abweichung zur eigentlichen Pixelposition abgefragt werden und dann gemeinsam mit dem Grünkanal an der richtigen Position das neue Pixel bilden. Die Abweichung der Position erfolgt für rot und blau in jeweils entgegengesetzte Richtung in einem Fragment Shader:
 
@@ -206,4 +205,43 @@ Chromatic Aberration eignet sich sich bei gro{\ss}en Abweichungswerten auch gut,
 
 \subsection{Vignette, warped Display und Scanlines}
 
-\lipsum[3]
+Die drei Effekte Vignette, Displaykrümmung und Scanlines werden unter anderem von alten CRT-Monitoren verursacht. Vignette bezeichnet eine Abdunklung verschiedener Bildbereiche (meist der Ränder). Scanlines sind (meist horizontale) dunkle Linien, die dadurch entstehen, dass das Bild vom Monitor zeilenweise gezeichnet wird. Auch hatten diese Monitore gewölbte Displays, deren Effekt ebenfalls emuliert wird.
+%link CRT
+
+Sie sind in einer Sektion zusammengefasst, da sie in einem einzigen Fragment Shader Pass gemeinsam durchgeführt werden können.
+
+Übergebene Variablen:
+\begin{description}
+\item[sampler2D MainTex] Die Eingabetextur
+\item[float vignetteAmount] gibt an, wie stark die Ränder abgedunkelt werden
+\item[float vignetteWidth] gibt an, wie weit die Verdunklung in Richtung Bildmitte vordringt
+\end{description}
+
+Zuerst wird der warped Display Effekt durchgeführt. Dafür werden die UV-Koordinaten, welche Werte von 0 bis 1 annehmen können, zuerst in einen Wertebereich zwischen -1 und 1 transformiert: $uv = i.uv * 2 - 1$.
+Anschlie{\ss}end wird mit folgenden Formeln der x-Wert der Koordinaten gestreckt: $uv.x = uv.x * (1 + pow(abs(uv.y) / 8, 2))$
+
+Das lässt sich so verstehen, dass der x-Wert für gro{\ss}e Absolutwerte von y (also weit oben und unten im Bild) besonders gestreckt wird. Es werden so bei der Erstellung des Bildes schon vor den Rändern Koordinaten erreicht, die über den Wertebereich der ursprünglichen Textur hinausgehen:
+
+\includegraphics[height=100pt]{warp_x.png}
+
+Diese Bereiche bleiben schwarz.
+
+Für die y-Werte wird analog verfahren: $uv.y = uv.y * (1 + pow(abs(uv.x) / 8, 2))$
+
+\includegraphics[height=100pt]{warp_y.png}
+
+Nun werden dem Bild noch Scanlines und Vignette hinzugefügt. Da die Scanlines vertikal angeordnet sind, kann deren Stärke als Sinusfunktion der y-Koordinate dargestellt werden und wird wie folgt berechnet: $sin(texcoord.y * 6.28 * 100) / 2 + 0.5$ 
+
+Die Faktoren 6.28 und 100 bedeuten, dass 100 Periodendurchläufe der Sinusfunktion (6.28 ist rund 2 Pi, also eine Periode) für y-Werte zwischen 0 und 1 geschehen. Da sich die Koordinaten in einem Wertebereich von -1 bis 1 befinden, entstehen auf der gesamten Displayhöhe insgesamt 200 Scanlines. Das Ergebnis der Sinusfunktion wird halbiert und es werden 0.5 addiert, womit es in einen Wertebereich zwischen 0 und 1 gebracht wird. Zuletzt wird der erhaltene Wert als Faktor mir der Farbe des Bildes multipliziert. 
+
+Da starke Scanlines besonders in der Mitte des Bildschirmes die Sichtbarkeit erheblich beeinträchtigen können, wird eine zusätzliche Variable 'scanLineIntensity' angelegt, die als Faktor mit in das Ergebnis einflie{\ss}t und die Intensität der Scanlines entsprechend verringert. Dazu wird die Funktion 'smoothstep' verwendet: $scanLineIntensity = smoothstep(.8, 1.41422, length(texcoord))$ Somit erhält man ein Ergebnis von 0 (also keine Scanlines) für alle Bereiche, die weniger als 0.8 vom Zentrum entfernt sind, danach steigt die Intensität linear bis auf einen Wert 1 in den Ecken. Es entsteht folgendes Resultat:
+
+\includegraphics[height=100pt]{scanlines.png}
+
+Zuletzt erfolgt die Vignettierung der Ränder. Dabei wird wie bei der Displaykrümmung mit den Absolutwerten der Koordinaten gearbeitet, da die Vignette an allen Rändern symmetrisch auftritt. Wieder kommt smoothstep zum Einsatz. Es wird geprüft, ob der grö{\ss}ere der beiden Koordinatenwerte (mit 'max' bestimmt) nicht weiter als der übergebene Wert vignetteWidth vom Rand entfernt ist: $vignetteStrength = smoothstep(1 - vignetteWidth, 1, max(texcoord.x, texcoord.y))$
+
+Damit der Effekt zur Mitte hin schneller abnimmt, wird das Ergebnis anschlie{\ss}end hoch 4 gerechnet, au{\ss}erdem wird der erhaltene Wert mit der zweiten Uniform Variable 'vignetteAmount' multipliziert, um die Stärke des Effekts vom Kontrollskript aus steuern zu können. Zusätzlich muss das Resultat mit 1 invertiert werden, um richtig mit den Farbwerten multipliziert werden zu können: $vignette = 1 - (pow(vignetteStrength, 4) * vignetteAmount)$
+Für vignetteWidth gleich 0.1 und vignetteAmount gleich 0.8 sieht das Ergebnis wie folgt aus:
+
+\includegraphics[height=100pt]{vignette.png}
+
