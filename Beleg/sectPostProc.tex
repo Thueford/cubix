@@ -78,6 +78,7 @@ Somit hat das resultierende Bild alle gewünschten Effekte.
 
 
 \subsection{Blur}
+\label{label:blur}
 
 Für die Effekte Bloom und Lens Flare wird eine Methode benötigt, Texturen verschwommen zu machen, was die Aufgabe der Blur-Shaders ist.
 Er ist ein Fragment Shader und wendet einen einfachen Gau{\ss}-schen Weichzeichnungsalgorithmus auf eine Textur an. Benötigt wird ein Ursprungsbild und ein Puffer der selben Grö{\ss}e.
@@ -136,6 +137,7 @@ Jedoch lässt sich die Anzahl der Texturzugriffe noch weiter senken. In einem Fr
 
 
 \subsection{Bloom}
+\label{label:bloom}
 
 Bloom (Überstrahlung) bezeichnet das Phänomen, dass sehr helle Bereiche eines Bildes nahe Bereiche 'überstrahlen'. Dies resultierte bei alten Kameras daraus, dass sie nicht den gesamten Helligkeitsbereich richtig aufnehmen konnten. In Videospielen und der Filmindustrie wird dieser Effekt gern verwendet, um den Eindruck von gro{\ss}er Helligkeit zu vermitteln, jedoch sollte er auch nicht zu stark sein und ablenken.
 Der Algorithmus ist als Compute Shader verfasst und besteht aus zwei Schritten, die von einem jeweils eigenen Kernel ausgeführt werden. 
@@ -199,7 +201,91 @@ Chromatic Aberration eignet sich sich bei gro{\ss}en Abweichungswerten auch gut,
 
 \subsection{Lens Flare}
 
-\lipsum[3]
+Als Lens Flare werden Abbilder von hellen Bereichen eines Bildes bezeichnet, die entlang einer Linie durch dessen Zentrum auftreten. Der Effekt entsteht dadurch, dass helles Licht zwischen einer oder mehreren Kameralinsen reflektiert wird (siehe \fullref{img:lensFlareImg}\footnote{\href{https://de.wikipedia.org/wiki/Lens_Flare}{Lens Flare} Zugriff 23.06.2021}). Unter Umständen kann zusätzlich zu den Ghosts auch ein sogenannter Halo entstehen, ein blasser Ring um die Lichtquelle.
+
+\includegraphics[height=100pt]{lensflare.png}
+\caption{Lens Flare Beispiel}
+\label{img:lensFlareImg}
+
+Lens Flare wird aus artistischen Gründen oft in Filmen sowie in der Fotografie und in Videospielen emuliert. In letzterem Fall gibt es dafür grundlegend zwei Ansätze: Zum Einen der Spritebasierte Ansatz, bei dem die Abbilder (auch Ghosts genannt) der hellen Stellen als Bilder (Sprites) vorgefertigt sind, welche dann entlang der Linie durch das Zentrum platziert werden. Dafür ist es notwendig, Lichtquellen, welche Lens Flare verursachen sollen, entsprechend zu markieren und dann beim Rendern des Bildes zu prüfen, ob diese Lichtquellen im Bild und nicht verdeckt sind. Danach werden anhand deren Position die Ghost-Sprites auf dem Bild platziert. Der Nachteil dieser Methode ist, dass viele Informationen über die Lichtquellen notwendig sind. Au{\ss}erdem werden Bereiche, die zwar hell genug sind, aber nicht für Lens Flare markiert wurden, auch keinen Lens Flare erzeugen. Zusätzlich ist die die Form der Ghosts von Beginn an festgelegt, was unter Umständen auch nicht gewünscht ist.
+
+Eine Alternative bildet der Ansatz des Screen Space Lens Flare. Dabei werden dynamisch alle Bereiche eines Bildes extrahiert, deren Helligkeit einen gewissen Schwellenwert übersteigt und danach automatisch entsprechende Ghosts erzeugt und auf dem Bild platziert. Dieser Ansatz ist wesentlich Flexibler, da keine anderen Informationen als das Bild selbst notwendig sind, er ist jedoch auch rechenintensiver und es lassen sich bestimmten Lichtquellen nicht einfach ausschlie{\ss}en.
+
+Cubix verwendet den zweiten Ansatz. Lens Flare ist hier als Compute Shader verfasst, der zwei Kernels umfasst, welche ähnliche Aufgaben wie die des \nameref{label:bloom} Effekts haben. 
+
+Übergebene Variablen:
+\begin{description}
+\item[RWTexture2D<float4> Source] Die Eingabetextur
+\item[RWTexture2D<float4> Result] Textur für die entstandenen Ghosts und den Halo
+\item[Texture2D<float4> lensDirt] Transparente Textur einer dreckigen Linse
+\item[uniform int ghostCount] Anzahl der Ghosts pro heller Stelle
+\item[uniform float ghostSpacing] Abstand der Ghosts zueinander
+\item[uniform float threshold] Schwellenwert der Helligkeit, ab dem Ghosts/Halo produziert werden
+\item[uniform float caStrength] Stärke der Chromatic Aberration der Ghosts/des Halo
+\end{description}
+
+Der Algorithmus läuft in zwei Schritten ab: Zuerst werden für helle Stellen im Bild die Ghosts und der Halo generiert, anschlie{\ss}end werden mittels \nameref{label:blur} die entstandenen Features verschwommen gemacht und unter Einbezug der LensDirt Textur auf das Ursprungsbild zurückgeschrieben.
+
+Für den ersten Schritt wurde im Shader der Kernel 'CSFlare' angelegt. Texturzugriffe erfolgen hier mithilfe der übergebenen Variable 'id'. Die Werte dieser Variablen sind diskrete Pixelkoordinaten, damit später mit ihnen einfacher zu rechnen ist, müssen sie auf Werte zwischen 0 und 1 transformiert werden. Dies erfolgt über das Teilen durch die grö{\ss}e der Textur in Pixeln, welche mit der Funktion GetDimensions ermittelt werden kann:
+
+\begin{hlsl}
+    uint width, height;
+    Source.GetDimensions(width, height);
+    float2 iResolution = float2(width, height); // Size of Source
+    float2 texcoord = (id.xy / iResolution); //coordinates transformed to [0, 1]
+\end{hlsl}
+
+Texcoord ist nun also ein Vektor mit einem Wertebereich von 0 bis 1, der auf das derzeitige Pixel zeigt. Um nun wieder auf die Texturen zugreifen zu können, muss dieser Vektor mit deren Grö{\ss}e multipliziert werden:
+
+\begin{hlsl}
+Source[texcoords * iResolution];
+\end{hlsl}
+
+Sehr wichtig ist auch der Vektor 'ghostVec'. Dieser zeigt vom derzeitigen Pixel in Richtung Mitte des Bildes und wird wie folgt berechnet:
+
+$ghostVec = ( -texcoord + .5 ) * ghostSpacing$
+
+GhostSpacing ist eine der Uniform Variablen und gibt an, um wie viel länger beziehungsweise kürzer ghostVec sein soll als der Abstand von texcoord zur Bildmitte (siehe \fullref{img:lfghostvec})
+
+\captionsetup{type=figure}
+\includegraphics[height=150pt]{lf_ghostvec.png}
+\captionof{figure}{ghostVec}
+\label{img:lfghostvec}
+
+Nun werden die Ghosts und der Halo jeweils in ihrer eigenen Funktion generiert und zu einem Ergebnis zusammenaddiert:
+
+\begin{hlsl}
+float3 col = 0;
+col += generateGhosts(texcoord, ghostVec, iResolution);
+col += generateHalo(texcoord, ghostVec, iResolution);
+\end{hlsl}
+
+Zuerst werden mit 'generateGhosts', wie der Name schon sagt, die Ghosts generiert. Eine Schleife, die an unterschiedlichen Stellen des Bildes den entsprechenden Helligkeitswert überprüft, läuft so oft ab, wie durch den übergebenen Parameter ghostCount angegeben. Dabei wird in jedem Durchlauf einmal der Vektor ghostVec als Abweichung zu den derzeitigen Texturkoordinaten hinzuaddiert. An der resultierenden Stelle wird dann die Farbe des Ursprungsbildes bestimmt und der Schwellenwert wird von ihr abgezogen: $texColor = max(texColor - threshold, 0)$
+
+Zuletzt wird der Wert von texColor noch mit einem Faktor multipliziert, der davon abhängig ist, wie weit die helle Stelle vom Zentrum des Bildes entfernt ist, da Lichtquellen am Rand weniger bis gar kein Lens Flare auslösen sollen. \fullref{img:lfghostgen} zeigt, wie die Berechnung der Koordinaten der hellen Stellen für jeden Ghost stattfindet.
+
+\captionsetup{type=figure}
+\includegraphics[height=150pt]{lf_ghostgen_1.png}
+\includegraphics[height=150pt]{lf_ghostgen_2.png}
+\includegraphics[height=150pt]{lf_ghostgen_3.png}
+\captionof{figure}{Berechnung der Position der hellen Stelle für Ghosts (rot umrandet sei ein heller Bereich)}
+\label{img:lfghostgen}
+
+Wie zu sehen ist, wird ghostVec kleiner, je näher der Ghost dem Zentrum des Bildes ist. Mit jeder Iteration entfernt sich Offset einmal um die Länge von ghostVec von den ursprünglichen Koordinaten. Deshalb muss die Schleife für jeden Ghost einmal öfter durchlaufen werden, um an jeweils die gleichen Offset-Koordinaten zu gelangen. Für ghostCount war in diesem Beispiel 3 eingestellt.
+
+Somit ist die Erstellung der Ghosts abgeschlossen und es folgt der Halo. Die Funktion 'generateHalo' arbeitet grundsätzlich sehr ähnlich zu 'generateGhosts'. Die Unterschiede bestehen darin, dass es keine Schleife gibt (zu jedem Objekt existiert immer nur ein Halo) und dass ghostVec auf eine feste Länge normalisiert und nun haloVec genannt wird: $haloVec = normalize(ghostVec) * 0.35$
+
+Der Faktor 0.35 legt den Radius des Halo fest (auf 0.35 Bildbreiten/-höhen). HaloVec zeigt genau wie ghostVec in Richtung Mitte des Bildes, aber dadurch, dass er eine feste Länge hat, bilden sich um jede Stelle des Bildes teile eines Ringes, in denen haloVec auf besagte Stelle zeigt. Besser veranschaulicht ist der Sachverhalt in \fullref{img:lfhalogen}
+
+\captionsetup{type=figure}
+\includegraphics[height=150pt]{lf_halogen_1.png}
+\includegraphics[height=150pt]{lf_halogen_2.png}
+\captionof{figure}{Berechnung der Stellen, die Teil des Halo sind (rot umrandet sei ein heller Bereich)}
+\label{img:lfhalogen}
+
+Je näher die helle Stelle dem Zentrum ist, desto grö{\ss}er wird der Halo, bis er sich gänzlich schlie{\ss}t, falls sie sich genau dort befindet. Im Gegensatz zu den Ghosts ist die Helligkeit der Halopixel nicht abhängig von der Entfernung der hellen Stelle zum Zentrum, sondern davon, wie weit sie selbst vom Zentrum entfernt sind.
+
+Zweiter Schritt: Zurückschreiben auf caResult, damit Flare nicht verschoben wird.
 
 
 
