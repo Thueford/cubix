@@ -27,17 +27,20 @@
 
 Eine Stufe besteht im Wesentlichen aus 2 Gruppen von Komponenten: den statischen, unveränderlichen und den dynamisch generierten.
 
-Zu den statischen gehören Wände, die den Spielbereich abgrenzen und ggf. Hindernisse auf dem Spielfeld darstellen, der Spawn auf dem der Spieler die Stufe betritt, das Portal durch das der Spieler in die nächste Stufe gelangt und der Charger, den der Spieler aufladen muss, um das Portal zu aktivieren.
+\renewcommand{\imgspace}{8em}
+\imgtxt{stageInspect.png}{
+Zu den statischen gehören Wände, die den Spielbereich abgrenzen und ggf. Hindernisse auf dem Spielfeld darstellen, der Spawn auf dem der Spieler die Stufe betritt, das Portal durch das der Spieler in die nächste Stufe gelangt und der Charger, den der Spieler aufladen muss, um das Portal zu aktivieren. (siehe \fullref{img:stage}) \\
 
-Zu den dynamischen gehören die Gegner, abgefeuerte Bullets, Collectables, ggf. dynamisch generierte Hindernisse sowie dazugehörige Partikeleffekte. Zudem kann es in einer Stufe ein oder mehrere für den Spieler unsichtbare Gegnerspawner (siehe \nameref{subsect:spawner}) geben.
+Zu den dynamischen (im Bild links markiert) gehören die Gegner, abgefeuerte Bullets, Collectables, ggf. dynamisch generierte Hindernisse sowie dazugehörige Partikeleffekte. Zudem kann es in einer Stufe ein oder mehrere für den Spieler unsichtbare Gegnerspawner (siehe \nameref{subsect:spawner}) geben.
+}
 
-Alle dynamischen Objekte werden in einem dafür angelegten Containerobjekt in der Stage hinterlegt, damit er in seiner Gesamtheit bein Entladen einer Stufe gelöscht werden kann.
+Alle dynamischen Objekte werden in einem dafür angelegten Containerobjekt in der Stage hinterlegt, damit er in seiner Gesamtheit beim Entladen einer Stufe gelöscht werden kann.
 
 
 
 \subsection{Tutorialstages}
 
-Das Tutorial besteht aus geskripteten Stages mit voreingestellten Spawnern, Farbcollectables und Hinweistexten. Die Hinweistexte werden hierbei durch zu den Stages gehörigen Skripte gesteuert.
+Das Tutorial besteht aus geskripteten Stages mit voreingestellten Spawnern, Farbcollectables und Hinweistexten. Die Hinweistexte und manchmal auch andere Komponenten werden hierbei durch zu den Stages gehörigen Skripte gesteuert. Dabei kann es unterschiedliche Verhalten geben, wenn der Endlosmodus bereits freigeschalten wurde, bspw. für die Anzeige von Statistiken und dem Highscore im Hauptmenü.
 
 
 
@@ -91,16 +94,21 @@ In dieser Implementierung gibt es sog. Effektoren, die jeweils vier Werte speich
 
 \begin{description}
 \item[Zieltag] Zeichenkette, die die Gruppe an Objekten mit dieser Begehrlichkeit beschreibt
-\item[Begehrlichkeitswert] wie anstrebenswert ein Objekt ist. Ein positiver Wert ist hierbei ein Ziel, welches verfolgt wird, während ein negativer Wert ein zu vermeidendes Objekt darstellt.
+\item[Begehrlichkeit] wie anstrebenswert ein Objekt ist. Ein positiver Wert ist hierbei ein Ziel, welches verfolgt wird, während ein negativer Wert ein zu vermeidendes Objekt darstellt.
 \item[Mindestabstand] Wie nah eine Entität sein muss, um von diesem Effektor beeinflusst zu werden
 \item[Typ] Wie stark der Effektor abhängig vom Abstand wirkt. Das kann hier entweder logisch, linear oder quadratisch sein. 
 \end{description}
 
 Jede Entität bestimmt dann anhand der Formel $ clamp(typed(1 - dist / dist_{min}), 0, 1) * v_{dir} $ einen Vektor der die die Richtung und die Kraft zu diesem Objekt angibt.
 
-Für die Erkennung von Wänden schaut jede Entität in in 30° Schritten um sich herum und schickt in jede dieser Richtungen einen Physik-Raycast. Von den Effektor-Vektoren wird dann  mittels Punktprodukt ein anteiliger Faktor in diese Richtung ermittelt und die resultierende Richtung durch die Summe dieser Richtungsvektoren ermittelt.
+Für die Erkennung von Wänden schaut jede Entität in in 30° Schritten um sich herum und schickt in jede dieser Richtungen einen Physik-Raycast. Von den Effektor-Vektoren wird dann  mittels Punktprodukt ein anteiliger Faktor in diese Richtung ermittelt und die resultierende Richtung durch die Summe dieser Richtungsvektoren ermittelt. Für etwas mehr Abwechslung wird diese noch durch Perlin-Noise ein wenig abgeändert.
 
-Für etwas mehr Abwechslung wird diese noch durch Perlin-Noise ein wenig abgeändert.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\linewidth]{ctxSteer.png}
+\caption{Debug-Linien vom Kontext-Steering}
+\label{img:ctxSteer}
+\end{figure}
 
 Da jede Gegnerart ein eigenes Verhalten hat, haben diese auch unterschiedliche Effektorenlisten. Strays besitzen nur das Standardverhalten und bewegen sich rein durch noise und vermeiden Wände und andere Gegner. Hunter haben zusätzlich eine Kraft zum Spieler hin und Archer wiederum noch einen Effektor mit kleinerem Radius vom Spieler weg, ebenfalls mit etwas Noise damit der Archer scheinbar vom SPieler strategisch vor- und zurückweicht.
 
@@ -121,6 +129,13 @@ Die Gegnerspawner sind standardisierte Rechteck-Objekte, die unsichtbar für den
 \item[delay] Zeitspanne zwischen Gegnerwellen
 \item[variation] Zeitspanne, nach der einzelne Gegnerspawns verzögert werden
 \end{description}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{spawner.png}
+\caption{Spawner im Unity-Inspektor}
+\label{img:spawner}
+\end{figure}
 
 Zudem hat jede Stage eine Maximale Anzahl an Gegnern, die sich Zeitgleich in der Stage aufhalten können, damit der Spieler nicht von Gegnern überrant wird.
 

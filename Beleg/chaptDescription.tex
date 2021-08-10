@@ -12,9 +12,9 @@ Als Neuerung wird ein Farbkonzept verwendet, bei dem die Grundfarben Rot, Grün 
 
 \section{Spielziel}
 
-Das Spiel ist aus verschiedenen Stufen (siehe \fullref{sect:stages}) aufgebaut, die vom Spieler abgeschlossen werden müssen.
+Das Spiel ist aus verschiedenen Stufen aufgebaut (siehe \fullref{sect:stages}), die vom Spieler abgeschlossen werden müssen.
 Solange sich der Spieler im roten Ladebereich (Charger) in der Mitte des Spielfeldes aufhält, wird dieser aufgeladen.
-Sobald der Charger aktiviert wird, fangen Gegner an zu erscheinen (spawnen). Diese können vom Spieler durch Schie{\ss}en besiegt werden, sie selbst schie{\ss}en aber ebenfalls auf den Spieler und können ihm so schaden.
+Sobald der Charger das erste Mal aktiviert wird, fangen Gegner an zu erscheinen (spawnen). Diese können vom Spieler durch Schie{\ss}en besiegt werden. Sie selbst schie{\ss}en aber ggf. ebenfalls auf den Spieler und können ihm so schaden zufügen, bis er keine Leben mehr hat und die Stage von vorn beginnen muss.
 Ist der Charger vollständig geladen, hören die Gegner auf zu spawnen und ein Portal zur nächsten Stufe wird aktiviert.
 
 
@@ -35,9 +35,10 @@ Der Spieler kann seinen Schüssen jeweils eine der Eigenschaften der drei Grundf
 {werden in einem Fächer von fünf Kugeln in einer höheren Schussrate verschossen, fügen aber weniger Schaden zu.}
 
 Die gleichzeitige Kombination mehrerer Farben ist nur auf Kosten von Ressourcen erlaubt (siehe \fullref{sect:ressourcen}). Dabei erhalten die Kugeln alle Eigenschaften der aktiven Farben.
-Beispiel (in Klammern jeweils die Farbe, von der der Effekt stammt): Kombiniert man die Farben rot und grün, so erhält man gelbe Kugeln, die etwas langsamer als Grüne sind (durch rot wird der Bonus von Grün verringert) und eine geringere Feuerrate haben (grün). Sie durchdringen Gegner und prallen von Wänden ab (grün), wobei jeder Kontakt eine Explosion erzeugt (rot), die zusätzlich mehr Schaden verursacht (grün).
 
-Bei den anderen Kombinationen (magenta, cyan, wei{\ss}) ist analog zu verfahren.
+Beispiel: Kombiniert man die Farben rot und grün, so erhält man gelbe Kugeln, die etwas langsamer sind als Grüne, eine geringere Feuerrate haben und mehr Schaden zufügen. Eigenschaften wie das durchdringen von Gegnern, abprallen von Wänden und erzeugen von Explosion bei Kontakt bleiben erhalten. Bei den anderen Kombinationen (magenta, cyan) ist analog zu verfahren.
+
+Eine Ausnahme gibt es bei blau: wird diese Farbe kombiniert werden statt fünf nur drei Kugeln abgefeuert, um den Bonus der anderen Farbe nicht durch die gro{\ss}e Anzahl von Kugeln übermä{\ss}ig zu steigern.
 
 
 \section{Gegner}
@@ -125,6 +126,12 @@ So ist das Hauptmenü schon stark mit dem Gameplay verbunden, es gibt einen naht
 
 Auf eine herkömmliche Lebensanzeige des Spielers wurde auch verzichtet, stattdessen zeigen kleine, um die Spielfigur kreisende Würfel die aktuellen Lebenspunkte an.
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{stage.png}
+\caption{Spielansicht im Hauptmenü}
+\label{img:stage}
+\end{figure}
 
 
 \section{Tutorial}
