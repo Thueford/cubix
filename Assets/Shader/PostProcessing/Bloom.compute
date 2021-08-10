@@ -14,6 +14,7 @@ uniform float threshold;
 [numthreads(numThreads, numThreads, 1)]
 void CSExtractBright (uint3 id : SV_DispatchThreadID)
 {
+    // write only pixels with a brightness above threshold to BrightSpots
     if (dot(float3(0.2126, 0.7152, 0.0722), Source[id.xy].rgb) > threshold)
     {
         BrightSpots[id.xy] = Source[id.xy];
