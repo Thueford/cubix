@@ -37,13 +37,13 @@ Zur Sequenziellen Ausführung aller Effekte werden insgesamt 6 RenderTextures an
     public RenderTexture lensTex;
 \end{csh}
 
-Zum Start des Programms oder falls die Fenstergrö{\ss}e geändert wird, müssen alle diese RenderTextures nmit der Funktion createTexture() neu angelegt werden.
+Zum Start des Programms oder falls die Fenstergrö{\ss}e geändert wird, müssen alle diese RenderTextures mit der Funktion createTexture() neu angelegt werden.
 
 Durchgeführt wird das Postprocessing in der Funktion 
 \begin{csh} 
 private void OnRenderImage(RenderTexture source, RenderTexture destination) 
 \end{csh}
-Diese Funktion wird von der Unity Engine zur Verfügung gestellt und in einem Skript, das an eine Kamera angehängt ist, immer dann aufgerufen, wenn ein neues Bild gerendert wurde. Source ist dabei das gelieferte Bild und Destination ist das Bild, welches zum Schluss abgebildet wird. Source kann also bevor es nach Destination geschrieben wird noch beliebig verändert werden. Der erste Effekt, welcher auf das Bild angewendet wird, ist Bloom. Bloom ist als Compute Shader verfasst, für den Texturen, in die geschrieben werden soll, das Flag 'enableRandomWrite' benötigen. Dieses lässt sich für einmal erstellte Texturen im Nachhinein nicht mehr ändern und ist in Source standardmäßig deaktiviert. Also ist der erste Schritt, mit der Funktion 
+Diese Funktion wird von der Unity Engine zur Verfügung gestellt und in einem Skript, das an eine Kamera angehängt ist, immer dann aufgerufen, wenn ein neues Bild gerendert wurde. Source ist dabei das Eingabebild und Destination ist das Bild, welches zum Schluss abgebildet wird. Source kann also noch beliebig verändert werden, bevor es nach Destination geschrieben wird. Der erste Effekt, welcher auf das Bild angewendet wird, ist Bloom. Bloom ist als Compute Shader verfasst, für den Texturen, in die geschrieben werden soll, das Flag 'enableRandomWrite' benötigen. Dieses lässt sich für einmal erstellte Texturen im Nachhinein nicht mehr ändern und ist in Source standardmäßig deaktiviert. Also ist der erste Schritt, mit der Funktion 
 \begin{csh}
 Graphics.Blit(source, sourceTex);
 \end{csh}
@@ -55,11 +55,11 @@ Nun kann der Bloom-Effekt angewandt werden. Zuerst werden mithilfe des Bloomshad
 
 %image bloom
 
-Als nächstes wird Chromatic Aberration auf das fertige Bild mit Bloom (sourceTex) angewandt. Es wird keine zusätzliche Textur benötigt und das Resultat befindet sich in caResult.
+Als Nächstes wird Chromatic Aberration auf das fertige Bild mit Bloom (sourceTex) angewandt. Es wird keine zusätzliche Textur benötigt und das Resultat befindet sich in caResult.
 
 %image ca
 
-Nun ist Lens Flare an der Reihe. Als ausgangstextur dient ebenfalls sourceTex und ähnlich wie bei Bloom werden bestimmte Features des Ursprungsbildes in eine separate Textur (lfResult) geschrieben. Diese wird dann wiederum mithilfe von blurBuff verschwommen gemacht und dieses mal additiv auf caResult zurückgeschrieben. 
+Nun ist Lens Flare an der Reihe. Als Ausgangstextur dient ebenfalls sourceTex und ähnlich wie bei Bloom werden bestimmte Features des Ursprungsbildes in eine separate Textur (lfResult) geschrieben. Diese wird dann wiederum mithilfe von blurBuff verschwommen gemacht und dieses Mal additiv auf caResult zurückgeschrieben. 
 
 %image lf
 
@@ -67,11 +67,11 @@ Vorher jedoch wird das Ergebnis mit der Textur lensTex kombiniert, die zum Start
 
 %image lensTex
 
-Die Effekte Vignette, Scanlines und Displaykrümmung können zuletzt alle mit einmal auf caResult angewendet werden, wobei das Ergebnis direkt nach destination (Argument von OnRenderImage) geschrieben wird.
+Die Effekte Vignette, Scanlines und Displaykrümmung können zuletzt alle mit einmal auf caResult angewendet werden, wobei das Ergebnis direkt nach Destination (Argument von OnRenderImage) geschrieben wird.
 
 %image crt
 
-Somit hat das resultierende Bild alle gewünschten Effekte
+Somit hat das resultierende Bild alle gewünschten Effekte.
 
 %complete pipeline
 
@@ -94,7 +94,7 @@ Der Algorithmus funktioniert, indem er zu einem Pixel immer auch den Wert jedes 
 \includegraphics[height=100pt]{gauss_normal.png}
 
 Diese Methode hat jedoch den Nachteil, dass 81 (9x9) Texturzugriffe für jedes Pixel notwendig sind, was nicht sehr effizient ist.
-Die Texturzugriffe lassen sich jedoch verringern, indem in zwei Durchläufen des Shaders die Pixeldaten zuerst nur in horizontale Richtung und dann nur in vertikale Richtung abgefragt wird:
+Die Texturzugriffe lassen sich jedoch verringern, indem in zwei Durchläufen des Shaders die Pixeldaten zuerst nur in horizontale Richtung und dann nur in vertikale Richtung abgefragt werden:
 
 \includegraphics[height=100pt]{gauss_horizontal.png}
 \includegraphics[height=100pt]{gauss_vertical.png}
@@ -103,19 +103,19 @@ Das Resultat ist dabei fast identisch:
 
 \includegraphics[height=100pt]{gauss_twopass.png}
 
-Diese Methode nennt sich two-pass Gaussian blur und es sind hier nur 18 (2x9) Texturzugriffe notwendig. Die angelegte Variable 'horizontal' gibt bei jedem Aufruf des Shaders an, ob in die horizontale oder die vertikale Richtung verwaschen werden soll, und wird nach jedem Aufruf invertiert. Zusätzlich ist nun ein separater Puffer vonnöten (hier blurBuff), in dem das resultat des ersten Durchlaufes (horizontal) zwischengespeichert wird und dessen Inhalt im zweiten Durchlauf (vertikal) verschwommen wieder zurück in die ursprüngliche Textur geschrieben wird. Dieser Prozess ist im Postprocessing-Skript in eine eigene Methode blur ausgelagert worden:
+Diese Methode nennt sich two-pass Gaussian Blur und es sind hier nur 18 (2x9) Texturzugriffe notwendig. Die angelegte Variable 'horizontal' gibt bei jedem Aufruf des Shaders an, ob in die horizontale oder die vertikale Richtung verwaschen werden soll, und wird nach jedem Aufruf invertiert. Zusätzlich ist nun ein separater Puffer vonnöten (hier blurBuff), in dem das resultat des ersten Durchlaufes (horizontal) zwischengespeichert wird und dessen Inhalt im zweiten Durchlauf (vertikal) verschwommen wieder zurück in die ursprüngliche Textur geschrieben wird. Dieser Prozess ist im Postprocessing-Skript in eine eigene Blur-Methode ausgelagert worden:
 
 \begin{csh}
-    private void blur(RenderTexture tex, int count)
+private void blur(RenderTexture tex, int count)
+{
+    for (int i = 0; i < count; i++)
     {
-        for (int i = 0; i < count; i++)
-        {
-            postProcMat.SetInt("_horizontal", 1);
-            Graphics.Blit(tex, blurBuff, postProcMat, BlurPass);
-            postProcMat.SetInt("_horizontal", 0);
-            Graphics.Blit(blurBuff, tex, postProcMat, BlurPass);
-        }
+        postProcMat.SetInt("_horizontal", 1);
+        Graphics.Blit(tex, blurBuff, postProcMat, BlurPass);
+        postProcMat.SetInt("_horizontal", 0);
+        Graphics.Blit(blurBuff, tex, postProcMat, BlurPass);
     }
+}
 \end{csh}
 
 Zusätzlich zur zu bearbeitenden Textur wird der Methode eine Variable 'count' übergeben, über welche die Stärke der Verwaschung reguliert werden kann. Dazu wird die Shadersequenz so oft durchlaufen, wie count angibt. Nach jedem Shaderaufruf wird die Uniform Variable 'horizontal' auf den entsprechenden Wert neu gesetzt.
@@ -125,7 +125,7 @@ Jedoch lässt sich die Anzahl der Texturzugriffe noch weiter senken. In einem Fr
     static const float weight[3] = { 0.2270270270, 0.3162162162, 0.0702702703 };
     static const float offset[3] = { 0.0, 1.3846153846, 3.2307692308 };
 \end{hlsl}
-'Offset' gibt an, wie viele Pixel entfernt vom Hauptpixel die Farbdaten bestimmt werden sollen. Zu beachten ist hier, dass keine ganzzaligen Pixelabstände gewählt wurden, um den gewünschten Effekt zu erzielen.
+'Offset' gibt an, wie viele Pixel entfernt vom Hauptpixel die Farbdaten bestimmt werden sollen. Zu beachten ist hier, dass keine ganzzahligen Pixelabstände gewählt wurden, um den gewünschten Effekt zu erzielen.
 'Weight' gibt zu jedem Offset an, wie stark dieser Wert in das Endergebnis einflie{\ss}t. Mit der richtigen Werteliste ist das Ergebnis identisch zu einem Algorithmus, der mit den 5 ganzzahligen Pixeloffsets 0, 1, 2, 3 und 4 arbeitet, benötigt jedoch nur reichlich die Hälfte der Texturzugriffe.
 
 %https://john-chapman.github.io/2017/11/05/pseudo-lens-flare.html
@@ -167,7 +167,7 @@ Anschlie{\ss}end wird der Blur-Effekt auf BrightSpots angewendet, wodurch die he
 
 \subsection{Chromatic Aberration}
 
-Chromatic Aberration ist ein von Kameralinsen und Röhrenmonitoren verursachtes Bildartefakt, das im Falle der Kameralinse dadurch auftritt, dass das eintreffende Licht von dieser nicht korrekt gebündelt wird. Licht unterschiedlicher Wellenlängen wird unterschiedlich stark von der Linse gebrochen, wodurch besonders kurz- oder langwellige Lichtfarben (zum Beispiel rot und blau) mit einiger Abweichung auf dem Sensor eintreffen. Normalerweise tritt Chromatic Aberration in Richtung der Ränder des Bildes stärker auf, jedoch erschwerte eine zu gro{\ss}e Effektstärke die Leserlichkeit des GUI. In der Mitte des Bildschirmes sollte der Effekt wiederum nicht zu schwach sein, da er bei der wei{\ss}en Spielfigur am besten zur Geltung kam. Deshalt fiel die Entscheidung, die Stärke der Chromatic Aberration für den gesamten Bildschirm auf einen einheitlichen Wert zu setzen.
+Chromatic Aberration ist ein von Kameralinsen und Röhrenmonitoren verursachtes Bildartefakt, das im Falle der Kameralinse dadurch auftritt, dass das eintreffende Licht von dieser nicht korrekt gebündelt wird. Licht unterschiedlicher Wellenlängen wird unterschiedlich stark von der Linse gebrochen, wodurch besonders kurz- oder langwellige Lichtfarben (zum Beispiel rot und blau) mit einiger Abweichung auf dem Sensor eintreffen. Normalerweise tritt Chromatic Aberration in Richtung der Ränder des Bildes stärker auf, jedoch erschwerte eine zu gro{\ss}e Effektstärke die Leserlichkeit des GUI. In der Mitte des Bildschirmes sollte der Effekt wiederum nicht zu schwach sein, da er bei der wei{\ss}en Spielfigur am besten zur Geltung kam. Deshalb fiel die Entscheidung, die Stärke der Chromatic Aberration für den gesamten Bildschirm auf einen einheitlichen Wert zu setzen.
 
 Als Shader kann der Effekt dadurch nachgebildet werden, dass vom ursprünglichen Bild der rote und blaue Farbkanal mit einer kleinen Abweichung zur eigentlichen Pixelposition abgefragt werden und dann gemeinsam mit dem Grünkanal an der richtigen Position das neue Pixel bilden. Die Abweichung der Position erfolgt für rot und blau in jeweils entgegengesetzte Richtung in einem Fragment Shader:
 
@@ -184,8 +184,8 @@ Als Shader kann der Effekt dadurch nachgebildet werden, dass vom ursprünglichen
     col.b = tex2D(_MainTex, i.uv - float2(_CAAmount, 0)).b;
 \end{hlsl}
 
-Wie zu sehen ist, wird der Rotkanal der resultierenden Farbe in MainTex an der entsprechenden Texturpixelposition (i.uv) plus einer Abweichung 'CAAmount' ermittelt. Für den Blaukanal wird i.uv minus CAAmount abgefragt, beim Grünkanal gibt es keine Abweichung. Damit CAAmount als Abweichung nur die x-Position des Pixels beeinflusst, wird ein float2 erstellt, der CAAmount als x-Wert und 0 als y-Wert besitzt, welcher dann zu i.uv (auch zweidimensional) dazuaddiert beziehungsweise davon abgezogen werden kann.
-CAAmount kann vom Hauptporgramm aus gesteuert werden, als Standard wurde der Wert 0.0005 gewählt. Das bedeutet, dass rot und blau um ein halbes Tausendstel der Displaybreite (ein paar Pixel) von ihrer ursprünglichen Position abweichen. So sehen verschiedene Werte für CAAmount im Vergleich aus:
+Wie zu sehen ist, wird der Rotkanal der resultierenden Farbe in MainTex an der entsprechenden Texturpixelposition (i.uv) plus einer Abweichung 'CAAmount' ermittelt. Für den Blaukanal wird i.uv minus CAAmount abgefragt, beim Grünkanal gibt es keine Abweichung. Damit CAAmount als Abweichung nur die x-Position des Pixels beeinflusst, wird ein float2 erstellt, der CAAmount als x-Wert und 0 als y-Wert besitzt, welcher dann zu i.uv (auch zweidimensional) dazu addiert beziehungsweise davon abgezogen werden kann.
+CAAmount kann vom Hauptprogramm aus gesteuert werden, als Standard wurde der Wert 0.0005 gewählt. Das bedeutet, dass rot und blau um ein halbes Tausendstel der Displaybreite (ein paar Pixel) von ihrer ursprünglichen Position abweichen. So sehen verschiedene Werte für CAAmount im Vergleich aus:
 
 \captionsetup{type=figure}
 \includegraphics[height=75pt]{bloom_on.png}
@@ -193,7 +193,7 @@ CAAmount kann vom Hauptporgramm aus gesteuert werden, als Standard wurde der Wer
 \includegraphics[height=75pt]{ca_005.png}
 \captionof{figure}{Links: kein Effekt, Mitte: CAAmount = 0.0005, Rechts: CAAmount = 0.005}
 
-Chromatic Aberration eignet sich sich bei gro{\ss}en Abweichungswerten auch gut, um das Gefühl von Fehlern beziehungsweise Glitches zu vermitteln. So wird zum Beispiel für kurze Zeit nachdem der Spieler getroffen wurde die Abweichung auf zufällig wechselnde, hohe Werte gesetzt, was den erlittenen Schaden gut verdeutlicht.
+Chromatic Aberration eignet sich sich bei gro{\ss}en Abweichungswerten auch gut, um das Gefühl von Fehlern beziehungsweise Glitches zu vermitteln. So wird zum Beispiel für kurze Zeit nachdem der Spieler getroffen wurde, die Abweichung auf zufällig wechselnde, hohe Werte gesetzt, was den erlittenen Schaden gut verdeutlicht.
 
 
 
@@ -217,7 +217,7 @@ Sie sind in einer Sektion zusammengefasst, da sie in einem einzigen Fragment Sha
 \item[float vignetteWidth] gibt an, wie weit die Verdunklung in Richtung Bildmitte vordringt
 \end{description}
 
-Zuerst wird der warped Display Effekt durchgeführt. Dafür werden die UV-Koordinaten, welche Werte von 0 bis 1 annehmen können, zuerst in einen Wertebereich zwischen -1 und 1 transformiert: $uv = i.uv * 2 - 1$.
+Zuerst wird der Warped Display Effekt durchgeführt. Dafür werden die UV-Koordinaten, welche Werte von 0 bis 1 annehmen können, zuerst in einen Wertebereich zwischen -1 und 1 transformiert: $uv = i.uv * 2 - 1$.
 Anschlie{\ss}end wird mit folgenden Formeln der x-Wert der Koordinaten gestreckt: $uv.x = uv.x * (1 + pow(abs(uv.y) / 8, 2))$
 
 Das lässt sich so verstehen, dass der x-Wert für gro{\ss}e Absolutwerte von y (also weit oben und unten im Bild) besonders gestreckt wird. Es werden so bei der Erstellung des Bildes schon vor den Rändern Koordinaten erreicht, die über den Wertebereich der ursprünglichen Textur hinausgehen:
@@ -234,7 +234,7 @@ Nun werden dem Bild noch Scanlines und Vignette hinzugefügt. Da die Scanlines v
 
 Die Faktoren 6.28 und 100 bedeuten, dass 100 Periodendurchläufe der Sinusfunktion (6.28 ist rund 2 Pi, also eine Periode) für y-Werte zwischen 0 und 1 geschehen. Da sich die Koordinaten in einem Wertebereich von -1 bis 1 befinden, entstehen auf der gesamten Displayhöhe insgesamt 200 Scanlines. Das Ergebnis der Sinusfunktion wird halbiert und es werden 0.5 addiert, womit es in einen Wertebereich zwischen 0 und 1 gebracht wird. Zuletzt wird der erhaltene Wert als Faktor mir der Farbe des Bildes multipliziert. 
 
-Da starke Scanlines besonders in der Mitte des Bildschirmes die Sichtbarkeit erheblich beeinträchtigen können, wird eine zusätzliche Variable 'scanLineIntensity' angelegt, die als Faktor mit in das Ergebnis einflie{\ss}t und die Intensität der Scanlines entsprechend verringert. Dazu wird die Funktion 'smoothstep' verwendet: $scanLineIntensity = smoothstep(.8, 1.41422, length(texcoord))$ Somit erhält man ein Ergebnis von 0 (also keine Scanlines) für alle Bereiche, die weniger als 0.8 vom Zentrum entfernt sind, danach steigt die Intensität linear bis auf einen Wert 1 in den Ecken. Es entsteht folgendes Resultat:
+Da starke Scanlines besonders in der Mitte des Bildschirmes die Sichtbarkeit erheblich beeinträchtigen können, wird eine zusätzliche Variable 'scanLineIntensity' angelegt, die als Faktor mit in das Ergebnis einflie{\ss}t und die Intensität der Scanlines entsprechend verringert. Dazu wird die Funktion 'smoothstep' verwendet: $scanLineIntensity = smoothstep(.8, 1.41422, length(texcoord))$. Somit erhält man ein Ergebnis von 0 (also keine Scanlines) für alle Bereiche, die weniger als 0.8 vom Zentrum entfernt sind, danach steigt die Intensität linear bis auf einen Wert 1 in den Ecken. Es entsteht folgendes Resultat:
 
 \includegraphics[height=100pt]{scanlines.png}
 

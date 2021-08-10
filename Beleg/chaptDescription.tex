@@ -3,9 +3,9 @@
 
 %Konzept, ~farben
 Cubix ist ein Top-Down Bullet-Hell Shooter angelehnt an den Hacking-Mode aus Nier:Automata\cite{qNierHM}.
-Dort steuert man eine Figur in einer Welt von Gegnern und Hindernissen und muss möglichst schnell und Fehlerfrei sämtliche Gegner durch gekonntes Ausweichen und gezielte Schüsse eliminieren.
+Dort steuert man eine Figur in einer Welt von Gegnern und Hindernissen und muss möglichst schnell und fehlerfrei sämtliche Gegner durch gekonntes Ausweichen und gezielte Schüsse eliminieren.
 
-Als Neuerung wird ein Farbkonzept verwendet, bei dem die Grundfarben Rot, Grün und Blau mit verschiedenen Eigenschaften assoziiert werden. Alle Akteure des Spiels (sowohl der Spieler selbst als auch die Gegner und aufsammelbare Objekte) können in Beliebiger Kombination dieser Farben auftreten. Ist mehr als eine Farbe aktiv, so addieren sich deren Eigenschaften. Dieses System ist für den Spieler leicht verständlich, denn das Wissen über die Eigenschaften der drei Grundfarben reicht aus, um die Ergebnisse jeder möglichen Kombination schon im Voraus zu erschlie{\ss}en. Diese Kombinationsmöglichkeiten sorgen aber trotz des simplen Systems für genug Abwechslung und Tiefe. Die einzige Ausnahme beim Kombinieren bilden die sammelbaren Objekte, dazu später mehr (siehe \fullref{sect:Collectables}).
+Als Neuerung wird ein Farbkonzept verwendet, bei dem die Grundfarben Rot, Grün und Blau mit verschiedenen Eigenschaften assoziiert werden. Alle Akteure des Spiels (sowohl der Spieler selbst als auch die Gegner und aufsammelbare Objekte) können in beliebiger Kombination dieser Farben auftreten. Ist mehr als eine Farbe aktiv, so addieren sich deren Eigenschaften. Dieses System ist für den Spieler leicht verständlich, denn das Wissen über die Eigenschaften der drei Grundfarben reicht aus, um die Ergebnisse jeder möglichen Kombination schon im Voraus zu erschlie{\ss}en. Diese Kombinationsmöglichkeiten sorgen aber trotz des simplen Systems für genug Abwechslung und Tiefe. Die einzige Ausnahme beim Kombinieren bilden die sammelbaren Objekte, dazu später mehr (siehe \fullref{sect:Collectables}).
 
 
 
@@ -22,7 +22,7 @@ Ist der Charger vollständig geladen, hören die Gegner auf zu spawnen und ein P
 
 \section{Schussmodi}
 
-Der Spieler kann seinen Schüssen jeweils eine der Eigenschaften der drei Grundfarben verleihen, welche er im Tutorial der Reihe nach freischalten und ausprobieren kann. Die ausgewählte Farbe kann jederzeig gewechselt werden:
+Der Spieler kann seinen Schüssen jeweils eine der Eigenschaften der drei Grundfarben verleihen, welche er im Tutorial der Reihe nach freischalten und ausprobieren kann. Die ausgewählte Farbe kann jederzeit gewechselt werden:
 
 \renewcommand{\itmspace}{4.5em}
 \imgitmtxt{s_red.png}{Rote Kugeln}
@@ -34,8 +34,8 @@ Der Spieler kann seinen Schüssen jeweils eine der Eigenschaften der drei Grundf
 \imgitmtxt{s_blue.png}{Blaue Kugeln}
 {werden in einem Fächer von fünf Kugeln in einer höheren Schussrate verschossen, fügen aber weniger Schaden zu.}
 
-Die gleichzeitige Kombination mehrerer Farben ist nur auf Kosten von Ressourcen erlaubt  (siehe \fullref{sect:ressourcen}). Dabei erhalten die Kugeln alle Eigenschaften der aktiven Farben.
-Beispiel (in Klammern jeweils die Farbe, von der der Effekt stammt): Kombiniert man die Farben rot und grün, so erhält man gelbe Kugeln, die etwas langsamer als Grüne sind (durch rot wird der Bonus von grün verringert) und eine geringere Feuerrate haben (grün). Sie durchdringen Gegner und prallen von Wänden ab (grün), wobei jeder Kontakt eine Explosion erzeugt (rot), die zusätzlich mehr Schaden verursacht (grün).
+Die gleichzeitige Kombination mehrerer Farben ist nur auf Kosten von Ressourcen erlaubt (siehe \fullref{sect:ressourcen}). Dabei erhalten die Kugeln alle Eigenschaften der aktiven Farben.
+Beispiel (in Klammern jeweils die Farbe, von der der Effekt stammt): Kombiniert man die Farben rot und grün, so erhält man gelbe Kugeln, die etwas langsamer als Grüne sind (durch rot wird der Bonus von Grün verringert) und eine geringere Feuerrate haben (grün). Sie durchdringen Gegner und prallen von Wänden ab (grün), wobei jeder Kontakt eine Explosion erzeugt (rot), die zusätzlich mehr Schaden verursacht (grün).
 
 Bei den anderen Kombinationen (magenta, cyan, wei{\ss}) ist analog zu verfahren.
 
@@ -108,22 +108,22 @@ Für jede der drei Grundfarben existiert eine entsprechende Ressource, deren Sta
 
 \includegraphics[height=100pt]{ressources.png}
 
-Ressourcen erhält man durch das Aufsammeln von entsprechend gefärbten Collectables und das Besiegen von farbigen Gegnern. Die erhaltenen Ressourcen werden für mehrfarbige Gegner auf die entsprechenden Grundfarben aufgeteilt, so gibt zum Beispiel ein Cyanfarbiger Gegner blaue und grüne Ressourcen.
+Ressourcen erhält man durch das Aufsammeln von entsprechend gefärbten Collectables und das Besiegen von farbigen Gegnern. Die erhaltenen Ressourcen werden für mehrfarbige Gegner auf die entsprechenden Grundfarben aufgeteilt, so gibt zum Beispiel ein cyanfarbiger Gegner blaue und grüne Ressourcen.
 
 Benutzen kann man Ressourcen, sobald die Balken von mindesten zwei Farben vollständig gefüllt sind. Drückt man nun die Taste zum Aktivieren der Farbkombination (Leertaste), so werden den Schüssen die Eigenschaften der aufgefüllten Farben verliehen und die entsprechenden Ressourcen leeren sich über ungefähr 10 Sekunden. Die Farbkombination bleibt so lange aufrecht erhalten, bis eine der benutzten Ressourcen leer ist. Während dieser Zeit kann die Schussfarbe nicht mehr manuell gewechselt werden, dafür ist eine Kombination aus mehreren Farben deutlich stärker als jede einzelne Farbe.
 
-Diese stärkere Phase wird also durch die Ressourcen zeitlich begrenzt, wodurch sie sich für den Spieler besonders anfühlt und dieser darauf hinarbeiten kann, sie erneut zu erleben. Zusätzlich lassen sich die Ressourcen auch während sie aktiv sind weiter aufladen (zum Beispiel durch das Töten von Gegnern), wodurch ein agressiver, spannender Spielstil gefördert wird.
+Diese stärkere Phase wird also durch die Ressourcen zeitlich begrenzt, wodurch sie sich für den Spieler besonders anfühlt und dieser darauf hinarbeiten kann, sie erneut zu erleben. Zusätzlich lassen sich die Ressourcen auch während sie aktiv sind, weiter aufladen (zum Beispiel durch das Töten von Gegnern), wodurch ein aggressiver, spannender Spielstil gefördert wird.
 
 
 
 \section{Interface und Hauptmenü}
 
-Um die Immersion zu steigern, ist das Interface auf das Nötigste beschränkt. Allein ein Knopf zum Pausieren und die Ressourcenanzeige bilden gemeinsam das GUI. Ist das Spiel pausiert, können über insgesamt 5 Knöpfe die grundlegensten Funktionen wie 'Fortfahren', 'Spiel beenden' oder 'zurück ins Hauptmenü'  aufgerufen werden. 
+Um die Immersion zu steigern, ist das Interface auf das Nötigste beschränkt. Allein ein Knopf zum Pausieren und die Ressourcenanzeige bilden gemeinsam das GUI. Ist das Spiel pausiert, können über insgesamt 5 Knöpfe die grundlegendsten Funktionen wie 'Fortfahren', 'Spiel beenden' oder 'zurück ins Hauptmenü' aufgerufen werden. 
 Das Hauptmenü selbst ist dabei kein wirkliches Menü, sondern bereits die erste Stufe. Anstatt wie üblich per Knopfdruck einen bestimmten Spielmodus auszuwählen (hier Tutorial oder Endlos), muss der Spieler erst den Charger aufladen und dann zum entsprechenden Portal navigieren. Gegner erscheinen hier noch keine. Hinweise für den Spieler, wie zum Beispiel die grundlegende Steuerung oder Informationen über Schussfarben und Gegner, erscheinen ebenfalls nicht im GUI, sondern als Text auf dem Boden. 
 
 So ist das Hauptmenü schon stark mit dem Gameplay verbunden, es gibt einen nahtlosen Übergang zum eigentlichen Spiel und der Fokus wird auf das Wesentliche gesetzt.
 
-Auf eine herkömmliche Lebensanzeige des Spielers wurde auch verzichtet, stattdessen zeigen kleine um die Spielfigur kreisende Würfel die aktuellen Lebenspunkte an.
+Auf eine herkömmliche Lebensanzeige des Spielers wurde auch verzichtet, stattdessen zeigen kleine, um die Spielfigur kreisende Würfel die aktuellen Lebenspunkte an.
 
 
 
@@ -145,4 +145,4 @@ Das Tutorial besteht aus einer Folge von 10 Stufen (das Hauptmenü eingeschlosse
 \item[Stufe 10+] Endlosmodus
 \end{description}
 
-Sobald Stufe 10 das erste mal erreicht wurde, wird die Möglichkeit freigeschalten, den Endlosmodus vom Hauptmenü aus direkt zu starten und das Tutorial zu überspringen.
+Sobald Stufe 10 das erste Mal erreicht wurde, wird die Möglichkeit freigeschalten, den Endlosmodus vom Hauptmenü aus direkt zu starten und das Tutorial zu überspringen.
