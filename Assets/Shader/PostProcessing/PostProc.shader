@@ -132,12 +132,10 @@ Shader "Hidden/PostProc"
                 // Vignette needs absolute texcoords
                 texcoord = abs(texcoord);
 
-                // u stores the strength of the vignette effect
-                fixed2 u = texcoord * _vignetteWidth;
-                u = 1 - (pow(smoothstep(u, 0, 1 - texcoord), 4) * _vignetteAmount);
+                float vignetteStrength = smoothstep(1 - _vignetteWidth, 1, max(texcoord.x, texcoord.y));
+                float vignette = 1 - (pow(vignetteStrength, 4) * _vignetteAmount);
+                col.rgb *= vignette;
 
-                // u.x * u.y is a representation of how much color would remain
-                col.rgb *= u.x * u.y;
                 return col;
             }
 
