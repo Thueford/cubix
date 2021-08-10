@@ -1,23 +1,28 @@
 \section{Partikelsystem}
 
-Ein Partikelsystem ist im Bereich der Computersimulation die Simulation einer Ansammlung gleichartiger Teilchen, deren Verhalten mittels Zufälligkeit variiert werden kann. Partikelsysteme erlauben durch die Auslagerung der Berechnungen auf die Grafikeinheit eines PCs die flüssige Simulation einer großen Menge an Teilchen auf einmal (auf einer NVidia 1070Ti bis zu 10 Mio. Partikel mit 60fps - mit dieser Implementation). Diese werden zumeist für die Simulation von Feuer, Rauch, Flüsigkeiten, Explosionen und ähnlich komplexen physikalischen Vorgängen verwendet.
+Ein Partikelsystem ist im Bereich der Computersimulation die Simulation einer Ansammlung gleichartiger Teilchen, deren Verhalten durch Zufälligkeit variiert werden kann. Partikelsysteme erlauben durch die Auslagerung der Berechnungen auf die Grafikeinheit eines PCs die flüssige Simulation einer gro{\ss}en Menge an Teilchen auf einmal (auf einer NVidia 1070Ti bis zu 10 Mio. Partikel mit 60fps in dieser Implementierung). Diese werden zumeist für die Simulation von Feuer, Rauch, Flüsigkeiten, Explosionen und ähnlich komplexen physikalischen Vorgängen verwendet.
 
-%Die wichtigsten sind hierbei der Hit-Effekt, der beim Aufprall eines Geschosses an dessen Position einige Partikel in alle Richtungen verstreut, und der Explosions-Effekt des roten Schussmoduses.
 In Cubix werden Partikelsysteme an verschiedensten Stellen eingesetzt, um die Optik aufzuwerten und das visuelle Feedback von Explosionen und Treffern zu verstärken. Zudem werden Partikel für Portale, für Bewegungsspuren, Ressourcen und für Explosionen eingesetzt.
 
 
 
-\subsection{Implementation}
+\subsection{Implementierung}
 
-Das Partikelsystem wurde zunächst auf Basis eines Artikels über das Zeichnen von 'tausenden Meshes auf einmal'\cite{qPartS1} in Unity basierend auf der Render-Funktion \href{https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstancedIndirect.html}{DrawMeshInstancedIndirect} konstruiert.
+Das Partikelsystem wurde zunächst auf Basis eines Artikels über das Zeichnen von \sq{tausenden Meshes auf einmal}\cite{qPartS1} in Unity basierend auf der Render-Funktion \href{https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstancedIndirect.html}{DrawMeshInstancedIndirect} konstruiert.
 
-Für die gesteuerte Emission von Partikeln wurde später ein GitHub-Repository eines ebenfalls selbst implementierten Partikelsystems\cite{qPartS2} zu Rate gezogen. Die einzige Neuerung war die etwas einfacher zu verwendende Render-Funktion \href{https://docs.unity3d.com/ScriptReference/Graphics.DrawProceduralNow.html}{DrawProceduralNow}.
+Für die gesteuerte Emission von Partikeln wurde später ein GitHub-Repository eines ebenfalls selbst implementierten Partikelsystems\cite{qPartS2} zu Rate gezogen. Die wesentliche Neuerung war die etwas einfacher zu verwendende Render-Funktion \href{https://docs.unity3d.com/ScriptReference/Graphics.DrawProceduralNow.html}{DrawProceduralNow} und das Benutzen von Gradient-Texturen zur Farbänderung.
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{partInspect.png}
+\caption{Ansicht im Unity-Inspektor}
+\label{img:partInspect}
+\end{figure}
 
 
 \subsection{Aufbau}
 
-Das Partikelsystem besteht aus einer Controller-Klasse in CSharp, welches sämtliche Einstellungen für das Partikelsystem dem Objektinspektor bereitstellt\#, einem Compute-Shader welcher Kernel für das Initialisieren, Emittieren und Aktualisieren von Partikeln besitzt sowie einem Unlit-Shader für die Darstellung der Partikel inklusive Billboard.
+Das Partikelsystem besteht aus einer Controller-Klasse in CSharp, welche sämtliche Einstellungen für das Partikelsystem dem Objektinspektor bereitstellt\#, einem Compute-Shader welcher Kernel für das Initialisieren, Emittieren und Aktualisieren von Partikeln besitzt sowie einem Unlit-Shader für die Darstellung der Partikel inklusive Billboard.
 
 
 \subsection{Partikel-Struktur}
@@ -45,7 +50,7 @@ public class Particles : MonoBehaviour
     public GeneralProps properties;       // general ps properties
     public RenderSettings renderSettings; // render settings (alpha blending)
 
-    public DynamicEffect pos, vel, force, posFac; // position effects
+    public DynamicEffect pos, vel, force, posFac; // dynamic mechanic effects
     public Colors color;          // Color [with variation & gradient]
     public Capsule<Vector3> size; // xy: offset, z: timefac
     public Vector4 attractor;     // Vector3 + w: factor
@@ -72,23 +77,24 @@ public struct DynamicEffect
 
 \subsubsection{Farbdaten}
 
-Farbdaten werden entweder als Absoluter oder als Gradient angegeben. Dabei kann optional Variation durch zufällige Interpolation zwischen zwei Absoluter oder Gradientwerte erreicht werden. Die Gradiente werden als dynamisch generierte Textur an den Shader gereicht, die Absoluten Farbwerte als einfache Uniforms.
+Farbdaten werden entweder absolut oder als Gradient angegeben. Dabei kann optional Variation durch zufällige Interpolation zwischenden Farbwerten erreicht werden. Die Gradiente werden als dynamisch generierte Textur an den Shader gereicht, die absoluten Farbwerte als einfache Uniforms.
 
-\begin{csh}
-public struct Colors
+\begin{csh}[caption=Generierung der Gradient-Textur]
+int height = useVariation ? 2 : 1;
+tex = new Texture2D(steps, height);
+for (int i = 0; i < steps; i++)
 {
-    public Color color, color2;
-    public bool useVariation, useGradient;
-    [Range(2, 256)] public int steps;
-    public Gradient gradient, gradient2;
+    tex.SetPixel(i, 0, gradient.Evaluate(i / (float)steps));
+    if (useVariation) tex.SetPixel(i, 1, gradient2.Evaluate(i / (float)steps));
 }
+tex.Apply();
 \end{csh}
 
 
 
 \subsection{Partikelsystem Eigenschaften}
 
-Zu guter Letzt hat ein Partikelsystem noch einige globale Eigenschaften, die dessen Verhalten definieren. Dazu gehört die maximale Partikelzahl, die Emmitierrate, die Lebensdauer eines Partikels, sowie ob das PS aktiv ist, ob es sich wiederholt (d.h. ständig generiert wird oder nur bis insgesamt die maximale Partikelzahl erreicht wurde), ob es vorwärmen (d.h. einen Lebenszyklus beim Initialisieren emulieren soll) und einige weniger Relevante Eigenschaften auf die ich ggf. später zurückkomme.
+Zu guter Letzt hat ein Partikelsystem noch einige globale Eigenschaften, die deren Verhalten definieren. Dazu gehört die maximale Partikelzahl, die Emmitierrate, die Lebensdauer eines Partikels, sowie ob das PS aktiv ist, ob es sich wiederholt (d.h. ständig generiert wird oder nur bis insgesamt die maximale Partikelzahl erreicht wurde), ob es vorwärmen (d.h. einen Lebenszyklus beim Initialisieren emulieren soll) und einige weniger Relevante Eigenschaften auf die ich ggf. später zurückkomme.
 
 \begin{csh}[caption=Partikel Struktur]
 public struct GeneralProps
@@ -166,6 +172,13 @@ Im Shader werden nun Partikel aus dem DeadBuffer entnommen und diese mit Eigensc
 
 Um die Partikel in einem bestimmten Bereich spawnen zu lassen werden Scales verwendet, zwischen dem die resultierenden Vektoren schwanken können. Um noch etwas mehr Variabilität zu sorgen kann man die Vektoren mittels einer Shape-ID 'formen'. Derzeit werden ausschlie{\ss}lich DOT (formlos) CIRCLE, RECT (2D), SPHERE und CUBE (3D) unterstützt. Die Dimensionsunterscheidung muss unternommen werden um die Vektoren nicht auf einer Achse zu verteilen, die garnicht verwendet wird und dann dort gehäuft auftreten.
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{partShapes.png}
+\caption{Spawhshapes}
+\label{img:partShapes}
+\end{figure}
+
 In folgendem Listing wurde noch beispielhaft die Berechnung der Spawnposition gezeigt, die von Geschwindigkeit und Beschleunigung erfolgt analog, wenn auch aus Intuitivitätsgründen nicht 100\% identisch.
 
 \begin{hlsl}[caption=Compute Emit Kernel]
@@ -180,14 +193,13 @@ p.color = F(P_CLRVARY) ? lerp(_Color, _Color2, p.rand) : _Color;
 float3 d = float3(ran(_Seeds.xzy), ran(_Seeds.yxz), ran(_Seeds.zyx));
 d = getShaped(d, _PosShape);
 p.pos = d * (_PosOffset + _PosScale * rand(_Seeds.wxy));
-
 /* ... */
 \end{hlsl}
 
 
 \subsubsection{Update}
 
-Bei jedem Frame-Update wird der Status jedes Partikels aktualisiert. Dazu werden nurnoch Daten benötigt, die das Partikel während seiner Lebensspanne von au{\ss}en verändern. Dazu gehört in jedem Fall die Zeitdifferenz zum letzten Update, die Statusflags, der Farbgradient falls verwendet, sowie die Grö{\ss}enänderung, da diese bisher für alle Partikel gleich ist. Des weiteren kann man ein Objekt definieren, zu dessem Position das Partikel konstant hingezogen werden soll. Das wurde ua. für den Ressourcenpartikeleffekt benötigt.
+Bei jedem Frame-Update wird der Status jedes Partikels aktualisiert. Dazu werden nur noch die Daten benötigt, die das Partikel während seiner Lebensspanne von au{\ss}en verändern. Dazu gehört in jedem Fall die Zeitdifferenz zum letzten Update, die Statusflags, der Farbgradient falls verwendet, sowie die Grö{\ss}enänderung, da diese bisher für alle Partikel gleich ist. Des weiteren kann man ein Objekt definieren, zu dessem Position das Partikel konstant hingezogen werden soll. Das wurde ua. für den Ressourcenpartikeleffekt benötigt.
 
 \begin{csh}[caption=Controller Update]
 DispatchUpdate();
@@ -199,7 +211,7 @@ if (properties.performance > PerformanceMode.LOW)
 }
 \end{csh}
 
-Im Shader werden sämtliche Änderungen an einem Partikel abhängig von der Zeitdifferenz vorgenommen. Erreicht es hierbei ein Alter größer als die Lebensdauer, wird es wieder als tot markiert und dem DeadBuffer hinzugefügt. Bereits tote Partikel werden übersprungen, es wird aber dennoch für jedes Partikel die Update-Funktion aufgerufen da der Shader das nicht im vorhinein bestimmen kann. Die Farbe wird ggf. aus der Gradienttextur gesampled und interpoliert.
+Im Shader werden sämtliche Änderungen an einem Partikel abhängig von der Zeitdifferenz vorgenommen. Erreicht es hierbei ein Alter grö{\ss}er als die Lebensdauer, wird es wieder als tot markiert und dem DeadBuffer hinzugefügt. Bereits tote Partikel werden übersprungen, es wird aber dennoch für jedes Partikel die Update-Funktion aufgerufen, da der Shader das nicht im vorhinein bestimmen kann. Die Farbe wird ggf. aus der Gradienttextur gesampled und interpoliert.
 
 \begin{hlsl}[caption=Compute Update]
 float4 getLifeColor(float2 life, float seed);
@@ -227,30 +239,28 @@ for (float i = 0; i < age; i += _DeltaTime) DoUpdate(id);
 
 Nach jedem Update wird anhand der durchschnittlichen Sterbenderate $r_{mort} = n_{alive} / t_{alive}$ berechnet, wie viele Partikel aktuell am leben sind. Das ist erheblich effizienter im Vergleich zu einer vorherigen Version, in der ein separater CounterBuffer dazu verwendet wurde, die genaue Grö{\ss}e des deadBuffers auszulesen. Da dieser physisch nur auf der Grafikkkarte existiert scheint Unity dazu eine Funktion namens Gfx.GetComputeBufferData\_Request zu benutzen, die zur Synchronisation eine Semaphore benutzt, was schon bei wenigen Partikelsystemen erhebliche Performanceeinbu{\ss}en mit sich brachte.
 
-\begin{minipage}{0.95\linewidth}
-\vspace{5mm}
-\captionsetup{type=figure}
-\includegraphics[width=\linewidth]{partBufCount.png}
-\includegraphics[width=\linewidth]{partDataReq.png}
-\captionof{figure}{ReadDeadCount im Unity Profiler}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\linewidth]{partBufCount.png}
+\includegraphics[width=0.95\linewidth]{partDataReq.png}
+\caption{ReadDeadCount im Unity Profiler}
 %\label{img:partBufCount}
-\end{minipage}
+\end{figure}
+    
 
 \subsection{Darstellung}
 
 Das Rendern der Partikel erfolgt über einen Unlit-Shader. Das Grundgerüst besteht aus einer Shader-Deklaration mit allen vom Inspektor übergebenen Eigenschaften, ua. die Rendertextur und BlendModes, die für korrektes Alpha-Blending nach Bedarf eingestellt werden können. Die BlendModes werden in der Struktur RenderSettings hinterlegt, zusammen mit einigen voreingestellten Modi\footnote{nach Artikel \href{https://elringus.me/blend-modes-in-unity}{BlendModes in Unity} vom 12.05.2015, Zugriff 23.06.2021}.
 
-Dem Folgt ein Subshader-Pass der sämtliche Rendereinstellungen vornimmt. Da Partikel transparent sind, wird die Transparent queue zum Rendern verwendet. Es ist außerdem wichtig ZWrite auszuschalten, da die Partikel sonst nicht korrekt sortiert werden (siehe \fullref{img:zoff}). Darauf folgt schließlich der tatsächliche Shader-Code des Fragment und des Vertex-Shaders.
+Dem Folgt ein Subshader-Pass der sämtliche Rendereinstellungen vornimmt. Da Partikel transparent sind, wird die Transparent queue zum Rendern verwendet. Es ist au{\ss}erdem wichtig ZWrite auszuschalten, da die Partikel sonst nicht korrekt sortiert werden (siehe \fullref{img:zoff}). Darauf folgt schlie{\ss}lich der tatsächliche Shader-Code des Fragment und des Vertex-Shaders.
 
-\begin{minipage}{\linewidth}
-\begin{center}
-\vspace{5mm}
-\captionsetup{type=figure}
-\includegraphics[width=0.2\linewidth]{zwOn.png}
-\captionof{figure}{ZWrite On}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\linewidth]{zwrite.png}
+\caption{ZWrite links: On, rechts: Off}
 \label{img:zoff}
-\end{center}
-\end{minipage}
+\end{figure}
+
 
 Die Variablen für das Rendering sind im \fullref{lst:partSetup} bereits enthalten. Erwähnenswert ist der Buffer für Vertexkoordinaten eines Partikels - in diesem Falle die eines Quads, der an den Unlit-Shader für die Berechnung des Billboards gegeben wird.
 
@@ -265,9 +275,9 @@ mat.SetPass(0);
 Graphics.DrawProceduralNow(MeshTopology.Triangles, meshVerts.Length, deadBuf.count);
 \end{csh}
 
-Der Vertex Shader berechnet zunächst von lebendigen Partikeln das Billboard - dh. es dreht die Vertices richtung Kamera. Dafür werden die Partikel zunächst durch die Kamera-View Matrix transformiert, dann die Vertex-Positionen addiert und schließlich durch die Projektionsmatrix richtung Kamera gedreht. Die UV-Koordinaten sowie die Farbdaten werden dann an den Fragment-Shader weitergegeben, der die Farbdaten der Textur mit der Partikelfarbe multipliziert.
+Der Vertex Shader berechnet zunächst von lebendigen Partikeln das Billboard - dh. es dreht die Vertices richtung Kamera. Dafür werden die Partikel zunächst durch die Kamera-View Matrix transformiert, dann die Vertex-Positionen addiert und schlie{\ss}lich durch die Projektionsmatrix richtung Kamera gedreht. Die UV-Koordinaten sowie die Farbdaten werden dann an den Fragment-Shader weitergegeben, der die Farbdaten der Textur mit der Partikelfarbe multipliziert.
 
-\begin{hlsl}[caption=Unlit Billboard Shader]
+\begin{hlsl}[caption=Unlit Billboard Vertex Shader]
 v2f vert(uint vid : SV_VertexID, uint iid : SV_INSTANCEID)
 {
     float3 vpos = float3(p.size.xy * _QuadVert[vid], 0);
