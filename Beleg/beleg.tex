@@ -1,5 +1,5 @@
 \documentclass[a4paper,ngerman,12pt]{report}
-\usepackage[a4paper,left=2.5cm,right=2cm,top=1.8cm,bottom=1.5cm,includefoot,head=18pt]{geometry}
+\usepackage[a4paper,left=3cm,right=3cm,top=3cm,bottom=2.5cm,includefoot,head=18pt]{geometry}
 
 \usepackage{hyphsubst} %[ngerman=ngerman-x-latest]
 \usepackage[onehalfspacing]{setspace}            % Zeilenabstand 1.5
@@ -11,13 +11,13 @@
 \include{code_csh}
 \include{code_hlsl}
 
-\graphicspath{{img/}{img/coll/}{img/enem/}{img/shot/}{img/particles/}{img/postproc/}}
+\graphicspath{{img/}{img/game/}{img/particles/}{img/postproc/}
+    {img/coll/}{img/enem/}{img/shot/}}
 
 % Daten für Titelseite
 \title{Kombinierte Belegarbeit \\ GameProgramming und \\ GPU Programmierung}
 \author{Alexander Feilke, Jakob Ma{\ss}alsky \\ Sem.Gr.: IF19wS-B}
-%\date{}
-
+\date{August 2021}
 
 %help: https://de.wikibooks.org/wiki/LaTeX-Wörterbuch
 % \part \chapter \section \subsection \subsubsection \paragraph \subparagraph
@@ -43,11 +43,28 @@
 \begin{document}
 
 %\thispagestyle{empty}\quad\newpage % leeres Deckblatt
-%\selectfont\sffamily
+
 \normalfont
 
-\maketitle
-\newpage % Titelblatt
+\makeatletter
+\begin{titlepage}
+\begin{center}
+    \includegraphics[width=0.4\linewidth]{hsmwLogo.png}\\[10ex]
+    %\selectfont\sffamily
+    {\huge \@title}\\[10ex]
+    {\Large Erstprüfer: \\
+        Prof. Dr. rer. nat. Marc Ritter \\
+        Dipl. Inf. Daniel Stockmann \\ \vspace{1em}
+        Co-Prüfer: \\ Manuel Heinzig, M.Sc.
+    }\\[20ex]
+    {\Large \@author}\\[10ex]
+    {\large \@date}
+\end{center}
+\end{titlepage}
+\makeatother
+
+%\maketitle
+%\newpage % Titelblatt
 
 \renewcommand{\contentsname}{Inhaltsverzeichnis}
 \tableofcontents
@@ -196,22 +213,6 @@
 \url{https://github.com/Robert-K/gpu-particles/tree/master/Assets/GPUParticles}
 
 \end{thebibliography}
-    
-
-
-
-
-\chapter{Eigenständigkeitserklärung}
-
-Hiermit erklären wir Alexander Feilke und Jakom Massal{\ss}ky, dass wir die vorliegende Arbeit selbstständig verfasst und keine anderen als die angegebenen Quellen und Hilfsmittel benutzt haben.
-
-Alle sinngemä{\ss} und wörtlich übernommenen Textstellen aus fremden Quellen wurden kenntlich gemacht.
-
-Mittweida, den 10.08.2021
-
-\vspace{2cm}
-
-Alexander Feilke \hspace{4cm} Jakob Ma{\ss}alsky
 
 
 
@@ -251,5 +252,19 @@ Pausiert wird das Spiel mit Escape.
 
 
 
+
+\chapter{Eigenständigkeitserklärung}
+
+Hiermit erklären wir Alexander Feilke und Jakom Massal{\ss}ky, dass wir die vorliegende Arbeit selbstständig verfasst und keine anderen als die angegebenen Quellen und Hilfsmittel benutzt haben.
+
+Alle sinngemä{\ss} und wörtlich übernommenen Textstellen aus fremden Quellen wurden kenntlich gemacht.
+
+Mittweida, den 10.08.2021
+
+\vspace{2cm}
+
+\includegraphics[width=4cm]{u_afeilke1.png} \hspace{3cm} \includegraphics[width=4cm]{u_jmassals.png}
+
+Alexander Feilke \hspace{4cm} Jakob Ma{\ss}alsky
 
 \end{document}
