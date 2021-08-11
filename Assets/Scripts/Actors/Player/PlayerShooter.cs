@@ -82,6 +82,7 @@ public class PlayerShooter : ShooterBase
         if (rgb.x == 1) GameState.save.stats.firedRedShots++;
         if (rgb.y == 1) GameState.save.stats.firedGreenShots++;
         if (rgb.z == 1) GameState.save.stats.firedBlueShots++;
+        StageStats.cur.AddShot((Vector4)(Vector3)rgb);
         //Player.self.KnockBack(-dir.normalized * p.speed * 3);
     }
 }

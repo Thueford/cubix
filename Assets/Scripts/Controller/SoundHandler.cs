@@ -28,7 +28,7 @@ public class SoundHandler : MonoBehaviour
     private static float wHitTimer = 0, eHitTimer = 0, shootTimer = 0, explTimer = 0;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         if (!self) self = this;
         foreach (NamedClip c in clipArray)

@@ -14,6 +14,7 @@ public abstract class SaveData
         public byte profile;
         public PlayerConfig config;
         public PlayerStats stats;
+        public StageStats stags;
 
         public Data Load(byte profile)
         {
@@ -21,14 +22,21 @@ public abstract class SaveData
             Debug.Log("Loading profile " + profile);
             config = LoadProfile<PlayerConfig>(profile, ".config");
             stats = LoadProfile<PlayerStats>(profile, ".stats");
+            stags = LoadProfile<StageStats>(profile, ".stags"); // will always create new
             return this;
         }
 
         public void Save(byte profile = 0)
         {
-            if (profile != 0) this.profile = profile;
+            SaveStats();
             config.Save();
+        }
+
+        public void SaveStats(byte profile = 0)
+        {
+            if (profile != 0) this.profile = profile;
             stats.Save();
+            stags.Save(stats.startNo);
         }
     }
 
@@ -42,7 +50,7 @@ public abstract class SaveData
 
     public static void SaveProfile<T>(T save, byte profile, string ext) where T : SaveData
     {
-        string json = JsonUtility.ToJson(save, !saveZipped);
+        string json = JsonUtility.ToJson(save).Replace("{", "\n{");
         byte[] data = { };
 
         if (saveZipped) data = ZipStr(json);

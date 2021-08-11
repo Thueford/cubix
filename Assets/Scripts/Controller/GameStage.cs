@@ -86,6 +86,7 @@ public class GameStage : MonoBehaviour
     public void OnCharged()
     {
         portal.SetEnabled(true);
+        StageStats.cur.completed = true;
     }
 
     // Called after player finished spawning
