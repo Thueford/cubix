@@ -29,8 +29,8 @@ public class PostProcessing : MonoBehaviour
 
     [Header("Lens Flare")]
     public bool useLensFlare = true;
-    [Range(1, 10)] public int lfGhostCount = 6;
-    [Range(1, 20)] public int lfBlurrCount = 3;
+    [Range(0, 10)] public int lfGhostCount = 6;
+    [Range(0, 20)] public int lfBlurrCount = 3;
     [Range(0.01f, 1f)] public float lfThreshold = 0.77f;
     [Range(0.1f, 2f)] public float lfGhostSpacing = .69f;
     [Range(0.0f, 0.3f)] public float lfCAStrength = 0.15f;
@@ -197,8 +197,6 @@ public class PostProcessing : MonoBehaviour
 
     private void setLensFlareUniforms()
     {
-        lensFlare.SetInt("width", Screen.width);
-        lensFlare.SetInt("height", Screen.height);
         lensFlare.SetInt("ghostCount", lfGhostCount);
         lensFlare.SetFloat("ghostSpacing", lfGhostSpacing);
         lensFlare.SetFloat("threshold", lfThreshold);

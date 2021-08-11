@@ -1,5 +1,5 @@
 // Each #kernel tells which function to compile; you can have many kernels
-#pragma kernel CSflare
+#pragma kernel CSFlare
 #pragma kernel CSWriteBack
 
 // Create a RenderTexture with enableRandomWrite flag and set it
@@ -10,12 +10,13 @@ Texture2D<float4> lensDirt;
 
 static const int numThreads = 24;
 
-uniform int ghostCount, width, height;
+uniform int ghostCount;
 uniform float ghostSpacing, threshold, caStrength;
 
 float3 getTexColor(float2 texcoords, float2 iResolution)
 {
     float amount = length(.5 - texcoords) * caStrength;
+    // works like ca, offset is in Direction of Image Center
     float2 offset = normalize(.5 - texcoords) * amount;
     return float3(
 		Source[(texcoords + offset) * iResolution].r,
@@ -50,12 +51,14 @@ float3 generateGhosts(float2 texcoord, float2 ghostVec, float2 iResolution)
 float3 generateHalo(float2 texcoord, float2 ghostVec, float2 iResolution)
 {
     float3 col = 0;
+    // Works like ghostVec but has a constant length (radius of the Halo)
     float2 haloVec = normalize(ghostVec) * 0.35;
     float3 texColor = getTexColor(texcoord + haloVec, iResolution);
     texColor = max(texColor - threshold, 0);
     
     if (any(texColor))
     {
+        // Halo gets dimmer closer to the edges
         float weight = length(.5 - texcoord);
         col += texColor * weight;
     }
@@ -63,15 +66,18 @@ float3 generateHalo(float2 texcoord, float2 ghostVec, float2 iResolution)
 }
 
 [numthreads(numThreads, numThreads, 1)]
-void CSflare(uint3 id : SV_DispatchThreadID)
+void CSFlare(uint3 id : SV_DispatchThreadID)
 {
-    float2 iResolution = float2(width, height);
-    //coordinates normalized to (0, 1)
+    uint width, height;
+    Source.GetDimensions(width, height);
+    float2 iResolution = float2(width, height); // Size of Source
+    
+    //coordinates transformed to [0, 1]
     float2 texcoord = (id.xy / iResolution);
     //vector from texcoord to the image center;
     float2 ghostVec = ( -texcoord + .5 ) * ghostSpacing;
-    float3 col = 0;
     
+    float3 col = 0;
     col += generateGhosts(texcoord, ghostVec, iResolution);
     col += generateHalo(texcoord, ghostVec, iResolution);
     
