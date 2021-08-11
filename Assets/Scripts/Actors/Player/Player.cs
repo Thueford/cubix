@@ -15,6 +15,8 @@ public class Player : EntityBase
     [NotNull, HideInInspector] public Particles psTrail, psColorSwitch;
     [NotNull, HideInInspector] public Animator animFlicker;
 
+    public int lives = 3;
+
     private float invulnurable = 0;
     private GameStage tpTarget;
 
@@ -22,6 +24,8 @@ public class Player : EntityBase
     {
         base.Awake();
         self = this;
+        maxHP = 3;
+        startHP = 3;
     }
 
     // Start is called before the first frame update
@@ -154,7 +158,7 @@ public class Player : EntityBase
         }
 
         GameState.updateClearStats(target);
-        if (GameState.curStage > 0) setHP(Mathf.Min(maxHP, HP + 1));
+        lives = Mathf.Min(lives + 1, 3);
         Teleport(target);
     }
 
@@ -184,6 +188,8 @@ public class Player : EntityBase
         Freeze();
         GameState.SwitchStage(stage);
 
+        setHP(maxHP);
+
         animFlicker.Play("Empty");
         animGeneral.enabled = true;
         animGeneral.Play("Spawn", 0, 0);
@@ -211,6 +217,9 @@ public class Player : EntityBase
     public override void OnDie(AnimationEvent ev)
     {
         base.OnDie(ev);
-        GameState.RestartStage();
+        lives -= 1;
+        Debug.Log(lives + " " + HP);
+        if (lives <= 0) GameState.RestartGame();
+        else GameState.RestartStage();
     }
 }

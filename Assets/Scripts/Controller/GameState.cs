@@ -171,7 +171,9 @@ public class GameState : MonoBehaviour
         Ressource.self.addRes(Ressource.col.Green, s.ressources[1] - Ressource.self.valueGreen);
         Ressource.self.addRes(Ressource.col.Blue, s.ressources[2] - Ressource.self.valueBlue);
 
-        Player.self.setHP(s.hp);
+        //Player.self.lives = s.lives;
+        Player.self.maxHP = s.maxhp;
+        Player.self.setHP(s.maxhp);
         Player.self.SpawnAt(s.stage);
         save.Save();
     }
@@ -184,6 +186,7 @@ public class GameState : MonoBehaviour
 
     public static void RestartGame()
     {
+        Player.self.lives = 3;
         load(stateBegin);
     }
 
@@ -199,7 +202,8 @@ public class GameState : MonoBehaviour
         s.stage = curStage;
         s.stageInfo = curStage.info;
 
-        s.hp = Player.self.HP;
+        s.maxhp = Player.self.maxHP;
+        s.lives = Player.self.lives;
         s.ressources = new float[] { 
             round(Ressource.self.valueRed),
             round(Ressource.self.valueGreen),
@@ -332,7 +336,8 @@ public class GameState : MonoBehaviour
         public Vector3Int unlockedColors;
         public int[] colorOrder;
         public int colorCount;
-        public float hp;
+        public int lives;
+        public float maxhp;
         public float[] ressources;
     }
 }
