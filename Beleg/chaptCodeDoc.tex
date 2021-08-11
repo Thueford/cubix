@@ -144,7 +144,7 @@ In jeder Stage können beliebig viele Spawner platziert werden, jedoch ist durch
 
 
 
-\section{Physics}
+\section{Physik}
 
 \lipsum[3]
 
@@ -153,3 +153,39 @@ In jeder Stage können beliebig viele Spawner platziert werden, jedoch ist durch
 \section{Sound}
 
 \lipsum[3]
+
+
+
+\section{Spielerdaten}
+
+Im Spiel werden verschiedene Arten von Daten persistent in Dateien abgespeichert. Als Datenformat wurde hier der Einfachheit halber JSON verwendet, da es einfach und menschenlesbar ist, sowie eine ausgezeichnete Portabilität zwischen Programmiersprachen hat, was ggf. für eine spätere Weiterverarbeitung und Auswertung nützlich sein kann. Gespeichert werden hierbei Fortschrittsstatistiken, Einstellungen und Nutzerstatistiken.
+
+
+
+\textbf{Fortschritt} \\
+Um im Spiel einen Wettbewerbsfaktor einzubringen, werden Statistiken aufgezeichnet, mit denen man Rückschlüsse auf die Fähigkeit eines Spielers ziehen kann. Diese werden ihm nach erfolgreicher Beendigung des Tutorials im Hauptmenü angezeigt. Dazu gehören zum einen allgemeine Informationen über die Spieldauer, dem Sessionzähler und die Anzahl der verschossenen Projektile, aber auch welche die maximal erreichte Stage ist, wie viele Stages insgesamt geschafft wurden, wie viele Gegner er besiegt hat und wie oft er selbst dabei daran glauben musste.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\linewidth]{stats.png}
+\caption{Statistiken im Hauptmenü}
+\label{img:gameStats}
+\end{figure}
+
+
+
+\textbf{Einstellungen} \\
+Weiterhin kann der Spieler im Spiel Einstellungen bezüglich Sound und Grafik vornehmen, um sein Spielerlebnis anzupassen, aber auch um die Plattformkompatibilität zu gewährleisten, da ältere Grafikkarten und vor allem integrierte Grafikeinheiten wie z. B. bei Laptops keine Compute Shader unterstützen oder allgemein zu wenig Leistung haben, um das Spiel in höchster Qualität flüssig spielen zu können. Diese sind auch als Tastaturkürzel bedienbar, sollte es zu einem Grafikfehler kommen und die GUI nicht bedienbar sein. (Z. B. öffnet die Kombination [X + M] das Einstellungsmenü)
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{config.png}
+\caption{Einstellungen im Pausenmenü}
+\label{img:gameConfig}
+\end{figure}
+
+
+
+\textbf{Nutzerstatistiken} \\
+Au{\ss}erdem werden über die Dauer einer Spielsession Daten über den Spieler aufgezeichnet, mit denen der grobe Ablauf seines Spielerlebnisses nachvollzogen werden kann. Diese sollen später benutzt werden, um das Spiel zu verbessern (mehr dazu siehe \fullref{chapt:PlayerStats}).
+Dabei wird für jede Stage die der Spieler betritt aufgezeichnet welchen Zustand der Spieler zu Beginn der Stage hatte (Leben, Schussfarben, Ressourcen), wie lang der Spieler zum Laden des Chargers gebraucht hat, wie oft Gegner eines bestimmten Typs und Farbe vorgekommen sind, welche Collectables gedroppt wurden und welche Schussfarben er benutzt hat.

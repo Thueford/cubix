@@ -139,6 +139,21 @@
 
 
 
+
+\chapter{Nutzerstatistiken}
+\label{chapt:PlayerStats}
+
+\lipsum[3]
+
+
+
+
+\section{Auswertung}
+
+
+
+
+
 \chapter{Fazit}
 
 \lipsum[3]
@@ -172,26 +187,40 @@
 
 
 \chapter{Dateiverzeichnis}
-\dirtree{%
-.1 Assets/.
-.2 Animation/.
-.2 Materials/. .3 Shader/.
-.2 Prefabs/.
-.3 Actors/. .4 Enemies/.
-.3 StageElements/.
-.3 Bases/.
-.2 Resources/.
-.2 Scenes/.
-.2 Scripts/.
-.3 Shader/.
-.3 Stages/.
-.3 Test/.
-.3 Actors/. .4 Player/. .4 Enemies/.
-.3 StageElements/.
-.3 Bases/.
-.3 Controller/.
-.2 Shader/. .3 Particles/. .3 PostProcessing/.
-}
+
+\definecolor{cGPU}{rgb}{0,0,.8}
+\definecolor{cGPR}{rgb}{0,.6,0}
+
+\begin{flushleft}%
+\parbox{0.5\linewidth}{
+    \dirtree{%
+    .1 \color{cGPR}Assets/.
+    .2 \color{cGPR}Animation/.
+    .2 \color{cGPR}Materials/. .3 \color{cGPU}Shader/.
+    .2 \color{cGPR}Prefabs/.
+    .3 \color{cGPR}Actors/. .4 \color{cGPR}Enemies/.
+    .3 \color{cGPR}StageElements/.
+    .3 \color{cGPR}Bases/.
+    .2 \color{cGPR}Resources/.
+    .2 \color{cGPR}Scenes/.
+    .2 \color{cGPR}Scripts/.
+    .3 \color{cGPU}Shader/.
+    .3 \color{cGPR}Stages/.
+    .3 \color{cGPR}Test/.
+    .3 \color{cGPR}Actors/. .4 \color{cGPR}Player/. .4 \color{cGPR}Enemies/.
+    .3 \color{cGPR}StageElements/.
+    .3 \color{cGPR}Bases/.
+    .3 \color{cGPR}Controller/.
+    .2 \color{cGPU}Shader/. .3 \color{cGPU}Particles/. .3 \color{cGPU}PostProcessing/.
+    }
+}%
+\parbox{0.4\linewidth}{
+    {\color{cGPR} Game Programming} \\
+    {\color{cGPU} GPU Programmierung}
+}%
+\end{flushleft}
+
+
 
 
 

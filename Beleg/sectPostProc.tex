@@ -39,11 +39,11 @@ Zur Sequenziellen Ausführung aller Effekte werden insgesamt 6 RenderTextures an
 
 Zum Start des Programms oder falls die Fenstergrö{\ss}e geändert wird, müssen alle diese RenderTextures mit der Funktion createTexture() neu angelegt werden.
 
-Durchgeführt wird das Postprocessing in der Funktion 
-\begin{csh} 
-private void OnRenderImage(RenderTexture source, RenderTexture destination) 
+Durchgeführt wird das Postprocessing in der Funktion
+\begin{csh}
+private void OnRenderImage(RenderTexture source, RenderTexture destination)
 \end{csh}
-Diese Funktion wird von der Unity Engine zur Verfügung gestellt und in einem Skript, das an eine Kamera angehängt ist, immer dann aufgerufen, wenn ein neues Bild gerendert wurde. Source ist dabei das Eingabebild und Destination ist das Bild, welches zum Schluss abgebildet wird. Source kann also noch beliebig verändert werden, bevor es nach Destination geschrieben wird. Der erste Effekt, welcher auf das Bild angewendet wird, ist Bloom. Bloom ist als Compute Shader verfasst, für den Texturen, in die geschrieben werden soll, das Flag 'enableRandomWrite' benötigen. Dieses lässt sich für einmal erstellte Texturen im Nachhinein nicht mehr ändern und ist in Source standardmäßig deaktiviert. Also ist der erste Schritt, mit der Funktion 
+Diese Funktion wird von der Unity Engine zur Verfügung gestellt und in einem Skript, das an eine Kamera angehängt ist, immer dann aufgerufen, wenn ein neues Bild gerendert wurde. Source ist dabei das Eingabebild und Destination ist das Bild, welches zum Schluss abgebildet wird. Source kann also noch beliebig verändert werden, bevor es nach Destination geschrieben wird. Der erste Effekt, welcher auf das Bild angewendet wird, ist Bloom. Bloom ist als Compute Shader verfasst, für den Texturen, in die geschrieben werden soll, das Flag 'enableRandomWrite' benötigen. Dieses lässt sich für einmal erstellte Texturen im Nachhinein nicht mehr ändern und ist in Source standardmäßig deaktiviert. Also ist der erste Schritt, mit der Funktion
 \begin{csh}
 Graphics.Blit(source, sourceTex);
 \end{csh}
@@ -59,7 +59,7 @@ Als Nächstes wird Chromatic Aberration auf das fertige Bild mit Bloom (sourceTe
 
 %image ca
 
-Nun ist Lens Flare an der Reihe. Als Ausgangstextur dient ebenfalls sourceTex und ähnlich wie bei Bloom werden bestimmte Features des Ursprungsbildes in eine separate Textur (lfResult) geschrieben. Diese wird dann wiederum mithilfe von blurBuff verschwommen gemacht und dieses Mal additiv auf caResult zurückgeschrieben. 
+Nun ist Lens Flare an der Reihe. Als Ausgangstextur dient ebenfalls sourceTex und ähnlich wie bei Bloom werden bestimmte Features des Ursprungsbildes in eine separate Textur (lfResult) geschrieben. Diese wird dann wiederum mithilfe von blurBuff verschwommen gemacht und dieses Mal additiv auf caResult zurückgeschrieben.
 
 %image lf
 
@@ -100,7 +100,7 @@ Die Texturzugriffe lassen sich jedoch verringern, indem in zwei Durchläufen des
 \includegraphics[height=100pt]{gauss_horizontal.png}
 \includegraphics[height=100pt]{gauss_vertical.png}
 
-Das Resultat ist dabei fast identisch: 
+Das Resultat ist dabei fast identisch:
 
 \includegraphics[height=100pt]{gauss_twopass.png}
 
@@ -140,7 +140,7 @@ Jedoch lässt sich die Anzahl der Texturzugriffe noch weiter senken. In einem Fr
 \label{label:bloom}
 
 Bloom (Überstrahlung) bezeichnet das Phänomen, dass sehr helle Bereiche eines Bildes nahe Bereiche 'überstrahlen'. Dies resultierte bei alten Kameras daraus, dass sie nicht den gesamten Helligkeitsbereich richtig aufnehmen konnten. In Videospielen und der Filmindustrie wird dieser Effekt gern verwendet, um den Eindruck von gro{\ss}er Helligkeit zu vermitteln, jedoch sollte er auch nicht zu stark sein und ablenken.
-Der Algorithmus ist als Compute Shader verfasst und besteht aus zwei Schritten, die von einem jeweils eigenen Kernel ausgeführt werden. 
+Der Algorithmus ist als Compute Shader verfasst und besteht aus zwei Schritten, die von einem jeweils eigenen Kernel ausgeführt werden.
 
 Übergebene Variablen:
 \begin{description}
@@ -202,7 +202,9 @@ Chromatic Aberration eignet sich sich bei gro{\ss}en Abweichungswerten auch gut,
 
 \subsection{Lens Flare}
 
-Als Lens Flare werden Abbilder von hellen Bereichen eines Bildes bezeichnet, die entlang einer Linie durch dessen Zentrum auftreten. Der Effekt entsteht dadurch, dass helles Licht zwischen einer oder mehreren Kameralinsen reflektiert wird (siehe \fullref{img:lensFlareImg}\footnote{\href{https://de.wikipedia.org/wiki/Lens_Flare}{Lens Flare} Zugriff 23.06.2021}). Unter Umständen kann zusätzlich auch ein sogenannter Halo entstehen, ein blasser Ring um die Lichtquelle.
+Als Lens Flare werden Abbilder von hellen Bereichen eines Bildes bezeichnet, die entlang einer Linie durch dessen Zentrum auftreten. Der Effekt entsteht dadurch, dass helles Licht zwischen einer oder mehreren Kameralinsen reflektiert wird (siehe \autoref{img:lensFlareImg}\footnote{\href{https://de.wikipedia.org/wiki/Lens_Flare}{Lens Flare} Zugriff 23.06.2021}). Unter Umständen kann zusätzlich auch ein sogenannter Halo entstehen, ein blasser Ring um die Lichtquelle.
+
+
 
 \includegraphics[height=100pt]{lensflare.png}
 \caption{Lens Flare Beispiel}
@@ -212,7 +214,7 @@ Lens Flare wird aus artistischen Gründen oft in Filmen sowie in der Fotografie 
 
 Eine Alternative bildet der Ansatz des Screen Space Lens Flare. Dabei werden dynamisch alle Bereiche eines Bildes extrahiert, deren Helligkeit einen gewissen Schwellenwert übersteigt und danach automatisch entsprechende Ghosts erzeugt. Dieser Ansatz ist wesentlich Flexibler, da keine anderen Informationen als das Bild selbst notwendig sind, er ist jedoch auch rechenintensiver und es lassen sich bestimmten Lichtquellen nicht einfach ausschlie{\ss}en.
 
-Cubix verwendet den zweiten Ansatz. Lens Flare ist hier als Compute Shader mit zwei Kernels verfasst, welche ähnliche Aufgaben wie die des \nameref{label:bloom} Effekts haben. 
+Cubix verwendet den zweiten Ansatz. Lens Flare ist hier als Compute Shader mit zwei Kernels verfasst, welche ähnliche Aufgaben wie die des \nameref{label:bloom} Effekts haben.
 
 Übergebene Variablen:
 \begin{description}
@@ -246,7 +248,7 @@ Sehr wichtig ist auch der Vektor 'ghostVec'. Dieser zeigt vom derzeitigen Pixel 
 
 $ghostVec = ( -texcoord + .5 ) * ghostSpacing$
 
-GhostSpacing ist eine der Uniform Variablen und gibt an, um wie viel länger beziehungsweise kürzer ghostVec sein soll als der Abstand von texcoord zur Bildmitte (siehe \fullref{img:lfghostvec})
+GhostSpacing ist eine der Uniform Variablen und gibt an, um wie viel länger beziehungsweise kürzer ghostVec sein soll als der Abstand von texcoord zur Bildmitte (siehe \autoref{img:lfghostvec})
 
 \captionsetup{type=figure}
 \includegraphics[height=150pt]{lf_ghostvec.png}
@@ -263,7 +265,7 @@ col += generateHalo(texcoord, ghostVec, iResolution);
 
 Zuerst werden mit 'generateGhosts', wie der Name schon sagt, die Ghosts generiert. Eine Schleife, die an unterschiedlichen Stellen des Bildes den entsprechenden Helligkeitswert überprüft, läuft so oft ab, wie durch den übergebenen Parameter ghostCount angegeben. Dabei wird in jedem Durchlauf einmal der Vektor ghostVec als Abweichung zu den derzeitigen Texturkoordinaten hinzuaddiert. An der resultierenden Stelle wird dann die Farbe des Ursprungsbildes bestimmt und der Schwellenwert wird von ihr abgezogen: $texColor = max(texColor - threshold, 0)$
 
-Zuletzt wird der Wert von texColor mit einem Faktor multipliziert, der davon abhängig ist, wie weit die helle Stelle vom Zentrum des Bildes entfernt ist, da Lichtquellen am Rand weniger bis gar kein Lens Flare auslösen sollen. \fullref{img:lfghostgen} zeigt, wie die Berechnung der Koordinaten der hellen Stellen für jeden Ghost stattfindet.
+Zuletzt wird der Wert von texColor mit einem Faktor multipliziert, der davon abhängig ist, wie weit die helle Stelle vom Zentrum des Bildes entfernt ist, da Lichtquellen am Rand weniger bis gar kein Lens Flare auslösen sollen. \autoref{img:lfghostgen} zeigt, wie die Berechnung der Koordinaten der hellen Stellen für jeden Ghost stattfindet.
 
 \captionsetup{type=figure}
 \includegraphics[height=150pt]{lf_ghostgen_1.png}
@@ -276,7 +278,7 @@ Wie zu sehen ist, wird ghostVec kleiner, je näher der Ghost dem Zentrum des Bil
 
 Somit ist die Erstellung der Ghosts abgeschlossen und es folgt der Halo. Die Funktion 'generateHalo' arbeitet grundsätzlich sehr ähnlich zu 'generateGhosts'. Die Unterschiede bestehen darin, dass es keine Schleife gibt (zu jedem Objekt existiert immer nur ein Halo) und dass ghostVec auf eine feste Länge normalisiert und nun haloVec genannt wird: $haloVec = normalize(ghostVec) * 0.35$
 
-Der Faktor 0.35 legt den Radius des Halo fest (auf 0.35 Bildbreiten/-höhen). HaloVec zeigt genau wie ghostVec in Richtung Mitte des Bildes, hat aber eine feste Länge. Dadurch bilden sich um jede Stelle des Bildes teile eines Ringes, in denen haloVec auf besagte Stelle zeigt. Besser veranschaulicht ist der Sachverhalt in \fullref{img:lfhalogen}
+Der Faktor 0.35 legt den Radius des Halo fest (auf 0.35 Bildbreiten/-höhen). HaloVec zeigt genau wie ghostVec in Richtung Mitte des Bildes, hat aber eine feste Länge. Dadurch bilden sich um jede Stelle des Bildes teile eines Ringes, in denen haloVec auf besagte Stelle zeigt. Besser veranschaulicht ist der Sachverhalt in \autoref{img:lfhalogen}
 
 \captionsetup{type=figure}
 \includegraphics[height=150pt]{lf_halogen_1.png}
@@ -323,7 +325,7 @@ So sieht der Lens Flare schon fast wie im fertigen Spiel aus, es fehlen nur noch
 \includegraphics[width=1\linewidth]{lf_lensgen.png}
 \captionof{figure}{Links: Linsendreck, Mitte: Barcode, Rechts: Resultat}
 
-Dieses Bild wird im Writeback Kernel des Lens Flare multiplikativ mit den Ghosts und dem Halo kombiniert, bevor diese auf die Ausgangstextur zurückgeschrieben werden (siehe \fullref{img:lfcubix}). Der Lens Flare Effekt ist somitvollständig.
+Dieses Bild wird im Writeback Kernel des Lens Flare multiplikativ mit den Ghosts und dem Halo kombiniert, bevor diese auf die Ausgangstextur zurückgeschrieben werden (siehe \autoref{img:lfcubix}). Der Lens Flare Effekt ist somitvollständig.
 
 \captionsetup{type=figure}
 \includegraphics[height=150pt]{lf_cubix.png}
@@ -360,9 +362,9 @@ Für die y-Werte wird analog verfahren: $uv.y = uv.y * (1 + pow(abs(uv.x) / 8, 2
 
 \includegraphics[height=100pt]{warp_y.png}
 
-Nun werden dem Bild noch Scanlines und Vignette hinzugefügt. Da die Scanlines vertikal angeordnet sind, kann deren Stärke als Sinusfunktion der y-Koordinate dargestellt werden und wird wie folgt berechnet: $sin(texcoord.y * 6.28 * 100) / 2 + 0.5$ 
+Nun werden dem Bild noch Scanlines und Vignette hinzugefügt. Da die Scanlines vertikal angeordnet sind, kann deren Stärke als Sinusfunktion der y-Koordinate dargestellt werden und wird wie folgt berechnet: $sin(texcoord.y * 6.28 * 100) / 2 + 0.5$
 
-Die Faktoren 6.28 und 100 bedeuten, dass 100 Periodendurchläufe der Sinusfunktion (6.28 ist rund 2 Pi, also eine Periode) für y-Werte zwischen 0 und 1 geschehen. Da sich die Koordinaten in einem Wertebereich von -1 bis 1 befinden, entstehen auf der gesamten Displayhöhe insgesamt 200 Scanlines. Das Ergebnis der Sinusfunktion wird halbiert und es werden 0.5 addiert, womit es in einen Wertebereich zwischen 0 und 1 gebracht wird. Zuletzt wird der erhaltene Wert als Faktor mir der Farbe des Bildes multipliziert. 
+Die Faktoren 6.28 und 100 bedeuten, dass 100 Periodendurchläufe der Sinusfunktion (6.28 ist rund 2 Pi, also eine Periode) für y-Werte zwischen 0 und 1 geschehen. Da sich die Koordinaten in einem Wertebereich von -1 bis 1 befinden, entstehen auf der gesamten Displayhöhe insgesamt 200 Scanlines. Das Ergebnis der Sinusfunktion wird halbiert und es werden 0.5 addiert, womit es in einen Wertebereich zwischen 0 und 1 gebracht wird. Zuletzt wird der erhaltene Wert als Faktor mir der Farbe des Bildes multipliziert.
 
 Da starke Scanlines besonders in der Mitte des Bildschirmes die Sichtbarkeit erheblich beeinträchtigen können, wird eine zusätzliche Variable 'scanLineIntensity' angelegt, die als Faktor mit in das Ergebnis einflie{\ss}t und die Intensität der Scanlines entsprechend verringert. Dazu wird die Funktion 'smoothstep' verwendet: $scanLineIntensity = smoothstep(.8, 1.41422, length(texcoord))$. Somit erhält man ein Ergebnis von 0 (also keine Scanlines) für alle Bereiche, die weniger als 0.8 vom Zentrum entfernt sind, danach steigt die Intensität linear bis auf einen Wert 1 in den Ecken. Es entsteht folgendes Resultat:
 
@@ -374,4 +376,3 @@ Damit der Effekt zur Mitte hin schneller abnimmt, wird das Ergebnis anschlie{\ss
 Für vignetteWidth gleich 0.1 und vignetteAmount gleich 0.8 sieht das Ergebnis wie folgt aus:
 
 \includegraphics[height=100pt]{vignette.png}
-
