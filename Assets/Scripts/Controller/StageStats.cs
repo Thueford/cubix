@@ -19,9 +19,9 @@ public class StageStats : SaveData
 
     public void Save(int startno)
     {
-        if (cur != null) cur.chargeTime = (int)(cur.chargeTime*1000)/1000;
+        if (cur != null) cur.chargeTime = round(cur.chargeTime);
         Debug.Log("Saving stags");
-        SaveProfile(this, profile, $"_${startno}.stags");
+        SaveProfile(this, profile, $"_{startno}.stags");
     }
 }
 
