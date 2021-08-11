@@ -201,7 +201,7 @@ Shader "Hidden/PostProc"
                 fixed4 col = tex2D(_MainTex, i.uv);
 
                 // StarburstTex is accessed via the angle of the texcoord vector (uv)
-                float angle = acos(dot(normalize(i.uv-.5), float2(1, 0))) / 3.1416 / 2 + 1;
+                float angle = acos(normalize(i.uv - .5).x) / 3.1416 / 2 + 1;
                 // Starburst is additively applied to Lens Dirt
                 col += max(0, tex2D(_StarburstTex, float2(angle, .5)-.2)) * .3;
 
