@@ -33,7 +33,8 @@ public class Portal : MonoBehaviour
         SetColor(color);
         if (isEndless)
         {
-            SetEnabled(true);
+            if (this != GetComponentInParent<GameStage>().portal) 
+                SetEnabled(true);
             ps.color.color2 = 0.2f * Color.red + 0.8f * Color.black;
             r.material.SetColor("_EmissionColor", ps.color.color2);
         }

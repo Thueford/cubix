@@ -30,7 +30,8 @@ public class StageStats : SaveData
 [System.Serializable]
 public class StageStat
 {
-    public int stageno;
+    public int stageno, wallId, spawnerId;
+    public bool generated;
     public GameState.State state;
 
     #region player
@@ -39,7 +40,7 @@ public class StageStat
     public bool completed = false;        // true when charged
     #endregion
 
-    public int[] collsDropped = new int[(int)Collectable.cType.BLACK];
+    public int[] collsDropped = new int[(int)Collectable.cType.BLACK + 1];
 
     #region enemies
     public int enemsKilled = 0;
