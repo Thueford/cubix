@@ -21,14 +21,14 @@ public class GameStage : MonoBehaviour
 
     public int number;
     public bool loaded { get; private set; } = false;
-    public bool isProcedural = false;
-    public bool isBoss = false;
+    public StageInfo info;
 
     public static implicit operator int(GameStage s) => s.number;
-    public bool hasBoss() => isBoss && EnemySpawner.remaining > 0;
+    public bool hasBoss() => info.isBoss && EnemySpawner.remaining > 0;
 
     public void Awake()
     {
+        info.stageNo = number;
         gameObject.SetActive(false);
         actorsBase.SetActive(false);
     }
@@ -78,7 +78,7 @@ public class GameStage : MonoBehaviour
     public void FinishedEnemies()
     {
         Debug.Log("GameStage.FinishedEnemies");
-        if (isBoss) charger.SetEnabled(true);
+        if (info.isBoss) charger.SetEnabled(true);
         charger.EnableParticles(true);
         charger.SetChargeSpeed(1.5f);
     }
@@ -113,7 +113,7 @@ public class GameStage : MonoBehaviour
     public void Unload()
     {
         if (!loaded) return;
-        if (isProcedural)
+        if (info.isProcedural)
         {
             Camera.main.transform.Translate(new Vector3(0, -40, 0));
             Destroy(gameObject);
@@ -128,4 +128,11 @@ public class GameStage : MonoBehaviour
     }
 
     public T[] GetActorComponents<T>() => actors.GetComponentsInChildren<T>();
+}
+
+[System.Serializable]
+public struct StageInfo
+{
+    public bool isProcedural, isBoss;
+    public int stageNo, wallId, spawnerId, bossId;
 }

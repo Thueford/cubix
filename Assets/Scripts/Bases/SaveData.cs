@@ -50,7 +50,7 @@ public abstract class SaveData
 
     public static void SaveProfile<T>(T save, byte profile, string ext) where T : SaveData
     {
-        string json = JsonUtility.ToJson(save).Replace("{", "\n{");
+        string json = JsonUtility.ToJson(save).Replace("{", "\n{").Trim();
         byte[] data = { };
 
         if (saveZipped) data = ZipStr(json);
@@ -99,7 +99,7 @@ public abstract class SaveData
         return p;
 
     returnDefault:
-        Debug.LogWarningFormat("{0} not found. Loading default profile", filePath);
+        Debug.LogWarningFormat("{0} not found. Loading default", filePath);
         p = new T();
         p.profile = profile;
         return p;

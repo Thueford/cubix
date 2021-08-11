@@ -197,11 +197,14 @@ public class GameState : MonoBehaviour
     {
         State s = new State();
         s.stage = curStage;
+        s.stageInfo = curStage.info;
+
         s.hp = Player.self.HP;
         s.ressources = new float[] { 
             round(Ressource.self.valueRed),
             round(Ressource.self.valueGreen),
             round(Ressource.self.valueBlue)};
+
         s.colorCount = colorCount;
         s.colorOrder = System.Array.ConvertAll(colorOrder, c => C2B(c));
         s.unlockedColors = unlockedColors;
@@ -323,7 +326,9 @@ public class GameState : MonoBehaviour
     [System.Serializable]
     public struct State
     {
+        [System.Runtime.Serialization.IgnoreDataMember]
         public GameStage stage;
+        public StageInfo stageInfo;
         public Vector3Int unlockedColors;
         public int[] colorOrder;
         public int colorCount;

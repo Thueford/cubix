@@ -14,33 +14,35 @@ public class StageBuilder : MonoBehaviour
     // Start is called before the first frame update
     void Awake() => self = this;
     GameObject getChild(GameObject obj, int index) => index < obj.transform.childCount ? obj.transform.GetChild(index).gameObject : null;
-    GameObject getRandomChild(GameObject obj) => obj.transform.childCount > 1 ? getChild(obj, Random.Range(1, obj.transform.childCount)) : null;
-
+    int randomChildIndex(GameObject obj) => Random.Range(1, obj.transform.childCount);
+    
     public GameStage Generate(Transform t, int number)
     {
         Vector3 pos = t.position;
-        if (!GameState.curStage.isProcedural) pos.z += 40;
+        if (!GameState.curStage.info.isProcedural) pos.z += 40;
 
         GameStage stage = Instantiate(StagePrefab, pos, Quaternion.identity);
-        stage.isProcedural = true;
-        stage.number = number;
+        stage.info.isProcedural = true;
+        stage.info.stageNo = stage.number = number;
 
         if (stage % 10 > 0)
         {
-            GameObject spawner = Instantiate(getRandomChild(ActorContainer), stage.actorsBase.transform);
+            stage.info.spawnerId = randomChildIndex(ActorContainer);
+            GameObject spawner = Instantiate(getChild(ActorContainer, stage.info.spawnerId), stage.actorsBase.transform);
             spawner.SetActive(true);
 
-            GameObject walls = Instantiate(getRandomChild(WallContainer), stage.actorsBase.transform);
+            stage.info.wallId = randomChildIndex(WallContainer);
+            GameObject walls = Instantiate(getChild(WallContainer, stage.info.wallId), stage.actorsBase.transform);
             walls.SetActive(true);
         }
         else
         {
-            stage.isBoss = true;
+            stage.info.isBoss = true;
 
-            int index = (stage / 10) % BossContainer.transform.childCount;
-            Debug.Log("Generating Boss Stage " + index);
-            
-            GameObject oBoss = Instantiate(getChild(BossContainer, index), stage.actorsBase.transform);
+            stage.info.bossId = (stage / 10) % BossContainer.transform.childCount;
+            Debug.Log("Generating Boss Stage " + stage.info.bossId);
+
+            GameObject oBoss = Instantiate(getChild(BossContainer, stage.info.bossId), stage.actorsBase.transform);
             pos = stage.portal.transform.position;
             pos.y = 0.5f;
             pos.z -= 5;

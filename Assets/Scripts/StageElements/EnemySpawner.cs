@@ -60,8 +60,8 @@ public class EnemySpawner : MonoBehaviour
 
     public static void EnableSpawning(GameStage stage, bool b)
     {
-        Debug.Log("Enable " + stage.isBoss + " " + b + " " + stage.actors.GetComponentsInChildren<EnemyBase>(true).Length);
-        if (stage.isBoss && b)
+        Debug.Log("Enable " + stage.info.isBoss + " " + b + " " + stage.actors.GetComponentsInChildren<EnemyBase>(true).Length);
+        if (stage.info.isBoss && b)
             foreach (EnemyBase e in stage.actors.GetComponentsInChildren<EnemyBase>(true))
                 e.gameObject.SetActive(true);
         
@@ -76,7 +76,7 @@ public class EnemySpawner : MonoBehaviour
     {
         enemyWeight = 0;
         enemyCount = 0;
-        remaining = stage.isBoss ? 1 : 0;
+        remaining = stage.info.isBoss ? 1 : 0;
         foreach (EnemySpawner es in stage.GetActorComponents<EnemySpawner>())
             es.ResetSpawner();
         Debug.Log("Remaining: " + remaining);
