@@ -29,8 +29,8 @@ public class Stage0 : StageController
 
     private void updateStats()
     {
-        tmHIScore.text = string.Format(txtHighScore, GameState.save.stats.getStartStats());
-        tmStats.text = string.Format(txtStatistics, GameState.save.stats.getMoreStats());
+        tmHIScore.text = string.Format(txtHighScore, PlayerStats.self.getStartStats());
+        tmStats.text = string.Format(txtStatistics, PlayerStats.self.getMoreStats());
     }
 
     override public void Experienced()

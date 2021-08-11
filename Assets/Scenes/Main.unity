@@ -10371,6 +10371,7 @@ MonoBehaviour:
   effectContainer: {fileID: 1502885767}
   txtDbg: {fileID: 336807975}
   txtFPS: {fileID: 1932165153}
+  menuBackground: {fileID: 2800000, guid: b1d4946d031aa7b42996439018fbfad2, type: 3}
   colorOrderNonStatic: []
   unlockedColorsNonStatic: {x: 0, y: 0, z: 0}
 --- !u!1 &883338673
@@ -23340,15 +23341,15 @@ MonoBehaviour:
   lfThreshold: 0.75
   lfGhostSpacing: 0.69
   lfCAStrength: 0.15
-  useCTREffect: 1
+  useCRTEffect: 1
   vignetteAmount: 0.8
   vignetteWidth: 0.1
   sourceTex: {fileID: 0}
   brightTex: {fileID: 0}
-  blurrBuff: {fileID: 0}
+  blurBuff: {fileID: 0}
   caResult: {fileID: 0}
   lfResult: {fileID: 0}
-  lensDirt: {fileID: 0}
+  lensTex: {fileID: 0}
 --- !u!1001 &1999105777
 PrefabInstance:
   m_ObjectHideFlags: 0

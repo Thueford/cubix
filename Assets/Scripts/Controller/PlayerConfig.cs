@@ -3,7 +3,10 @@
 [System.Serializable]
 public class PlayerConfig : SaveData
 {
+    public static PlayerConfig self;
+
     public string version;
+    public bool recordStats = true;
 
     public float volMusic = 1;
     public float volSoundEff = 1;
@@ -22,6 +25,7 @@ public class PlayerConfig : SaveData
 
     public PlayerConfig()
     {
+        self = this;
         version = Application.version + ":" + saveVersion;
     }
 
@@ -57,10 +61,14 @@ public class PlayerConfig : SaveData
         setLight(Player.self.GetComponentInChildren<Light>());
         foreach (GameObject o in GameObject.FindGameObjectsWithTag("Stage"))
             foreach (Light l in o.GetComponentsInChildren<Light>()) setLight(l);
+        SoundHandler.SetVolume(volMusic, volSoundEff);
+
+        Save();
     }
 
     public void ReadConfigShortcuts()
     {
+        if (GameState.showMenu && Input.GetMouseButtonUp(0)) UpdateSettings();
         if (!InputHandler.ReadCtl()) return;
 
         InputHandler.ResetLast();
@@ -84,10 +92,7 @@ public class PlayerConfig : SaveData
         if (InputHandler.ReadKeyDown(KeyCode.L)) lights = !lights;
 
         if (InputHandler.GetLast() != -1)
-        {
             UpdateSettings();
-            Save();
-        }
     }
 
     public void ConfigMenu()
@@ -96,10 +101,10 @@ public class PlayerConfig : SaveData
         style.normal.background = GameState.self.menuBackground;
 
         GUILayout.BeginHorizontal();
-        GUILayout.Space(100);
+        GUILayout.Space(50);
 
         GUILayout.BeginVertical();
-        GUILayout.Space(100);
+        GUILayout.Space(50);
 
         GUILayout.BeginHorizontal(style);
         GUILayout.Space(20);
@@ -162,15 +167,15 @@ public class PlayerConfig : SaveData
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Logs")) System.Diagnostics.Process.Start(dataDir);
         if (GUILayout.Button("Config")) System.Diagnostics.Process.Start(SAVEDATA_DIR);
+        recordStats = GUILayout.Toggle(recordStats, "Record Stats");
         GUILayout.EndHorizontal();
 
+        GUILayout.Space(20);
         GUILayout.EndVertical();
+        GUILayout.Space(20);
         GUILayout.EndHorizontal();
         GUILayout.EndVertical();
         GUILayout.EndHorizontal();
-
-        UpdateSettings();
-        if (Input.GetMouseButtonDown(0)) Save();
     }
 
     public void Save()

@@ -77,6 +77,14 @@ public class SoundHandler : MonoBehaviour
         }
         PlayClip(c[UnityEngine.Random.Range(0, c.Length)]);
     }
+
+    public static void SetVolume(float volMusic, float volEffects)
+    {
+        self.MusicSource.volume = volMusic;
+        self.EffectSource.volume = volEffects;
+        self.MenuSource.volume = volEffects;
+    }
+
     public static void PlayClip(string s) => PlayClip(clips[s]);
 
     public static void PlayClick()

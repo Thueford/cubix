@@ -59,7 +59,7 @@ public class GameState : MonoBehaviour
 
         save = new SaveData.Data().Load(1);
         save.stats.startNo++;
-        save.Save();
+        save.stats.Save();
     }
 
     // Start is called before the first frame update

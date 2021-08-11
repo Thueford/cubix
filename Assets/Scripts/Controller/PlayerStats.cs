@@ -4,6 +4,8 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerStats : SaveData
 {
+    public static PlayerStats self;
+
     #region general
     public double totalTime;
     public int startNo;
@@ -39,6 +41,7 @@ public class PlayerStats : SaveData
     public int[] stageDeaths = new int[11];
     #endregion
 
+    public PlayerStats() => self = this;
 
     public object[] getStartStats()
     {

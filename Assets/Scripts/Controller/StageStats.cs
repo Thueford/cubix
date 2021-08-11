@@ -19,6 +19,7 @@ public class StageStats : SaveData
 
     public void Save(int startno)
     {
+        if (!PlayerConfig.self.recordStats) return;
         if (cur != null) cur.chargeTime = round(cur.chargeTime);
         Debug.Log("Saving stags");
         SaveProfile(this, profile, $"_{startno}.stags");
