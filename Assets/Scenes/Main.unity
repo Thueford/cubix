@@ -2696,12 +2696,12 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 5e80174a6adc8f440be07af02f4266c3, type: 3}
   - name: shoot
     clip:
-    - {fileID: 8300000, guid: 77f43f361ed86844ba117c35d9c01624, type: 3}
+    - {fileID: 8300000, guid: 4c3a513b5278bf444819a3a878e45d0b, type: 3}
   - name: enemyHit
     clip:
-    - {fileID: 8300000, guid: bb1d1caa2336080478c56471a27fba40, type: 3}
-    - {fileID: 8300000, guid: 70787e464ebd53044af1aef7a47f6543, type: 3}
-    - {fileID: 8300000, guid: 8b71c6de4b007fe4eb884ff809e4ed37, type: 3}
+    - {fileID: 8300000, guid: 5c22d392fe5b4b44bb2fd416061f89e9, type: 3}
+    - {fileID: 8300000, guid: 03baa7f264295974e9a27098de1e1644, type: 3}
+    - {fileID: 8300000, guid: 8e1e23970aaa3f942a6030da2480faad, type: 3}
   - name: switch
     clip:
     - {fileID: 8300000, guid: 5209d4fc49dbde148b82f07242eb43c9, type: 3}
@@ -2709,7 +2709,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: d9649efa10c873e41bffae7589bd1ec2, type: 3}
   - name: wallHit
     clip:
-    - {fileID: 8300000, guid: 0f8500d7569615f4585b52c921bdecf9, type: 3}
+    - {fileID: 8300000, guid: 9b71c9eb0a4471e48a2409064c7f54d1, type: 3}
   - name: collect
     clip:
     - {fileID: 8300000, guid: 03f140fa67115064c90a5d6052acdd6b, type: 3}
