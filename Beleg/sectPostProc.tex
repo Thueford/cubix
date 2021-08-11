@@ -168,6 +168,7 @@ Anschlie{\ss}end wird der Blur-Effekt auf BrightSpots angewendet, wodurch die he
 
 
 \subsection{Chromatic Aberration}
+\label{label:chromatic aberration}
 
 Chromatic Aberration ist ein von Kameralinsen und Röhrenmonitoren verursachtes Bildartefakt, das im Falle der Kameralinse dadurch auftritt, dass das eintreffende Licht von dieser nicht korrekt gebündelt wird. Licht unterschiedlicher Wellenlängen wird unterschiedlich stark von der Linse gebrochen, wodurch besonders kurz- oder langwellige Lichtfarben (zum Beispiel rot und blau) mit einiger Abweichung auf dem Sensor eintreffen. Normalerweise tritt Chromatic Aberration in Richtung der Ränder des Bildes stärker auf, jedoch erschwerte eine zu gro{\ss}e Effektstärke die Leserlichkeit des GUI. In der Mitte des Bildschirmes sollte der Effekt wiederum nicht zu schwach sein, da er bei der wei{\ss}en Spielfigur am besten zur Geltung kam. Deshalb fiel die Entscheidung, die Stärke der Chromatic Aberration für den gesamten Bildschirm auf einen einheitlichen Wert zu setzen.
 
@@ -201,38 +202,38 @@ Chromatic Aberration eignet sich sich bei gro{\ss}en Abweichungswerten auch gut,
 
 \subsection{Lens Flare}
 
-Als Lens Flare werden Abbilder von hellen Bereichen eines Bildes bezeichnet, die entlang einer Linie durch dessen Zentrum auftreten. Der Effekt entsteht dadurch, dass helles Licht zwischen einer oder mehreren Kameralinsen reflektiert wird (siehe \fullref{img:lensFlareImg}\footnote{\href{https://de.wikipedia.org/wiki/Lens_Flare}{Lens Flare} Zugriff 23.06.2021}). Unter Umständen kann zusätzlich zu den Ghosts auch ein sogenannter Halo entstehen, ein blasser Ring um die Lichtquelle.
+Als Lens Flare werden Abbilder von hellen Bereichen eines Bildes bezeichnet, die entlang einer Linie durch dessen Zentrum auftreten. Der Effekt entsteht dadurch, dass helles Licht zwischen einer oder mehreren Kameralinsen reflektiert wird (siehe \fullref{img:lensFlareImg}\footnote{\href{https://de.wikipedia.org/wiki/Lens_Flare}{Lens Flare} Zugriff 23.06.2021}). Unter Umständen kann zusätzlich auch ein sogenannter Halo entstehen, ein blasser Ring um die Lichtquelle.
 
 \includegraphics[height=100pt]{lensflare.png}
 \caption{Lens Flare Beispiel}
 \label{img:lensFlareImg}
 
-Lens Flare wird aus artistischen Gründen oft in Filmen sowie in der Fotografie und in Videospielen emuliert. In letzterem Fall gibt es dafür grundlegend zwei Ansätze: Zum Einen der Spritebasierte Ansatz, bei dem die Abbilder (auch Ghosts genannt) der hellen Stellen als Bilder (Sprites) vorgefertigt sind, welche dann entlang der Linie durch das Zentrum platziert werden. Dafür ist es notwendig, Lichtquellen, welche Lens Flare verursachen sollen, entsprechend zu markieren und dann beim Rendern des Bildes zu prüfen, ob diese Lichtquellen im Bild und nicht verdeckt sind. Danach werden anhand deren Position die Ghost-Sprites auf dem Bild platziert. Der Nachteil dieser Methode ist, dass viele Informationen über die Lichtquellen notwendig sind. Au{\ss}erdem werden Bereiche, die zwar hell genug sind, aber nicht für Lens Flare markiert wurden, auch keinen Lens Flare erzeugen. Zusätzlich ist die die Form der Ghosts von Beginn an festgelegt, was unter Umständen auch nicht gewünscht ist.
+Lens Flare wird aus artistischen Gründen oft in Filmen sowie in der Fotografie und in Videospielen emuliert. In letzterem Fall gibt es dafür grundlegend zwei Ansätze: Zum Einen der Spritebasierte Ansatz, bei dem die Abbilder (auch Ghosts genannt) der hellen Stellen als Bilder (Sprites) vorgefertigt sind, die dann entlang der Linie durch das Zentrum platziert werden. Dafür ist es notwendig, Lichtquellen, welche Lens Flare verursachen sollen, entsprechend zu markieren und dann beim Rendern des Bildes zu prüfen, ob diese Lichtquellen im Blickfeld zu sehen sind. Danach werden anhand deren Position die Ghost-Sprites auf dem Bild platziert. Der Nachteil dieser Methode ist, dass viele Informationen über die Lichtquellen notwendig sind. Au{\ss}erdem werden Bereiche, die zwar hell genug sind, aber nicht für Lens Flare markiert wurden, auch keinen Lens Flare erzeugen. Zusätzlich ist die Form der Ghosts von Beginn an festgelegt, was unter Umständen auch nicht gewünscht ist.
 
-Eine Alternative bildet der Ansatz des Screen Space Lens Flare. Dabei werden dynamisch alle Bereiche eines Bildes extrahiert, deren Helligkeit einen gewissen Schwellenwert übersteigt und danach automatisch entsprechende Ghosts erzeugt und auf dem Bild platziert. Dieser Ansatz ist wesentlich Flexibler, da keine anderen Informationen als das Bild selbst notwendig sind, er ist jedoch auch rechenintensiver und es lassen sich bestimmten Lichtquellen nicht einfach ausschlie{\ss}en.
+Eine Alternative bildet der Ansatz des Screen Space Lens Flare. Dabei werden dynamisch alle Bereiche eines Bildes extrahiert, deren Helligkeit einen gewissen Schwellenwert übersteigt und danach automatisch entsprechende Ghosts erzeugt. Dieser Ansatz ist wesentlich Flexibler, da keine anderen Informationen als das Bild selbst notwendig sind, er ist jedoch auch rechenintensiver und es lassen sich bestimmten Lichtquellen nicht einfach ausschlie{\ss}en.
 
-Cubix verwendet den zweiten Ansatz. Lens Flare ist hier als Compute Shader verfasst, der zwei Kernels umfasst, welche ähnliche Aufgaben wie die des \nameref{label:bloom} Effekts haben. 
+Cubix verwendet den zweiten Ansatz. Lens Flare ist hier als Compute Shader mit zwei Kernels verfasst, welche ähnliche Aufgaben wie die des \nameref{label:bloom} Effekts haben. 
 
 Übergebene Variablen:
 \begin{description}
 \item[RWTexture2D<float4> Source] Die Eingabetextur
 \item[RWTexture2D<float4> Result] Textur für die entstandenen Ghosts und den Halo
-\item[Texture2D<float4> lensDirt] Transparente Textur einer dreckigen Linse
-\item[uniform int ghostCount] Anzahl der Ghosts pro heller Stelle
+\item[Texture2D<float4> lensTex] Transparente Textur einer dreckigen Linse
+\item[uniform int ghostCount] Anzahl der Ghosts pro hellem Bereich
 \item[uniform float ghostSpacing] Abstand der Ghosts zueinander
 \item[uniform float threshold] Schwellenwert der Helligkeit, ab dem Ghosts/Halo produziert werden
 \item[uniform float caStrength] Stärke der Chromatic Aberration der Ghosts/des Halo
 \end{description}
 
-Der Algorithmus läuft in zwei Schritten ab: Zuerst werden für helle Stellen im Bild die Ghosts und der Halo generiert, anschlie{\ss}end werden mittels \nameref{label:blur} die entstandenen Features verschwommen gemacht und unter Einbezug der LensDirt Textur auf das Ursprungsbild zurückgeschrieben.
+Der Algorithmus läuft in zwei Schritten ab: Zuerst werden für helle Stellen im Bild die Ghosts und der Halo generiert, anschlie{\ss}end werden mittels \nameref{label:blur} die entstandenen Features verschwommen gemacht und unter Einbezug der Textur lensTex auf das Ursprungsbild zurückgeschrieben.
 
-Für den ersten Schritt wurde im Shader der Kernel 'CSFlare' angelegt. Texturzugriffe erfolgen hier mithilfe der übergebenen Variable 'id'. Die Werte dieser Variablen sind diskrete Pixelkoordinaten, damit später mit ihnen einfacher zu rechnen ist, müssen sie auf Werte zwischen 0 und 1 transformiert werden. Dies erfolgt über das Teilen durch die grö{\ss}e der Textur in Pixeln, welche mit der Funktion GetDimensions ermittelt werden kann:
+Für den ersten Schritt wurde im Shader der Kernel 'CSFlare' angelegt. Texturzugriffe erfolgen hier mithilfe der übergebenen Variable 'id', deren Werte sind diskrete Pixelkoordinaten. Damit später mit ihnen einfacher zu rechnen ist, müssen sie auf Werte zwischen 0 und 1 transformiert werden. Dies erfolgt über das Teilen durch die grö{\ss}e der Textur in Pixeln, welche mit der Funktion GetDimensions ermittelt werden kann:
 
 \begin{hlsl}
-    uint width, height;
-    Source.GetDimensions(width, height);
-    float2 iResolution = float2(width, height); // Size of Source
-    float2 texcoord = (id.xy / iResolution); //coordinates transformed to [0, 1]
+uint width, height;
+Source.GetDimensions(width, height);
+float2 iResolution = float2(width, height); // Size of Source
+float2 texcoord = (id.xy / iResolution); //transform coordinates to [0, 1]
 \end{hlsl}
 
 Texcoord ist nun also ein Vektor mit einem Wertebereich von 0 bis 1, der auf das derzeitige Pixel zeigt. Um nun wieder auf die Texturen zugreifen zu können, muss dieser Vektor mit deren Grö{\ss}e multipliziert werden:
@@ -262,7 +263,7 @@ col += generateHalo(texcoord, ghostVec, iResolution);
 
 Zuerst werden mit 'generateGhosts', wie der Name schon sagt, die Ghosts generiert. Eine Schleife, die an unterschiedlichen Stellen des Bildes den entsprechenden Helligkeitswert überprüft, läuft so oft ab, wie durch den übergebenen Parameter ghostCount angegeben. Dabei wird in jedem Durchlauf einmal der Vektor ghostVec als Abweichung zu den derzeitigen Texturkoordinaten hinzuaddiert. An der resultierenden Stelle wird dann die Farbe des Ursprungsbildes bestimmt und der Schwellenwert wird von ihr abgezogen: $texColor = max(texColor - threshold, 0)$
 
-Zuletzt wird der Wert von texColor noch mit einem Faktor multipliziert, der davon abhängig ist, wie weit die helle Stelle vom Zentrum des Bildes entfernt ist, da Lichtquellen am Rand weniger bis gar kein Lens Flare auslösen sollen. \fullref{img:lfghostgen} zeigt, wie die Berechnung der Koordinaten der hellen Stellen für jeden Ghost stattfindet.
+Zuletzt wird der Wert von texColor mit einem Faktor multipliziert, der davon abhängig ist, wie weit die helle Stelle vom Zentrum des Bildes entfernt ist, da Lichtquellen am Rand weniger bis gar kein Lens Flare auslösen sollen. \fullref{img:lfghostgen} zeigt, wie die Berechnung der Koordinaten der hellen Stellen für jeden Ghost stattfindet.
 
 \captionsetup{type=figure}
 \includegraphics[height=150pt]{lf_ghostgen_1.png}
@@ -275,7 +276,7 @@ Wie zu sehen ist, wird ghostVec kleiner, je näher der Ghost dem Zentrum des Bil
 
 Somit ist die Erstellung der Ghosts abgeschlossen und es folgt der Halo. Die Funktion 'generateHalo' arbeitet grundsätzlich sehr ähnlich zu 'generateGhosts'. Die Unterschiede bestehen darin, dass es keine Schleife gibt (zu jedem Objekt existiert immer nur ein Halo) und dass ghostVec auf eine feste Länge normalisiert und nun haloVec genannt wird: $haloVec = normalize(ghostVec) * 0.35$
 
-Der Faktor 0.35 legt den Radius des Halo fest (auf 0.35 Bildbreiten/-höhen). HaloVec zeigt genau wie ghostVec in Richtung Mitte des Bildes, aber dadurch, dass er eine feste Länge hat, bilden sich um jede Stelle des Bildes teile eines Ringes, in denen haloVec auf besagte Stelle zeigt. Besser veranschaulicht ist der Sachverhalt in \fullref{img:lfhalogen}
+Der Faktor 0.35 legt den Radius des Halo fest (auf 0.35 Bildbreiten/-höhen). HaloVec zeigt genau wie ghostVec in Richtung Mitte des Bildes, hat aber eine feste Länge. Dadurch bilden sich um jede Stelle des Bildes teile eines Ringes, in denen haloVec auf besagte Stelle zeigt. Besser veranschaulicht ist der Sachverhalt in \fullref{img:lfhalogen}
 
 \captionsetup{type=figure}
 \includegraphics[height=150pt]{lf_halogen_1.png}
@@ -283,10 +284,53 @@ Der Faktor 0.35 legt den Radius des Halo fest (auf 0.35 Bildbreiten/-höhen). Ha
 \captionof{figure}{Berechnung der Stellen, die Teil des Halo sind (rot umrandet sei ein heller Bereich)}
 \label{img:lfhalogen}
 
-Je näher die helle Stelle dem Zentrum ist, desto grö{\ss}er wird der Halo, bis er sich gänzlich schlie{\ss}t, falls sie sich genau dort befindet. Im Gegensatz zu den Ghosts ist die Helligkeit der Halopixel nicht abhängig von der Entfernung der hellen Stelle zum Zentrum, sondern davon, wie weit sie selbst vom Zentrum entfernt sind.
+Je näher die helle Stelle dem Zentrum ist, desto grö{\ss}er wird der Halo, bis er sich gänzlich schlie{\ss}t, falls sie sich genau dort befindet.
 
-Zweiter Schritt: Zurückschreiben auf caResult, damit Flare nicht verschoben wird.
+Nun sind alle Features erstellt, die für den Lens Flare notwendig sind. Sie befinden sich in der Textur Result und müssten noch per \nameref{label:blur} verschwommen gemacht werden. Jedoch lässt sich die Qualität der Features noch verbessern: Da Licht unterschiedlicher Wellenlängen an der Linse unterschiedlich stark gebrochen wird, haben auch deren Ghosts unterschiedliche Abstände. Es wird hier also ähnlich vorgegangen wie bei \nameref{label:chromatic aberration}, die Rot- und Blaukanäle werden mit einer gewissen Abweichung zu den eigentlichen Koordinaten abgefragt. Der Unterschied besteht darin, dass die Abweichung richtung Zentrum erfolgt und deren Stärke anhand der Entfernung davon skaliert wird. Dies führt dann zu folgendem Unterschied in Result:
 
+\captionsetup{type=figure}
+\includegraphics[height=100pt]{lf_ca_off.png}
+\includegraphics[height=100pt]{lf_ca_on.png}
+\captionof{figure}{Links: ohne Chromatic Aberration, Rechts: mit Chromatic Aberration}
+
+Erzielt wird dieser Effekt mithilfe der Funktion 'float3 getTexColor(float2 texcoords, float2 iResolution)'. Diese wird immer dort aufgerufen, wo ein Texturzugriff auf Source erfolgen würde. Für den Zugriff auf den Rotkanal wird ein Offset zu den Koordinaten addiert, beim Blaukanal wird Offset abgezogen:
+
+\begin{hlsl}
+return float3(
+	Source[(texcoords + offset) * iResolution].r,
+	Source[texcoords * iResolution].g,
+	Source[(texcoords - offset) * iResolution].b
+	);
+\end{hlsl}
+
+Die Richtung von Offset entspricht der Richtung von texcoord zum Zentrum, die Länge ergibt sich aus der Entfernung von texcoord zum Zentrum und der übergebenen Variable caStrength, die vom Skript aus steuerbar ist:
+
+\begin{hlsl}
+    float amount = length(.5 - texcoords) * caStrength;
+    float2 offset = normalize(.5 - texcoords) * amount;
+\end{hlsl}
+
+Nun ist der erste Schritt abgeschlossen und Result kann (nachdem es verschwommen gemacht wurde) auf die Ausgangstextur zurückgeschrieben werden. Jedoch soll das Ergebnis nicht von der normalen \nameref{label:chromatic aberration} beeinflusst werden, weshalb Source für das Zurückschreiben zuvor auf das Resultat des Chromatic Aberration Effekts geändert wird. Dieser Schritt wird ähnlich wie bei Bloom von einem eigenen Kernel 'CSWriteBack' übernommen:
+
+\captionsetup{type=figure}
+\includegraphics[height=100pt]{lf_ca_on.png}
+\includegraphics[height=100pt]{lf_writeback_2.png}
+\captionof{figure}{Links: Lens Flare Features, Rechts: Resultat}
+
+So sieht der Lens Flare schon fast wie im fertigen Spiel aus, es fehlen nur noch die Streifen und Unreinheiten auf der Linse. Dafür wird die Textur lensDirt verwendet. Diese wird zu Beginn des Spiels aus einer fertigen Textur mit Linsendreck und einem kreisförmig gerenderten Barcode durch einen Fragment Shader generiert:
+
+\captionsetup{type=figure}
+\includegraphics[width=1\linewidth]{lf_lensgen.png}
+\captionof{figure}{Links: Linsendreck, Mitte: Barcode, Rechts: Resultat}
+
+Dieses Bild wird im Writeback Kernel des Lens Flare multiplikativ mit den Ghosts und dem Halo kombiniert, bevor diese auf die Ausgangstextur zurückgeschrieben werden (siehe \fullref{img:lfcubix}). Der Lens Flare Effekt ist somitvollständig.
+
+\captionsetup{type=figure}
+\includegraphics[height=150pt]{lf_cubix.png}
+\captionof{figure}{Lens Flare in Cubix}
+\label{img:lfcubix}
+
+%https://docs.unrealengine.com/4.26/Images/RenderingAndGraphics/PostProcessEffects/Bloom/DirtMaskTextureExample.png
 
 
 \subsection{Vignette, warped Display und Scanlines}
