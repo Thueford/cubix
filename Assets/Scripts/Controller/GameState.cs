@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static Helper;
 
 [DisallowMultipleComponent]
 public class GameState : MonoBehaviour
@@ -88,6 +89,7 @@ public class GameState : MonoBehaviour
     private void Update()
     {
         if (Time.time > lastFpsTime + 0.5) UpdateFPS();
+        if (!paused) StageStats.cur.Charge(curStage.charger);
         if (InputHandler.ReadPauseInput()) TogglePause();
         save.config.ReadConfigShortcuts();
 
@@ -161,13 +163,13 @@ public class GameState : MonoBehaviour
         Player.self.SetShooterColor(Vector3Int.zero);
         
         unlockedColors = s.unlockedColors;
-        colorOrder = (Color[])s.colorOrder.Clone();
+        colorOrder = System.Array.ConvertAll(s.colorOrder, c => B2C(c));
         colorCount = s.colorCount;
 
         Ressource.self.setModes(false);
-        Ressource.self.addRes(Ressource.col.Red, s.resRed - Ressource.self.valueRed);
-        Ressource.self.addRes(Ressource.col.Green, s.resGreen - Ressource.self.valueGreen);
-        Ressource.self.addRes(Ressource.col.Blue, s.resBlue - Ressource.self.valueBlue);
+        Ressource.self.addRes(Ressource.col.Red, s.ressources[0] - Ressource.self.valueRed);
+        Ressource.self.addRes(Ressource.col.Green, s.ressources[1] - Ressource.self.valueGreen);
+        Ressource.self.addRes(Ressource.col.Blue, s.ressources[2] - Ressource.self.valueBlue);
 
         Player.self.setHP(s.hp);
         Player.self.SpawnAt(s.stage);
@@ -196,11 +198,12 @@ public class GameState : MonoBehaviour
         State s = new State();
         s.stage = curStage;
         s.hp = Player.self.HP;
-        s.resRed = Ressource.self.valueRed;
-        s.resGreen = Ressource.self.valueGreen;
-        s.resBlue = Ressource.self.valueBlue;
+        s.ressources = new float[] { 
+            round(Ressource.self.valueRed),
+            round(Ressource.self.valueGreen),
+            round(Ressource.self.valueBlue)};
         s.colorCount = colorCount;
-        s.colorOrder = (Color[])colorOrder.Clone();
+        s.colorOrder = System.Array.ConvertAll(colorOrder, c => C2B(c));
         s.unlockedColors = unlockedColors;
         return s;
     }
@@ -223,8 +226,9 @@ public class GameState : MonoBehaviour
         next.Load();
         next.OnStageEnter();
 
-        if (stateCurStage.stage != next)
-            SaveCurState();
+        if (stateCurStage.stage != next) SaveCurState();
+
+        save.stags.addStage(next, stateCurStage);
     }
 
     public static void updateClearStats(GameStage nextStage)
@@ -242,7 +246,7 @@ public class GameState : MonoBehaviour
         if (IsTutorial()) save.stats.tutorialClears++;
         if (curStage) save.stats.totalClears++;
 
-        save.stats.Save();
+        save.SaveStats();
     }
 
     public static void updateDeadStats()
@@ -255,7 +259,7 @@ public class GameState : MonoBehaviour
         if (!save.stats.reachedEndless)
             save.stats.tutorialDeaths++;
 
-        save.stats.Save();
+        save.SaveStats();
     }
 
     private static string colToStr(Color color)
@@ -316,12 +320,14 @@ public class GameState : MonoBehaviour
     public static bool IsTutorial(GameStage s) => !IsEndless(s) && s > 0;
     public static bool IsTutorial() => IsTutorial(curStage);
 
+    [System.Serializable]
     public struct State
     {
         public GameStage stage;
         public Vector3Int unlockedColors;
-        public Color[] colorOrder;
+        public int[] colorOrder;
         public int colorCount;
-        public float resRed, resGreen, resBlue, hp;
+        public float hp;
+        public float[] ressources;
     }
 }

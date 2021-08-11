@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Helper;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -71,8 +72,6 @@ public class EnemySpawner : MonoBehaviour
     public void SetSpawning(bool b) => isSpawning = b;
 
 
-    private static float round(float f, float d = 1e3f) => Mathf.RoundToInt(f * d) / d;
-
     public static void Reset(GameStage stage)
     {
         enemyWeight = 0;
@@ -94,12 +93,14 @@ public class EnemySpawner : MonoBehaviour
     {
         enemyWeight = round(enemyWeight - e.countWeight);
         --enemyCount;
+        StageStats.cur.enemsKilled++;
         if (--remaining == 0) GameState.curStage.FinishedEnemies();
     }
 
     public static void EnemySpawned(EnemyBase e)
     {
         ++enemyCount;
+        StageStats.cur.AddEnemy(e, enemyCount);
         enemyWeight = round(enemyWeight + e.countWeight);
     }
 

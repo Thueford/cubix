@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEditor;
 using ParticleProps;
 using RenderSettings = ParticleProps.RenderSettings;
+using static Helper;
 
 // [ExecuteAlways]
 public class Particles : MonoBehaviour
@@ -32,8 +33,6 @@ public class Particles : MonoBehaviour
     #endregion
 
     #region Flags
-    private static int F(bool v, int p) => v ? 1 << p : 0;
-
     int GetFlags() =>
         F(!stats.prewarmed, 0) +
         F(color.useGradient, 1) +

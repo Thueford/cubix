@@ -22,7 +22,7 @@ public class Collectable : MonoBehaviour
         RED, GREEN, BLUE,
         HALO, INVIS, ATKSPD,
         ENDALLEXISTENCE,
-        BLACK
+        BLACK // should always be last (StageStats)
     }
 
     public cType type;
@@ -56,6 +56,7 @@ public class Collectable : MonoBehaviour
         if (!hs) Debug.LogError("HaloShooter not found");
         GameState.save.config.setLight(l);
         setType(type);
+        StageStats.cur.addCollectable(this);
     }
 
     public void setType(cType t)
