@@ -9,6 +9,8 @@ public class PlayerShooter : ShooterBase
     private Vector3Int rgb = Vector3Int.zero;
     public Vector3Int lastColor { get; private set; }
 
+    private Dictionary<float, int> atkSpdMults = new Dictionary<float, int>();
+
     // Start is called before the first frame update
     override protected void Start()
     {
@@ -62,7 +64,14 @@ public class PlayerShooter : ShooterBase
         StartCoroutine(E_AtkSpeedBoost(duration, mult));
     }
 
-    public void atkSpeedBoost(float mult) { rateOfFire /= mult; }
+    public void atkSpeedBoost(float mult) 
+    { 
+        rateOfFire /= mult;
+        if (atkSpdMults.ContainsKey(mult))
+            atkSpdMults[mult] += 1;
+        else
+            atkSpdMults.Add(mult, 1);
+    }
 
     private IEnumerator E_AtkSpeedBoost(float duration, float mult)
     {
@@ -84,5 +93,21 @@ public class PlayerShooter : ShooterBase
         if (rgb.z == 1) PlayerStats.self.firedBlueShots++;
         StageStats.cur.AddShot((Vector4)(Vector3)rgb);
         //Player.self.KnockBack(-dir.normalized * p.speed * 3);
+    }
+
+    public Dictionary<float, int> getAtkSpd()
+    {
+        return new Dictionary<float, int>(atkSpdMults);
+    }
+
+    public void setAtkSpd(Dictionary<float, int> mults)
+    {
+        if (mults != atkSpdMults)
+        {
+            foreach (float m in atkSpdMults.Keys)
+                rateOfFire *= Mathf.Pow(m, atkSpdMults[m]);
+            foreach (float m in mults.Keys)
+                rateOfFire /= Mathf.Pow(m, mults[m]);
+        }
     }
 }

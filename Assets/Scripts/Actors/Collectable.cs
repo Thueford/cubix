@@ -184,7 +184,7 @@ public class Collectable : MonoBehaviour
                 }
                 else if (val <= 0.66f)
                 {
-                    Player.self.maxSpeed *= 1.2f;
+                    Player.self.maxSpeed += 4;
                     GUIManager.self.showTip("+ Movement Speed");
                 }
                 else

@@ -175,6 +175,9 @@ public class GameState : MonoBehaviour
         //Player.self.lives = s.lives;
         Player.self.maxHP = s.maxhp;
         Player.self.setHP(s.maxhp);
+        Player.self.maxSpeed = s.maxSpeed;
+        Player.self.bs.setAtkSpd(s.fateOfFire);
+
         Player.self.SpawnAt(s.stage);
         save.Save();
     }
@@ -205,6 +208,8 @@ public class GameState : MonoBehaviour
 
         s.maxhp = Player.self.maxHP;
         s.lives = Player.self.lives;
+        s.maxSpeed = Player.self.maxSpeed;
+        s.fateOfFire = Player.self.bs.getAtkSpd();
         s.ressources = new float[] { 
             round(Ressource.self.valueRed),
             round(Ressource.self.valueGreen),
@@ -339,6 +344,8 @@ public class GameState : MonoBehaviour
         public int colorCount;
         public int lives;
         public float maxhp;
+        public float maxSpeed;
         public float[] ressources;
+        public Dictionary<float, int> fateOfFire;
     }
 }
