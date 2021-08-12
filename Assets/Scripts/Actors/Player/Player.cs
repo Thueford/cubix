@@ -116,6 +116,7 @@ public class Player : EntityBase
     {
         if (invulnurable <= 0 && damage > 0)
         {
+            SoundHandler.PlayClip("playerHit");
             setHP(HP - damage);
             if (HP > 0) MakeInvulnurable(1.25f);
             PostProcessing.self.StartPlayerHitEffect(0.2f);
@@ -169,6 +170,8 @@ public class Player : EntityBase
         tpTarget = target;
         animGeneral.enabled = true;
         animGeneral.Play("Teleport");
+
+        SoundHandler.PlayClip("teleOut");
     }
 
 
@@ -198,6 +201,8 @@ public class Player : EntityBase
         Vector3 spawnPos = stage.spawn.transform.position;
         spawnPos.y = floatHeight;
         transform.position = spawnPos;
+
+        SoundHandler.PlayClip("teleIn");
     }
 
     override public void OnSpawn(AnimationEvent ev)

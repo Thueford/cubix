@@ -48,6 +48,8 @@ public class Charger : MonoBehaviour
         ps.SetEnabled(true);
         SetEnabled(false);
         GameState.curStage.OnCharged();
+
+        SoundHandler.PlayClip("chargeFinish");
     }
 
     private void OnTriggerEnter(Collider c)
@@ -55,14 +57,22 @@ public class Charger : MonoBehaviour
         if (!charged && c.CompareTag("Player"))
         {
             if (!active) EnemySpawner.EnableSpawning(GameState.curStage, active = true);
-            if (!GameState.curStage.hasBoss()) anim.SetEnabled(charging = true);
+            if (!GameState.curStage.hasBoss()) 
+            { 
+                anim.SetEnabled(charging = true); 
+                SoundHandler.PlayClip("chargeUp"); 
+            }
         }
     }
 
     private void OnTriggerExit(Collider c)
     {
         if (!charged && c.CompareTag("Player"))
+        {
             anim.SetEnabled(charging = false);
+            if (!GameState.curStage.hasBoss())
+                SoundHandler.PlayClip("chargeDown");
+        }
     }
 
     internal void Reset(float duration = 0)

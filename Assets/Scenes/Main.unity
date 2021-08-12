@@ -2719,6 +2719,25 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 8b55ba37e1ad2da44a29b53b2f726811, type: 3}
     - {fileID: 8300000, guid: ab891595b40927241bd1609f842e3446, type: 3}
     - {fileID: 8300000, guid: 8464138310a64254ba09c54f0d6285c0, type: 3}
+  - name: playerHit
+    clip:
+    - {fileID: 8300000, guid: 8e8d61736af4d814190a76fbb9453821, type: 3}
+    - {fileID: 8300000, guid: b0ff958e58400164ca0f3d08431502e2, type: 3}
+  - name: teleIn
+    clip:
+    - {fileID: 8300000, guid: 22fe50959339cbc42b35901c56c71214, type: 3}
+  - name: teleOut
+    clip:
+    - {fileID: 8300000, guid: f7a4c38a560460540abe6232c8b2392b, type: 3}
+  - name: chargeFinish
+    clip:
+    - {fileID: 8300000, guid: 7c79771fddfc4994cbe35122361dc8ea, type: 3}
+  - name: chargeUp
+    clip:
+    - {fileID: 8300000, guid: 7def6b512dc1bbd439ef18d4d1a9f520, type: 3}
+  - name: chargeDown
+    clip:
+    - {fileID: 8300000, guid: 87d9ba02c8cc02d48b04e24330c31854, type: 3}
 --- !u!82 &322929870
 AudioSource:
   m_ObjectHideFlags: 0
