@@ -24,6 +24,7 @@ Ist der Charger vollständig geladen, hören die Gegner auf zu spawnen und ein P
 
 Der Spieler kann seinen Schüssen jeweils eine der Eigenschaften der drei Grundfarben verleihen, welche er im Tutorial der Reihe nach freischalten und ausprobieren kann. Die ausgewählte Farbe kann jederzeit gewechselt werden:
 
+\renewcommand{\imgspace}{3.5em}
 \renewcommand{\itmspace}{4.5em}
 \imgitmtxt{s_red.png}{Rote Kugeln}
 {sind langsamer aber explodieren beim Aufprall.}
@@ -45,7 +46,7 @@ Eine Ausnahme gibt es bei blau: wird diese Farbe kombiniert werden statt fünf n
 
 Im Spiel gibt es drei verschiedene Gegnertypen, erkennbar an ihrer Form:
 
-\renewcommand{\itmspace}{4.5em}
+\renewcommand{\itmspace}{5em}
 \imgitmtxt{e_hunter.png}{Hunter}
 {jagen den Spieler um ihm Kollisionsschaden zuzufügen.}
 
@@ -67,10 +68,12 @@ Auch die Gegner können in drei verschiedenen Farben vorkommen:
 \imgitmtxt{e_blue.png}{Blaue Gegner}
 {spawnen in Zweiergruppen, haben aber weniger Leben.}
 
-Bei der Kombination der Gegnerfarben ist ebenfalls wie bei den Schussfarben vorzugehen. Beispiel:
+Bei der Kombination der Gegnerfarben ist ebenfalls wie bei den Schussfarben vorzugehen. Ausnahme sind hierbei:
 
 \imgitmtxt{e_white.png}{Wei{\ss}e Gegner}
 {spawnen als Kombination aller drei Farben und haben mehrere Boni. Sie sind so schnell wie grüne Gegner, haben etwas weniger Leben als Rote und spawnen ebenfalls in Gruppen.}
+
+
 
 
 
@@ -107,7 +110,12 @@ Wenn Gegner besiegt werden, lassen sie zu einer gewissen Wahrscheinlichkeit aufs
 
 Für jede der drei Grundfarben existiert eine entsprechende Ressource, deren Stand in der Ressourcenanzeige oben rechts im Fenster angezeigt wird:
 
-\includegraphics[height=100pt]{ressources.png}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\linewidth]{ressources.png}
+\caption{Ressourcen-Anzeige}
+\label{img:ress}
+\end{figure}
 
 Ressourcen erhält man durch das Aufsammeln von entsprechend gefärbten Collectables und das Besiegen von farbigen Gegnern. Die erhaltenen Ressourcen werden für mehrfarbige Gegner auf die entsprechenden Grundfarben aufgeteilt, so gibt zum Beispiel ein cyanfarbiger Gegner blaue und grüne Ressourcen.
 

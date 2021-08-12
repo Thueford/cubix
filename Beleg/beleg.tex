@@ -54,7 +54,7 @@
     {\huge \@title}\\[10ex]
     {\Large Erstprüfer: \\
         Prof. Dr. rer. nat. Marc Ritter \\
-        Dipl. Inf. Daniel Stockmann \\ \vspace{1em}
+        Dipl. Inf. (FH) Daniel Stockmann \\ \vspace{1em}
         Co-Prüfer: \\ Manuel Heinzig, M.Sc.
     }\\[20ex]
     {\Large \@author}\\[10ex]
@@ -80,7 +80,7 @@
 
 \chapter{Aufgabenstellung}
 
-\lipsum[3]
+Dieser Beleg ist eine Kombination aus den Modulen GameProgramming und GPU-Programmierung. Dabei war die Aufgabe in GameProgramming ein Spiel zu entwickeln, in welchem in den Vorlesungen behandelte Spielkonzepte aufgegriffen und ausgefeilt werden. Dazu sollen die wesentlichen Spielfeatures und Implementierungsdetails beschrieben werden. In GPU Programmierung bestand die Aufgabe in der praktischen Umsetzung eines Shaderprogrammes, sowie die Beschreibung dessen algorithmischer und mathematischer Hintergründe.
 
 
 
@@ -89,6 +89,10 @@
 
 \include{chaptCodeDoc}
 
+
+
+
+
 \chapter{Grafikeffekte}
 
 
@@ -96,8 +100,32 @@
 
 \section{Shader in Unity}
 
-\lipsum[3]
+Um in Unity Shader zu benutzen muss zunächst ein neues Shader-Asset erstellt werden. Dabei stehen verschiedene Shadertypen zur Verfügung. Hier verwendet wurden ImageEffect Shader für das PostProcessing, Unlit Shader für die Partikel und Compute Shader für Berechnungen zu den Partikeln und einigen PostProcessing-Effekten. 
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\linewidth]{creatShader.png}
+\caption{Erstellen eines Shader-Assets}
+\label{img:creatShader}
+\end{figure}
+
+Um Grafische Shader zu verwenden müssen diese an ein Material gebunden werden (wie oben mit Auswahl des Shaders, Create > Material), welches dann auf das jeweilige GameObject angewandt werden kann. Im Inspektor können dann dort schon einige Standardwerte für im Shader deklarierte Variablen eingestellt werden.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\linewidth]{shaderMat.png}
+\includegraphics[width=0.38\linewidth]{shaderVars.png}
+\caption{Shader-Material im Inspektor}
+\label{img:shaderMat}
+\end{figure}
+
+Um einen Material-Shader im Code anzuwenden müssen diese mit spieziellen Funktionen aufgerufen werden. Diese können sich je nach anwendungsfall unterscheiden. Für das Anwenden eines Shaders auf eine Textur wird im PostProcessing die Funktion \href{https://docs.unity3d.com/ScriptReference/Graphics.Blit.html}{Graphics.Blit()} verwendet. Für die Darstellung der Partikel muss der Shader zusätzlich Daten aus einem Compute Shader verwenden. Dafür kann man bspw. \href{https://docs.unity3d.com/ScriptReference/Graphics.DrawProceduralNow.html}{Graphics.DrawProceduralNow()} oder \href{https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstanced.html}{Graphics.DrawMeshInstanced[Indirect]()} verwenden. Um einen ComputeBuffer auf eine Reihe von Daten anzuwenden benutzt man die Funktion \href{https://docs.unity3d.com/ScriptReference/ComputeShader.Dispatch.html}{ComputeBuffer.Dispatch()}. Um Daten an irgendeinen Shader weiterzugeben werden diese vor dem Aufruf mit Funktionen nach dem Muster shader.Set\textit{Type}(value) übermittelt.
+
+\begin{csh}[caption=Shader Uniform and Dispatch]
+postProcMat.SetFloat("_vignetteAmount", vignetteAmount);
+postProcMat.SetFloat("_vignetteWidth", vignetteWidth);
+Graphics.Blit(caResult, destination, postProcMat, CRTPass);
+\end{csh}
 
 \include{sectParticles}
 
@@ -131,32 +159,45 @@
 
 \chapter{Ausblick}
 
-% Bossstages, mehr testdaten & statistiken
-% mehr Inhalt & Abwechslung (generischere Gegner & Stages, mehr presets & Gegnertypen)
-\lipsum[3]
+Die Grundlagen für das Spiel sind gelegt. Das Spiel ist an einem Stand, bei dem vorrangig nur noch mehr Inhalt und Abwechslung produziert werden können.
 
+Zum einen können mehr Bosse, Wall- und Spawnerlayouts für den Endlosmodus entwickelt werden. Weiterhin könnte man dem Spiel weitere Powerups hinzufügen wie Schilde, Shooter oder Ähnliches. Auch denkbar wäre beispielsweise stärkere reguläre Gegner einzuführen, die als Mini-Boss fungieren und diesen ebenfalls bestimmte Powerups zu geben.
+
+Geplant ist außerdem die Portierung für Mobilgeräte und die Unterstützung von Controller-Eingabegeräten, um mehr Nutzer erreichen zu können.
+
+Zu guter Letzt soll das Spiel durch aufgenommene Nutzerstatistiken ausgewogener und fairer gestaltet werden. Mehr dazu in folgendem Kapitel.
 
 
 
 
 
 \chapter{Nutzerstatistiken}
-\label{chapt:PlayerStats}
+\label{chapt:userStats}
 
-\lipsum[3]
+Nutzerstatistiken werden in verschiedenster Software dafür verwendet, Daten über das Verhalten des Nutzers aufzuzeichnen, um das Nuzererlebnis (User-Experience) und die Software an sich zu verbessern. Dabei können verschiedene Aspekte in Betracht gezogen werden: Wo hält sich der Nutzer besonders kurz oder lange auf, wo hatte er Probleme, welche Ladezeiten gab es usw..
+
+
+
+
+\section{Statistiken im Spiel}
+
+Auch in Cubix werden optional Spielerstatistiken aufgezeichnet. Über die Dauer einer Spielsession werden Daten aufgenommen, mit denen der grobe Ablauf seines Spielerlebnisses nachvollzogen werden kann. Diese sollen später benutzt werden, um das Spiel zu verbessern.
+
+Dabei wird für jede vom Spieler betretene Stage aufgezeichnet welchen Zustand er zu Beginn hatte (Leben, Schussfarben, Ressourcen), wie lang er zum Laden des Chargers gebraucht hat, wie oft Gegner eines bestimmten Typs und Farbe vorgekommen sind, welche Collectables gedroppt wurden und welche Schussfarben er benutzt hat.
 
 
 
 
 \section{Auswertung}
 
+\lipsum[1]
 
 
 
 
 \chapter{Fazit}
 
-\lipsum[3]
+\lipsum[1]
 
 
 
@@ -173,6 +214,7 @@
 \item[Compute Shader] Shader, der Kernels in mehreren Arbeitsgruppen ausführt
 \item[Kernel] Bestandteil des Compute Shaders, enthält die Arbeitsanweisungen für die Arbeitsgruppen
 \item[Billboard] Projektion eines Meshes auf ein Rechteck, welches immer richtung Kamera ausgerichtet wird
+\item[Sampling] Bezeichnet in der Computergrafik das Lesen eines Farbwertes aus einer Textur, wobei farbwerte zwischen Pixeln interpoliert werden
 \vspace{5mm}
 \item[Postprocessing] Nachbearbeitung (zum Beispiel eines Bildes)
 \item[Bloom] Überblendung, helle Bereiche eines Bildes überstrahlen naheliegende Bereiche
