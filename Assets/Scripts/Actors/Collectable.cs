@@ -177,12 +177,12 @@ public class Collectable : MonoBehaviour
                 break;
             case cType.BOSS:
                 float val = Random.value;
-                if (val <= 0.33)
+                if (val <= 0.33f)
                 {
                     Player.self.bs.atkSpeedBoost(1.2f);
                     GUIManager.self.showTip("+ Attack Speed");
                 }
-                else if (val <= 0.66)
+                else if (val <= 0.66f)
                 {
                     Player.self.maxSpeed *= 1.2f;
                     GUIManager.self.showTip("+ Movement Speed");
