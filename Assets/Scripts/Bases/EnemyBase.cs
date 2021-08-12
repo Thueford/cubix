@@ -23,6 +23,8 @@ public abstract class EnemyBase : CtxSteer
     {
         base.Start();
         EnemySpawner.EnemySpawned(this);
+
+        if (isBoss) SoundHandler.PlayClip("bossSpawn");
     }
     public static int getColorCount(Color c) => c.b == 1 || c == Color.white ? 2 : 1;
     public float countWeight => 1 / getColorCount(_color);
@@ -116,7 +118,7 @@ public abstract class EnemyBase : CtxSteer
     {
         base.OnDie(ev);
         PlayerStats.self.totalKills++;
-        Collectable.Drop(rgb, pos);
+        Collectable.Drop(rgb, pos, isBoss);
         Destroy(gameObject);
     }
 

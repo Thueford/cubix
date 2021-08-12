@@ -150,6 +150,7 @@ public class GameState : MonoBehaviour
             curStage.actors.SetActive(true);
             Player.self.Melt();
         }
+        SoundHandler.OnPause(paused);
     }
 
     public static void ToggleSettings()

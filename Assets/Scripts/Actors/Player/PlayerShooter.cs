@@ -24,6 +24,7 @@ public class PlayerShooter : ShooterBase
 
     public void updateProperties(Vector3Int rgbNew)
     {
+        if (rgbNew.sqrMagnitude == 1) lastColor = rgbNew;
         if (rgbNew.x != rgb.x) toggleRed(rgbNew.x == 1);
         if (rgbNew.y != rgb.y) toggleGreen(rgbNew.y == 1);
         if (rgbNew.z != rgb.z) toggleBlue(rgbNew.z == 1);
@@ -37,14 +38,12 @@ public class PlayerShooter : ShooterBase
 
     public void toggleRed(bool b)
     {
-        lastColor = Vector3Int.right;
         bulletProps.explodes = b;
         bulletProps.speed *= cndinv(2/3f, b);
     }
 
     public void toggleGreen(bool b)
     {
-        lastColor = Vector3Int.up;
         bulletProps.speed *= cndinv(3, b);
         rateOfFire *= cndinv(1.5f, b);
         bulletProps.damage *= cndinv(2, b);
@@ -54,7 +53,6 @@ public class PlayerShooter : ShooterBase
 
     public void toggleBlue(bool b)
     {
-        lastColor = Vector3Int.forward;
         rateOfFire *= cndinv(2/3f, b);
         bulletProps.damage *= cndinv(1/3f, b);
     }
@@ -63,6 +61,8 @@ public class PlayerShooter : ShooterBase
     {
         StartCoroutine(E_AtkSpeedBoost(duration, mult));
     }
+
+    public void atkSpeedBoost(float mult) { rateOfFire /= mult; }
 
     private IEnumerator E_AtkSpeedBoost(float duration, float mult)
     {

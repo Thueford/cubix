@@ -43,6 +43,7 @@ public class Explosion : MonoBehaviour
 
         // light.range = p.explosionRadius*2;
         this.damage = damage;
+        if (damage >= 10) SoundHandler.SetLPTarget(1500, 2);
     }
 
     private void hit(Vector3 pos)
@@ -69,7 +70,7 @@ public class Explosion : MonoBehaviour
         }
         else if (c.CompareTag("Player") && CompareTag("EnemyBullet"))
         {
-            float damageMult = Mathf.SmoothStep(sc.radius, 0, (b.pos - transform.position).magnitude);
+            //float damageMult = Mathf.SmoothStep(sc.radius, 0, (b.pos - transform.position).magnitude);
             b.Hit(damage);
             hit(b.pos);
         }

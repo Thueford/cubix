@@ -11,6 +11,9 @@ public class SoundHandler : MonoBehaviour
     [NotNull] public AudioSource EffectSource;
     [NotNull] public AudioSource MenuSource;
 
+    [NotNull] public AudioHighPassFilter filterHigh;
+    [NotNull] public AudioLowPassFilter filterLow;
+
     [Range(0, 1)]
     public float volume = 1;
 
@@ -26,6 +29,8 @@ public class SoundHandler : MonoBehaviour
     public static Dictionary<string, AudioClip[]> clips = new Dictionary<string, AudioClip[]>();
 
     private static float wHitTimer = 0, eHitTimer = 0, shootTimer = 0, explTimer = 0;
+
+    private static float filterHighValue = 10, filterLowValue = 22000;
 
     // Start is called before the first frame update
     void Awake()
@@ -47,6 +52,24 @@ public class SoundHandler : MonoBehaviour
         eHitTimer += Time.deltaTime;
         shootTimer += Time.deltaTime;
         explTimer += Time.deltaTime;
+
+        if (filterHigh.cutoffFrequency != filterHighValue && !GameState.paused)
+        {
+            float delta = filterHigh.cutoffFrequency - filterHighValue;
+            if (Mathf.Abs(delta) < 50)
+                filterHigh.cutoffFrequency = filterHighValue;
+            else
+                filterHigh.cutoffFrequency -= delta * 0.3f;
+        }
+
+        if (filterLow.cutoffFrequency != filterLowValue && !GameState.paused)
+        {
+            float delta = filterLow.cutoffFrequency - filterLowValue;
+            if (Mathf.Abs(delta) < 50)
+                filterLow.cutoffFrequency = filterLowValue;
+            else
+                filterLow.cutoffFrequency -= delta * 0.3f;
+        }
     }
 
     public static void PlayClip(AudioClip c)
@@ -92,4 +115,50 @@ public class SoundHandler : MonoBehaviour
         self.MenuSource.PlayOneShot(clips["click"][0]);
     }
 
+    public static void SetHPTarget(float frequency) => filterHighValue = frequency;
+    public static void SetLPTarget(float frequency) => filterLowValue = frequency;
+
+    public static void OnPause(bool pause)
+    {
+        if (pause)
+        {
+            self.filterLow.cutoffFrequency = 2000;
+            self.filterHigh.cutoffFrequency = 10;
+        }
+        else
+        {
+            self.filterLow.cutoffFrequency = filterLowValue;
+            self.filterHigh.cutoffFrequency = filterHighValue;
+        }
+    }
+
+    public static void SetLPTarget(float frequency, float duration) =>
+        self.StartCoroutine(E_StartLP(frequency, duration));
+
+    public static void SetHPTarget(float frequency, float duration) =>
+        self.StartCoroutine(E_StartHP(frequency, duration));
+
+    private static IEnumerator E_StartLP(float frequency, float duration)
+    {
+        float oldVal = filterLowValue;
+        filterLowValue = frequency;
+        while (duration > 0)
+        {
+            if (!GameState.paused) duration -= 0.1f;
+            yield return new WaitForSeconds(0.1f);
+        }
+        filterLowValue = oldVal;
+    }
+
+    private static IEnumerator E_StartHP(float frequency, float duration)
+    {
+        float oldVal = filterHighValue;
+        filterHighValue = frequency;
+        while (duration > 0)
+        {
+            if (!GameState.paused) duration -= 0.1f;
+            yield return new WaitForSeconds(0.1f);
+        }
+        filterHighValue = oldVal;
+    }
 }

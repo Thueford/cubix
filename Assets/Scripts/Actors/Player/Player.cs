@@ -126,7 +126,7 @@ public class Player : EntityBase
 
     public void setHP(float value)
     {
-        HP = Mathf.Max(value, 0);
+        HP = Mathf.Clamp(value, 0, maxHP);
         hpDisplay.SetHP((int)HP);
         if (HP <= 0) Die();
     }

@@ -82,6 +82,7 @@ public class Ressource : MonoBehaviour
             InputHandler.enableNumbers = true;
             if ((GameState.unlockedColors * Player.self.bs.lastColor).sqrMagnitude > 0)
                 Player.self.SetShooterColor(Player.self.bs.lastColor);
+            SoundHandler.SetHPTarget(10);
         }
     }
 
@@ -100,6 +101,7 @@ public class Ressource : MonoBehaviour
             color.a = alpha;
             textObject.color = color;
         }
+
         for (int i = 0; i < (int)value / 10; i++)
         {
             tmp += bar + " ";
@@ -131,6 +133,8 @@ public class Ressource : MonoBehaviour
         blueMode = blue;
         rgb.z = blue ? 1 : 0;
 
+        SoundHandler.SetHPTarget(500);
+
         return rgb;
     }
 
@@ -140,14 +144,20 @@ public class Ressource : MonoBehaviour
         switch (c)
         {
             case col.Red:
+                if (valueRed < 100 && !redMode && valueRed + value >= 100)
+                    SoundHandler.PlayClip("resFull");
                 valueRed = Mathf.Clamp(valueRed + value, 0, 100);
                 SetRessourceText(valueRed, TextRed);
                 return valueRed;
             case col.Green:
+                if (valueGreen < 100 && !greenMode && valueGreen + value >= 100)
+                    SoundHandler.PlayClip("resFull");
                 valueGreen = Mathf.Clamp(valueGreen + value, 0, 100);
                 SetRessourceText(valueGreen, TextGreen);
                 return valueGreen;
             case col.Blue:
+                if (valueBlue < 100 && !blueMode && valueBlue + value >= 100)
+                    SoundHandler.PlayClip("resFull");
                 valueBlue = Mathf.Clamp(valueBlue + value, 0, 100);
                 SetRessourceText(valueBlue, TextBlue);
                 return valueBlue;

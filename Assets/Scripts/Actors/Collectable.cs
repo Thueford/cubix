@@ -22,6 +22,7 @@ public class Collectable : MonoBehaviour
         RED, GREEN, BLUE,
         HALO, INVIS, ATKSPD,
         ENDALLEXISTENCE,
+        BOSS,
         BLACK // should always be last (StageStats)
     }
 
@@ -59,6 +60,18 @@ public class Collectable : MonoBehaviour
         StageStats.cur.addCollectable(this);
     }
 
+    private void Update()
+    {
+        if (type == cType.BOSS)
+        {
+            setColor(new Color(
+                Mathf.Sin(Time.time) / 2 + 0.5f,
+                Mathf.Sin(Time.time + 4/3 * Mathf.PI) / 2 + 0.5f,
+                Mathf.Sin(Time.time + 2/3 * Mathf.PI) / 2 + 0.5f
+                ), true);
+        }
+    }
+
     public void setType(cType t)
     {
         type = t;
@@ -80,9 +93,15 @@ public class Collectable : MonoBehaviour
         foreach (Collectable c in s.actors.GetComponentsInChildren<Collectable>()) c.Kill();
     }
 
-    private void setColor(Color color)
+    private void setColor(Color color, bool ignoreColorHelper = false)
     {
         ps.color.color = GameState.getLightColor(color);
+
+        if (ignoreColorHelper) 
+        {
+            r.material.color = l.color = ps.color.color2 = color;
+            return;
+        }
 
         if (color != Color.white)
         {
@@ -156,14 +175,39 @@ public class Collectable : MonoBehaviour
                 Instantiate(explosion, GameState.curStage.transform.position, Quaternion.identity)
                     .SetProperties("Player", 30, 10, 0.8f);
                 break;
+            case cType.BOSS:
+                if (Random.value <= 1 / 3)
+                {
+                    Player.self.bs.atkSpeedBoost(1.2f);
+                    GUIManager.self.showTip("+ Attack Speed");
+                }
+                else if (Random.value <= 2 / 3)
+                {
+                    Player.self.maxSpeed *= 1.2f;
+                    GUIManager.self.showTip("+ Movement Speed");
+                }
+                else
+                {
+                    Player.self.maxHP += 1;
+                    GUIManager.self.showTip("+1 Max HP");
+                }
+                break;
             default:
                 break;
         }
         if (type != cType.ENDALLEXISTENCE) SoundHandler.PlayClip("collect");
     }
 
-    public static void Drop(Vector3Int col, Vector3 pos)
+    public static void Drop(Vector3Int col, Vector3 pos, bool boss = false)
     {
+        if (boss) 
+        {
+            Debug.Log("dropped " + nameof(type));
+            Instantiate(CollPrefab, pos, Quaternion.identity, GameState.curStage.actors.transform).
+                GetComponent<Collectable>().setType(cType.BOSS);
+            return;
+        }
+
         if (!GameState.IsEndless()) return;
 
         float dropChance = chance;
@@ -174,9 +218,6 @@ public class Collectable : MonoBehaviour
             dropChance *= col.sqrMagnitude;
             if (col.z == 1) dropChance /= 3;
         }
-
-        //float dropChance = chance / EnemyBase.getColorCount((Vector4)(Vector3)col);
-        //if (col == Vector3Int.one) dropChance = chanceWhite;
 
         if (Random.value <= dropChance)
         {

@@ -2689,7 +2689,9 @@ MonoBehaviour:
   MusicSource: {fileID: 322929868}
   EffectSource: {fileID: 322929867}
   MenuSource: {fileID: 322929870}
-  volume: 0
+  filterHigh: {fileID: 1990724505}
+  filterLow: {fileID: 1990724503}
+  volume: 1
   clipArray:
   - name: click
     clip:
@@ -2738,6 +2740,12 @@ MonoBehaviour:
   - name: chargeDown
     clip:
     - {fileID: 8300000, guid: 87d9ba02c8cc02d48b04e24330c31854, type: 3}
+  - name: bossSpawn
+    clip:
+    - {fileID: 8300000, guid: 2d70f6d13a5f6b44cb7e7b3e5551d5fb, type: 3}
+  - name: resFull
+    clip:
+    - {fileID: 8300000, guid: 720e82a74df05bc478bf4a82e8c74730, type: 3}
 --- !u!82 &322929870
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2763,7 +2771,7 @@ AudioSource:
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
-  BypassListenerEffects: 0
+  BypassListenerEffects: 1
   BypassReverbZones: 0
   rolloffCustomCurve:
     serializedVersion: 2
@@ -20588,7 +20596,7 @@ PrefabInstance:
     - target: {fileID: 1618364806311752024, guid: 891daa6c8c6ecf9429fe901f3e341964,
         type: 3}
       propertyPath: m_text
-      value: Each stage you get 1 HP back
+      value: Each stage you get 1 Life back
       objectReference: {fileID: 0}
     - target: {fileID: 1618364806311752024, guid: 891daa6c8c6ecf9429fe901f3e341964,
         type: 3}
@@ -22027,6 +22035,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 28796460234395697, guid: af1c05db94dd5cb448ff1201673f069e,
+        type: 3}
+      propertyPath: m_Maskable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 28796460234395697, guid: af1c05db94dd5cb448ff1201673f069e,
+        type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 28796460234395697, guid: af1c05db94dd5cb448ff1201673f069e,
+        type: 3}
+      propertyPath: m_FontData.m_RichText
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 989857925212215817, guid: af1c05db94dd5cb448ff1201673f069e,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -22291,6 +22314,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 3391500332087591103, guid: af1c05db94dd5cb448ff1201673f069e,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -41.600006
       objectReference: {fileID: 0}
     - target: {fileID: 5431564729744157811, guid: af1c05db94dd5cb448ff1201673f069e,
         type: 3}
@@ -23241,9 +23269,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1990724501}
   - component: {fileID: 1990724500}
-  - component: {fileID: 1990724499}
   - component: {fileID: 1990724502}
   - component: {fileID: 1990724504}
+  - component: {fileID: 1990724499}
+  - component: {fileID: 1990724505}
+  - component: {fileID: 1990724503}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -23331,6 +23361,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stickyness: 10
   target: {x: 0, y: 0, z: 0}
+--- !u!169 &1990724503
+AudioLowPassFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1990724498}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_LowpassResonanceQ: 1
+  lowpassLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!114 &1990724504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23369,6 +23424,16 @@ MonoBehaviour:
   caResult: {fileID: 0}
   lfResult: {fileID: 0}
   lensTex: {fileID: 0}
+--- !u!165 &1990724505
+AudioHighPassFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1990724498}
+  m_Enabled: 1
+  m_CutoffFrequency: 10
+  m_HighpassResonanceQ: 1
 --- !u!1001 &1999105777
 PrefabInstance:
   m_ObjectHideFlags: 0
