@@ -176,12 +176,13 @@ public class Collectable : MonoBehaviour
                     .SetProperties("Player", 30, 10, 0.8f);
                 break;
             case cType.BOSS:
-                if (Random.value <= 1 / 3)
+                float val = Random.value;
+                if (val <= 0.33)
                 {
                     Player.self.bs.atkSpeedBoost(1.2f);
                     GUIManager.self.showTip("+ Attack Speed");
                 }
-                else if (Random.value <= 2 / 3)
+                else if (val <= 0.66)
                 {
                     Player.self.maxSpeed *= 1.2f;
                     GUIManager.self.showTip("+ Movement Speed");

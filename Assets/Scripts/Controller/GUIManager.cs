@@ -47,6 +47,7 @@ public class GUIManager : MonoBehaviour
     private IEnumerator E_FadeText(float duration)
     {
         float mult = duration;
+        tipText.alpha = 1;
         while (duration > 0)
         {
             if (!GameState.paused) 
