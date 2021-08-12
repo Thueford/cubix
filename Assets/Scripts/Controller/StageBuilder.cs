@@ -25,7 +25,7 @@ public class StageBuilder : MonoBehaviour
         stage.info.isProcedural = true;
         stage.info.stageNo = stage.number = number;
 
-        if (stage % 10 > 0)
+        if (stage % 5 > 0)
         {
             stage.info.spawnerId = randomChildIndex(ActorContainer);
             GameObject spawner = Instantiate(getChild(ActorContainer, stage.info.spawnerId), stage.actorsBase.transform);
@@ -39,7 +39,7 @@ public class StageBuilder : MonoBehaviour
         {
             stage.info.isBoss = true;
 
-            stage.info.bossId = (stage / 10) % BossContainer.transform.childCount;
+            stage.info.bossId = (stage / 5) % BossContainer.transform.childCount;
             Debug.Log("Generating Boss Stage " + stage.info.bossId);
 
             GameObject oBoss = Instantiate(getChild(BossContainer, stage.info.bossId), stage.actorsBase.transform);

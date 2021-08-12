@@ -28,6 +28,8 @@ public class SoundHandler : MonoBehaviour
 
     public static Dictionary<string, AudioClip[]> clips = new Dictionary<string, AudioClip[]>();
 
+    private static bool hpRunning = false, lpRunning = false;
+
     private static float wHitTimer = 0, eHitTimer = 0, shootTimer = 0, explTimer = 0;
 
     private static float filterHighValue = 10, filterLowValue = 22000;
@@ -132,14 +134,19 @@ public class SoundHandler : MonoBehaviour
         }
     }
 
-    public static void SetLPTarget(float frequency, float duration) =>
-        self.StartCoroutine(E_StartLP(frequency, duration));
+    public static void SetLPTarget(float frequency, float duration)
+    {
+        if (!lpRunning) self.StartCoroutine(E_StartLP(frequency, duration));
+    }
 
-    public static void SetHPTarget(float frequency, float duration) =>
-        self.StartCoroutine(E_StartHP(frequency, duration));
+    public static void SetHPTarget(float frequency, float duration)
+    {
+        if (!hpRunning) self.StartCoroutine(E_StartHP(frequency, duration));
+    }
 
     private static IEnumerator E_StartLP(float frequency, float duration)
     {
+        lpRunning = true;
         float oldVal = filterLowValue;
         filterLowValue = frequency;
         while (duration > 0)
@@ -148,10 +155,12 @@ public class SoundHandler : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
         filterLowValue = oldVal;
+        lpRunning = false;
     }
 
     private static IEnumerator E_StartHP(float frequency, float duration)
     {
+        hpRunning = true;
         float oldVal = filterHighValue;
         filterHighValue = frequency;
         while (duration > 0)
@@ -160,5 +169,6 @@ public class SoundHandler : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
         filterHighValue = oldVal;
+        hpRunning = false;
     }
 }

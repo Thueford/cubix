@@ -50,17 +50,17 @@ MonoBehaviour:
   bulletPrefab: {fileID: 484546216173710262, guid: da2792a8ce1e4d54388cd8c5a606e116,
     type: 3}
   amount: 1
-  rateOfFire: 0.7
+  rateOfFire: 1
   spread: 0
   bulletProps:
-    explodes: 0
-    reflects: 1
+    explodes: 1
+    reflects: 0
     hits: 0
-    speed: 20
+    speed: 15
     damage: 1
-    explosionRadius: 0
-    owner: 
-    color: {r: 0, g: 0, b: 0, a: 0}
+    explosionRadius: 3.5
+    owner: Enemy
+    color: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1001 &506063611165092103
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -77,6 +77,11 @@ PrefabInstance:
         type: 3}
       propertyPath: startHP
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: -7602710152866961878, guid: 60580c159fb96a8458a29dd2496e3b5a,
+        type: 3}
+      propertyPath: maxSpeed
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5750802749758967166, guid: 60580c159fb96a8458a29dd2496e3b5a,
         type: 3}
@@ -236,8 +241,33 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5772039059951688626, guid: 858f3bb5482b2fa4da6fa48d4a9ee6b3,
         type: 3}
+      propertyPath: bulletProps.owner
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 5772039059951688626, guid: 858f3bb5482b2fa4da6fa48d4a9ee6b3,
+        type: 3}
       propertyPath: bulletProps.speed
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5772039059951688626, guid: 858f3bb5482b2fa4da6fa48d4a9ee6b3,
+        type: 3}
+      propertyPath: bulletProps.color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5772039059951688626, guid: 858f3bb5482b2fa4da6fa48d4a9ee6b3,
+        type: 3}
+      propertyPath: bulletProps.color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5772039059951688626, guid: 858f3bb5482b2fa4da6fa48d4a9ee6b3,
+        type: 3}
+      propertyPath: bulletProps.color.g
+      value: 0.16494802
+      objectReference: {fileID: 0}
+    - target: {fileID: 5772039059951688626, guid: 858f3bb5482b2fa4da6fa48d4a9ee6b3,
+        type: 3}
+      propertyPath: bulletProps.color.r
+      value: 0.14117646
       objectReference: {fileID: 0}
     - target: {fileID: 6227684510912938246, guid: 858f3bb5482b2fa4da6fa48d4a9ee6b3,
         type: 3}
@@ -299,6 +329,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6208816497888350061}
     m_Modifications:
+    - target: {fileID: 2119687864818214426, guid: d1695d8d7ce0254499686bc9ad288bb7,
+        type: 3}
+      propertyPath: m_SelectedEditorRenderState
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2803653462950124550, guid: d1695d8d7ce0254499686bc9ad288bb7,
         type: 3}
       propertyPath: m_Mesh
@@ -392,7 +427,17 @@ PrefabInstance:
     - target: {fileID: 8452632988693228686, guid: d1695d8d7ce0254499686bc9ad288bb7,
         type: 3}
       propertyPath: startHP
-      value: 100
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 9047991911036538869, guid: d1695d8d7ce0254499686bc9ad288bb7,
+        type: 3}
+      propertyPath: amount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9047991911036538869, guid: d1695d8d7ce0254499686bc9ad288bb7,
+        type: 3}
+      propertyPath: spread
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 9047991911036538869, guid: d1695d8d7ce0254499686bc9ad288bb7,
         type: 3}
@@ -401,8 +446,33 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9047991911036538869, guid: d1695d8d7ce0254499686bc9ad288bb7,
         type: 3}
+      propertyPath: bulletProps.hits
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9047991911036538869, guid: d1695d8d7ce0254499686bc9ad288bb7,
+        type: 3}
+      propertyPath: bulletProps.owner
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 9047991911036538869, guid: d1695d8d7ce0254499686bc9ad288bb7,
+        type: 3}
       propertyPath: bulletProps.speed
-      value: 20
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 9047991911036538869, guid: d1695d8d7ce0254499686bc9ad288bb7,
+        type: 3}
+      propertyPath: bulletProps.color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9047991911036538869, guid: d1695d8d7ce0254499686bc9ad288bb7,
+        type: 3}
+      propertyPath: bulletProps.color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9047991911036538869, guid: d1695d8d7ce0254499686bc9ad288bb7,
+        type: 3}
+      propertyPath: bulletProps.reflects
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1695d8d7ce0254499686bc9ad288bb7, type: 3}

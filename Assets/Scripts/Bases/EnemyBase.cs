@@ -26,6 +26,22 @@ public abstract class EnemyBase : CtxSteer
 
         if (isBoss) SoundHandler.PlayClip("bossSpawn");
     }
+
+    override public void Update()
+    {
+        base.Update();
+        if (isBoss)
+        {
+            Color c = new Color(
+                Mathf.Sin(Time.time) / 2 + 0.5f,
+                Mathf.Sin(Time.time + 4 / 3 * Mathf.PI) / 2 + 0.5f,
+                Mathf.Sin(Time.time + 2 / 3 * Mathf.PI) / 2 + 0.5f
+                );
+            rend.material.color = c;
+            vlight.color = c;
+        }
+    }
+
     public static int getColorCount(Color c) => c.b == 1 || c == Color.white ? 2 : 1;
     public float countWeight => 1 / getColorCount(_color);
 
