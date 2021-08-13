@@ -13,8 +13,8 @@ public class StageBuilder : MonoBehaviour
 
     // Start is called before the first frame update
     void Awake() => self = this;
-    GameObject getChild(GameObject obj, int index) => index < obj.transform.childCount ? obj.transform.GetChild(index).gameObject : null;
-    int randomChildIndex(GameObject obj) => Random.Range(1, obj.transform.childCount);
+    GameObject getChild(GameObject obj, int index) => index+1 < obj.transform.childCount ? obj.transform.GetChild(index+1).gameObject : null;
+    int randomChildIndex(GameObject obj) => Random.Range(0, obj.transform.childCount-1);
     
     public GameStage Generate(Transform t, int number)
     {
@@ -25,7 +25,7 @@ public class StageBuilder : MonoBehaviour
         stage.info.isProcedural = true;
         stage.info.stageNo = stage.number = number;
 
-        if (stage % 5 > 0)
+        if (number % 5 > 0)
         {
             stage.info.spawnerId = randomChildIndex(ActorContainer);
             GameObject spawner = Instantiate(getChild(ActorContainer, stage.info.spawnerId), stage.actorsBase.transform);
@@ -39,7 +39,7 @@ public class StageBuilder : MonoBehaviour
         {
             stage.info.isBoss = true;
 
-            stage.info.bossId = (stage / 5) % BossContainer.transform.childCount;
+            stage.info.bossId = (stage / 5) % (BossContainer.transform.childCount-1);
             Debug.Log("Generating Boss Stage " + stage.info.bossId);
 
             GameObject oBoss = Instantiate(getChild(BossContainer, stage.info.bossId), stage.actorsBase.transform);

@@ -145,7 +145,8 @@ public class Bullet : MonoBehaviour
             {
                 SoundHandler.PlayClip(SoundHandler.clips["enemyHit"]);
                 b.Hit(p.damage);
-                b.KnockBack(rb.velocity.normalized*(5+p.speed*0.15f));
+                if (!((EnemyBase)b).isBoss)
+                    b.KnockBack(rb.velocity.normalized*(5+p.speed*0.15f));
             }
         }
         else if (c.CompareTag("Player") && CompareTag("EnemyBullet"))

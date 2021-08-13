@@ -50,7 +50,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 484546216173710262, guid: da2792a8ce1e4d54388cd8c5a606e116,
     type: 3}
   amount: 1
-  rateOfFire: 1
+  rateOfFire: 0.55
   spread: 0
   bulletProps:
     explodes: 1
@@ -81,7 +81,7 @@ PrefabInstance:
     - target: {fileID: -7602710152866961878, guid: 60580c159fb96a8458a29dd2496e3b5a,
         type: 3}
       propertyPath: maxSpeed
-      value: 10
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 5750802749758967166, guid: 60580c159fb96a8458a29dd2496e3b5a,
         type: 3}
@@ -442,7 +442,7 @@ PrefabInstance:
     - target: {fileID: 9047991911036538869, guid: d1695d8d7ce0254499686bc9ad288bb7,
         type: 3}
       propertyPath: rateOfFire
-      value: 0.3
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 9047991911036538869, guid: d1695d8d7ce0254499686bc9ad288bb7,
         type: 3}
@@ -493,6 +493,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Stage
+      objectReference: {fileID: 0}
+    - target: {fileID: 331514180023121776, guid: c757194044ae0bd40bbc234134156d13,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 331514180023121783, guid: c757194044ae0bd40bbc234134156d13,
         type: 3}
@@ -547,6 +552,11 @@ PrefabInstance:
     - target: {fileID: 331514180023121783, guid: c757194044ae0bd40bbc234134156d13,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 757038173234545941, guid: c757194044ae0bd40bbc234134156d13,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

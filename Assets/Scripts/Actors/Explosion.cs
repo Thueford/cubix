@@ -65,7 +65,8 @@ public class Explosion : MonoBehaviour
             float distanceMultiplier = distance.magnitude > sc.radius/2 ? 3 : 6;
             //float damageMult = Mathf.SmoothStep(sc.radius, 0, (b.pos - transform.position).magnitude);
             b.Hit(damage);
-            b.KnockBack(distance.normalized * distanceMultiplier * 3f);
+            if (!((EnemyBase)b).isBoss)
+                b.KnockBack(distance.normalized * distanceMultiplier * 3f);
             hit(b.pos);
         }
         else if (c.CompareTag("Player") && CompareTag("EnemyBullet"))
